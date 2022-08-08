@@ -12,7 +12,7 @@ In this task, you will implement search feature for your website and write tests
    Use this [tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Testing) as helper.
    You decide what to test and how to test (train your testing skills here).
 3. Make your website looks better. Customize your templates, add static images for taxi service.
-   Just make this website looks better using your imagination :)
+   Just make it looks better using your imagination :)
 4. (Optional): Add some new features for this project. If you want to adjust project or add some
    new functionality - it's the ideal moment for it.
 
