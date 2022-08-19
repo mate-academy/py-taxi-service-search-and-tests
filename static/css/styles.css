@@ -6,3 +6,8 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.my_image {
+    height: 400px;
+    width: 200px;
+}
