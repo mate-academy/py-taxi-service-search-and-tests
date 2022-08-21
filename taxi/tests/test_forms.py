@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, validate_license_number
 
 
 class FormsTest(TestCase):
@@ -17,3 +17,7 @@ class FormsTest(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+    def test_license_number_validation(self):
+        self.assertEqual(validate_license_number("ABC12345"), "ABC12345")
+        self.assertRegex(validate_license_number("ABC12345"), "^[A-Z]{3}\d{5}$")

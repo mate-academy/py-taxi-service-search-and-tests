@@ -1,11 +1,22 @@
-from django.db import models
+import os
+from uuid import uuid4
+
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.urls import reverse
+
+
+def path_and_rename(instance, filename):
+    upload_to = "car_photos"
+    ext = filename.split('.')[-1]
+    filename = f"{uuid4()}.{ext}"
+    return os.path.join(upload_to, filename)
 
 
 class Manufacturer(models.Model):
     name = models.CharField(max_length=255, unique=True)
     country = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to=path_and_rename, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -32,7 +43,7 @@ class Car(models.Model):
     model = models.CharField(max_length=255)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
     drivers = models.ManyToManyField(Driver, related_name="cars")
-    image = models.ImageField(upload_to="taxi", blank=True)
+    image = models.ImageField(upload_to=path_and_rename, blank=True)
 
     def __str__(self):
         return self.model

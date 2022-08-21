@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from taxi.models import Manufacturer, Car, Driver
+
+from taxi.models import Car, Manufacturer
 
 
 class ModelsTest(TestCase):
@@ -36,7 +37,10 @@ class ModelsTest(TestCase):
         self.assertEqual(str(self.car), "C200")
 
     def test_driver_string(self):
-        self.assertEqual(str(self.driver), f"{self.username} ({self.first_name} {self.last_name})")
+        self.assertEqual(
+            str(self.driver),
+            f"{self.username} ({self.first_name} {self.last_name})"
+            )
 
     def test_create_driver_with_license_number(self):
         self.assertEqual(self.driver.username, self.username)

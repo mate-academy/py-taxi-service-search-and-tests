@@ -1,19 +1,20 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Driver, Car, Manufacturer
 from .forms import (
+    CarForm,
+    CarsSearchForm,
     DriverCreationForm,
     DriverLicenseUpdateForm,
-    CarForm,
     DriversSearchForm,
-    CarsSearchForm,
+    ManufacturerForm,
     ManufacturerSearchForm
 )
+from .models import Car, Driver, Manufacturer
 
 
 @login_required
@@ -43,7 +44,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 2
     queryset = Manufacturer.objects.all()
-    
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
 
@@ -76,7 +77,7 @@ class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
 
 class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Manufacturer
-    fields = "__all__"
+    form_class = ManufacturerForm
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
@@ -188,7 +189,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
-    if Car.objects.get(id=pk) in driver.cars.all():  # probably could check if car exists
+    if Car.objects.get(id=pk) in driver.cars.all():
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)

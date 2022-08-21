@@ -3,13 +3,18 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from taxi.models import Car, Driver
+from taxi.models import Car, Driver, Manufacturer
 
 
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
+    )
+
+    image = forms.ImageField(
+        label="Select image for car",
+        required=False,
     )
 
     class Meta:
@@ -24,7 +29,7 @@ class DriverCreationForm(UserCreationForm):
             "license_number", "first_name", "last_name",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
+    def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
@@ -38,7 +43,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
-def validate_license_number(license_number):  # regex validation is also possible here
+def validate_license_number(license_number):
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
     elif not license_number[:3].isupper() or not license_number[:3].isalpha():
@@ -74,3 +79,14 @@ class ManufacturerSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search..."})
     )
+
+
+class ManufacturerForm(forms.ModelForm):
+    logo = forms.ImageField(
+        label="",
+        required=False
+    )
+
+    class Meta:
+        model = Manufacturer
+        fields = "__all__"
