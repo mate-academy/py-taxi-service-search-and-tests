@@ -29,7 +29,6 @@ class DriverCreationForm(UserCreationForm):
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
-
     class Meta:
         model = Driver
         fields = ["license_number"]
@@ -47,3 +46,36 @@ def validate_license_number(license_number):  # regex validation is also possibl
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class DriversSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "placeholder": "search by username"
+        })
+    )
+
+
+class CarsSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=56,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "placeholder": "search by model"
+        })
+    )
+
+
+class ManufacturersSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "placeholder": "search by name"
+        })
+    )
