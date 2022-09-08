@@ -31,6 +31,20 @@ class PublicManufacturerViewTest(TestCase):
         self.assertNotEqual(res.status_code, 200)
 
 
+class PublicCarViewTest(TestCase):
+    def test_manufacturer_login_required(self):
+        res = self.client.get(CAR_URL)
+
+        self.assertNotEqual(res.status_code, 200)
+
+
+class PublicDriverViewTest(TestCase):
+    def test_manufacturer_login_required(self):
+        res = self.client.get(DRIVER_URL)
+
+        self.assertNotEqual(res.status_code, 200)
+
+
 class ManufacturerViewTests(TestCase):
     def setUp(self):
         driver = get_user_model().objects.create_user(
