@@ -28,32 +28,28 @@ class ValidLicenseNumberTests(TestCase):
 
     def test_length_of_license_number_is_bigger_than_8(self):
         license_number = "TES123456"
-        try:
+        message = "License number should consist of 8 characters"
+
+        with self.assertRaisesMessage(ValidationError, message):
             validate_license_number(license_number)
-        except ValidationError as error:
-            self.error = error
-        self.assertEqual(self.error, ValidationError("License number should consist of 8 characters"))
 
     def test_length_of_license_number_is_less_than_8(self):
         license_number = "TES1234"
-        try:
+        message = "License number should consist of 8 characters"
+
+        with self.assertRaisesMessage(ValidationError, message):
             validate_license_number(license_number)
-        except ValidationError as error:
-            self.error = error
-        self.assertEqual(self.error, ValidationError("License number should consist of 8 characters"))
 
     def test_first_3_characters_should_be_uppercase_letters(self):
         license_number = "TE123456"
-        try:
+        message = "First 3 characters should be uppercase letters"
+
+        with self.assertRaisesMessage(ValidationError, message):
             validate_license_number(license_number)
-        except ValidationError as error:
-            self.error = error
-        self.assertEqual(self.error, ValidationError("First 3 characters should be uppercase letters"))
 
     def test_last_5_characters_should_be_digits(self):
         license_number = "TESTTEST"
-        try:
+        message = "Last 5 characters should be digits"
+
+        with self.assertRaisesMessage(ValidationError, message):
             validate_license_number(license_number)
-        except ValidationError as error:
-            self.error = error
-        self.assertEqual(self.error, ValidationError("Last 5 characters should be digits"))
