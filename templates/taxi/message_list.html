@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Tell us!</h1>
+  <a href="{% url 'taxi:message-create' %}" class="btn btn-primary">New message</a>
+{#  {% if massage_list %}#}
+    {% for message in message_list %}
+      <div>
+        <strong>Topic</strong>: {{ message.title }}<br>
+        <strong>{{ message.author.username }}</strong>: {{ message.text }} <br>
+        date: {{ message.date }}
+        <hr>
+      </div>
+    {% endfor %}
+{#  {% else %}#}
+{#    <p>There are no messages!</p>#}
+{#  {% endif %}#}
+
+{% endblock %}

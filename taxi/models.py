@@ -35,3 +35,14 @@ class Car(models.Model):
 
     def __str__(self):
         return self.model
+
+
+class Message(models.Model):
+    title = models.CharField(max_length=63)
+    text = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="massages")
+
+    def __str__(self):
+        return f"Message: {self.text} About: {self.title}" \
+               f"from: {self.author}"
