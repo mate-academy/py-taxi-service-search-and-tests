@@ -21,7 +21,9 @@ class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
         fields = UserCreationForm.Meta.fields + (
-            "license_number", "first_name", "last_name",
+            "license_number",
+            "first_name",
+            "last_name",
         )
 
     def clean_license_number(self):  # this logic is optional, but possible
@@ -29,7 +31,6 @@ class DriverCreationForm(UserCreationForm):
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
-
     class Meta:
         model = Driver
         fields = ["license_number"]
@@ -47,3 +48,13 @@ def validate_license_number(license_number):  # regex validation is also possibl
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class SearchForm(forms.Form):
+    def __init__(self, search_name: str = None, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields["search_edit"].widget.attrs.update(
+            {"placeholder": f"Search by {search_name}..."}
+        )
+
+    search_edit = forms.CharField(max_length=255, label="", widget=forms.TextInput())
