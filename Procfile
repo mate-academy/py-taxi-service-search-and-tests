@@ -1,0 +1,1 @@
+web: qunicorn taxi_service.wsgi --log-file -
