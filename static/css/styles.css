@@ -1,8 +1,39 @@
 body {
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+}
+
+.row_class {
+    display: flex;
+}
+
+.sidebar_ {
+  width: 20vw;
+  height: 100vh;
+  background-size:cover;
+  background-image: linear-gradient(to bottom, rgb(44, 43, 44) 30%, transparent, rgb(44, 43, 44) 70%),url("../images/map.webp");
+  color: white;
+}
+
+
+.content_ {
+  width: 80vw;
+  height: 100vh;
+  background-size: cover;
+  background-image: linear-gradient(to bottom, rgb(44, 43, 44) 30%, transparent, rgb(44, 43, 44) 70%),url("../images/taxi.png");
+  color: white;
+  font-size: 20px;
+}
+
+.table_ {
+    color: white;
+    background-color: #000a;
+}
+
+.li_class {
+    color: black;
 }

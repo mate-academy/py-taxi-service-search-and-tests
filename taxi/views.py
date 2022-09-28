@@ -4,9 +4,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.base import ContextMixin, View
+from django.views.generic.list import MultipleObjectMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, SearchForm
 
 
 @login_required
@@ -30,7 +32,41 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+class SearchMixin:
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(SearchMixin, self).get_context_data(
+            object_list=object_list, **kwargs
+        )
+
+        search_edit = self.request.GET.get("search_edit", "")
+
+        context["search_form"] = SearchForm(
+            search_name="name"
+            if self.model == Manufacturer
+            else "model"
+            if self.model == Car
+            else "username",
+            initial={"search_edit": search_edit},
+        )
+
+        return context
+
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        search_request = self.request.GET.get("search_edit")
+        if search_request:
+            if self.model == Driver:
+                return query_set.filter(username__icontains=search_request)
+            if self.model == Car:
+                return query_set.filter(model__icontains=search_request)
+
+            if self.model == Manufacturer:
+                return query_set.filter(name__icontains=search_request)
+
+        return query_set
+
+
+class ManufacturerListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
@@ -54,7 +90,7 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class CarListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
@@ -81,7 +117,7 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:car-list")
 
 
-class DriverListView(LoginRequiredMixin, generic.ListView):
+class DriverListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
@@ -110,7 +146,9 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
-    if Car.objects.get(id=pk) in driver.cars.all():  # probably could check if car exists
+    if (
+        Car.objects.get(id=pk) in driver.cars.all()
+    ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
