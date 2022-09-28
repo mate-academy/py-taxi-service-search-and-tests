@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-8ovil3xu6=eaoq
 # DEBUG = True
 DEBUG = bool(os.environ.get("DJANGO_DEBUG", True))
 
-ALLOWED_HOSTS = ["taxi-servise-1985.herokuapp.com/"]
+ALLOWED_HOSTS = ["127.0.0.1", "taxi-servise-1985.herokuapp.com/"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -94,6 +94,9 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+# Heroku: Update database configuration from $DATABASE_URL.
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -143,10 +146,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Heroku: Update database configuration from $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
