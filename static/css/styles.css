@@ -1,7 +1,3 @@
-body {
-    margin-top: 20px;
-}
-
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
@@ -16,6 +12,5 @@ body {
 }
 
 .logo{
-    width: 90px;
-    padding-bottom: 15px;
+    width: 110px;
 }
