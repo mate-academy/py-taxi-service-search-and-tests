@@ -6,3 +6,16 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.update{
+    color:green;
+}
+
+.delete{
+    color:red;
+}
+
+.logo{
+    width: 90px;
+    padding-bottom: 15px;
+}
