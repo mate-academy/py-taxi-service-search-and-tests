@@ -1,8 +1,30 @@
 body {
     margin-top: 20px;
+    background-color: bisque;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+h1 {
+    color: midnightblue;
+}
+
+a {
+    color: lightslategrey;
+}
+
+th {
+    color: darkslategrey;
+}
+
+img {
+    display: inline;
+    height: 15%;
+    width: 12%;
+    float: left;
+    margin-right: 20px;
+}
+
