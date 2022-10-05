@@ -2,9 +2,11 @@
 
 {% block content %}
   <h1>Delete manufacturer?</h1>
+  <p>All cars with this manufacturer will be also delete!</p>
+
+  <hr>
   <form action="" method="post">
     {% csrf_token %}
-
-    <input type="submit" value="Yes" class="btn btn-danger">
+    <input type="submit" value="Yes, please" class="btn btn-danger">
   </form>
 {% endblock %}

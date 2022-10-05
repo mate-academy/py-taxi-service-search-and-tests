@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>
-    {{ car.model }}
+    {{ car.model }} ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})
     <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
@@ -11,8 +11,10 @@
       Update
     </a>
   </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
+{#  <h3>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</h3>#}
+
+  <br>
+  <h2>
     Drivers
 
     {% if car in user.cars.all %}
@@ -25,11 +27,11 @@
       </a>
     {% endif %}
 
-  </h1>
+  </h2>
   <hr>
   <ul>
     {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
+      <li><h5><a href="{% url 'taxi:driver-detail' pk=driver.id %}">{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</a></h5></li>
     {% endfor %}
   </ul>
 {% endblock %}
