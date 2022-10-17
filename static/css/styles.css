@@ -1,8 +1,25 @@
 body {
     margin-top: 20px;
+    background-color: gainsboro;
+    height: 100%;
+
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+}
+.image-main {
+    height: 50px;
+
+}
+
+.list-group-item{
+    background-color: gainsboro;
+    border: solid gainsboro 1px;
+}
+
+a{
+    color: #4682B4;
+    font-weight: bold;
 }
