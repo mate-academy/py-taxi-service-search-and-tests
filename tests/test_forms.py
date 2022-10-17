@@ -4,7 +4,7 @@ from taxi.forms import DriverCreationForm
 
 
 class DriverFormTest(TestCase):
-    def test_driver_creation_form_with_license_number_first_name_last_name_is_valid(self):
+    def test_driver_creation_form_with_license_number_is_valid(self):
         form_data = {
             "username": "test",
             "password1": "Qwer123456",
@@ -16,4 +16,3 @@ class DriverFormTest(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
-
