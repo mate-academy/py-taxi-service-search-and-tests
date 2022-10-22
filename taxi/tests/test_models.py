@@ -11,7 +11,10 @@ class ModelsTests(TestCase):
             country="Test country"
         )
 
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self):
         driver = get_user_model().objects.create_user(
@@ -21,7 +24,10 @@ class ModelsTests(TestCase):
             last_name="Test last"
         )
 
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver), f"{driver.username} "
+                         f"({driver.first_name} {driver.last_name})"
+        )
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(
