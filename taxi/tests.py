@@ -49,21 +49,36 @@ class ModelsTests(TestCase):
     model_temp = "MOdel"
 
     def create_manufacture(self):
-        return Manufacturer.objects.create(name=self.name_temp, country=self.country_temp)
+        return Manufacturer.objects.create(
+            name=self.name_temp,
+            country=self.country_temp)
 
     def test_manufacturer_str(self):
         manufacture = self.create_manufacture()
-        self.assertEqual(str(manufacture), f"{self.name_temp} {self.country_temp}")
+        self.assertEqual(
+            str(manufacture),
+            f"{self.name_temp} {self.country_temp}"
+        )
 
     def test_driver_str(self):
-        driver = Driver.objects.create(username=self.username_temp,
-                                       first_name=self.first_name_temp,
-                                       last_name=self.last_name_temp)
-        self.assertEqual(str(driver), f"{self.username_temp} ({self.first_name_temp} {self.last_name_temp})")
+        driver = Driver.objects.create(
+            username=self.username_temp,
+            first_name=self.first_name_temp,
+            last_name=self.last_name_temp
+        )
+        self.assertEqual(
+            str(driver),
+            f"{self.username_temp} "
+            f"({self.first_name_temp} "
+            f"{self.last_name_temp})"
+        )
 
     def test_car_str(self):
         manufacturer_ = self.create_manufacture()
-        car = Car.objects.create(model=self.model_temp, manufacturer=manufacturer_)
+        car = Car.objects.create(
+            model=self.model_temp,
+            manufacturer=manufacturer_
+        )
         self.assertEqual(str(car), f"{self.model_temp}")
 
     def test_driver_with_license_number(self):
@@ -123,7 +138,7 @@ class ViewsDisplayListTests(TestCase):
 
     def test_car_data_list(self):
         mazda = Manufacturer.objects.create(name="Mazda")
-        toyota= Manufacturer.objects.create(name="Toyota")
+        toyota = Manufacturer.objects.create(name="Toyota")
         car = Car.objects.create(manufacturer=mazda, model="CX7")
         car.drivers.add(self.user.id)
         Car.objects.create(manufacturer=toyota, model="Prado")
@@ -132,7 +147,7 @@ class ViewsDisplayListTests(TestCase):
         result = self.client.get(URL_CAR_LIST)
 
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(list (result.context["car_list"]), need_list)
+        self.assertEqual(list(result.context["car_list"]), need_list)
 
     def test_driver_data_list(self):
         need_list = list(Driver.objects.all())

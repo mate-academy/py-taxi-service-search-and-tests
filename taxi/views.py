@@ -7,7 +7,11 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm, CarSearchForm, \
+from .forms import DriverCreationForm, \
+    DriverLicenseUpdateForm, \
+    CarForm, \
+    DriverSearchForm, \
+    CarSearchForm, \
     ManufacturerSearchForm
 
 
@@ -129,7 +133,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         context = super(DriverListView, self).get_context_data(**kwargs)
 
         username = self.request.GET.get("username", "")
-        context["search_form"] = DriverSearchForm(initial={"username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
 
         return context
 
