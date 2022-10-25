@@ -1,15 +1,16 @@
-<ul class="sidebar-nav list-group">
+<p class="h3 text-center">Menu</p>
+<ul class=" my_div h4 sidebar-nav list-group rounded-circle text-center">
   {% if user.is_authenticated %}
-    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-    <li class="list-group-item"><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+    <button class="list-group-item list-group-item-action rounded-circle" onclick="location.href='{{ user.get_absolute_url }}'">User: {{ user.get_username }}</button>
+    <button class="list-group-item list-group-item-action rounded-circle" onclick="location.href='{% url 'logout'%}?next={{request.path}}'">🔚 Logout</button>
   {% else %}
-    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    <button class="list-group-item rounded-circle" onclick="location.href='{% url 'login'%}?next={{request.path}}'">🚪 Login</button>
   {% endif %}
 
   <br>
 
-  <li class="list-group-item"><a href="{% url 'taxi:index' %}">Home</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:driver-list' %}">All drivers</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:car-list' %}">All cars</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a></li>
+  <button class="list-group-item list-group-item-action rounded-circle" onclick="location.href='{% url 'taxi:index' %}'">🏠 Home</button>
+  <button class="list-group-item list-group-item-action rounded-circle" onclick="location.href='{% url 'taxi:driver-list' %}'">👨‍🦱 All drivers</button>
+  <button class="list-group-item list-group-item-action rounded-circle" onclick="location.href='{% url 'taxi:car-list' %}'">🚕 All cars</button>
+  <button class="list-group-item list-group-item-action rounded-circle" onclick="location.href='{% url 'taxi:manufacturer-list' %}'">🏭 All manufacturers</button>
 </ul>
