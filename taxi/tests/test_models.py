@@ -8,7 +8,10 @@ class ModelsTests(TestCase):
     def test_manufacturer_str(self):
         manufacturer_ = Manufacturer.objects.create(name="test")
 
-        self.assertEqual(str(manufacturer_), f"{manufacturer_.name} {manufacturer_.country}")
+        self.assertEqual(
+            str(manufacturer_),
+            f"{manufacturer_.name} {manufacturer_.country}"
+        )
 
     def test_driver_str(self):
         driver = get_user_model().objects.create_user(
@@ -18,7 +21,11 @@ class ModelsTests(TestCase):
             last_name="Test last"
         )
 
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver), f"{driver.username} "
+                         f"({driver.first_name} "
+                         f"{driver.last_name})"
+        )
 
     def test_driver_with_license_number(self):
         username = "test"
