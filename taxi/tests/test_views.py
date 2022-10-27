@@ -50,19 +50,23 @@ class PublicCarTests(TestCase):
         )
         self.client.force_login(self.user)
 
+    @staticmethod
+    def create_objects_for_tests(class_obj, **kwargs):
+        return class_obj.objects.create(**kwargs)
+
     def test_search_for_a_car_by_symbols_from_the_model(self):
-        man_1 = Manufacturer.objects.create(name="Lincoln", country="USA")
-        man_2 = Manufacturer.objects.create(name="BMW", country="Germany")
-        Car.objects.create(model="LincolnX Navigator", manufacturer=man_1,)
-        Car.objects.create(model="X7", manufacturer=man_2)
+        man_1 = self.create_objects_for_tests(Manufacturer, name="Lincoln", country="USA")
+        man_2 = self.create_objects_for_tests(Manufacturer, name="BMW", country="Germany")
+        self.create_objects_for_tests(Car, model="LincolnX Navigator", manufacturer=man_1)
+        self.create_objects_for_tests(Car, model="X7", manufacturer=man_2)
+
         resp = self.client.get(reverse("taxi:car-list") + "?model=x")
-        print(resp)
         cars = Car.objects.filter(model__icontains="x")
-        print(cars)
-        print(resp.context["car_list"])
+
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
             list(resp.context["car_list"]),
             list(cars)
         )
+
         self.assertTemplateUsed(resp, "taxi/car_list.html")
