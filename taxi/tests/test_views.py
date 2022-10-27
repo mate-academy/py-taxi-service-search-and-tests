@@ -55,10 +55,14 @@ class PublicCarTests(TestCase):
         return class_obj.objects.create(**kwargs)
 
     def test_search_for_a_car_by_symbols_from_the_model(self):
-        man_1 = self.create_objects_for_tests(Manufacturer, name="Lincoln", country="USA")
-        man_2 = self.create_objects_for_tests(Manufacturer, name="BMW", country="Germany")
-        self.create_objects_for_tests(Car, model="LincolnX Navigator", manufacturer=man_1)
-        self.create_objects_for_tests(Car, model="X7", manufacturer=man_2)
+        man_1 = self.create_objects_for_tests(
+            Manufacturer, name="Lincoln", country="USA")
+        man_2 = self.create_objects_for_tests(
+            Manufacturer, name="BMW", country="Germany")
+        self.create_objects_for_tests(
+            Car, model="LincolnX Navigator", manufacturer=man_1)
+        self.create_objects_for_tests(
+            Car, model="X7", manufacturer=man_2)
 
         resp = self.client.get(reverse("taxi:car-list") + "?model=x")
         cars = Car.objects.filter(model__icontains="x")
