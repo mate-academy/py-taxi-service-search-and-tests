@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase,  Client
+from django.test import TestCase, Client
 from django.urls import reverse
 from taxi.models import Manufacturer, Car, Driver
 
@@ -18,6 +18,7 @@ class PublicIndexTests(TestCase):
         resp = self.client.get(INDEX_URL)
 
         self.assertNotEqual(resp.status_code, 200)
+
 
 class PrivateIndexTests(TestCase):
     def setUp(self) -> None:
@@ -77,6 +78,7 @@ class PublicCarTests(TestCase):
 
         self.assertNotEqual(resp.status_code, 200)
 
+
 class PrivateCarTests(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
@@ -86,10 +88,22 @@ class PrivateCarTests(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_cars(self):
-        manufacturer1 = Manufacturer.objects.create(name="Test1", country="country1")
-        manufacturer2 = Manufacturer.objects.create(name="Test2", country="country2")
-        Car.objects.create(model="test_model1", manufacturer=manufacturer1)
-        Car.objects.create(model="test_model2", manufacturer=manufacturer2)
+        manufacturer1 = Manufacturer.objects.create(
+            name="Test1",
+            country="country1"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="Test2",
+            country="country2"
+        )
+        Car.objects.create(
+            model="test_model1",
+            manufacturer=manufacturer1
+        )
+        Car.objects.create(
+            model="test_model2",
+            manufacturer=manufacturer2
+        )
 
         resp = self.client.get(CAR_URL)
         cars = Car.objects.all()
@@ -111,6 +125,7 @@ class PublicDriverTests(TestCase):
         resp = self.client.get(DRIVER_URL)
 
         self.assertNotEqual(resp.status_code, 200)
+
 
 class PrivateDriverTests(TestCase):
     def setUp(self) -> None:
