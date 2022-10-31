@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -7,16 +8,23 @@
       Create
     </a>
   </h1>
-
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input type="submit" value="🔎" class="btn btn-secondary">
+  </form>
+  <br>
   {% if manufacturer_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Update</th>
-        <th>Delete</th>
-      </tr>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Country</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+
 
       {% for manufacturer in manufacturer_list %}
         <tr>
