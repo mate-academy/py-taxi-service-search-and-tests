@@ -9,7 +9,6 @@ CAR_URL = reverse("taxi:car-list")
 DRIVER_URL = reverse("taxi:driver-list")
 
 
-# Index page tests
 class PublicIndexTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
@@ -34,7 +33,6 @@ class PrivateIndexTests(TestCase):
         self.assertEqual(resp.status_code, 200)
 
 
-# Manufacturers page tests
 class PublicManufacturerTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
@@ -68,7 +66,6 @@ class PrivateManufacturerTests(TestCase):
         self.assertTemplateUsed(resp, "taxi/manufacturer_list.html")
 
 
-# Car page tests
 class PublicCarTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
@@ -116,7 +113,6 @@ class PrivateCarTests(TestCase):
         self.assertTemplateUsed(resp, "taxi/car_list.html")
 
 
-# Driver page tests
 class PublicDriverTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
