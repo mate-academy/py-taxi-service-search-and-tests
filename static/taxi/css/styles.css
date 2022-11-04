@@ -1,8 +1,13 @@
 body {
     margin-top: 20px;
+    background-color: linen;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+}
+
+.list-group-item {
+    border-radius: 10px;
 }
