@@ -11,11 +11,13 @@ class AdminSiteTests(TestCase):
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
-            username="driver", password="driver12345", license_number="ABC12345"
+            username="driver", password="driver12345",
+            license_number="ABC12345"
         )
 
     def test_driver_license_number_listed(self):
-        """Tests that driver's license_number is in list_display an driver admin  page"""
+        """Tests that driver's license_number is in
+        list_display an driver admin  page"""
         url = reverse("admin:taxi_driver_changelist")
         res = self.client.get(url)
         self.assertContains(res, self.driver.license_number)

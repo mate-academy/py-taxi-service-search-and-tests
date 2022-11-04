@@ -24,9 +24,6 @@ class PrivateManufacturerTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_cars(self):
-        mitsubishi = Manufacturer.objects.create(name="Mitsubishi", country="Japan")
-        seat = Manufacturer.objects.create(name="Seat", country="Spain")
-
         response = self.client.get(MANUFACTURER_URL)
         manufacturer = Manufacturer.objects.all()
         self.assertEqual(response.status_code, 200)
