@@ -30,7 +30,9 @@ class PrivateHomePageTests(TestCase):
         self.client.force_login(self.driver)
 
     def test_home_page(self):
-        manufacturer = Manufacturer.objects.create(name="BMW", country="Germany")
+        manufacturer = Manufacturer.objects.create(
+            name="BMW", country="Germany"
+        )
         Car.objects.create(model="DMW x6", manufacturer=manufacturer)
 
         num_cars = Car.objects.count()
@@ -92,7 +94,9 @@ class PrivateManufacturerTests(TestCase):
         self.assertEqual(manufacturer.country, form_data["country"])
 
     def test_manufacturer_update(self):
-        manufacturer = Manufacturer.objects.create(name="Audi", country="Germany")
+        manufacturer = Manufacturer.objects.create(
+            name="Audi", country="Germany"
+        )
         manufacturer_id = manufacturer.id
 
         form_data = {
@@ -122,7 +126,9 @@ class PrivateManufacturerTests(TestCase):
                 country="Japan"
             )
 
-        res = self.client.get(f"{MANUFACTURER_LIST_URL}?name={manufacturer_name}")
+        res = self.client.get(
+            f"{MANUFACTURER_LIST_URL}?name={manufacturer_name}"
+        )
 
         self.assertEqual(len(res.context["manufacturer_list"]), 1)
 
@@ -140,8 +146,8 @@ class PublicCarListView(TestCase):
 
     def test_car_detail_login_required(self):
         manufacturer = Manufacturer.objects.create(
-            name=f"car manufacturer",
-            country=f"country"
+            name="car manufacturer",
+            country="country"
         )
         car = Car.objects.create(
             model="car model",
@@ -164,8 +170,8 @@ class PrivateCarTests(TestCase):
 
     def test_car_list(self):
         manufacturer = Manufacturer.objects.create(
-            name=f"car manufacturer",
-            country=f"country"
+            name="car manufacturer",
+            country="country"
         )
         for i in range(5):
             Car.objects.create(
@@ -186,11 +192,11 @@ class PrivateCarTests(TestCase):
 
     def test_car_detail(self):
         manufacturer = Manufacturer.objects.create(
-            name=f"car manufacturer",
-            country=f"country"
+            name="car manufacturer",
+            country="country"
         )
         car = Car.objects.create(
-            model=f"BMW x5",
+            model="BMW x5",
             manufacturer=manufacturer,
         )
         car.drivers.add(self.driver)
@@ -274,7 +280,9 @@ class PrivateDroverTests(TestCase):
         self.assertTemplateUsed(res, "taxi/driver_list.html")
 
     def test_driver_detail(self):
-        res = self.client.get(reverse("taxi:driver-detail", args=[self.driver.pk]))
+        res = self.client.get(
+            reverse("taxi:driver-detail", args=[self.driver.pk])
+        )
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.context["driver"], self.driver)

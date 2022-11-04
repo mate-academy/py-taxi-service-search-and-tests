@@ -1,24 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1 class="display-4">Taxi Service Home Page</h1>
+  <h1 class="display-3">Taxi Service Home Page</h1>
   <p>Welcome to this little Taxi Service</p>
   <div class="homepage-content">
     <ul class="list-group">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <i class="bi bi-car-front"></i>
         <span>Cars</span>
-        <span class="badge badge-info badge-pill">{{ num_cars }}</span>
+        <a href="{% url "taxi:car-list" %}">
+          <span class="badge badge-primary badge-pill">{{ num_cars }}</span>
+        </a>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <i class="bi bi-people"></i>
         <span>Drivers</span>
-        <span class="badge badge-info badge-pill">{{ num_drivers }}</span>
+        <a href="{% url "taxi:driver-list" %}">
+          <span class="badge badge-primary badge-pill">{{ num_drivers }}</span>
+        </a>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <i class="bi bi-building"></i>
         <span>Manufacturers</span>
-        <span class="badge badge-info badge-pill">{{ num_manufacturers }}</span>
+        <a href="{% url "taxi:manufacturer-list" %}">
+          <span class="badge badge-primary badge-pill">{{ num_manufacturers }}</span>
+        </a>
       </li>
     </ul>
   </div>
