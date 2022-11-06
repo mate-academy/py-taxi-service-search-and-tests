@@ -1,8 +1,22 @@
 body {
-    margin-top: 20px;
+    background-color: #F1F3F4;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.content {
+    padding-top: 30px;
+    width: 70%;
+    min-height: 100vh;
+    background-color: #BABCBE;
+}
+
+.pagination {
+    color: #BABCBE;
+}
+
+
+

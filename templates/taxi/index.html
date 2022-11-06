@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
     <h1>Taxi Service Home</h1>
@@ -14,5 +15,7 @@
     <p>You have visited this page
         {{ num_visits }} time{{ num_visits|pluralize }}.
     </p>
-
+  <div class="col-md-10 px-">
+  <img data-mdb-animation-start="onScroll" src="{% static 'rider.jpg' %}" class="img-fluid" alt="rider">
+  </div>
 {% endblock %}

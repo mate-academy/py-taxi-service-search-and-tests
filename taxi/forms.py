@@ -39,14 +39,56 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+def validate_license_number(license_number):
+    uppercase_char_num = 3
+    digit_char_num = 5
+    license_number_length = uppercase_char_num + digit_char_num
+
+    if len(license_number) != license_number_length:
+        raise ValidationError(
+            f"License number must consist of "
+            f"{license_number_length} characters!"
+        )
+
+    if not (
+            license_number[: uppercase_char_num].isalpha()
+            and license_number[: uppercase_char_num].isupper()
+    ):
+        raise ValidationError(
+            f"First {uppercase_char_num} "
+            f"characters must be uppercase letters!"
+        )
+
+    if not license_number[uppercase_char_num:].isdigit():
+        raise ValidationError(
+            f"Last {digit_char_num} characters must be digits!"
+        )
 
     return license_number
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by model"}),
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name"}),
+    )
+
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by username"}),
+    )
