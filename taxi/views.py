@@ -6,8 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm, CarSearchForm, \
-    ManufacturerSearchForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+)
 
 
 @login_required
@@ -43,9 +49,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("name", "")
 
-        context["search_form"] = ManufacturerSearchForm(initial={
-            "name": name
-        })
+        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
 
         return context
 
@@ -54,7 +58,8 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         if form.is_valid():
             return self.queryset.filter(
-                name__contains=form.cleaned_data["name"])
+                name__contains=form.cleaned_data["name"]
+            )
 
         return self.queryset
 
@@ -86,9 +91,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         model = self.request.GET.get("model", "")
 
-        context["search_form"] = CarSearchForm(initial={
-            "model": model
-        })
+        context["search_form"] = CarSearchForm(initial={"model": model})
 
         return context
 
@@ -134,9 +137,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = DriverSearchForm(initial={
-            "username": username
-        })
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
 
         return context
 
