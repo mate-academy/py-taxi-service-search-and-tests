@@ -1,5 +1,9 @@
 body {
-    background-color: #F1F3F4;
+    background-image: url('/static/background.jpg'), url('/static/background.jpg');
+    background-position: right bottom, left top;
+    background-repeat: no-repeat, no-repeat;
+    background-size: contain, contain;
+
 }
 
 .link-to-page {
