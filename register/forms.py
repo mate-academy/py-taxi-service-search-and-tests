@@ -1,8 +1,6 @@
 from django.contrib.auth import login, authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 
 class RegisterForm(UserCreationForm):
@@ -12,5 +10,13 @@ class RegisterForm(UserCreationForm):
     license_number = forms.CharField(max_length=8)
 
     class Meta:
-        model = User
-        fields = ("username", "first_name", "last_name", "email", "license_number", "password1", "password2")
+        model = get_user_model()
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "license_number",
+            "password1",
+            "password2",
+        )
