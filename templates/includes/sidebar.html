@@ -1,15 +1,39 @@
+{% load static %}
 <ul class="sidebar-nav list-group">
+  <img class="image-logo" src="{% static 'images/logo-taxi.jpg' %}" alt="logo">
   {% if user.is_authenticated %}
-    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-    <li class="list-group-item"><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+    <div class="list-group text-center auth-field" id="list-tab" role="tablist">
+
+      <a href="{{ user.get_absolute_url }}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+        <i class="fa fa-user-circle float-left" aria-hidden="true"></i>User: {{ user.get_username }}
+      </a>
+
+      <a href="{% url 'logout'%}?next={{request.path}}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+        <i class="fa fa-sign-out fa-lg float-left" aria-hidden="true"></i> Logout
+      </a>
+    </div>
   {% else %}
-    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    <div class="list-group text-center auth-field" id="list-tab" role="tablist">
+      <a href="{% url 'login'%}?next={{request.path}}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+        <i class="fa fa-sign-in fa-lg float-left" aria-hidden="true"></i>Login
+      </a>
+    </div>
   {% endif %}
 
   <br>
 
-  <li class="list-group-item"><a href="{% url 'taxi:index' %}">Home</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:driver-list' %}">All drivers</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:car-list' %}">All cars</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a></li>
+  <div class="list-group text-center" id="list-tab" role="tablist">
+    <a href="{% url 'taxi:index' %}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+      <i class="fa fa-home fa-lg float-left" aria-hidden="true"></i> Home
+    </a>
+    <a href="{% url 'taxi:driver-list' %}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+      <i class="fa fa-id-card fa-lg float-left" aria-hidden="true"></i> All drivers
+    </a>
+    <a href="{% url 'taxi:car-list' %}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+      <i class="fa fa-car fa-lg  float-left" aria-hidden="true"></i> All cars
+    </a>
+    <a href="{% url 'taxi:manufacturer-list' %}" class="list-group-item list-group-item-action list-group-item-light" id="logout-list" data-toggle="list" role="tab" aria-controls="home">
+      <i class="fa fa-industry fa-lg float-left" aria-hidden="true"></i> All manufacturers
+    </a>
+  </div>
 </ul>

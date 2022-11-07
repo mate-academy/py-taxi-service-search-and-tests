@@ -17,6 +17,7 @@ from .views import (
     ManufacturerUpdateView,
     ManufacturerDeleteView,
     toggle_assign_to_car,
+    no_permission,
 )
 
 urlpatterns = [
@@ -70,6 +71,7 @@ urlpatterns = [
         DriverDeleteView.as_view(),
         name="driver-delete",
     ),
+    path("no_permission/", no_permission, name="no_permission"),
 ]
 
 app_name = "taxi"
