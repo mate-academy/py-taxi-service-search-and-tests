@@ -15,25 +15,25 @@
 
     {% if driver_list %}
     <table class="table table-hover">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
-      </tr>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>License number</th>
+    </tr>
     {% for driver in driver_list %}
-      <tr>
+      <tr onclick="window.location='{{ driver.get_absolute_url }}'">
         <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
+        <td>{{ driver.username }} {% if user == driver %} (Me){% endif %}</td>
         <td>{{ driver.first_name }}</td>
         <td>{{ driver.last_name }}</td>
         <td>{{ driver.license_number }}</td>
       </tr>
     {% endfor %}
 
-    </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  </table>
+{% else %}
+  <p>There are no drivers in the service.</p>
+{% endif %}
 {% endblock %}

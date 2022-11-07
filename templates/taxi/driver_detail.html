@@ -21,7 +21,7 @@
     <h4>Cars</h4>
 
     {% for car in driver.cars.all %}
-      <a href="{% url 'taxi:car-detail' pk=car.id %}" class="list-group-item list-group-item-action">
+      <a href="{% url 'taxi:car-detail' pk=car.id %}" class="list-group-item list-group-item-action list-group-item-secondary">
         <p><strong>Model:</strong> {{ car.model }}</p>
         <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
         <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
