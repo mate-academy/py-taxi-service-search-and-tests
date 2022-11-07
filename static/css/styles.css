@@ -1,8 +1,7 @@
 body {
     margin-top: 20px;
+    background-color: #ffb503;
 }
-
-.link-to-page {
-    float: right;
-    margin: 0 2px 0 2px;
-}
+ head {
+     margin-top: 50px;
+ }
