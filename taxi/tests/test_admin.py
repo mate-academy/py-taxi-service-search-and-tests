@@ -35,13 +35,11 @@ class AdminSiteTest(TestCase):
 
         self.assertContains(result, self.driver.license_number)
 
-    # Does not work :(
+    def test_driver_add_license_number_listed(self):
+        """Test that driver's license_number
+        is on driver add admin page"""
 
-    # def test_driver_add_license_number_listed(self):
-    #     """Test that driver's license_number
-    #     is on driver add admin page"""
-    #
-    #     url = reverse("admin:taxi_driver_add")
-    #     result = self.client.get(url)
-    #
-    #     self.assertContains(result, self.driver.license_number)
+        url = reverse("admin:taxi_driver_add")
+        result = self.client.get(url)
+
+        self.assertContains(result, "license_number")
