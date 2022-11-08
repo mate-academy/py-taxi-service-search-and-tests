@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car, Driver
+from taxi.models import Manufacturer, Car
 
 DRIVER_URL = reverse("taxi:driver-list")
 CARS_URL = reverse("taxi:car-list")
