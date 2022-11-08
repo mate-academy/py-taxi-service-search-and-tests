@@ -6,7 +6,11 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm
+from .forms import \
+    DriverCreationForm, \
+    DriverLicenseUpdateForm, \
+    CarForm, \
+    DriverSearchForm
 
 
 @login_required
@@ -34,7 +38,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
-    paginate_by = 2
+    paginate_by = 5
     queryset = Manufacturer.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
