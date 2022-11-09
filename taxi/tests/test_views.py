@@ -101,7 +101,7 @@ def test_login_required(url, client):
     assertRedirects(
         response,
         f"{reverse('login')}?{urlencode({'next': url})}",
-        status_code=302
+        status_code=302,
     )
 
 
@@ -185,6 +185,17 @@ class TestDriverViews:
         assert list(response.context["driver_list"]) == list(drivers)
 
     @pytest.mark.django_db
+    def test_driver_detail(self, drivers_data, driver_client):
+        driver_id = 1
+
+        response = driver_client.get(
+            reverse("taxi:driver-detail", args=[driver_id])
+        )
+        driver = get_user_model().objects.get(pk=driver_id)
+
+        assert response.context_data["driver"] == driver
+
+    @pytest.mark.django_db
     def test_car_template(self, driver_client):
         response = driver_client.get(reverse("taxi:driver-list"))
 
@@ -263,6 +274,17 @@ class TestCarViews:
         assertTemplateUsed(response, "taxi/car_list.html")
 
     @pytest.mark.django_db
+    def test_car_detail(
+        self, manufacturers_data, drivers_data, cars_data, driver_client
+    ):
+        car_id = 1
+
+        response = driver_client.get(reverse("taxi:car-detail", args=[car_id]))
+        car = Car.objects.get(pk=car_id)
+
+        assert response.context_data["car"] == car
+
+    @pytest.mark.django_db
     def test_manufacturer_template(self, driver_client):
         response = driver_client.get(reverse("taxi:car-list"))
 
@@ -329,11 +351,33 @@ class TestCarViews:
         self, drivers_data, manufacturers_data, cars_data, driver_client
     ):
         # Probably not how you do it 3.
-        response = driver_client.get(
-            reverse("taxi:car-list") + "?model=5"
-        )
+        response = driver_client.get(reverse("taxi:car-list") + "?model=5")
         cars = Car.objects.filter(model__icontains="5")
 
-        assert list(response.context["car_list"]) == list(
-            cars
+        assert list(response.context["car_list"]) == list(cars)
+
+    @pytest.mark.django_db
+    def test_assign_to_car(
+        self, drivers_data, manufacturers_data, cars_data, driver_client
+    ):
+        car_id = 1
+
+        response_add = driver_client.get(
+            reverse("taxi:toggle-car-assign", args=[car_id])
         )
+
+        car = Car.objects.prefetch_related("drivers").get(pk=car_id)
+        user = response_add.wsgi_request.user
+
+        assert response_add.status_code == 302
+        assert user in car.drivers.all()
+
+        # And now the other way, using the WET design principle.
+        response_remove = driver_client.get(
+            reverse("taxi:toggle-car-assign", args=[car_id])
+        )
+
+        car.refresh_from_db()
+
+        assert response_remove.status_code == 302
+        assert user not in car.drivers.all()
