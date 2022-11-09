@@ -1,15 +1,14 @@
-<ul class="sidebar-nav list-group">
+<div class="mb-3 w-100 btn-group-vertical">
   {% if user.is_authenticated %}
-    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-    <li class="list-group-item"><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+    <a href="{{ user.get_absolute_url }}" class="btn btn-light"><i class="bi bi-person float-left"></i>&nbsp;{{ user.get_username }}</a>
+    <a href="{% url 'logout'%}?next={{request.path}}" class="btn btn-light"><i class="bi bi-box-arrow-right float-left"></i> Logout</a>
   {% else %}
-    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    <a href="{% url 'login'%}?next={{request.path}}" class="btn btn-light"><i class="bi bi-box-arrow-in-right float-left"></i> Login</a></li>
   {% endif %}
-
-  <br>
-
-  <li class="list-group-item"><a href="{% url 'taxi:index' %}">Home</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:driver-list' %}">All drivers</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:car-list' %}">All cars</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a></li>
-</ul>
+</div>
+<div class="sidebar-nav w-100 btn-group-vertical">
+  <a href="{% url 'taxi:index' %}" class="btn btn-light"><i class="bi bi-house-door float-left"></i> Home</a>
+  <a href="{% url 'taxi:driver-list' %}" class="btn btn-light"><i class="bi bi-person-badge float-left"></i> All drivers</a>
+  <a href="{% url 'taxi:car-list' %}" class="btn btn-light"><i class="bi bi-car-front float-left"></i> All cars</a>
+  <a href="{% url 'taxi:manufacturer-list' %}" class="btn btn-light"><i class="bi bi-wrench-adjustable-circle float-left"></i> All manufacturers</a>
+</div>
