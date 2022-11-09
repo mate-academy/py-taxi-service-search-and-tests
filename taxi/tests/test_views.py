@@ -9,14 +9,14 @@ CAR_LIST_URL = reverse("taxi:car-list")
 DRIVER_CREATE = reverse("taxi:driver-create")
 
 
-class PublicManufacturerList(TestCase):
+class PublicManufacturerTest(TestCase):
     def test_login_required(self):
         response = self.client.get(MANUFACTURER_LIST_URL)
 
         self.assertNotEqual(response.status_code, 200)
 
 
-class PrivateManufacturerList(TestCase):
+class PrivateManufacturerTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user("Test", "Pass11243fd")
         self.client.force_login(self.user)
@@ -50,14 +50,14 @@ class PrivateManufacturerList(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
 
-class PublicCarList(TestCase):
+class PublicCarTest(TestCase):
     def test_login_required(self):
         response = self.client.get(CAR_LIST_URL)
 
         self.assertNotEqual(response.status_code, 200)
 
 
-class PrivateCarList(TestCase):
+class PrivateCarTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="testName",
