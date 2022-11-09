@@ -6,6 +6,7 @@ from taxi.models import Car, Manufacturer, Driver
 
 CAR_URL = reverse("taxi:car-list")
 DRIVER_URL = reverse("taxi:driver-list")
+MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
 
 class PublicCarTests(TestCase):
@@ -88,8 +89,10 @@ class PrivateManufacturerTests(TestCase):
     def test_retrieve_manufacturers(self):
         Manufacturer.objects.create(name="Ford", country="USA")
         Manufacturer.objects.create(name="BMW", country="Germany")
-        res = self.client.get(reverse("taxi:manufacturer-list"))
+        res = self.client.get(MANUFACTURER_URL)
         manufacturers = Manufacturer.objects.all()
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(list(res.context["manufacturer_list"]), list(manufacturers))
+        self.assertEqual(
+            list(res.context["manufacturer_list"]), list(manufacturers)
+        )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
