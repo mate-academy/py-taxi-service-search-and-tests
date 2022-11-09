@@ -1,7 +1,8 @@
 import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from pytest_django.asserts import assertTemplateUsed
+from django.utils.http import urlencode
+from pytest_django.asserts import assertTemplateUsed, assertRedirects
 
 from taxi.models import Manufacturer, Car
 
@@ -95,7 +96,13 @@ def test_login_required(url, client):
     # Therefore, its behaviour definitely should be changed if
     # at some point there appear pages that allow database access to
     # unauthorized users. :)
-    assert client.get(url).status_code == 302
+    response = client.get(url)
+
+    assertRedirects(
+        response,
+        f"{reverse('login')}?{urlencode({'next': url})}",
+        status_code=302
+    )
 
 
 class TestManufacturerViews:
