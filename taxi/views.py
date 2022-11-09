@@ -121,36 +121,42 @@ def toggle_assign_to_car(request, pk):
 
 
 def cars_search(request):
-    search_car = request.GET.get('search')
+    search_car = request.GET.get("search")
     if search_car:
-        car_list = Car.objects.filter(Q(model__icontains=search_car) | Q(manufacturer__name__contains=search_car))
+        car_list = Car.objects.filter(
+            Q(model__icontains=search_car)
+            | Q(manufacturer__name__contains=search_car)
+        )
     else:
-        car_list = Car.objects.all().order_by("-model")
+        car_list = Car.objects.all().order_by("model")
 
     context = {
         "car_list": car_list
     }
-    return render(request, 'taxi/car_list.html', context=context)
+    return render(request, "taxi/car_list.html", context=context)
 
 
 def drivers_search(request):
-    drivers_searching = request.GET.get('search')
+    drivers_searching = request.GET.get("search")
     if drivers_searching:
-        driver_list = Driver.objects.filter(Q(username__icontains=drivers_searching))
+        driver_list = Driver.objects.filter(
+            Q(username__icontains=drivers_searching)
+        )
     else:
         driver_list = Driver.objects.all().order_by("username")
 
     context = {
         "driver_list": driver_list
     }
-    return render(request, 'taxi/driver_list.html', context=context)
+    return render(request, "taxi/driver_list.html", context=context)
 
 
 def manufacturers_search(request):
-    manufacturers_searching = request.GET.get('search')
+    manufacturers_searching = request.GET.get("search")
     if manufacturers_searching:
         manufacturer_list = Manufacturer.objects.filter(
-            Q(name__icontains=manufacturers_searching) | Q(country__icontains=manufacturers_searching)
+            Q(name__icontains=manufacturers_searching)
+            | Q(country__icontains=manufacturers_searching)
         )
     else:
         manufacturer_list = Manufacturer.objects.all().order_by("name")
@@ -158,4 +164,4 @@ def manufacturers_search(request):
     context = {
         "manufacturer_list": manufacturer_list
     }
-    return render(request, 'taxi/manufacturer_list.html', context=context)
+    return render(request, "taxi/manufacturer_list.html", context=context)
