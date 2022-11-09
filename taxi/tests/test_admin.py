@@ -28,4 +28,3 @@ class AdminSiteTest(TestCase):
         response = self.client.get(url)
 
         self.assertContains(response, self.driver.license_number)
-
