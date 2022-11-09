@@ -102,7 +102,6 @@ class PrivateDriverTest(TestCase):
         self.user = get_user_model().objects.create_user(
             username="test",
             password="test12345",
-            license_number="TES12345"
         )
         self.client.force_login(self.user)
 
@@ -122,3 +121,20 @@ class PrivateDriverTest(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
+
+    def test_create_driver(self):
+        form_data = {
+            "username": "test.test",
+            "password1": "test11111",
+            "password2": "test11111",
+            "first_name": "first",
+            "last_name": "last",
+            "license_number": "TES12345",
+        }
+
+        self.client.post(reverse("taxi:driver-create"), data=form_data)
+        new_user = get_user_model().objects.get(username=form_data["username"])
+
+        self.assertEqual(new_user.first_name, form_data["first_name"])
+        self.assertEqual(new_user.last_name, form_data["last_name"])
+        self.assertEqual(new_user.license_number, form_data["license_number"])
