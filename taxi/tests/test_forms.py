@@ -21,7 +21,7 @@ class FormsTest(TestCase):
     def test_driver_creation_form_with_invalid_licence_num(self):
         """Test whether licence number validation works"""
 
-        bad_license_number = ["JAk12312", "1111111", "jac"]
+        bad_license_number = ["JAk12312", "JAK1111", "JAK"]
         for license_number in bad_license_number:
             with self.subTest(license_number=license_number):
                 form_data = {
