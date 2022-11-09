@@ -32,9 +32,16 @@ class FormsTests(TestCase):
 
         driver = get_user_model().objects.create_user(**FormsTests.form_data)
         license_number = {"license_number": "QNR12457"}
-        self.client.post(reverse("taxi:driver-update", args=[driver.id]), license_number)
+        self.client.post(reverse(
+            "taxi:driver-update",
+            args=[driver.id]),
+            license_number
+        )
         driver = get_user_model().objects.get(pk=driver.id)
-        self.assertEqual(driver.license_number, license_number["license_number"])
+        self.assertEqual(
+            driver.license_number,
+            license_number["license_number"]
+        )
 
     def test_correct_license_number_entry(self):
         bad_license_number = ["QWE123344", "12345678", "QWE"]
