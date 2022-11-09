@@ -15,17 +15,17 @@ class PublicAccessForbiddenTest(TestCase):
     def setUp(self) -> None:
         self.client = Client()
 
-    def test_public_access_forbidden_driver(self):
+    def test_public_access_forbidden_driver_list(self):
         response = self.client.get(DRIVER_URL)
 
         self.assertNotEqual(response.status_code, 200)
 
-    def test_public_access_forbidden_car(self):
+    def test_public_access_forbidden_car_list(self):
         response = self.client.get(CARS_URL)
 
         self.assertNotEqual(response.status_code, 200)
 
-    def test_public_access_forbidden_manufacturer(self):
+    def test_public_access_forbidden_manufacturer_list(self):
         response = self.client.get(MANUFACTURERS_URL)
 
         self.assertNotEqual(response.status_code, 200)
@@ -59,7 +59,7 @@ class PrivateAccessGrantedTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_private_access_granted_driver(self):
+    def test_private_access_granted_driver_list(self):
         response = self.client.get(DRIVER_URL)
 
         drivers = get_user_model().objects.all()
@@ -70,7 +70,7 @@ class PrivateAccessGrantedTest(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
-    def test_private_access_granted_car(self):
+    def test_private_access_granted_car_list(self):
         response = self.client.get(CARS_URL)
 
         cars = Car.objects.all()
@@ -81,7 +81,7 @@ class PrivateAccessGrantedTest(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
-    def test_private_access_granted_manufacturer(self):
+    def test_private_access_granted_manufacturer_list(self):
         response = self.client.get(MANUFACTURERS_URL)
 
         manufacturers = Manufacturer.objects.all()
@@ -102,3 +102,30 @@ class PrivateAccessGrantedTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "registration/login.html")
+
+
+class PrivateCreationTest(TestCase):
+
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "testuser",
+            "Testpass123"
+        )
+        self.client.force_login(self.user)
+
+    def test_create_driver(self):
+        form_data = {
+            "username": "qweqweqwe",
+            "password1": "asdasda123",
+            "password2": "asdasda123",
+            "first_name": "jack test",
+            "last_name": "black test",
+            "license_number": "JAK12312",
+        }
+
+        self.client.post(reverse("taxi:driver-create"), data=form_data)
+        new_user = get_user_model().objects.get(username=form_data["username"])
+
+        self.assertEqual(new_user.first_name, form_data["first_name"])
+        self.assertEqual(new_user.last_name, form_data["last_name"])
+        self.assertEqual(new_user.license_number, form_data["license_number"])
