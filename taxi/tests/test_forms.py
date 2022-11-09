@@ -5,7 +5,6 @@ from taxi.models import Driver
 
 
 class TestDriverCreationForm(TestCase):
-
     def test_creation_driver(self):
         form_data = {
             "username": "test",
@@ -19,8 +18,13 @@ class TestDriverCreationForm(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
-        driver = Driver.objects.create_user(username="test", password="test12345", first_name="first_name",
-                                            last_name="last_name", license_number="BHJ12345",)
+        driver = Driver.objects.create_user(
+            username="test",
+            password="test12345",
+            first_name="first_name",
+            last_name="last_name",
+            license_number="BHJ12345",
+        )
         driver.refresh_from_db()
 
         self.assertEqual(driver.username, form_data["username"])
