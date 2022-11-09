@@ -63,7 +63,10 @@ class DriversTests(TestCase):
     def test_driver_str(self):
         driver = get_user_model().objects.get(id=1)
 
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_create_driver_with_license_number(self):
         driver = get_user_model().objects.get(id=1)
