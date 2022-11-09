@@ -2,15 +2,16 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer
+from taxi.models import Manufacturer, Car
 
-LITERARY_FORMAT_URL = reverse("taxi:manufacturer-list")
+MANUFACTURER_URL = reverse("taxi:manufacturer-list")
+DRIVER_URL = reverse("taxi:driver-list")
+CAR_URL = reverse("taxi:car-list")
 
 
 class PublicManufacturerTests(TestCase):
-
     def test_login_required(self):
-        res = self.client.get(LITERARY_FORMAT_URL)
+        res = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(res.status_code, 200)
 
 
@@ -23,10 +24,10 @@ class PrivateManufacturerTests(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_manufacturer(self):
-        Manufacturer.objects.create(name="Tesla")
-        Manufacturer.objects.create(name="Mercedes-Benz")
+        Manufacturer.objects.create(name="Tesla", country="USA")
+        Manufacturer.objects.create(name="Mercedes-Benz", country="Germany")
 
-        response = self.client.get(LITERARY_FORMAT_URL)
+        response = self.client.get(MANUFACTURER_URL)
 
         manufacturer = Manufacturer.objects.all()
 
@@ -36,6 +37,12 @@ class PrivateManufacturerTests(TestCase):
             list(manufacturer)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+
+class PublicDriverTests(TestCase):
+    def test_login_required(self):
+        res = self.client.get(DRIVER_URL)
+        self.assertNotEqual(res.status_code, 200)
 
 
 class PrivateDriverTests(TestCase):
@@ -62,3 +69,41 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(new_user.first_name, form_data["first_name"])
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
+
+
+class PublicCarTests(TestCase):
+    def test_login_required(self):
+        res = self.client.get(CAR_URL)
+        self.assertNotEqual(res.status_code, 200)
+
+
+class PrivateCarTests(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "test",
+            "password12345"
+        )
+        self.client.force_login(self.user)
+
+    def test_retrieve_car(self):
+        manufacturer_1 = Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        Car.objects.create(model="Tesla", manufacturer=manufacturer_1)
+        manufacturer_2 = Manufacturer.objects.create(
+            name="Mercedes-Benz",
+            country="Germany"
+        )
+        Car.objects.create(model="Mercedes-Benz", manufacturer=manufacturer_2)
+
+        response = self.client.get(CAR_URL)
+
+        car = Car.objects.all()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(car)
+        )
+        self.assertTemplateUsed(response, "taxi/car_list.html")
