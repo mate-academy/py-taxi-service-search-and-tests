@@ -61,8 +61,12 @@ class PrivetCarTest(TestCase):
             name="BMW",
             country="Germany"
         )
-        Car.objects.create(model="Lincoln Continental", manufacturer_id=manufacturer.id)
-        Car.objects.create(model="Toyota Yaris", manufacturer_id=manufacturer.id)
+        Car.objects.create(
+            model="Lincoln Continental", manufacturer_id=manufacturer.id
+        )
+        Car.objects.create(
+            model="Toyota Yaris", manufacturer_id=manufacturer.id
+        )
 
         response = self.client.get(CAR_URL_LIST)
 
@@ -102,8 +106,9 @@ class PrivetDriverTest(TestCase):
         }
 
         self.client.post(DRIVER_URL_CREATE, data=form_data)
-        test_user = get_user_model().objects.get(username=form_data["username"])
-
+        test_user = get_user_model().objects.get(
+            username=form_data["username"]
+        )
         self.assertEqual(test_user.first_name, form_data["first_name"])
         self.assertEqual(test_user.last_name, form_data["last_name"])
         self.assertEqual(test_user.license_number, form_data["license_number"])
