@@ -18,14 +18,6 @@ class AdminSiteTest(TestCase):
             password="123driver123",
             license_number="RRR54321"
         )
-        self.manufacturer = Manufacturer.objects.create(
-            name="Ford",
-            country="USA"
-        )
-        self.car = Car.objects.create(
-            model="Focus",
-            manufacturer=self.manufacturer,
-        )
 
     def test_drivers_license_listed(self):
         url = reverse("admin:taxi_driver_changelist")
