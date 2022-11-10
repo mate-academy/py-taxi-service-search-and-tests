@@ -17,8 +17,7 @@ class PublicCarsTests(TestCase):
 class PrivateCarsTests(TestCase):
     def setUp(self) -> None:
         self.driver = get_user_model().objects.create_user(
-            username="testuser",
-            password="test123user"
+            username="testuser", password="test123user"
         )
         self.client.force_login(self.driver)
 
@@ -31,14 +30,8 @@ class PrivateCarsTests(TestCase):
             country="Manufcountry2"
         )
 
-        self.car1 = Car.objects.create(
-            model="Car1",
-            manufacturer=manuf1
-        )
-        self.car2 = Car.objects.create(
-            model="Car2",
-            manufacturer=manuf2
-        )
+        self.car1 = Car.objects.create(model="Car1", manufacturer=manuf1)
+        self.car2 = Car.objects.create(model="Car2", manufacturer=manuf2)
 
     def test_retrieve_cars(self):
         cars = Car.objects.all()
@@ -46,10 +39,7 @@ class PrivateCarsTests(TestCase):
         response = self.client.get(CARS_URL)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["car_list"]),
-            list(cars)
-        )
+        self.assertEqual(list(response.context["car_list"]), list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_car_listed(self):

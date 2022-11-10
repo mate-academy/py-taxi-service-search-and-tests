@@ -11,7 +11,7 @@ class FormTests(TestCase):
             "password2": "u123test",
             "first_name": "Nametest",
             "last_name": "Surnametest",
-            "license_number": "AAA12345"
+            "license_number": "AAA12345",
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -19,9 +19,7 @@ class FormTests(TestCase):
         self.assertEqual(form.fields.keys(), form_data.keys())
 
     def test_driver_license_update_form(self):
-        form_data = {
-            "license_number": "AAA12345"
-        }
+        form_data = {"license_number": "AAA12345"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)

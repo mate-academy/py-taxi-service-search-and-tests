@@ -17,20 +17,13 @@ class PublicManufacturersTests(TestCase):
 class PrivateManufacturersTests(TestCase):
     def setUp(self) -> None:
         self.driver = get_user_model().objects.create_user(
-            username="testuser",
-            password="test123user"
+            username="testuser", password="test123user"
         )
         self.client.force_login(self.driver)
 
     def test_retrieve_manufacturers(self):
-        Manufacturer.objects.create(
-            name="Manufname1",
-            country="Manufcountry1"
-        )
-        Manufacturer.objects.create(
-            name="Manufname2",
-            country="Manufcountry2"
-        )
+        Manufacturer.objects.create(name="Manufname1", country="Manufcountry1")
+        Manufacturer.objects.create(name="Manufname2", country="Manufcountry2")
 
         manufacturers = Manufacturer.objects.all()
 
@@ -38,7 +31,6 @@ class PrivateManufacturersTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            list(response.context["manufacturer_list"]),
-            list(manufacturers)
+            list(response.context["manufacturer_list"]), list(manufacturers)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")

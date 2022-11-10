@@ -6,8 +6,7 @@ from django.urls import reverse
 class AdminSiteTests(TestCase):
     def setUp(self) -> None:
         self.admin_user = get_user_model().objects.create_superuser(
-            username="admin1",
-            password="admin12345"
+            username="admin1", password="admin12345"
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
@@ -17,7 +16,7 @@ class AdminSiteTests(TestCase):
         )
 
     def test_driver_license_listed(self):
-        """Test driver's license number is in list_display on driver admin page"""
+        """Test driver's license is in list_display on driver admin page"""
         url = reverse("admin:taxi_driver_changelist")
         response = self.client.get(url)
 

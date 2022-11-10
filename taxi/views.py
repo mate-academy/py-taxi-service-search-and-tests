@@ -6,8 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm, CarSearchForm, \
-    ManufacturerSearchForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+)
 
 
 @login_required
@@ -40,9 +46,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context["search_form"] = ManufacturerSearchForm(initial={
-            "search_by": self.request.GET.get("search_by", "")
-        })
+        context["search_form"] = ManufacturerSearchForm(
+            initial={"search_by": self.request.GET.get("search_by", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -80,9 +86,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context["search_form"] = CarSearchForm(initial={
-            "search_by": self.request.GET.get("search_by", "")
-        })
+        context["search_form"] = CarSearchForm(
+            initial={"search_by": self.request.GET.get("search_by", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -124,9 +130,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context["search_form"] = DriverSearchForm(initial={
-            "search_by": self.request.GET.get("search_by", "")
-        })
+        context["search_form"] = DriverSearchForm(
+            initial={"search_by": self.request.GET.get("search_by", "")}
+        )
         return context
 
     def get_queryset(self):
