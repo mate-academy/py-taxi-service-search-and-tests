@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Username: {{ driver.username }}
+<div class="px-4">
+<h1>👨‍🦱 Driver details</h1>
+<div class="h3">
+  <h2>
     <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
@@ -10,24 +12,65 @@
     <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
       Update license number
     </a>
-  </h1>
+  </h2>
+ <br>
+  <table class="table table-sm">
+    <tr>
+      <td class="col col-lg-2">Username</td>
+      <td>{{ driver.username }}</td>
+    </tr>
+    <tr>
+      <td>First name</td>
+      <td>{{ driver.first_name }}</td>
+    </tr>
+    <tr>
+      <td>Last name</td>
+      <td>{{ driver.last_name }}</td>
+    </tr>
+    <tr>
+      <td>License number</td>
+      <td>{{ driver.license_number }}</td>
+    </tr>
+    <tr>
+      <td>Is staff</td>
+      <td>{{ driver.is_staff }}</td>
+    </tr>
 
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
+  </table>
 
-  <div class="ml-3">
-    <h4>Cars</h4>
+</div>
+  <div class="h3">
 
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
+    <hr>
+    {% if not driver.cars.all %}
+      <div class="h3">No assigned cars!</div>
+    {% else %}
+       <table class="table table-sm table-hover col col-lg-3">
+          <thead class="table-info">
+            <tr class="table-dark">
+              <th class="text-center" colspan="3">Assigned cars</th>
+            </tr>
 
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
+
+            <tr>
+                <th>id</th>
+                <th>Manufacturer</th>
+                <th>Model</th>
+            </tr>
+          </thead>
+
+        {% for car in driver.cars.all %}
+          <tr style="cursor:pointer"  onclick="location.href='{% url 'taxi:car-detail' pk=car.id %}'">
+            <td class="text-muted">{{car.id}}</td>
+            <td>{{ car.manufacturer.name }}</td>
+            <td>{{ car.model }}</td>
+          </tr>
+
+        {% empty %}
+          <div class="h3">No assigned cars!</div>
+        {% endfor %}
+      </table>
+  {% endif %}
   </div>
+</div>
 {% endblock %}

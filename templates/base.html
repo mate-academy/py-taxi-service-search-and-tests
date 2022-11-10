@@ -12,19 +12,34 @@
     <!-- Add additional CSS in static file -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {margin: 0 0 0 0}
+        .my_div {
+            height: 100vh;
+            padding-left: 0px;
+
+
+
+        }
+        .my_div button {
+        background-color: #17a2b8;
+        color: white;
+        }
+    </style>
 </head>
 
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-2">
+        <div class="my_div col-sm-2 bg-info text-white">
 
             {% block sidebar %}
                 {% include "includes/sidebar.html" %}
             {% endblock %}
 
         </div>
-        <div class="col-sm-10 ">
+
+        <div class="my_div col-sm-10 bg-light">
 
             {% block content %}{% endblock %}
 
