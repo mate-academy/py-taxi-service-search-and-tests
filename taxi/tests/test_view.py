@@ -54,6 +54,15 @@ class PrivateTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
+    def test_search_manufacturer(self):
+        response = self.client.get(MANUFACTURER_LIST_URL + "?name=e")
+        manufacturers = Manufacturer.objects.filter(name__icontains="e")
+
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
+
     def test_retrieve_car(self):
         response = self.client.get(CAR_LIST_URL)
         cars = Car.objects.all()
@@ -65,6 +74,15 @@ class PrivateTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
+    def test_search_cars(self):
+        response = self.client.get(CAR_LIST_URL + "?model=m")
+        cars = Car.objects.filter(model__icontains="m")
+
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(cars)
+        )
+
     def test_retrieve_driver(self):
         response = self.client.get(DRIVER_LIST_URL)
         drivers = get_user_model().objects.all()
@@ -75,6 +93,15 @@ class PrivateTests(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_search_driver(self):
+        response = self.client.get(DRIVER_LIST_URL + "?username=ee")
+        drivers = get_user_model().objects.filter(username__icontains="ee")
+
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
 
     def test_create_driver(self):
         form_data = {
