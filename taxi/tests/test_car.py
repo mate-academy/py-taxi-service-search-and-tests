@@ -17,7 +17,10 @@ class PublicCarTests(TestCase):
         self.assertNotEqual(resp.status_code, 200)
 
     def test_login_required_detail_page(self):
-        manufacturer = Manufacturer.objects.create(name="Test", country="Ukraine")
+        manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="Ukraine"
+        )
         Car.objects.create(
             id=CARS_ID,
             model="Test model",
@@ -39,7 +42,10 @@ class PrivateCarTests(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_list_page(self):
-        manufacturer = Manufacturer.objects.create(name="Test", country="Ukraine")
+        manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="Ukraine"
+        )
         Car.objects.create(
             model="Frist test model",
             manufacturer=manufacturer,
@@ -60,7 +66,10 @@ class PrivateCarTests(TestCase):
         )
 
     def test_retrieve_detail_page(self):
-        manufacturer = Manufacturer.objects.create(name="Test", country="Ukraine")
+        manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="Ukraine"
+        )
         Car.objects.create(
             id=CARS_ID,
             model="Frist test model",
