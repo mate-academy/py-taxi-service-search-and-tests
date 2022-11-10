@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% load static %}
+    <img src="{% static 'taxi_img.jpeg' %}" alt="My image">
     <h1>Taxi Service Home</h1>
     <p>Welcome to Best Taxi Ever!</p>
     <h2>Dynamic content</h2>
