@@ -58,7 +58,8 @@ class PrivateCarTests(TestCase):
         self.client.force_login(self.user)
 
     def test_read_car(self):
-        manufacturer = Manufacturer.objects.create(name="Woks", country="Pored")
+        manufacturer = Manufacturer.objects.create(name="Woks",
+                                                   country="Pored")
         Car.objects.create(
             model="Lowes",
             manufacturer=manufacturer,
