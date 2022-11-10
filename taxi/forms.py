@@ -39,7 +39,6 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
-
 class ManufacturerSearchForm(forms.Form):
     name = forms.CharField(
         max_length=63,
