@@ -2,9 +2,16 @@
 
 {% block content %}
   <h1>Delete car?</h1>
+  <hr>
+  <p>
+    Are you sure you want to delete the car: <strong>{{ car }}</strong>?
+  </p>
+
   <form action="" method="post">
     {% csrf_token %}
+    <hr>
+    <br>
 
-    <input type="submit" value="Yes" class="btn btn-danger">
+    <input type="submit" value="Yes, delete" class="btn btn-danger">
   </form>
 {% endblock %}
