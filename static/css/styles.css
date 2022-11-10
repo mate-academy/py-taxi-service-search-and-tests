@@ -1,8 +1,12 @@
 body {
-    margin-top: 20px;
+    background-color: #fffce3;
 }
 
-.link-to-page {
-    float: right;
-    margin: 0 2px 0 2px;
+.content {
+    padding-top: 20px;
+    width: 50%;
+    min-height: 100vh;
+    background-color: white;
+    border: lightgray solid;
+    border-width: 0 1px;
 }
