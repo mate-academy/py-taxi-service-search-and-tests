@@ -9,7 +9,7 @@ from taxi.models import (
 
 
 class ManufacturerModelTest(TestCase):
-    
+
     def test_manufacturer_str(self):
         manufacturer = Manufacturer.objects.create(
             name="Honda",
@@ -47,7 +47,7 @@ class DriverModelTest(TestCase):
 
     def test_get_absolute_url(self):
         driver = Driver.objects.get(id=1)
-        self.assertEqual(driver.get_absolute_url(), '/drivers/1/')
+        self.assertEqual(driver.get_absolute_url(), "/drivers/1/")
 
     def test_create_driver_with_license(self):
         self.assertEqual(self.driver.username, "sandychicks")

@@ -44,7 +44,10 @@ class PrivateManufacturerTests(TestCase):
             list(manufacturers)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
-        self.assertEqual(len(response.context['manufacturer_list']), ManufacturerListView.paginate_by)
+        self.assertEqual(
+            len(response.context["manufacturer_list"]),
+            ManufacturerListView.paginate_by
+        )
 
 
 class PrivateCarTests(TestCase):
@@ -57,7 +60,10 @@ class PrivateCarTests(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_cars(self):
-        manufacturer = Manufacturer.objects.create(name="Honda", country="Japan")
+        manufacturer = Manufacturer.objects.create(
+            name="Honda",
+            country="Japan"
+        )
         Car.objects.create(model="Civic", manufacturer=manufacturer)
         Car.objects.create(model="Accord", manufacturer=manufacturer)
 
@@ -103,5 +109,3 @@ class DriverCarTests(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
-
-
