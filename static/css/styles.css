@@ -6,3 +6,13 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.logo {
+    height: 100px;
+}
+
+.title {
+    display: inline-block;
+    font-size: 70px;
+    text-shadow: 5px 5px 10px lightblue;
+}
