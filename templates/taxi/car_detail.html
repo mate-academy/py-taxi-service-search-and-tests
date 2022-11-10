@@ -11,8 +11,10 @@
       Update
     </a>
   </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
+  <p><strong>Manufacturer: </strong>{{ car.manufacturer.name }} ({{ car.manufacturer.country }})</p>
+
+  <div class="ml-3">
+  <h3>
     Drivers
 
     {% if car in user.cars.all %}
@@ -21,15 +23,22 @@
       </a>
     {% else %}
       <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
+        Assign me to this car
       </a>
     {% endif %}
+  </h3>
 
-  </h1>
-  <hr>
-  <ul>
     {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
+      <hr>
+        <p><strong>Username: </strong>
+          <a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a>
+        </p>
+        <p><strong>Full name: </strong>{{ driver.first_name }} {{ driver.last_name }}</p>
+        <p><strong>License number: </strong>{{ driver.license_number }}</p>
+
+      {% empty %}
+      <p>No drivers!</p>
+
     {% endfor %}
-  </ul>
+  </div>
 {% endblock %}
