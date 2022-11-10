@@ -42,5 +42,3 @@ class PrivateViewsTests(TestCase):
             list(resp.context["manufacturer_list"]),
             list(manufacturers)
         )
-
-

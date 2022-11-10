@@ -73,6 +73,7 @@ class ManufacturerSearchForm(forms.Form):
         widget=forms.TextInput(attrs={"placeholder": "Search by name"})
     )
 
+
 def validate_license_number(
     license_number,
 ):  # regex validation is also possible here
