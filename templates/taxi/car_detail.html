@@ -29,7 +29,7 @@
   <hr>
   <ul>
     {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
+      <li><a href="{% url 'taxi:driver-detail' pk=driver.id %}">{{ driver.username }}</a> ({{ driver.first_name }} {{ driver.last_name }})</li>
     {% endfor %}
   </ul>
 {% endblock %}

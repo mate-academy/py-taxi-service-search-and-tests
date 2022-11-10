@@ -10,7 +10,11 @@
     <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
       Update license number
     </a>
+     <a href="{% url 'taxi:driver-update-info' pk=driver.id%}" class="btn btn-success link-to-page">
+       Update driver info
+     </a>
   </h1>
+
 
   <p><strong>First name:</strong> {{ driver.first_name }}</p>
   <p><strong>Last name:</strong> {{ driver.last_name }}</p>
@@ -19,15 +23,26 @@
 
   <div class="ml-3">
     <h4>Cars</h4>
+    {% if driver.cars.all %}
+      <table class="table">
+        <tr>
+          <th>ID</th>
+          <th>Model</th>
+          <th>Manufacturer</th>
+          <th></th>
 
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
+        </tr>
 
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
+      {% for car in driver.cars.all %}
+          <tr>
+            <td>{{ car.id }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.manufacturer.name }}</td>
+            <td><a href="{% url 'taxi:car-detail' pk=car.id %}">Check car</a></td>
+          </tr>
+
+      {% endfor %}
+      </table>
+    {% endif %}
   </div>
 {% endblock %}
