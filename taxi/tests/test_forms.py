@@ -87,7 +87,7 @@ class PrivateDriverTests(TestCase):
             get_user_model().objects.filter(id=self.driver.id).exists()
         )
 
-    def test_search_car_form(self):
+    def test_search_driver_form(self):
         get_user_model().objects.create_user(
             username="test.username",
             license_number="TSS23345",
