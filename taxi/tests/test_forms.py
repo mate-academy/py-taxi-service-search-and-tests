@@ -87,6 +87,24 @@ class PrivateDriverTests(TestCase):
             get_user_model().objects.filter(id=self.driver.id).exists()
         )
 
+    def test_search_car_form(self):
+        get_user_model().objects.create_user(
+            username="test.username",
+            license_number="TSS23345",
+            first_name="TEST",
+            last_name="USER",
+            password="1qazcde3",
+        )
+        response = self.client.get(
+            reverse("taxi:driver-list") + "?model=d"
+        )
+        drivers = get_user_model().objects.filter(username__icontains="d")
+
+        self.assertNotEqual(list(response.context["driver_list"]), list(
+            drivers))
+        self.assertEqual(len(response.context["driver_list"]), 3)
+        self.assertEqual(len(drivers), 1)
+
 
 class PrivateCarTest(TestCase):
     def setUp(self) -> None:
@@ -142,6 +160,20 @@ class PrivateCarTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Car.objects.filter(id=car.id).exists())
 
+    def test_search_car_form(self):
+        Car.objects.create(model="Test", manufacturer=self.manufacturer)
+        Car.objects.create(model="TestModel", manufacturer=self.manufacturer)
+        Car.objects.create(model="DesdModel", manufacturer=self.manufacturer)
+        response = self.client.get(
+            reverse("taxi:car-list") + "?model=t"
+        )
+        cars = Car.objects.filter(model__icontains="t")
+
+        self.assertEqual(list(response.context["car_list"]), list(
+            cars))
+        self.assertEqual(Car.objects.count(), 3)
+        self.assertEqual(len(cars), 2)
+
 
 class ManufacturerTest(TestCase):
     def setUp(self) -> None:
@@ -190,3 +222,16 @@ class ManufacturerTest(TestCase):
         self.assertFalse(
             Manufacturer.objects.filter(id=manufacturer.id).exists()
         )
+
+    def test_search_manufacturer_form(self):
+        Manufacturer.objects.create(name="SanYong", country="Korea")
+        Manufacturer.objects.create(name="TesYong", country="Test")
+        response = self.client.get(
+            reverse("taxi:manufacturer-list") + "?name=a"
+        )
+        manufacturers = Manufacturer.objects.filter(name__icontains="a")
+
+        self.assertEqual(list(response.context["manufacturer_list"]), list(
+            manufacturers))
+        self.assertEqual(Manufacturer.objects.count(), 2)
+        self.assertEqual(len(manufacturers), 1)
