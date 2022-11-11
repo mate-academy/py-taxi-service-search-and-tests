@@ -48,5 +48,7 @@ class ManufacturerTestWithLoggedInUser(TestCase):
     def test_manufacturer_search(self):
         response = self.client.get("/manufacturers/?name=Fo")
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context["manufacturer_list"],
-                                 Manufacturer.objects.filter(name__icontains="Fo"))
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="Fo")
+        )
