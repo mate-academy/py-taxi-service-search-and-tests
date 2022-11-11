@@ -24,7 +24,6 @@ class ManufacturerTestWithLoggedInUser(TestCase):
         Manufacturer.objects.create(name="ZAZ", country="Ukraine")
 
     def test_retrieve_manufacturer_list_view(self):
-
         response = self.client.get(MANUFACTURER_LIST_VIEW_URL)
         manufacturers = Manufacturer.objects.all()
 
@@ -45,3 +44,9 @@ class ManufacturerTestWithLoggedInUser(TestCase):
 
         self.assertEqual(new_manufacturer.name, form_data["name"])
         self.assertEqual(new_manufacturer.country, form_data["country"])
+
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=Fo")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context["manufacturer_list"],
+                                 Manufacturer.objects.filter(name__icontains="Fo"))
