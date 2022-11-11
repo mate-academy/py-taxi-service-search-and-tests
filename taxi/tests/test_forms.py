@@ -1,6 +1,8 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from taxi.forms import DriverCreationForm
+from taxi.models import Manufacturer
 
 
 class FormsTest(TestCase):
@@ -22,6 +24,7 @@ class FormsTest(TestCase):
         """Test whether licence number validation works"""
 
         bad_license_number = ["JAk12312", "JAK1111", "JAK"]
+
         for license_number in bad_license_number:
             with self.subTest(license_number=license_number):
                 form_data = {

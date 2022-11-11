@@ -11,20 +11,20 @@
   {% if car_list %}
 
     <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="🔍" class="btn btn-secondary">
+      {{ search_form|crispy }}
+      <input type="submit" value="🔍" class="btn btn-secondary">
     </form>
 
     <table class="table">
-    <thead>
+      <thead>
       <tr>
         <th>ID</th>
         <th>Model</th>
         <th>Manufacturer</th>
       </tr>
-    </thead>
+      </thead>
 
-    <tbody>
+      <tbody>
       {% for car in car_list %}
         <tr>
           <td><a href="{% url "taxi:car-detail" pk=car.id %}">{{ car.id }}</a></td>
@@ -32,7 +32,8 @@
           <td>{{ car.manufacturer.name }}</td>
         </tr>
       {% endfor %}
-    </tbody>
+      </tbody>
+
     </table>
   {% else %}
     <p>There are no cars in taxi</p>

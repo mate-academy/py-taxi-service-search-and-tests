@@ -129,3 +129,36 @@ class PrivateCreationTest(TestCase):
         self.assertEqual(new_user.first_name, form_data["first_name"])
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
+
+
+class LoggeInSearchTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "testuser",
+            "Testpass123"
+        )
+        self.client.force_login(self.user)
+
+    def test_drivar_search(self):
+        response = self.client.get("/drivers/?username=f")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(username__icontains="f")
+        )
+
+    def test_car_search(self):
+        response = self.client.get("/cars/?model=f")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains="f")
+        )
+
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=f")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="f")
+        )
