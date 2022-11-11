@@ -37,6 +37,14 @@ class PrivateCarTests(TestCase):
         self.assertEqual(list(res.context["car_list"]), list(cars))
         self.assertTemplateUsed(res, "taxi/car_list.html")
 
+    def test_car_search(self):
+        res = self.client.get("/cars/?model=X5")
+        self.assertEqual(res.status_code, 200)
+        self.assertQuerysetEqual(
+            res.context["car_list"],
+            Car.objects.filter(model__icontains="X5")
+        )
+
 
 class PublicDriverTests(TestCase):
     def test_login_required(self):
@@ -70,6 +78,14 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(list(res.context["driver_list"]), list(drivers))
         self.assertTemplateUsed(res, "taxi/driver_list.html")
 
+    def test_driver_search(self):
+        res = self.client.get("/drivers/?username=driver1")
+        self.assertEqual(res.status_code, 200)
+        self.assertQuerysetEqual(
+            res.context["driver_list"],
+            Driver.objects.filter(username__icontains="driver1")
+        )
+
 
 class PublicManufacturerTests(TestCase):
     def test_login_required(self):
@@ -96,3 +112,11 @@ class PrivateManufacturerTests(TestCase):
             list(res.context["manufacturer_list"]), list(manufacturers)
         )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
+
+    def test_manufacturer_search(self):
+        res = self.client.get("/manufacturers/?name=BMW")
+        self.assertEqual(res.status_code, 200)
+        self.assertQuerysetEqual(
+            res.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="BMW")
+        )
