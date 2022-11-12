@@ -75,6 +75,14 @@ class PrivateManufacturerTests(TestCase):
         )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
 
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=Ford")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="Ford")
+        )
+
 
 class PublicDriverTests(TestCase):
     def test_login_required_driver_list(self):
