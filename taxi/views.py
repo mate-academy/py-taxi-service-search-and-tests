@@ -52,10 +52,10 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
 
-        form_ = SearchForm(self.request.GET)
-        if form_.is_valid():
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
             return self.queryset.filter(
-                name__icontains=form_.cleaned_data["title"]
+                name__icontains=form.cleaned_data["title"]
             )
 
         return self.queryset
