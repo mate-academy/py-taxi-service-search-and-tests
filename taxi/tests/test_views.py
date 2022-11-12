@@ -31,11 +31,17 @@ class TestSearchViews(TestCase):
         )
         self.client.force_login(self.user)
 
-
     def create_manufacturers(self):
-        manufacturer1 = Manufacturer.objects.create(name="manufacturer1", country="country1")
-        manufacturer2 = Manufacturer.objects.create(name="manufacturer2", country="country2")
+        manufacturer1 = Manufacturer.objects.create(
+            name="manufacturer1",
+            country="country1"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="manufacturer2",
+            country="country2"
+        )
         return manufacturer1, manufacturer2
+
     def test_manufacturer_search(self):
         self.create_manufacturers()
         resp = self.client.get("/manufacturers/?title=manufacturer2")
