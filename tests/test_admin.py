@@ -18,7 +18,6 @@ class AdminSiteTests(TestCase):
         )
 
     def test_license_number_in_list(self):
-        """ Tests that driver's license number is displayed on driver admin page """
 
         url = reverse("admin:taxi_driver_changelist")
         res = self.client.get(url)
@@ -26,7 +25,6 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, self.driver.license_number)
 
     def test_license_number_in_driver_detail_page(self):
-        """ Tests that driver's license number is displayed on driver's detail admin page """
 
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         res = self.client.get(url)
