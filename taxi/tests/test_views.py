@@ -27,10 +27,10 @@ class PrivateManufacturerTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_manufacturer(self):
-        Manufacturer.objects.create(name="test", country="test")
-        Manufacturer.objects.create(name="test2", country="test2")
+        for i in range(3):
+            Manufacturer.objects.create(name=f"test {i}", country=f"test {i}")
 
+    def test_retrieve_manufacturer(self):
         response = self.client.get(MANUFACTURER_LIST_URL)
         manufacturers = Manufacturer.objects.all()
 
@@ -40,6 +40,15 @@ class PrivateManufacturerTest(TestCase):
             list(manufacturers),
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+    def test_manufacturer_search_test(self):
+        response = self.client.get(MANUFACTURER_LIST_URL + "?name=0")
+        response_res = list(response.context["manufacturer_list"])
+        manufacturers_res = list(
+            Manufacturer.objects.filter(name__icontains="0")
+        )
+
+        self.assertEqual(response_res, manufacturers_res)
 
 
 class PublicCarTests(TestCase):
@@ -82,6 +91,13 @@ class PrivateCarTest(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
+
+    def test_car_search_test(self):
+        response = self.client.get(CAR_LIST_URL + "?model=e")
+        response_res = list(response.context["car_list"])
+        cars_res = list(Car.objects.filter(model__icontains="e"))
+
+        self.assertEqual(response_res, cars_res)
 
 
 class PublicDriverTests(TestCase):
@@ -138,3 +154,10 @@ class PrivateDriverTest(TestCase):
         self.assertEqual(new_user.first_name, form_data["first_name"])
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
+
+    def test_driver_search_test(self):
+        response = self.client.get(DRIVER_LIST_URL + "?username=e")
+        response_res = list(response.context["driver_list"])
+        drivers_res = list(Driver.objects.filter(username__icontains="e"))
+
+        self.assertEqual(response_res, drivers_res)
