@@ -16,9 +16,9 @@ class ModelsTests(TestCase):
         self.driver = get_user_model().objects.create_user(
             username=self.username,
             password=self.password,
-            first_name=self.license_number,
+            first_name="first_name",
             last_name="test_last",
-            license_number="TES12345",
+            license_number=self.license_number,
         )
 
         self.car = Car.objects.create(
