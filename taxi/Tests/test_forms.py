@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.models import Car
 
 
 class FormsTests(TestCase):
