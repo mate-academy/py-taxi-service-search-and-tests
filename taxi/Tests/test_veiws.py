@@ -111,3 +111,11 @@ class PrivateTests(TestCase):
         self.assertEqual(new_user.first_name, form_data["first_name"])
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
+
+    def test_car_search(self):
+        response = self.client.get("/cars/?model=Ferr")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Manufacturer.objects.filter(name__icontains="Ferr")
+        )
