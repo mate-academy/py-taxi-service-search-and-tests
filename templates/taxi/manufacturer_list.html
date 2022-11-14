@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -8,6 +9,10 @@
     </a>
   </h1>
 
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary btn-sm" type="submit" value="🔎">
+  </form>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -21,18 +26,18 @@
       {% for manufacturer in manufacturer_list %}
         <tr>
           <td>
-              {{ manufacturer.id }}
+            {{ manufacturer.id }}
           </td>
           <td>
-              {{ manufacturer.name }}
+            {{ manufacturer.name }}
           </td>
           <td>
-              {{ manufacturer.country }}
+            {{ manufacturer.country }}
           </td>
           <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
-              </a>
+            <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
+              Update
+            </a>
             </td>
             <td>
               <a style="color: red"
@@ -45,6 +50,6 @@
     </table>
 
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+    <p>There are no manufacturers in the service.</p>
   {% endif %}
 {% endblock %}
