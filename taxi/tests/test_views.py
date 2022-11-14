@@ -43,12 +43,11 @@ class PrivateManufacturerTest(TestCase):
 
     def test_manufacturer_search_test(self):
         response = self.client.get(MANUFACTURER_LIST_URL + "?name=0")
-        response_res = list(response.context["manufacturer_list"])
-        manufacturers_res = list(
-            Manufacturer.objects.filter(name__icontains="0")
-        )
 
-        self.assertEqual(response_res, manufacturers_res)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(Manufacturer.objects.filter(name__icontains="0"))
+        )
 
 
 class PublicCarTests(TestCase):
@@ -94,10 +93,11 @@ class PrivateCarTest(TestCase):
 
     def test_car_search_test(self):
         response = self.client.get(CAR_LIST_URL + "?model=e")
-        response_res = list(response.context["car_list"])
-        cars_res = list(Car.objects.filter(model__icontains="e"))
 
-        self.assertEqual(response_res, cars_res)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(Car.objects.filter(model__icontains="e"))
+        )
 
 
 class PublicDriverTests(TestCase):
@@ -157,7 +157,8 @@ class PrivateDriverTest(TestCase):
 
     def test_driver_search_test(self):
         response = self.client.get(DRIVER_LIST_URL + "?username=e")
-        response_res = list(response.context["driver_list"])
-        drivers_res = list(Driver.objects.filter(username__icontains="e"))
 
-        self.assertEqual(response_res, drivers_res)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(Driver.objects.filter(username__icontains="e"))
+        )
