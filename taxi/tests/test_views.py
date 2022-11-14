@@ -123,3 +123,38 @@ class CreateViewsTest(TestCase):
         self.assertEqual(user.first_name, form_data["first_name"])
         self.assertEqual(user.last_name, form_data["last_name"])
         self.assertEqual(user.license_number, form_data["license_number"])
+
+
+class TestSearchField(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            "user", "testuser123"
+        )
+        self.client.force_login(self.user)
+
+    def test_search_driver(self):
+        response = self.client.get("/drivers/?username=a/")
+
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(username__icontains="a")
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_search_manufacturer(self):
+        response = self.client.get("/manufacturers/?name=a/")
+
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="a")
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_search_car(self):
+        response = self.client.get("/cars/?model=a/")
+
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains="a")
+        )
+        self.assertEqual(response.status_code, 200)
