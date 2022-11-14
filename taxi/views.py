@@ -12,7 +12,7 @@ from .forms import (
     CarForm,
     ManufacturerSearchForm,
     CarSearchForm,
-    DriverSearchForm
+    DriverSearchForm,
 )
 
 
@@ -49,9 +49,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("model", "")
 
-        context["search_form"] = ManufacturerSearchForm(initial={
-            "name": name
-        })
+        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
 
         return context
 
@@ -92,9 +90,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         model = self.request.GET.get("model", "")
 
-        context["search_form"] = CarSearchForm(initial={
-            "model": model
-        })
+        context["search_form"] = CarSearchForm(initial={"model": model})
 
         return context
 
@@ -139,9 +135,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = DriverSearchForm(initial={
-            "username": username
-        })
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
 
         return context
 
