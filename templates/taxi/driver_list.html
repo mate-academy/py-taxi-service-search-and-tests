@@ -1,34 +1,45 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+  <h1>
+    Drivers
+    <a href="{% url 'taxi:driver-create' %}" class="float-right btn btn-outline-primary add-button">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+    </a>
+  </h1>
 
-    {% if driver_list %}
-    <table class="table">
-      <tr>
+  {% block search_field %}
+    {% include "includes/search_field.html" %}
+  {% endblock %}
+  <br>
+
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr class="tr-head">
         <th>ID</th>
         <th>Username</th>
         <th>First name</th>
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+    {% if driver_list %}
+      {% for driver in driver_list %}
 
-    </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+        <tr>
+          <td>{{ driver.id }}</td>
+          <td class="link_to_driver"><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
+          <td>{{ driver.first_name }}</td>
+          <td>{{ driver.last_name }}</td>
+          <td>{{ driver.license_number }}</td>
+        </tr>
+      {% endfor %}
+      {% else %}
+        <p>There are no drivers in the service.</p>
+      {% endif %}
+    </tbody>
+  </table>
+
 {% endblock %}

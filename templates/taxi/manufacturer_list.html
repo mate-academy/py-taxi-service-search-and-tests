@@ -2,49 +2,56 @@
 
 {% block content %}
   <h1>
-    Manufacturer List
-    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
-      Create
+    Manufacturers
+    <a href="{% url 'taxi:manufacturer-create' %}" class="float-right btn btn-outline-primary add-button">
+      <i class="fa fa-plus-circle"></i> Add
     </a>
   </h1>
 
-  {% if manufacturer_list %}
-    <table class="table">
-      <tr>
+  {% block search_field %}
+    {% include "includes/search_field.html" %}
+  {% endblock %}
+  <br>
+
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr class="tr-head">
         <th>ID</th>
         <th>Name</th>
         <th>Country</th>
         <th>Update</th>
         <th>Delete</th>
       </tr>
-
+    </thead>
+    <tbody>
+    {% if manufacturer_list %}
       {% for manufacturer in manufacturer_list %}
-        <tr>
-          <td>
-              {{ manufacturer.id }}
-          </td>
-          <td>
-              {{ manufacturer.name }}
-          </td>
-          <td>
-              {{ manufacturer.country }}
-          </td>
-          <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
+          <tr>
+            <td>
+                {{ manufacturer.id }}
+            </td>
+            <td>
+                {{ manufacturer.name }}
+            </td>
+            <td>
+                {{ manufacturer.country }}
+            </td>
+            <td>
+              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}" role="button" class="btn btn-outline-success">
+                <i class="fa fa-pencil-square" aria-hidden="true"></i> Update
               </a>
             </td>
             <td>
-              <a style="color: red"
-                href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
-                Delete
+              <a href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}" role="button" class="btn btn-outline-danger">
+                <i class="fa fa-trash" aria-hidden="true"></i> Delete
               </a>
             </td>
         </tr>
       {% endfor %}
-    </table>
-
-  {% else %}
+    {% else %}
       <p>There are no manufacturers in the service.</p>
-  {% endif %}
+    {% endif %}
+    </tbody>
+  </table>
+
 {% endblock %}

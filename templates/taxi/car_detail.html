@@ -3,12 +3,12 @@
 {% block content %}
   <h1>
     {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
-      Delete
+    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-outline-danger link-to-page">
+      <i class="fa fa-trash" aria-hidden="true"></i> Delete
     </a>
 
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
-      Update
+    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-outline-success link-to-page">
+      <i class="fa fa-pencil-square" aria-hidden="true"></i> Update
     </a>
   </h1>
   <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>

@@ -10,14 +10,16 @@
 <h1>Login</h1>
 
 {% if next %}
-  <p>Please login to see this page.</p>
+  <p>Please login to see this page. </p>
+
 {% endif %}
 
 <form method="post" action="{% url 'login' %}">
   {% csrf_token %}
   {{ form|crispy }}
 
-  <input type="submit" value="Login" class="btn btn-primary" />
+  <input type="submit" value="Login" class="btn btn-outline-success" />
+  <p>Don't have an account? Create one <a href="{% url 'register:signup' %}">here</a></p>
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
