@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import CookCreationForm
 
 
 class FormsTest(TestCase):
@@ -13,7 +13,7 @@ class FormsTest(TestCase):
             "last_name": "lastname",
             "license_number": "AAA12345",
         }
-        form = DriverCreationForm(data=form_data)
+        form = CookCreationForm(data=form_data)
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
@@ -30,7 +30,7 @@ class FormsTest(TestCase):
                     "last_name": "lastname",
                     "license_number": license_number,
                 }
-                form = DriverCreationForm(form_data)
+                form = CookCreationForm(form_data)
 
                 self.assertFalse(form.is_valid())
                 self.assertNotEqual(form.cleaned_data, form_data)

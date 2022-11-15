@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.models import Driver, Manufacturer, Car
+from taxi.models import Cook, DishType, Dish
 
 
 class ModelTests(TestCase):
     def test_driver_str(self):
-        driver = Driver.objects.create(
+        driver = Cook.objects.create(
             username="testdriver",
             first_name="firsttest",
             last_name="lasttest",
@@ -18,7 +18,7 @@ class ModelTests(TestCase):
                          f" {driver.last_name})")
 
     def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.create(
+        manufacturer = DishType.objects.create(
             name="Toyota",
             country="Japan"
         )
@@ -26,11 +26,11 @@ class ModelTests(TestCase):
                          f"{manufacturer.name} {manufacturer.country}")
 
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(
+        manufacturer = DishType.objects.create(
             name="Toyota",
             country="Japan"
         )
-        car = Car.objects.create(
+        car = Dish.objects.create(
             model="Rav4",
             manufacturer=manufacturer
         )
