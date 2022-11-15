@@ -88,3 +88,27 @@ class HomePrivateTest(TestCase):
             )
         response = self.client.get(HOME_URL)
         self.assertEqual(response.context["num_drivers"], 1)
+
+
+class CarListTest(TestCase):
+
+    def test_search_filter_working(self) -> None:
+        user = get_user_model().objects.create(
+            username="test",
+            password="test_password",
+        )
+        self.client.force_login(user)
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="test_country"
+        )
+
+        for car_index in range(1, 12):
+            Car.objects.create(
+                model=f"test dish №{car_index}",
+                manufacturer=manufacturer,
+            )
+
+        response = self.client.get(CAR_LIST_URL + "?model=1")
+        # cars №1, 10, 11
+        self.assertEqual(response.context["car_list"].count(), 3)
