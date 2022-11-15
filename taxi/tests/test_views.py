@@ -230,3 +230,11 @@ class PrivateDriverTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
                                 "taxi/driver_confirm_delete.html")
+
+    def test_driver_search(self):
+        response = self.client.get("/drivers/?username=us")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Driver.objects.filter(username__icontains="us")
+        )
