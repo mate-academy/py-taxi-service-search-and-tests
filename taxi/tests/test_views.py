@@ -141,7 +141,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["car_list"],
-            Manufacturer.objects.filter(name__icontains="i")
+            Car.objects.filter(model__icontains="i")
         )
 
     def test_driver_search(self):
@@ -150,5 +150,5 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["driver_list"],
-            Manufacturer.objects.filter(name__icontains="i")
+            get_user_model().objects.filter(username__icontains="i")
         )
