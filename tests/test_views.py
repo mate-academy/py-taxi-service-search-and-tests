@@ -111,3 +111,51 @@ class PrivateCarTest(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(list(res.context["car_list"]), list(cars))
         self.assertTemplateUsed(res, "taxi/car_list.html")
+
+
+class SearchTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "test", "admin12345"
+        )
+        self.client.force_login(self.user)
+
+    def test_driver_search(self):
+        response = self.client.get("/drivers/?username=test")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(username__icontains="test"),
+        )
+        self.assertNotEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(license_number__icontains="test"),
+        )
+
+    def test_car_search(self):
+        response = self.client.get("/cars/?search=test")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains="test"),
+        )
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(manufacturer__country__icontains="test"),
+        )
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(manufacturer__name__icontains="test"),
+        )
+
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=test")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="test"),
+        )
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(country__icontains="test"),
+        )
