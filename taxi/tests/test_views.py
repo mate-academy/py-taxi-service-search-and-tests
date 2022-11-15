@@ -116,3 +116,21 @@ class CreateDriverTests(TestCase):
         self.assertEqual(new_user.first_name, from_data["first_name"])
         self.assertEqual(new_user.last_name, from_data["last_name"])
         self.assertEqual(new_user.license_number, from_data["license_number"])
+
+
+class TestSearch(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "test",
+            "password1234",
+        )
+        self.client.force_login(self.user)
+
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=i")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="i")
+        )
