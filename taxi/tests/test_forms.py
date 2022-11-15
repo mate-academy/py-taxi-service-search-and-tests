@@ -2,16 +2,31 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.models import Manufacturer, Car
 
 
 class FormsTest(TestCase):
-    def test_driver_creation_form_with_license_is_valid(self):
+    def setUp(self) -> None:
+        self.manufacturer = Manufacturer.objects.create(
+            name="testik", country="test"
+        )
+
+        self.driver = get_user_model().objects.create_user(
+            username="user",
+            password="password_test123",
+            first_name="Test first",
+            last_name="Test last",
+            license_number="TJK12345",
+        )
+        self.client.force_login(self.driver)
+
+    def test_driver_creation_form_with_valid_license(self):
         form_data = {
-            "username": "admin.user",
+            "username": "test_user",
             "password1": "password_test123",
             "password2": "password_test123",
-            "license_number": "TJK12345",
+            "license_number": "TOK12345",
             "first_name": "Test first",
             "last_name": "Test last",
         }
@@ -20,29 +35,65 @@ class FormsTest(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
+    def test_driver_creation_form_with_invalid_license(self):
+        invalid_license = [
+            "TJK123",
+            "tjk12345",
+            "12345",
+        ]
 
-class PrivateDriverTests(TestCase):
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user("test", "password123")
-        self.client.force_login(self.user)
+        for license_ in invalid_license:
+            with self.subTest(license_number=license_):
+                form_data = {
+                    "username": "test_user",
+                    "password1": "password_test123",
+                    "password2": "password_test123",
+                    "first_name": "Test first",
+                    "last_name": "Test last",
+                    "license_number": license_,
+                }
 
-    def test_create_driver(self):
+        form = DriverCreationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertNotEqual(form.cleaned_data, form_data)
+
+    def test_driver_update_form_with_valid_license(self):
         form_data = {
-            "username": "admin.user",
-            "password1": "password_test123",
-            "password2": "password_test123",
-            "license_number": "TJK12345",
-            "first_name": "Test first",
-            "last_name": "Test last",
+            "license_number": "TOK12345",
         }
 
-        self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = get_user_model().objects.get(
-            username=form_data["username"]
-        )
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, form_data)
 
+    def test_driver_update_form_with_invalid_license(self):
+        invalid_license = [
+            "TJK123",
+            "tjk12345",
+            "12345",
+        ]
+
+        for license_ in invalid_license:
+            with self.subTest(license_number=license_):
+                form_data = {
+                    "license_number": license_,
+                }
+
+            form = DriverLicenseUpdateForm(data=form_data)
+            self.assertFalse(form.is_valid())
+            self.assertNotEqual(form.cleaned_data, form_data)
+
+    def test_car_creation_form(self):
+        car = {
+            "model": "test",
+            "manufacturer": self.manufacturer.id,
+            "drivers": self.driver.id,
+        }
+
+        response = self.client.post(reverse("taxi:car-create"), car)
+
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(
-            new_driver.license_number, form_data["license_number"]
+            Car.objects.get(model="test").manufacturer.id, car["manufacturer"]
         )
-        self.assertEqual(new_driver.first_name, form_data["first_name"])
-        self.assertEqual(new_driver.last_name, form_data["last_name"])
+        self.assertEqual(Car.objects.get(model="test").model, car["model"])

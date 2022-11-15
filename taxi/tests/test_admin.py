@@ -25,8 +25,11 @@ class AdminSiteTests(TestCase):
 
         self.assertContains(response, self.driver.license_number)
 
-    def test_driver_license_number_in_detailed_list(self):
+    def test_driver_info_in_detailed_list(self):
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         response = self.client.get(url)
 
         self.assertContains(response, self.driver.license_number)
+        self.assertContains(response, self.driver.username)
+        self.assertContains(response, self.driver.first_name)
+        self.assertContains(response, self.driver.last_name)

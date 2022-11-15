@@ -37,14 +37,12 @@ class ModelsTest(TestCase):
         driver = get_user_model().objects.get(id=1)
         self.assertEqual(
             str(driver),
-            f"{driver.username} "
-            f"({driver.first_name} "
-            f"{driver.last_name})",
+            f"{driver.username} ({driver.first_name} {driver.last_name})",
         )
 
     def test_car_str(self):
         car = Car.objects.get(id=1)
-        self.assertEqual(str(car), f"{car.model}")
+        self.assertEqual(str(car), car.model)
 
     def test_create_user_with_license_number(self):
         username = "test"
@@ -63,5 +61,4 @@ class ModelsTest(TestCase):
 
     def test_get_absolute_url(self):
         driver = get_user_model().objects.get(id=1)
-        self.assertEqual(driver.get_absolute_url(),
-                         "/drivers/1/")
+        self.assertEqual(driver.get_absolute_url(), "/drivers/1/")
