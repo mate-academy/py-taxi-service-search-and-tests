@@ -105,10 +105,51 @@ class CarListTest(TestCase):
 
         for car_index in range(1, 12):
             Car.objects.create(
-                model=f"test dish №{car_index}",
+                model=f"test car №{car_index}",
                 manufacturer=manufacturer,
             )
 
         response = self.client.get(CAR_LIST_URL + "?model=1")
         # cars №1, 10, 11
         self.assertEqual(response.context["car_list"].count(), 3)
+
+
+class ManufacturerListTest(TestCase):
+
+    def test_search_filter_working(self) -> None:
+        user = get_user_model().objects.create(
+            username="test",
+            password="test_password",
+        )
+        self.client.force_login(user)
+
+        for manufacturer_index in range(1, 12):
+            Manufacturer.objects.create(
+                name=f"test manufacturer №{manufacturer_index}",
+                country="test"
+            )
+
+        response = self.client.get(MANUFACTURERS_LIST_URL + "?name=1")
+        # manufacturers №1, 10, 11
+        self.assertEqual(response.context["manufacturer_list"].count(), 3)
+
+
+class DriverListTest(TestCase):
+
+    def test_search_filter_working(self) -> None:
+        user = get_user_model().objects.create(
+            username="test №111",
+            password="test_password",
+        )
+        self.client.force_login(user)
+
+        for driver_index in range(1, 12):
+            get_user_model().objects.create(
+                username=f"test driver №{driver_index}",
+                password="password",
+                license_number=f"license №{driver_index}"
+            )
+
+        response = self.client.get(DRIVER_LIST_URL + "?username=1")
+        # drivers №111, 1, 10, 11
+        self.assertEqual(response.context["driver_list"].count(), 4)
