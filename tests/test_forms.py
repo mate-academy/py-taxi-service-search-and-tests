@@ -23,14 +23,8 @@ class FormsTest(TestCase):
         for license_number in incorrect_license:
             with self.subTest(license_number=license_number):
                 form_data = {
-                    "username": "test_name",
-                    "password1": "test12345",
-                    "password2": "test12345",
-                    "first_name": "firstname",
-                    "last_name": "lastname",
                     "license_number": license_number,
                 }
                 form = DriverCreationForm(form_data)
 
                 self.assertFalse(form.is_valid())
-                self.assertNotEqual(form.cleaned_data, form_data)
