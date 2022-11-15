@@ -143,3 +143,12 @@ class TestSearch(TestCase):
             response.context["car_list"],
             Manufacturer.objects.filter(name__icontains="i")
         )
+
+    def test_driver_search(self):
+        response = self.client.get("/drivers/?username=i")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Manufacturer.objects.filter(name__icontains="i")
+        )
