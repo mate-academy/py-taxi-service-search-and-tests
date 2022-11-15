@@ -134,3 +134,12 @@ class TestSearch(TestCase):
             response.context["manufacturer_list"],
             Manufacturer.objects.filter(name__icontains="i")
         )
+
+    def test_car_search(self):
+        response = self.client.get("/cars/?name=i")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Manufacturer.objects.filter(name__icontains="i")
+        )
