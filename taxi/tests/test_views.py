@@ -32,7 +32,7 @@ class ViewsTests(TestCase):
         self.client.force_login(self.driver)
 
     def test_car_get_context_data(self) -> None:
-        response = self.client.get(reverse("taxi:car-list") + '?page=2')
+        response = self.client.get(reverse("taxi:car-list") + "?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"] is True)
@@ -42,7 +42,7 @@ class ViewsTests(TestCase):
 
     def test_manufacturer_get_context_data(self) -> None:
         response = self.client.get(
-            reverse("taxi:manufacturer-list") + '?page=2'
+            reverse("taxi:manufacturer-list") + "?page=2"
         )
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
@@ -54,7 +54,7 @@ class ViewsTests(TestCase):
         )
 
     def test_driver_get_context_data(self) -> None:
-        response = self.client.get(reverse("taxi:driver-list") + '?page=2')
+        response = self.client.get(reverse("taxi:driver-list") + "?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"] is True)

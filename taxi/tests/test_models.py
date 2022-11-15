@@ -8,8 +8,8 @@ class ModelsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         Driver.objects.create(
-            first_name='George',
-            last_name='Michael',
+            first_name="George",
+            last_name="Michael",
             license_number="ABC12345"
         )
 
@@ -27,12 +27,13 @@ class ModelsTests(TestCase):
 
     def test_get_absolute_url(self):
         driver = Driver.objects.get(id=1)
-        self.assertEqual(driver.get_absolute_url(), '/drivers/1/')
+        self.assertEqual(driver.get_absolute_url(), "/drivers/1/")
 
     def test_manufacturer_model_str(self):
         manufacturer = Manufacturer.objects.get(id=1)
         self.assertEqual(
-            str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+            str(manufacturer), f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_car_model_str(self):
         manufacturer = Manufacturer.objects.get(id=1)
