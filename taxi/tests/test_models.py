@@ -30,7 +30,7 @@ class ModelsTest(TestCase):
         manufacturer = Manufacturer.objects.get(id=1)
         self.assertEqual(
             str(manufacturer),
-            f"{manufacturer.name} " f"{manufacturer.country}",
+            f"{manufacturer.name} {manufacturer.country}",
         )
 
     def test_driver_str(self):
