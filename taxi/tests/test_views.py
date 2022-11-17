@@ -1,11 +1,32 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+
 from taxi.models import Car, Manufacturer, Driver
 
 
-class ViewsTests(TestCase):
+class PublicDriverTest(TestCase):
+    def test_login_required(self):
+        resp = self.client.get(reverse("taxi:driver-list"))
 
+        self.assertNotEqual(resp.status_code, 200)
+
+
+class PublicCarTest(TestCase):
+    def test_login_required(self):
+        resp = self.client.get(reverse("taxi:car-list"))
+
+        self.assertNotEqual(resp.status_code, 200)
+
+
+class PublicManufacturerTest(TestCase):
+    def test_login_required(self):
+        resp = self.client.get(reverse("taxi:manufacturer-list"))
+
+        self.assertNotEqual(resp.status_code, 200)
+
+
+class ViewsTests(TestCase):
     def setUp(self) -> None:
         number_of_cars = 10
 
@@ -62,4 +83,25 @@ class ViewsTests(TestCase):
         self.assertTrue("driver_search" in response.context)
         self.assertTrue(
             "username" in response.context["driver_search"].fields
+        )
+
+    def test_driver_get_queryset(self) -> None:
+        response = self.client.get("/drivers/?username=test")
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Driver.objects.filter(username__icontains="test")
+        )
+
+    def test_car_get_queryset(self) -> None:
+        response = self.client.get("/cars/?model=test")
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains="test")
+        )
+
+    def test_manufacturer_get_queryset(self) -> None:
+        response = self.client.get("/manufacturers/?name=test")
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="test")
         )
