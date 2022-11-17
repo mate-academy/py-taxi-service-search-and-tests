@@ -42,3 +42,12 @@ class PrivateViewsTests(TestCase):
             list(resp.context["manufacturer_list"]),
             list(manufacturers)
         )
+
+    def test_retrieve_with_search_form(self):
+        resp = self.client.get("/manufacturers/?name=Zaporozhets")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertQuerysetEqual(
+            resp.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="zaporozhets")
+        )
