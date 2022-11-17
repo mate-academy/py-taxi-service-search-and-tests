@@ -31,25 +31,12 @@ class FormsTests(TestCase):
 
     def test_car_search_form_valid_data(self):
         manufacturer = Manufacturer.objects.create(name="test")
-        driver = Driver.objects.create(
-            username="test",
-            license_number="FRE12345"
-        )
         car = Car.objects.create(
             model="test",
             manufacturer=manufacturer,
-            driver=driver
         )
         data = {
             "car_0": car.model
         }
         form = CarSearchForm(data=data)
         self.assertTrue(form.is_valid())
-
-    def test_driver_search_form_invalid_data(self):
-        data = {
-            "driver_0": "di",
-            "driver_1": ""
-        }
-        form = DriverSearchForm(data=data)
-        self.assertFalse(form.is_valid())
