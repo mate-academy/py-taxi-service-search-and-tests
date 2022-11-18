@@ -1,6 +1,8 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.models import Car, Driver, Manufacturer
 
 
 class FormsTests(TestCase):
@@ -25,3 +27,35 @@ class FormsTests(TestCase):
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+
+class SearchFormTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "MAO", "test_password1234"
+        )
+        self.client.force_login(self.user)
+
+    def test_driver_search(self):
+        response = self.client.get("/drivers/?username=MAO")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Driver.objects.filter(username__icontains="MAO")
+        )
+
+    def test_car_search(self):
+        response = self.client.get("/cars/?model=audi")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains="audi"),
+        )
+
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=Audi")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="Audi")
+        )
