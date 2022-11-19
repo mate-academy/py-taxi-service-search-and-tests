@@ -102,3 +102,13 @@ class PrivateAccessGrantedTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "registration/login.html")
+
+    def test_search_driver(self):
+        response = self.client.get(
+            reverse("taxi:driver-list") + "?username=te"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Driver.objects.filter(username__icontains="te")
+        )
