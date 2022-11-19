@@ -13,22 +13,20 @@ class FormsTests(TestCase):
             "last_name": "krivko",
             "license_number": "AAA12345",
         },
-            {
-                "username": "user123",
-                "password1": "test12344",
-                "password2": "test12345",
-                "first_name": "volodya",
-                "last_name": "krivko",
-                "license_number": "AAA12345",
-            },
-            {
-                "username": "user123",
-                "password1": "test12345",
-                "password2": "test12345",
-                "first_name": "volodya",
-                "last_name": "krivko",
-                "license_number": "AA12345",
-            }]
+            {"username": "user123",
+             "password1": "test12344",
+             "password2": "test12345",
+             "first_name": "volodya",
+             "last_name": "krivko",
+             "license_number": "AAA12345",
+             },
+            {"username": "user123",
+             "password1": "test12345",
+             "password2": "test12345",
+             "first_name": "volodya",
+             "last_name": "krivko",
+             "license_number": "AA12345",
+             }]
 
         form = DriverCreationForm(data=form_data[0])
 
