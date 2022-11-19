@@ -29,4 +29,7 @@ class FormsTest(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertFormError(form, field="license_number", errors=["License number should consist of 8 characters"])
+        self.assertFormError(
+            form, field="license_number",
+            errors=["License number should consist of 8 characters"]
+        )
