@@ -2,7 +2,9 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
+
 from taxi.models import Manufacturer, Car, Driver
+
 
 MANUFACTURES_URL = reverse("taxi:manufacturer-list")
 DRIVERS_URL = reverse("taxi:driver-list")
@@ -117,8 +119,7 @@ class PrivateCarTests(TestCase):
                                                    country="TestCountry")
 
         Car.objects.create(model="Test",
-                           manufacturer=manufacturer)
-
+                                 manufacturer=manufacturer)
         cars = Car.objects.all()
 
         response = self.client.get(CAR_URL)
