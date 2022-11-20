@@ -53,9 +53,9 @@ class FormsTest(TestCase):
                     "license_number": license_,
                 }
 
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form_data)
+                form = DriverCreationForm(data=form_data)
+                self.assertFalse(form.is_valid())
+                self.assertNotEqual(form.cleaned_data, form_data)
 
     def test_driver_update_form_with_valid_license(self):
         form_data = {
@@ -79,9 +79,9 @@ class FormsTest(TestCase):
                     "license_number": license_,
                 }
 
-            form = DriverLicenseUpdateForm(data=form_data)
-            self.assertFalse(form.is_valid())
-            self.assertNotEqual(form.cleaned_data, form_data)
+                form = DriverLicenseUpdateForm(data=form_data)
+                self.assertFalse(form.is_valid())
+                self.assertNotEqual(form.cleaned_data, form_data)
 
     def test_car_creation_form(self):
         car = {
