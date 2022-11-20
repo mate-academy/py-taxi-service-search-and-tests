@@ -36,3 +36,26 @@ class PrivateManufacturerTests(TestCase):
             list(resp.context["manufacturer_list"]),
             list(manufacturers),
         )
+
+    def test_search_form_list_page(self):
+        Manufacturer.objects.create(
+            name="First manufacturer",
+            country="Ukraine"
+        )
+        Manufacturer.objects.create(
+            name="SECOND_MANUFACTURER",
+            country="Poland"
+        )
+        Manufacturer.objects.create(name="Third", country="Poland")
+
+        searching_data = {"name": "manufacturer"}
+        resp = self.client.get(MANUFACTURERS_LIST_URL, data=searching_data)
+
+        manufacturers = Manufacturer.objects.filter(
+            name__icontains="manufacturer"
+        )
+
+        self.assertEqual(
+            list(resp.context["manufacturer_list"]),
+            list(manufacturers),
+        )

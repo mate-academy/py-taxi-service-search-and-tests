@@ -44,7 +44,7 @@ class PrivateDriverTests(TestCase):
         get_user_model().objects.create_user(
             username="Second driver",
             password="second1234",
-            license_number="SECC12345",
+            license_number="SEC12345",
         )
 
         resp = self.client.get(DRIVERS_LIST_URL)
@@ -63,3 +63,30 @@ class PrivateDriverTests(TestCase):
         resp = self.client.get(reverse("taxi:driver-detail", args=[user_id]))
 
         self.assertEqual(resp.status_code, 200)
+
+    def test_search_form_list_page(self):
+        get_user_model().objects.create_user(
+            username="First driver",
+            password="first1234",
+            license_number="FIR12345",
+        )
+        get_user_model().objects.create_user(
+            username="SECOND_DRIVER",
+            password="second1234",
+            license_number="SEC12345",
+        )
+        get_user_model().objects.create_user(
+            username="Third",
+            password="third1234",
+            license_number="THI12345",
+        )
+
+        searching_data = {"username": "driver"}
+        resp = self.client.get(DRIVERS_LIST_URL, data=searching_data)
+
+        drivers = get_user_model().objects.filter(username__icontains="driver")
+
+        self.assertEqual(
+            list(resp.context["driver_list"]),
+            list(drivers),
+        )

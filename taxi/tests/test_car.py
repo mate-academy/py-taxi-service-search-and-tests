@@ -79,3 +79,31 @@ class PrivateCarTests(TestCase):
         resp = self.client.get(CARS_DETAIL_URL)
 
         self.assertEqual(resp.status_code, 200)
+
+    def test_search_form_list_page(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="Ukraine"
+        )
+        Car.objects.create(
+            model="Frist car",
+            manufacturer=manufacturer,
+        )
+        Car.objects.create(
+            model="SECOND_CAR",
+            manufacturer=manufacturer,
+        )
+        Car.objects.create(
+            model="Third",
+            manufacturer=manufacturer,
+        )
+
+        searching_data = {"model": "car"}
+        resp = self.client.get(CARS_LIST_URL, data=searching_data)
+
+        cars = Car.objects.filter(model__icontains="car")
+
+        self.assertEqual(
+            list(resp.context["car_list"]),
+            list(cars),
+        )
