@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 MANUFACTURES_URL = reverse("taxi:manufacturer-list")
 DRIVERS_URL = reverse("taxi:driver-list")
@@ -39,6 +39,14 @@ class PrivateManufacturerTests(TestCase):
         self.assertEqual(list(response.context["manufacturer_list"]),
                          list(manufacturers))
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+    def test_manufacturer_search_option(self):
+        url = MANUFACTURES_URL + "?=username=est"
+        response = self.client.get(url)
+        self.assertQuerysetEqual(
+            Manufacturer.objects.filter(
+                name__icontains="est"),
+            response.context["manufacturer_list"])
 
 
 class PublicDriverTests(TestCase):
@@ -78,6 +86,13 @@ class PrivateDriverTests(TestCase):
                          list(drivers))
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
+    def test_driver_search_option(self):
+        url = DRIVERS_URL + "?=username=est"
+        response = self.client.get(url)
+        self.assertQuerysetEqual(
+            Driver.objects.filter(username__icontains="est"),
+            response.context["driver_list"])
+
 
 class PublicCarTests(TestCase):
     def setUp(self) -> None:
@@ -102,7 +117,7 @@ class PrivateCarTests(TestCase):
                                                    country="TestCountry")
 
         Car.objects.create(model="Test",
-                                 manufacturer=manufacturer)
+                           manufacturer=manufacturer)
 
         cars = Car.objects.all()
 
@@ -112,3 +127,10 @@ class PrivateCarTests(TestCase):
         self.assertEqual(list(response.context["car_list"]),
                          list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_car_search_option(self):
+        url = CAR_URL + "?=model=es"
+        response = self.client.get(url)
+        self.assertQuerysetEqual(Car.objects.filter(
+            model__icontains="es"),
+            response.context["car_list"])
