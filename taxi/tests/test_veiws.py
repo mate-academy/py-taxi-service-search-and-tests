@@ -86,6 +86,18 @@ class PrivateTests(TestCase):
             Car.objects.filter(model__icontains="Ferr")
         )
 
+    def test_car_create(self):
+        model = "test_model"
+        manufacturer_id = 1
+
+        form_data = {"model": model, "manufacturer_id": manufacturer_id}
+
+        self.client.post(CAR_LIST_URL, data=form_data)
+        car = Car.objects.get(model=model)
+
+        self.assertEqual(car.model, model)
+        self.assertEqual(car.manufacturer_id, manufacturer_id)
+
     def test_driver_list(self):
         response = self.client.get(DRIVER_LIST_URL)
         drivers = Driver.objects.all()
