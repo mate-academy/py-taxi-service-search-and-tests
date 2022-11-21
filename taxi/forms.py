@@ -51,8 +51,8 @@ def validate_license_number(license_number):
         )
 
     if not (
-            license_number[: uppercase_char_num].isalpha()
-            and license_number[: uppercase_char_num].isupper()
+            license_number[:uppercase_char_num].isalpha()
+            and license_number[:uppercase_char_num].isupper()
     ):
         raise ValidationError(
             f"First {uppercase_char_num} "

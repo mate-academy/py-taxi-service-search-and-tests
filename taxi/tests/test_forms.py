@@ -25,7 +25,7 @@ class ValidLicenseNumberFromTest(TestCase):
     def test_first_3_characters_uppercase(self):
         self.assertFalse(self.create_form("AnE01234").is_valid())
 
-    def test_first_5_characters_digits(self):
+    def test_last_5_characters_digits(self):
         self.assertFalse(self.create_form("AN012345").is_valid())
 
     def test_license_number_with_valid_data(self):
