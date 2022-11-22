@@ -62,7 +62,6 @@ class TestCarForm(TestCase):
         self.assertEqual(list(new_car.drivers.all()), [self.superuser])
 
 
-
 class TestDriverForm(TestCase):
     def setUp(self) -> None:
         self.superuser = get_user_model().objects.create_superuser(
