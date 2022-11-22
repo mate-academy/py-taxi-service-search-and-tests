@@ -50,13 +50,17 @@ class TestCarForm(TestCase):
         form_data = {
             "model": "911",
             "manufacturer": manufacturer.id,
+            "drivers": [self.superuser.id],
         }
 
         self.client.post(reverse("taxi:car-create"), data=form_data)
+
         new_car = Car.objects.get(model=form_data["model"])
 
         self.assertEqual(new_car.model, form_data["model"])
-        self.assertEqual(new_car.manufacturer, form_data["manufacturer"])
+        self.assertEqual(new_car.manufacturer, manufacturer)
+        self.assertEqual(list(new_car.drivers.all()), [self.superuser])
+
 
 
 class TestDriverForm(TestCase):
@@ -77,12 +81,13 @@ class TestDriverForm(TestCase):
             "username": "new_user",
             "first_name": "first_name",
             "last_name": "last_name",
-            "password1": "password",
-            "password2": "password",
+            "password1": "qwtyasd103krjr!jrt",
+            "password2": "qwtyasd103krjr!jrt",
             "license_number": "ABC12345",
         }
 
         self.client.post(reverse("taxi:driver-create"), data=form_data)
+
         new_driver = get_user_model().objects.get(
             username=form_data["username"]
         )
