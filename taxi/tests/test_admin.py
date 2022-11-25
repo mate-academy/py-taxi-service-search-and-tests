@@ -7,8 +7,7 @@ class AdminSiteTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-            username="admin",
-            password="admin12345"
+            username="admin", password="admin12345",
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
@@ -19,19 +18,19 @@ class AdminSiteTests(TestCase):
             license_number="SJE12345",
         )
 
-    def test_driver_license_number_listed(self):
+    def test_driver_license_number_listed(self) -> None:
         url = reverse("admin:taxi_driver_changelist")
         response = self.client.get(url)
 
         self.assertContains(response, self.driver.license_number)
 
-    def test_driver_detailed_license_number_listed(self):
+    def test_driver_detailed_license_number_listed(self) -> None:
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         response = self.client.get(url)
 
         self.assertContains(response, self.driver.license_number)
 
-    def test_driver_additional_fields(self):
+    def test_driver_additional_fields(self) -> None:
         url = reverse("admin:taxi_driver_add")
         response = self.client.get(url)
 

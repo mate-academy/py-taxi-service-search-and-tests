@@ -1,6 +1,10 @@
+from typing import Any
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import QuerySet
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -18,7 +22,7 @@ from .forms import (
 
 
 @login_required
-def index(request):
+def index(request: WSGIRequest) -> HttpResponse:
     """View function for the home page of the site."""
 
     num_drivers = Driver.objects.count()
@@ -45,7 +49,12 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Manufacturer.objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self,
+            *,
+            object_list: Any = None,
+            **kwargs: dict[str, Any],
+    ) -> dict[str, Any]:
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
         context["search_form"] = ManufacturerSearchForm(
@@ -56,7 +65,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Manufacturer]:
         form = ManufacturerSearchForm(self.request.GET)
 
         if form.is_valid():
@@ -87,9 +96,11 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer")
+    queryset = Car.objects.select_related("manufacturer")
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self, *, object_list: Any = None, **kwargs: dict[str, Any],
+    ) -> dict[str, Any]:
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
         context["search_form"] = CarSearchForm(
@@ -100,7 +111,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Car]:
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
@@ -137,7 +148,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = get_user_model().objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self, *, object_list: Any = None, **kwargs: dict[str, Any],
+    ) -> dict[str, Any]:
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(
@@ -148,12 +161,12 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Driver]:
         form = DriverSearchForm(self.request.GET)
 
         if form.is_valid():
             return self.queryset.filter(
-                username__icontains=form.cleaned_data["username"]
+                username__icontains=form.cleaned_data["username"],
             )
 
         return self.queryset
@@ -161,7 +174,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
-    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+    queryset = Driver.objects.prefetch_related("cars__manufacturer")
 
 
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
@@ -181,7 +194,9 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_assign_to_car(request, pk):
+def toggle_assign_to_car(
+        request: WSGIRequest, pk: int,
+) -> HttpResponseRedirect:
     driver = Driver.objects.get(id=request.user.id)
     if (
             Car.objects.get(id=pk) in driver.cars.all()

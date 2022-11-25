@@ -5,18 +5,16 @@ from taxi.models import Manufacturer, Car
 
 
 class ModelsTests(TestCase):
-    def test_manufacturer_str(self):
+    def test_manufacturer_str(self) -> None:
         manufacturer = Manufacturer.objects.create(
-            name="General Motors",
-            country="USA",
+            name="General Motors", country="USA",
         )
 
         self.assertEqual(
-            str(manufacturer),
-            f"{manufacturer.name} {manufacturer.country}",
+            str(manufacturer), f"{manufacturer.name} {manufacturer.country}",
         )
 
-    def test_driver_str(self):
+    def test_driver_str(self) -> None:
         driver = get_user_model().objects.create_user(
             username="nancy.wheeler",
             password="superdriver123",
@@ -29,19 +27,17 @@ class ModelsTests(TestCase):
             f"{driver.username} ({driver.first_name} {driver.last_name})",
         )
 
-    def test_car_str(self):
+    def test_car_str(self) -> None:
         manufacturer = Manufacturer.objects.create(
-            name="General Motors",
-            country="USA",
+            name="General Motors", country="USA",
         )
         car = Car.objects.create(
-            model="Cadillac Escalade",
-            manufacturer=manufacturer,
+            model="Cadillac Escalade", manufacturer=manufacturer,
         )
 
         self.assertEqual(str(car), car.model)
 
-    def test_create_driver_with_license_number(self):
+    def test_create_driver_with_license_number(self) -> None:
         username = "bob.newby"
         password = "yeapbuddy!"
         license_number = "BOB09631"
@@ -56,7 +52,7 @@ class ModelsTests(TestCase):
         self.assertTrue(driver.check_password(password))
         self.assertEqual(driver.license_number, license_number)
 
-    def test_driver_get_absolute_url(self):
+    def test_driver_get_absolute_url(self) -> None:
         driver = get_user_model().objects.create_user(
             username="nancy.wheeler",
             password="superdriver123",
