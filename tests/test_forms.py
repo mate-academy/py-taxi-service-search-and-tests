@@ -43,7 +43,7 @@ class FormsTests(TestCase):
             name="TestName",
             country="TestCountry"
         )
-        car = Car.objects.create(
+        Car.objects.create(
             model="CarTest",
             manufacturer=manufacturer
         )
