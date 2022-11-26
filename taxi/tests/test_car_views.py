@@ -30,8 +30,12 @@ class PrivateCarsTests(TestCase):
             country="Manufacturer Country 2"
         )
 
-        self.car1 = Car.objects.create(model="Car1", manufacturer=manufacturer1)
-        self.car2 = Car.objects.create(model="Car2", manufacturer=manufacturer2)
+        self.car1 = Car.objects.create(
+            model="Car1", manufacturer=manufacturer1
+        )
+        self.car2 = Car.objects.create(
+            model="Car2", manufacturer=manufacturer2
+        )
 
     def test_retrieve_cars(self):
         cars = Car.objects.all()
