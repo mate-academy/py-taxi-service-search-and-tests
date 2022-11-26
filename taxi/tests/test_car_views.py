@@ -54,3 +54,25 @@ class PrivateCarsTests(TestCase):
             self.car2.manufacturer.name,
         ]:
             self.assertContains(response, element)
+
+    def test_search_car(self):
+        response = self.client.get(CARS_URL + "?search_by=ar1")
+
+        self.assertContains(response, self.car1.model)
+        self.assertContains(response, self.car1.manufacturer.name)
+        self.assertNotContains(response, self.car2.model)
+        self.assertNotContains(response, self.car2.manufacturer.name)
+
+        response = self.client.get(CARS_URL + "?search_by=a")
+
+        self.assertContains(response, self.car1.model)
+        self.assertContains(response, self.car1.manufacturer.name)
+        self.assertContains(response, self.car2.model)
+        self.assertContains(response, self.car2.manufacturer.name)
+
+        response = self.client.get(CARS_URL + "?search_by=super")
+
+        self.assertNotContains(response, self.car1.model)
+        self.assertNotContains(response, self.car1.manufacturer.name)
+        self.assertNotContains(response, self.car2.model)
+        self.assertNotContains(response, self.car2.manufacturer.name)
