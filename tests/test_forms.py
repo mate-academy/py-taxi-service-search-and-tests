@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 
@@ -7,6 +8,7 @@ from taxi.forms import (
     DriverSearchForm,
     ManufacturerSearchForm
 )
+from taxi.models import Manufacturer, Car, Driver
 
 
 class FormsTests(TestCase):
@@ -37,22 +39,60 @@ class FormsTests(TestCase):
         self.assertNotEqual(form.cleaned_data, form_data)
 
     def test_car_search_form(self):
-        form_data = {"model": "testing123"}
-        form = CarSearchForm(form_data)
+        manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country="TestCountry"
+        )
+        car = Car.objects.create(
+            model="CarTest",
+            manufacturer=manufacturer
+        )
 
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        self.user = get_user_model().objects.create_user(
+            username="UserTest",
+            password="testpass"
+        )
+        self.client.force_login(self.user)
+
+        response = self.client.get("/cars/?model=ca")
+        cars = Car.objects.filter(model__icontains="ca")
+
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(cars)
+        )
 
     def test_manufacturer_search_form(self):
-        form_data = {"name": "manuf321"}
-        form = ManufacturerSearchForm(form_data)
+        self.manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country="TestCountry"
+        )
 
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        self.user = get_user_model().objects.create_user(
+            username="UserTest",
+            password="testpass"
+        )
+        self.client.force_login(self.user)
+
+        response = self.client.get("/manufacturers/?name=na")
+        manufacturers = Manufacturer.objects.filter(name__icontains="na")
+
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
 
     def test_driver_search_form(self):
-        form_data = {"username": "user123"}
-        form = DriverSearchForm(form_data)
+        self.user = get_user_model().objects.create_user(
+            username="UserTest",
+            password="testpass"
+        )
+        self.client.force_login(self.user)
 
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        response = self.client.get("/drivers/?username=use")
+        drivers = Driver.objects.filter(username__icontains="use")
+
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )

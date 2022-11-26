@@ -41,7 +41,7 @@ class ModelsTest(TestCase):
 
         self.assertEqual(str(car), car.model)
 
-    def test_create_driver_wtih_license_number(self):
+    def test_create_driver_with_license_number(self):
         username = "Hiso"
         first_name = "Jimmy"
         last_name = "Likoswu"

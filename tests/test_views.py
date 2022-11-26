@@ -57,6 +57,27 @@ class PrivateCarTests(TestCase):
         )
         self.client.force_login(self.user)
 
+    def test_create_car(self):
+        self.manufacturer = Manufacturer.objects.create(
+            name="BSJW5",
+            country="Juwos"
+        )
+        self.driver = Driver.objects.create(
+            username="Test",
+            password="Oweq"
+        )
+
+        response = self.client.post(
+            reverse("taxi:car-create"),
+            data={
+                "model": "Opel",
+                "manufacturer": self.manufacturer.id,
+                "drivers": [self.driver.id],
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Car.objects.first().model, "Opel")
+
     def test_read_car(self):
         manufacturer = Manufacturer.objects.create(name="Woks",
                                                    country="Pored")
@@ -112,3 +133,17 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
         self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_update_driver_license(self):
+        self.driver = Driver.objects.create(
+            username="testdata",
+            password="newpass927273",
+            license_number="OWH28432"
+        )
+        response = self.client.post(
+            reverse("taxi:driver-update", kwargs={"pk": self.driver.id}),
+            data={"license_number": "OWI28427"},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Driver.objects.get(id=2).license_number, "OWI28427")
