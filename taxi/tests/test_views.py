@@ -120,7 +120,8 @@ class SearchTests(TestCase):
         self.client.force_login(self.user)
 
     def test_search_drivers_by_username(self):
-        response = self.client.get(reverse("taxi:driver-list") + "?name=sandychicks")
+        response = self.client.get(reverse("taxi:driver-list")
+                                   + "?name=sandychicks")
         self.assertEqual(
             list(response.context["driver_list"]),
             list(Driver.objects.filter(username__icontains="sandychicks")),
@@ -134,7 +135,8 @@ class SearchTests(TestCase):
         )
 
     def test_search_manufacturer_by_name(self):
-        response = self.client.get(reverse("taxi:manufacturer-list") + "?name=Honda")
+        response = self.client.get(reverse("taxi:manufacturer-list")
+                                   + "?name=Honda")
         self.assertEqual(
             list(response.context["manufacturer_list"]),
             list(Manufacturer.objects.filter(name__icontains="Honda")),
