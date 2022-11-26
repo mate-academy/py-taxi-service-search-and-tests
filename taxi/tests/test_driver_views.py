@@ -39,11 +39,11 @@ class PrivateCarsTests(TestCase):
 
         response = self.client.get(DRIVERS_URL)
 
-        for value in [
+        for element in [
             self.driver.id,
             self.driver.username,
             self.driver.first_name,
             self.driver.last_name,
             self.driver.license_number,
         ]:
-            self.assertContains(response, value)
+            self.assertContains(response, element)

@@ -21,17 +21,17 @@ class PrivateCarsTests(TestCase):
         )
         self.client.force_login(self.driver)
 
-        manuf1 = Manufacturer.objects.create(
-            name="Manufname1",
-            country="Manufcountry1"
+        manufacturer1 = Manufacturer.objects.create(
+            name="Manufacturer Name 1",
+            country="Manufacturer Country 1"
         )
-        manuf2 = Manufacturer.objects.create(
-            name="Manufname2",
-            country="Manufcountry2"
+        manufacturer2 = Manufacturer.objects.create(
+            name="Manufacturer Name 2",
+            country="Manufacturer Country 2"
         )
 
-        self.car1 = Car.objects.create(model="Car1", manufacturer=manuf1)
-        self.car2 = Car.objects.create(model="Car2", manufacturer=manuf2)
+        self.car1 = Car.objects.create(model="Car1", manufacturer=manufacturer1)
+        self.car2 = Car.objects.create(model="Car2", manufacturer=manufacturer2)
 
     def test_retrieve_cars(self):
         cars = Car.objects.all()
@@ -45,9 +45,12 @@ class PrivateCarsTests(TestCase):
     def test_car_listed(self):
         response = self.client.get(CARS_URL)
 
-        self.assertContains(response, self.car1.id)
-        self.assertContains(response, self.car1.model)
-        self.assertContains(response, self.car1.manufacturer)
-        self.assertContains(response, self.car2.id)
-        self.assertContains(response, self.car2.model)
-        self.assertContains(response, self.car2.manufacturer)
+        for element in [
+            self.car1.id,
+            self.car1.model,
+            self.car1.manufacturer.name,
+            self.car2.id,
+            self.car2.model,
+            self.car2.manufacturer.name,
+        ]:
+            self.assertContains(response, element)
