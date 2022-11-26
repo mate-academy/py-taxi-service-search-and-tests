@@ -30,4 +30,3 @@ class FormTests(TestCase):
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertNotEqual(form.cleaned_data, form_data)
-        self.assertNotEqual(form.fields.keys(), form_data.keys())
