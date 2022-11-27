@@ -36,7 +36,10 @@ class FormsTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_driver_search_form_valid_data(self):
-        driver = Driver.objects.create(username="test", license_number="FRE12345")
+        driver = Driver.objects.create(
+            username="test",
+            license_number="FRE12345"
+        )
         data = {"driver_0": driver.username}
         form = DriverSearchForm(data=data)
         self.assertTrue(form.is_valid())
