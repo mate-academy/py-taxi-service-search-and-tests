@@ -20,10 +20,7 @@ class PublicManufacturerTests(TestCase):
 
 class PrivateManufacturerTests(TestCase):
     def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            "test",
-            "password123"
-        )
+        self.user = get_user_model().objects.create_user("test", "password123")
         self.client.force_login(self.user)
 
     def test_retrieve_manufacturer(self):
@@ -35,8 +32,7 @@ class PrivateManufacturerTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            list(response.context["manufacturer_list"]),
-            list(manufacturers)
+            list(response.context["manufacturer_list"]), list(manufacturers)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
@@ -55,10 +51,7 @@ class PublicCarTests(TestCase):
 
 class PrivateCarTests(TestCase):
     def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            "test",
-            "password123"
-        )
+        self.user = get_user_model().objects.create_user("test", "password123")
         self.client.force_login(self.user)
 
     def test_retrieve_car(self):
@@ -70,10 +63,7 @@ class PrivateCarTests(TestCase):
         cars = Car.objects.all()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["car_list"]),
-            list(cars)
-        )
+        self.assertEqual(list(response.context["car_list"]), list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
 
@@ -91,28 +81,16 @@ class PublicDriverTests(TestCase):
 
 class PrivateDriverTests(TestCase):
     def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            "test",
-            "password123"
-        )
+        self.user = get_user_model().objects.create_user("test", "password123")
         self.client.force_login(self.user)
 
     def test_retrieve_driver(self):
-        Driver.objects.create(
-            username="test1",
-            license_number="TYR12345"
-        )
-        Driver.objects.create(
-            username="test2",
-            license_number="TPR12345"
-        )
+        Driver.objects.create(username="test1", license_number="TYR12345")
+        Driver.objects.create(username="test2", license_number="TPR12345")
 
         response = self.client.get(DRIVER_URL)
         drivers = Driver.objects.all()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["driver_list"]),
-            list(drivers)
-        )
+        self.assertEqual(list(response.context["driver_list"]), list(drivers))
         self.assertTemplateUsed(response, "taxi/driver_list.html")
