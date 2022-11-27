@@ -48,8 +48,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
 
         name = self.request.GET.get("name", "")
-
-        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
+        context["manufacturer_search"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
 
         return context
 
@@ -85,27 +86,21 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     queryset = Car.objects.all().select_related("manufacturer")
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        print("kwargs", kwargs)
         context = super(CarListView, self).get_context_data(**kwargs)
-        print("context", context)
 
         model = self.request.GET.get("model", "")
-        print("self.request.GET", self.request.GET)
-        print("model", model)
+        context["car_search"] = CarSearchForm(initial={"model": model})
 
-        context["search_form"] = CarSearchForm(initial={"model": model})
-        print("context['search_form']", context["search_form"])
-        print("context", context)
         return context
 
     def get_queryset(self):
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
-            print("form.cleaned_data", form.cleaned_data)
             return self.queryset.filter(
                 model__icontains=form.cleaned_data["model"]
             )
+
         return self.queryset
 
 
@@ -138,19 +133,20 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
 
-        username = self.request.GET.get("username", "")
-
-        context["search_form"] = DriverSearchForm(
+        username = self.request.GET.get("username")
+        context["driver_search"] = DriverSearchForm(
             initial={"username": username}
         )
 
         return context
 
     def get_queryset(self):
-        username = self.request.GET.get("username")
+        form = DriverSearchForm(self.request.GET)
 
-        if username:
-            return self.queryset.filter(username__icontains=username)
+        if form.is_valid():
+            return self.queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
 
         return self.queryset
 
