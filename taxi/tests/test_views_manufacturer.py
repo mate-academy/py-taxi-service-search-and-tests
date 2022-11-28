@@ -76,7 +76,7 @@ class PrivetManufacturerTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-class SearchDriverTests(TestCase):
+class SearchManufacturerTests(TestCase):
     """test the search manufacturer field"""
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
