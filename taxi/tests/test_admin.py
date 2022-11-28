@@ -3,7 +3,6 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 
-
 class AdminSiteTest(TestCase):
     def setUp(self) -> None:
         self.client = Client()
