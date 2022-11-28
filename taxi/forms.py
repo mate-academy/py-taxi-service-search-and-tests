@@ -89,4 +89,3 @@ class ManufacturerSearchForm(forms.Form):
             }
         )
     )
-

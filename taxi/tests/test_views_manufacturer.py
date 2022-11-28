@@ -44,7 +44,9 @@ class PrivetManufacturerTests(TestCase):
         manufacturer_all = Manufacturer.objects.all()
         response = self.client.get(MANUFACTURER_LIST)
 
-        self.assertEqual(list(response.context["manufacturer_list"]), list(manufacturer_all))
+        self.assertEqual(
+            list(response.context["manufacturer_list"]), list(manufacturer_all)
+        )
 
     def test_link_template_should_be_manufacturer_list_with_login(self):
         """test should required template in right link"""
@@ -84,7 +86,9 @@ class SearchDriverTests(TestCase):
         self.client.force_login(self.user)
 
     def test_manufacturer_search_field(self):
-        response = self.client.get(reverse("taxi:manufacturer-list") + "?name=test")
+        response = self.client.get(
+            reverse("taxi:manufacturer-list") + "?name=test"
+        )
         self.assertEqual(
             list(response.context["manufacturer_list"]),
             list(Manufacturer.objects.filter(name__icontains="test")),

@@ -58,7 +58,9 @@ class PrivetCarTests(TestCase):
 
     def test_update_required_in_detail_manufacturer_with_login(self):
         """test should update the car in detail list"""
-        car_update = Car.objects.create(model="test", manufacturer=self.manufacturer)
+        car_update = Car.objects.create(
+            model="test", manufacturer=self.manufacturer
+        )
         url_to_car = reverse(
             "taxi:car-update", args=[car_update.id]
         )
@@ -67,7 +69,9 @@ class PrivetCarTests(TestCase):
 
     def test_delete_required_in_detail_manufacturer_with_login(self):
         """test should delete the car in detail list"""
-        car_delete = Car.objects.create(model="test", manufacturer=self.manufacturer)
+        car_delete = Car.objects.create(
+            model="test", manufacturer=self.manufacturer
+        )
         url_to_delete = reverse(
             "taxi:car-delete", args=[car_delete.id]
         )

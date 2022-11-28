@@ -90,7 +90,9 @@ class SearchDriverTests(TestCase):
         self.client.force_login(self.user)
 
     def test_driver_search_field(self):
-        response = self.client.get(reverse("taxi:driver-list") + "?username=test")
+        response = self.client.get(
+            reverse("taxi:driver-list") + "?username=test"
+        )
         self.assertEqual(
             list(response.context["driver_list"]),
             list(Driver.objects.filter(username__icontains="test")),
