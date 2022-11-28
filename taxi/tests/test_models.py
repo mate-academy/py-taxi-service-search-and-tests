@@ -23,7 +23,8 @@ class ModelsTests(TestCase):
             password="test1234",
         )
         self.assertEqual(
-            str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})"
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
         )
 
     def test_create_driver_with_licence_number(self):
