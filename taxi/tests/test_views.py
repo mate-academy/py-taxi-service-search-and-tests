@@ -77,3 +77,15 @@ class PrivateViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["car_list"]), list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_driver_search(self):
+        response = self.client.get("/drivers/?username=seb")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(username__icontains="seb"),
+        )
+        self.assertNotEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(license_number__icontains="seb"),
+        )
