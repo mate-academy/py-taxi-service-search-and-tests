@@ -1,8 +1,231 @@
 body {
-    margin-top: 20px;
+    background-color: #777;
+}
+
+.nomar-right {
+    margin-right: 0;
+}
+
+.header {
+    background-color: #555;
+    border-radius: 0 0 8px 8px;
+    margin: 0 15px 20px;
+    padding: 10px 20px;
+}
+
+.header_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    color: #f5f5f5;
+}
+
+.logout {
+    display: flex;
+}
+
+.logout > div > a {
+    color: #f5f5f5;
+}
+
+.logout > div:first-child {
+    margin-right: 10px;
+}
+
+.logout > div:last-child {
+    border-left: 1px solid #333;
+    padding-left: 10px;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.sidebar li {
+    background-color: #f5f5f5;
+}
+
+.sidebar-item {
+    position: relative;
+
+}
+
+.content_detail {
+    width: 100%;
+    padding: 0 30px;
+}
+
+.content_wrapper {
+    padding: 30px 0;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    min-height: 80vh;
+}
+
+.login_container {
+    padding: 20px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 20px 20px 30px -18px rgba(0, 0, 0, 0.65);
+    margin: auto;
+    max-width: 250px;
+}
+
+.comments {
+    padding: 30px 0;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+
+}
+
+.driver_list {
+    list-style: none;
+    margin: 0 0 40px;
+    padding: 0;
+}
+
+.driver_item {
+    padding: 10px;
+}
+
+.driver_name {
+    font-weight: 600;
+}
+
+.driver_nickname {
+    font-weight: 400;
+}
+
+.driver_image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 125px;
+    height: 125px;
+    object-fit: contain;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+}
+
+.comment_user {
+    display: flex;
+    align-items: center;
+}
+
+.comment_user {
+    font-weight: bold;
+    margin-right: 10px;
+    padding: 10px 0;
+}
+
+.comment_user_name {
+    margin-right: 8px;
+}
+
+.comment_user_img {
+    margin-right: 8px;
+}
+
+.comment_user_img > img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.comment_text {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 14px;
+    padding: 8px;
+    position: relative;
+}
+
+.comment_date {
+    font-size: 10px;
+    color: #555555;
+    position: absolute;
+    right: 8px;
+    bottom: 3px;
+}
+
+.confirm_delete {
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    box-shadow: 20px 20px 30px -18px rgba(0, 0, 0, 0.65);
+}
+
+.link_color {
+    color: #000;
+
+}
+
+.link_color:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+.link_color_white {
+    color: #ffffff;
+}
+
+.link_color_white:hover {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.car_list_features {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.driver_search {
+    margin-bottom: 20px;
+}
+
+.driver_info {
+    display: flex;
+    align-items: center;
+
+}
+
+.driver_avatar,
+.driver_name {
+    margin-right: 20px;
+}
+
+.settings_btn {
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+
+.driver_info_features {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
