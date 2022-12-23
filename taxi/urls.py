@@ -1,5 +1,6 @@
 from django.urls import path
 
+from . import views
 from .views import (
     index,
     CarListView,
@@ -13,10 +14,13 @@ from .views import (
     DriverLicenseUpdateView,
     DriverDeleteView,
     ManufacturerListView,
+    ManufacturerDetailView,
     ManufacturerCreateView,
     ManufacturerUpdateView,
     ManufacturerDeleteView,
-    toggle_assign_to_car,
+    RegisterCreateView,
+    CommentDeleteView,
+    toggle_assign_to_car, DriverAvatarUpdateView, CarImageUpdateView,
 )
 
 urlpatterns = [
@@ -26,6 +30,9 @@ urlpatterns = [
         ManufacturerListView.as_view(),
         name="manufacturer-list",
     ),
+    path("manufacturers/<int:pk>/",
+         ManufacturerDetailView.as_view(),
+         name="manufacturer-detail"),
     path(
         "manufacturers/create/",
         ManufacturerCreateView.as_view(),
@@ -51,6 +58,9 @@ urlpatterns = [
         toggle_assign_to_car,
         name="toggle-car-assign",
     ),
+    path("cars/<int:pk>/update/car_image",
+         CarImageUpdateView.as_view(),
+         name="car-image-update"),
     path("drivers/", DriverListView.as_view(), name="driver-list"),
     path(
         "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
@@ -65,11 +75,19 @@ urlpatterns = [
         DriverLicenseUpdateView.as_view(),
         name="driver-update",
     ),
+    path("drivers/<int:pk>/update/avatar/",
+         DriverAvatarUpdateView.as_view(),
+         name="avatar-update"),
     path(
         "drivers/<int:pk>/delete/",
         DriverDeleteView.as_view(),
         name="driver-delete",
     ),
+    path("register/", RegisterCreateView.as_view(),
+         name="user-register"),
+    path("cars/<int:id>/comment/<int:pk>/delete/", CommentDeleteView.as_view(),
+         name="comment-delete"),
+    path("rate/<int:car_id>/<int:rating>/", views.rate, name="car-rating")
 ]
 
 app_name = "taxi"

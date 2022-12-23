@@ -3,26 +3,48 @@
 {% block content %}
   <h1>
     Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+    {% if user.is_staff or user.id == driver.id %}
+          <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
 
     <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
       Update license number
     </a>
+    {% endif %}
   </h1>
+  <table class="table">
+    <tr>
+      <th>Avatar {% if user.is_staff or user.id == driver.id %}
+        <a href="{% url "taxi:avatar-update" pk=driver.id %}" class="btn btn-secondary"
+                      id="avatar-btn">Update</a></th>
+      {% endif %}
+      <th>Information</th>
+    </tr>
+    <tr>
+      <th>
+        {% if driver.avatar %}
+          <img src="/media/{{ driver.avatar }}" alt="avatar" id="avatar">
+        {% else %}
+          <img src="/static/images/default_avatar.jpg" alt="avatar" id="avatar">
+      {% endif %}
+        </th>
+      <td><ul>
+        <li><strong>First name:</strong> {{ driver.first_name }}</li>
+        <li><strong>Last name:</strong> {{ driver.last_name }}</li>
+        <li><strong>License number:</strong> {{ driver.license_number }}</li>
+        <li><strong>Number of cars:</strong> {{ driver.cars.all.count }}</li>
+      </ul></td>
+    </tr>
+  </table>
 
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
+  <br>
   <div class="ml-3">
     <h4>Cars</h4>
 
     {% for car in driver.cars.all %}
         <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
+        <p><strong>Model:</strong> <a href="{% url "taxi:car-detail" pk=car.pk %}">{{ car.model }}</a></p>
         <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
         <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
 

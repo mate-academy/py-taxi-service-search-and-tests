@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>Update Avatar</h1>
+  <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Update" class="btn btn-primary">
+    <a href="{% url "taxi:driver-detail" pk=driver.id %}" class="btn btn-secondary">Back to profile</a>
+  </form>
+{% endblock %}
