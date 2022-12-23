@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taxi', '0004_alter_comment_options_rename_body_comment_content_and_more'),
+        ("taxi", "0004_alter_comment_options_rename_body_comment_content_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='comment',
-            options={'ordering': ('-date',)},
+            name="comment",
+            options={"ordering": ("-date",)},
         ),
     ]

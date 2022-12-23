@@ -34,10 +34,15 @@ class CarAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("user", "content",)
+    list_display = (
+        "user",
+        "content",
+    )
     list_filter = ("user",)
-    search_fields = ("user", "content",)
+    search_fields = (
+        "user",
+        "content",
+    )
 
 
 admin.site.register(Manufacturer)
-

@@ -19,8 +19,7 @@ class PublicCarTests(TestCase):
 class PrivateCarTests(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create(
-            username="test",
-            password="test12345"
+            username="test", password="test12345"
         )
         self.client.force_login(self.user)
 
@@ -29,8 +28,7 @@ class PrivateCarTests(TestCase):
             model="RX8",
             manufacturer=Manufacturer.objects.create(
                 name="Mazda",
-                country="Japan"
-            )
+                country="Japan"),
         )
 
         response = self.client.get(CAR_URL)
@@ -45,8 +43,7 @@ class PrivateCarTests(TestCase):
             "model": "Test",
             "manufacturer": Manufacturer.objects.create(
                 name="Test",
-                country="TEst"
-            )
+                country="TEst"),
         }
         self.client.post(reverse("taxi:car-create"), data=form_data)
         new_car = Car.objects.get(model=form_data["model"])
@@ -54,5 +51,6 @@ class PrivateCarTests(TestCase):
         self.assertEqual(new_car.model, form_data["model"])
         self.assertEqual(new_car.manufacturer.name,
                          form_data["manufacturer"].name)
-        self.assertEqual(new_car.manufacturer.country,
-                         form_data["manufacturer"].country)
+        self.assertEqual(
+            new_car.manufacturer.country, form_data["manufacturer"].country
+        )

@@ -8,50 +8,56 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taxi', '0003_rename_bode_comment_body_remove_comment_car_and_more'),
+        ("taxi", "0003_rename_bode_comment_body_remove_comment_car_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='comment',
-            options={'ordering': ('date',)},
+            name="comment",
+            options={"ordering": ("date",)},
         ),
         migrations.RenameField(
-            model_name='comment',
-            old_name='body',
-            new_name='content',
+            model_name="comment",
+            old_name="body",
+            new_name="content",
         ),
         migrations.RenameField(
-            model_name='comment',
-            old_name='created_at',
-            new_name='date',
+            model_name="comment",
+            old_name="created_at",
+            new_name="date",
         ),
         migrations.RemoveField(
-            model_name='comment',
-            name='active',
+            model_name="comment",
+            name="active",
         ),
         migrations.RemoveField(
-            model_name='comment',
-            name='email',
+            model_name="comment",
+            name="email",
         ),
         migrations.RemoveField(
-            model_name='comment',
-            name='name',
+            model_name="comment",
+            name="name",
         ),
         migrations.RemoveField(
-            model_name='comment',
-            name='updated',
+            model_name="comment",
+            name="updated",
         ),
         migrations.AddField(
-            model_name='comment',
-            name='car',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='taxi.car'),
+            model_name="comment",
+            name="car",
+            field=models.ForeignKey(
+                default=1, on_delete=django.db.models.deletion.CASCADE, to="taxi.car"
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='comment',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="comment",
+            name="user",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
     ]

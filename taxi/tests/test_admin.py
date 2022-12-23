@@ -7,8 +7,7 @@ class AdminSiteTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-            username="blin4ik",
-            password="admin12345"
+            username="blin4ik", password="admin12345"
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
@@ -16,7 +15,7 @@ class AdminSiteTests(TestCase):
             password="test12345",
             license_number="ABC12345",
             first_name="Vlad",
-            last_name="Magdenko"
+            last_name="Magdenko",
         )
 
     def test_driver_license_number_listed(self):
@@ -36,5 +35,3 @@ class AdminSiteTests(TestCase):
         self.assertContains(response, "first_name")
         self.assertContains(response, "last_name")
         self.assertContains(response, "license_number")
-
-

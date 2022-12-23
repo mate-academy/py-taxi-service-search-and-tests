@@ -7,13 +7,15 @@ import taxi.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taxi', '0012_alter_car_comments'),
+        ("taxi", "0012_alter_car_comments"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='driver',
-            name='avatar',
-            field=models.ImageField(blank=True, null=True, upload_to=taxi.models.path_to_image),
+            model_name="driver",
+            name="avatar",
+            field=models.ImageField(
+                blank=True, null=True, upload_to=taxi.models.path_to_image
+            ),
         ),
     ]

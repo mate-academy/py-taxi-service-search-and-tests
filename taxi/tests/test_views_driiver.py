@@ -30,13 +30,14 @@ class PrivateDriverTests(TestCase):
             password="test12345",
             first_name="Vlad",
             last_name="Magdenko",
-            license_number="ABC12345"
+            license_number="ABC12345",
         )
 
         response = self.client.get(DRIVERS_URL)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(list(response.context["driver_list"]),
-                         list(Driver.objects.all()))
+        self.assertEqual(
+            list(response.context["driver_list"]), list(Driver.objects.all())
+        )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_driver_create(self):
@@ -46,11 +47,16 @@ class PrivateDriverTests(TestCase):
             "password2": "test12345",
             "first_name": "test",
             "last_name": "test",
-            "license_number": "ABC12345"
+            "license_number": "ABC12345",
         }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = get_user_model().objects.get(username=form_data["username"])
+        new_driver = get_user_model().objects.get(
+            username=form_data["username"]
+        )
 
-        self.assertEqual(new_driver.first_name, form_data["first_name"])
-        self.assertEqual(new_driver.last_name, form_data["last_name"])
-        self.assertEqual(new_driver.license_number, form_data["license_number"])
+        self.assertEqual(new_driver.first_name,
+                         form_data["first_name"])
+        self.assertEqual(new_driver.last_name,
+                         form_data["last_name"])
+        self.assertEqual(new_driver.license_number,
+                         form_data["license_number"])

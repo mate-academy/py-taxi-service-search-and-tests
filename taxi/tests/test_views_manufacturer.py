@@ -19,8 +19,7 @@ class PublicManufacturerTests(TestCase):
 class PrivateManufacturerTests(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create(
-            username="test",
-            password="test12345"
+            username="test", password="test12345"
         )
         self.client.force_login(self.user)
 
@@ -33,21 +32,15 @@ class PrivateManufacturerTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            list(response.context["manufacturer_list"]),
-            list(manufacturers)
+            list(response.context["manufacturer_list"]), list(manufacturers)
         )
         self.assertEqual(len(manufacturers), 2)
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_manufacturer_create(self):
-        form_data = {
-            "name": "Mazda",
-            "country": "Japan"
-        }
-        self.client.post(reverse("taxi:manufacturer-create"),
-                         data=form_data)
-        new_manufacturer = Manufacturer.objects.get(
-            name=form_data["name"])
+        form_data = {"name": "Mazda", "country": "Japan"}
+        self.client.post(reverse("taxi:manufacturer-create"), data=form_data)
+        new_manufacturer = Manufacturer.objects.get(name=form_data["name"])
 
         self.assertEqual(new_manufacturer.name, form_data["name"])
         self.assertEqual(new_manufacturer.country, form_data["country"])

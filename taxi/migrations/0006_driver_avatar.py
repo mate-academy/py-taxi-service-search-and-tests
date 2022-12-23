@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taxi', '0005_alter_comment_options'),
+        ("taxi", "0005_alter_comment_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='driver',
-            name='avatar',
-            field=models.ImageField(default=1, upload_to='images'),
+            model_name="driver",
+            name="avatar",
+            field=models.ImageField(default=1, upload_to="images"),
             preserve_default=False,
         ),
     ]
