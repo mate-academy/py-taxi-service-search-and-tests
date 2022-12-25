@@ -98,9 +98,9 @@ class PublicDriverTest(TestCase):
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-             username="User123",
-             password="qwer1234"
-         )
+            username="User123",
+            password="qwer1234"
+        )
         self.client.force_login(self.user)
 
     def test_create_driver(self):
