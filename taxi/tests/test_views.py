@@ -72,7 +72,10 @@ class PrivateManufacturerTests(TestCase):
         manufacturers = Manufacturer.objects.all()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(list(response.context["manufacturer_list"]), list(manufacturers))
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_search_manufacturer_form(self):
@@ -117,8 +120,14 @@ class PrivateDriverTest(TestCase):
         self.assertEqual(new_user.license_number, form_data["license_number"])
 
     def test_search_driver_form(self):
-        get_user_model().objects.create_user(username="test1", password="test1234", license_number="ASD12345")
-        get_user_model().objects.create_user(username="test2", password="test1234", license_number="ASD12346")
+        get_user_model().objects.create_user(
+            username="test1",
+            password="test1234",
+            license_number="ASD12345")
+        get_user_model().objects.create_user(
+            username="test2",
+            password="test1234",
+            license_number="ASD12346")
         url = DRIVER_URL + "?username=test1"
         res = self.client.get(url)
 

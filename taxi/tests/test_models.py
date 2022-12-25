@@ -7,9 +7,13 @@ from taxi.models import Manufacturer, Car
 class ModelsTest(TestCase):
 
     def test_manufacturer_str(self):
-        manufacture = Manufacturer.objects.create(name="test_name", country="test_country")
+        manufacture = Manufacturer.objects.create(
+            name="test_name",
+            country="test_country")
 
-        self.assertEqual(str(manufacture), f"{manufacture.name} {manufacture.country}")
+        self.assertEqual(
+            str(manufacture), f"{manufacture.name} {manufacture.country}"
+        )
 
     def test_driver_str(self):
         driver = get_user_model().objects.create_user(
@@ -22,8 +26,14 @@ class ModelsTest(TestCase):
         self.assertEqual(str(driver), "test (test first test last)")
 
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="test_name", country="test_country")
-        car = Car.objects.create(model="test_model", manufacturer=manufacturer)
+        manufacturer = Manufacturer.objects.create(
+            name="test_name",
+            country="test_country"
+        )
+        car = Car.objects.create(
+            model="test_model",
+            manufacturer=manufacturer
+        )
 
         self.assertEqual(str(car), "test_model")
 
