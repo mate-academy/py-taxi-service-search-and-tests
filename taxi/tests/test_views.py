@@ -23,7 +23,7 @@ class PrivateManufacturerFormatTests(TestCase):
             "test",
             "password123",
         )
-        self.client.force_login(self.user) # Тут мы логинимся
+        self.client.force_login(self.user)  # Тут мы логинимся
 
     def test_retrieve_manufacturer(self):
         Manufacturer.objects.create(name="BMW")

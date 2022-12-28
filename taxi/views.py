@@ -6,7 +6,11 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, CarSearchForm, DriverSearchForm, \
+from .forms import DriverCreationForm,\
+    DriverLicenseUpdateForm,\
+    CarForm,\
+    CarSearchForm,\
+    DriverSearchForm, \
     ManufacturerSearchForm
 
 
@@ -96,7 +100,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         if form.is_valid():
             return queryset.filter(
-                model__icontains=form.cleaned_data['model']
+                model__icontains=form.cleaned_data["model"]
             )
 
         return queryset
