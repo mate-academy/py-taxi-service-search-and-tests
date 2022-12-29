@@ -3,16 +3,16 @@
 
 {% block content %}
     <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
-
-   <form action="" method="get" class="form-inline">
+    Driver List
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+  <form action="" method="get" class="form-inline" novalidate>
     {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="🔎">
+    <input type="submit" value="Search" class="btn btn-primary">
   </form>
+
 
     {% if driver_list %}
     <table class="table">

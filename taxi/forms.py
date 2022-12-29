@@ -62,18 +62,16 @@ class CarSearchForm(forms.Form):
 
 
 class DriverSearchForm(forms.Form):
-    model = forms.CharField(
-        max_length=255,
+    username = forms.CharField(
+        max_length=63,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "Search by license number"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "Search by Username"})
     )
 
 
 class ManufacturerSearchForm(forms.Form):
-    model = forms.CharField(
+    name = forms.CharField(
         max_length=255,
         required=False,
         label="",
