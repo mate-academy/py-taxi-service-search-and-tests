@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>Delete comment?</h1>
+  <p>Are you sure you want to delete your comment?</p>
+  <form action="" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Yes" class="btn btn-danger">
+  <a href="{% url "taxi:car-detail" pk=comment.car.pk %}" class="btn btn-secondary">No</a>
+  </form>
+{% endblock %}

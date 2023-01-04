@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ manufacturer.name }}</h1>
+  {% if manufacturer.car_set.all %}
+    <h2>Cars:</h2>
+    {% for car in manufacturer.car_set.all %}
+      <ul>
+      <li><a href="{% url "taxi:car-detail" pk=car.pk %}">{{ car }}</a></li>
+      </ul>
+    {% endfor %}
+  {% else %}
+    There are no cars yet!
+  {% endif %}
+
+
+
+
+{% endblock %}

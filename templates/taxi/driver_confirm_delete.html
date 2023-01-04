@@ -2,9 +2,11 @@
 
 {% block content %}
   <h1>Delete driver?</h1>
+  <p>Are you sure you want to delete {{ driver.first_name }} {{ driver.last_name }}({{ driver.username }})?</p>
   <form action="" method="post">
     {% csrf_token %}
 
     <input type="submit" value="Yes" class="btn btn-danger">
+    <a href="{% url "taxi:driver-list" %}" class="btn btn-primary">No</a>
   </form>
 {% endblock %}

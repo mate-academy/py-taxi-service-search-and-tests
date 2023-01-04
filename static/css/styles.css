@@ -1,8 +1,182 @@
 body {
-    margin-top: 20px;
+    margin-top: 15px;
+    background-color: aliceblue;
+    font-family: "Times New Roman", sans-serif;
+    font-style: normal;
 }
-
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+    border-radius: 12px;
+    font-family: "Times New Roman", sans-serif;
 }
+
+#avatar {
+    width: 150px;
+    height: 150px;
+    display: inline-flex;
+}
+
+#menu-btn {
+    width: 50px;
+    height: 50px;
+    margin: 0 0 0 -12px;
+}
+
+
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: lavender; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s;
+    font-family: "Times New Roman", sans-serif ;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.page {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.footer {
+    background-color: lavenderblush;
+    margin-top: auto;
+    padding: 15px 0 0 0;
+}
+
+.instagram {
+    width: 25px;
+    height: 25px;
+    margin-right: 6px;
+}
+.telegram {
+    width: 25px;
+    height: 25px;
+    margin-right: 6px;
+}
+.twitter {
+    width: 25px;
+    height: 25px;
+    margin-right: 6px;
+}
+.facebook {
+    width: 25px;
+    height: 25px;
+}
+
+.social {
+    margin-left: 750px;
+}
+
+#footer_links {
+    margin-left: 697px;
+}
+
+.copyright {
+    margin-left: 750px;
+}
+
+#avatar-btn {
+    border-radius: 14px;
+    background-color: green;
+    font-family: Roboto, sans-serif;
+    font-size: x-small;
+}
+
+#avatar-comment {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-user {
+    font-size: large;
+}
+
+.comment-body {
+    display: block;
+    background-color: white;
+    border-radius: 8px;
+    font-size: small;
+    margin-left: 59px;
+    height: fit-content;
+
+}
+
+#comment-delete {
+    width: 50px;
+    height: fit-content;
+    font-size: xx-small;
+}
+
+.btn-secondary {
+    background-color: cornflowerblue;
+}
+
+#car-image {
+    width: 150px;
+    height: 150px;
+    display: inline-flex;
+}
+
+.rating-list li {
+          float: right;
+          color: #ddd;
+          padding: 10px 5px;
+        }
+.rating-list li:hover,
+.rating-list li:hover ~ li {
+          color: orange;
+        }
+
+.rating-list {
+          display: inline-block;
+          list-style: none;
+        }
+.checked {
+            color: orange;
+        }
