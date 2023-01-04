@@ -54,3 +54,12 @@ class PrivateCarTests(TestCase):
         self.assertEqual(
             new_car.manufacturer.country, form_data["manufacturer"].country
         )
+
+    def test_car_search(self):
+        response = self.client.get("/cars/?model=ME")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains="ME")
+        )

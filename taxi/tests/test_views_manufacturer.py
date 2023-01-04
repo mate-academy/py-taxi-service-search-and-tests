@@ -44,3 +44,12 @@ class PrivateManufacturerTests(TestCase):
 
         self.assertEqual(new_manufacturer.name, form_data["name"])
         self.assertEqual(new_manufacturer.country, form_data["country"])
+
+    def test_manufacturer_search(self):
+        response = self.client.get("/manufacturers/?name=A")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains="A")
+        )

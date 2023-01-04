@@ -60,3 +60,11 @@ class PrivateDriverTests(TestCase):
                          form_data["last_name"])
         self.assertEqual(new_driver.license_number,
                          form_data["license_number"])
+
+    def test_driver_search(self):
+        response = self.client.get("/drivers/?username=Q")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Driver.objects.filter(username__icontains="Q")
+        )
