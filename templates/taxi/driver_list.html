@@ -8,6 +8,15 @@
       </a>
     </h1>
 
+    <form action="" method="get">
+      <div class="input-group mb-3 w-25">
+        <input type="text" class="form-control" placeholder="Type to search..." name="search" value="{{ search }}">
+        <div class="input-group-append">
+          <input type="submit" class="btn btn-outline-secondary" value="Search">
+        </div>
+      </div>
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>
