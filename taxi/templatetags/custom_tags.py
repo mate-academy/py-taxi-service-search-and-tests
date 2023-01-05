@@ -4,16 +4,13 @@ register = template.Library()
 
 
 @register.simple_tag
-def url_params(request, **kwargs):
-    params = request.GET.copy()
+def query_transform(request, **kwargs):
+    query = request.GET.copy()
 
     for key, value in kwargs.items():
         if value:
-            params[key] = value
+            query[key] = value
         else:
-            params.pop(key)
+            query.pop(key)
 
-    if len(params):
-        return "?" + params.urlencode()
-
-    return None
+    return query.urlencode()
