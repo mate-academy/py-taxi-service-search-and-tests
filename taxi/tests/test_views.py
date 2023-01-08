@@ -10,7 +10,7 @@ DRIVER_URL = reverse("taxi:driver-list")
 
 
 class PublicManufacturerTestForm(TestCase):
-    def test_logic_required(self):
+    def test_login_required(self):
         res = self.client.get(MANUFACTURERS_URL)
 
         self.assertNotEqual(res.status_code, 200)
@@ -65,7 +65,7 @@ class PrivateCarTests(TestCase):
 
 
 class PublicDriverTestForm(TestCase):
-    def test_logic_required(self):
+    def test_login_required(self):
         res = self.client.get(DRIVER_URL)
 
         self.assertNotEqual(res.status_code, 200)
