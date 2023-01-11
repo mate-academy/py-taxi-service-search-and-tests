@@ -39,4 +39,3 @@ class SearchTests(TestCase):
             list(response.context["car_list"]),
             list(Car.objects.filter(model__icontains="Yaris"))
         )
-        
