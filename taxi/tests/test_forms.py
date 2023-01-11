@@ -19,6 +19,54 @@ class FormsTests(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
+    def test_driver_license_number_has_two_letters(self):
+        form_data = {
+            "username": "user_name",
+            "password1": "3134test",
+            "password2": "3134test",
+            "first_name": "first name",
+            "last_name": "last name",
+            "license_number": "UA123456"
+        }
+        form = DriverCreationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_driver_license_number_is_too_long(self):
+        form_data = {
+            "username": "user_name",
+            "password1": "3134test",
+            "password2": "3134test",
+            "first_name": "first name",
+            "last_name": "last name",
+            "license_number": "UAQ123456"
+        }
+        form = DriverCreationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_driver_license_number_is_lowercase(self):
+        form_data = {
+            "username": "user_name",
+            "password1": "3134test",
+            "password2": "3134test",
+            "first_name": "first name",
+            "last_name": "last name",
+            "license_number": "uaq123456"
+        }
+        form = DriverCreationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_driver_license_number_is_too_short(self):
+        form_data = {
+            "username": "user_name",
+            "password1": "3134test",
+            "password2": "3134test",
+            "first_name": "first name",
+            "last_name": "last name",
+            "license_number": "UAQ1234"
+        }
+        form = DriverCreationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
 
 class PrivateDriverTests(TestCase):
     def setUp(self):
