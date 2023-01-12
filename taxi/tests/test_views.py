@@ -151,14 +151,12 @@ class PrivateViewsTests(TestCase):
 
     def test_toggle_assign_view_on_car_detail(self):
 
-        # initial response when driver is not assigned to this car
         response = self.client.get(
             reverse("taxi:car-detail", kwargs={"pk": self.car1.pk})
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Assign me to this car", html=True)
 
-        # imitates click on assign button
         self.client.get(reverse("taxi:car-detail", kwargs={"pk": self.car1.pk})
                         + "toggle-assign/")
 
@@ -170,7 +168,6 @@ class PrivateViewsTests(TestCase):
             response_after_assign, "Delete me from this car", html=True
         )
 
-        # imitates click on remove button
         self.client.get(
             reverse("taxi:car-detail", kwargs={"pk": self.car1.pk})
             + "toggle-assign/"

@@ -18,7 +18,6 @@ class Driver(AbstractUser):
     license_number = models.CharField(max_length=255, unique=True)
 
     class Meta:
-        # ordering was added to get rid of UnorderedObjectListWarning in tests
         ordering = ["id"]
         verbose_name = "driver"
         verbose_name_plural = "drivers"

@@ -7,7 +7,13 @@ from taxi.models import Car, Driver
 
 
 class ManufacturerNameSearchForm(forms.Form):
-    name = forms.CharField(max_length=255, required=False)
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Start typing the manufacturer name here"}
+        )
+    )
 
 
 class CarForm(forms.ModelForm):
@@ -22,11 +28,23 @@ class CarForm(forms.ModelForm):
 
 
 class CarModelSearchForm(forms.Form):
-    model_ = forms.CharField(max_length=255, required=False)
+    model_ = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Start typing the model name here"}
+        )
+    )
 
 
 class DriverUsernameSearchForm(forms.Form):
-    username = forms.CharField(max_length=150, required=False)
+    username = forms.CharField(
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Start typing the username here"}
+        )
+    )
 
 
 class DriverCreationForm(UserCreationForm):
