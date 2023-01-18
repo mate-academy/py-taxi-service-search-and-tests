@@ -25,3 +25,18 @@ class ManufacturerSearchListViewTest(TestCase):
                                   filter(name__icontains="ford").
                                   values("name", "country")),
                                  [{"name": "ford", "country": "usa"}])
+
+    def test_query_search_toyota(self):
+        self.assertQuerysetEqual((Manufacturer.
+                                  objects.
+                                  filter(name__icontains="toyota").
+                                  values("name", "country")),
+                                 [{"name": "toyota", "country": "japan"}])
+
+    def test_query_search_with_o(self):
+        self.assertQuerysetEqual((Manufacturer.
+                                  objects.
+                                  filter(name__icontains="o").
+                                  values("name", "country")),
+                                 [{"name": "ford", "country": "usa"},
+                                  {"name": "toyota", "country": "japan"}])
