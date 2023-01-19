@@ -1,33 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
-  </h1>
-
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
+  <h1>{{ driver.first_name }} {{ driver.last_name }} {% if user.id == driver.id %}<span class="me">(Me)</span>{% endif %}</h1>
+  <p><strong>Username:</strong> {{ driver.username }}</p>
   <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
-  <div class="ml-3">
-    <h4>Cars</h4>
-
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
-
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
-  </div>
+  <p><strong>Is staff</strong>: {{ driver.is_staff|yesno:"Yes,No" }}</p>
+  {% with driver.cars.all as driver_list %}
+    <h2>Car{{ driver_list|pluralize }}</h2>
+    {% if driver_list %}
+      <ul>
+        {% for car in driver_list %}
+          <hr>
+          <li>
+            <a class="text-warning link" href="{% url 'taxi:car-detail' pk=car.id %}">{{ car }} (ID: {{ car.id }})</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>There are no cars for {{ driver.first_name }} {{ driver.last_name }}</p>
+    {% endif %}
+  {% endwith %}
+  <a class="btn btn-sm btn-outline-warning" href="{% url 'taxi:driver-update' pk=driver.id %}">Update Driver's license</a>
+  <a class="btn btn-sm btn-outline-warning delete" href="{% url 'taxi:driver-delete' pk=driver.id %}">Delete Driver</a>
 {% endblock %}

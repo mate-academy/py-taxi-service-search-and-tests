@@ -1,8 +1,77 @@
 body {
+    background-color: #000000;
     margin-top: 20px;
+    color: whitesmoke;
 }
 
-.link-to-page {
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
+}
+
+.current {
+    color: whitesmoke;
+}
+
+.one-pag {
+    height: 330px;
+    margin: 0;
+}
+
+svg {
+    float: left;
+}
+
+.navbtn {
+    margin-bottom: 5px;
+}
+
+.btn {
+    border-radius: 0.7rem;
+}
+
+.me {
+    color: coral;
+}
+
+.textinput, .select, .selectmultiple {
+    background-color: whitesmoke;
+    border-radius: 0.7rem;
+}
+
+.submit {
+    width: 550px;
+    margin-top: 10px;
+}
+
+.del {
+    color: red;
+}
+
+.delete {
+    color: #dc3545;
+    border: solid  #dc3545;
+}
+
+.delete:hover {
+    background-color: #dc3545;
+    border: solid  #dc3545;
+}
+
+.table {
+    color: whitesmoke;
+}
+
+.warning {
+    color: red;
+}
+
+.back {
+    width: 550px;
+    margin-top: 10px;
     float: right;
-    margin: 0 2px 0 2px;
+}
+
+hr {
+    background-color: whitesmoke;
 }
