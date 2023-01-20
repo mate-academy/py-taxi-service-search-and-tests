@@ -37,30 +37,6 @@ class DriverForm(UserCreationForm, DriverLicenseUpdateForm):
         )
 
 
-class SearchForm(forms.Form):
-    username = forms.CharField(
-        max_length=255,
-        label="",
-        required=False,
-        widget=forms.TextInput(attrs={
-            "placeholder": "Search driver by username",
-            "size": "40"
-        })
-    )
-
-
-class DriverUsernameSearchForm(forms.Form):
-    username = forms.CharField(
-        max_length=255,
-        label="",
-        required=False,
-        widget=forms.TextInput(attrs={
-            "placeholder": "Search driver by username",
-            "size": "40"
-        })
-    )
-
-
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=Driver.objects.all(),
@@ -73,25 +49,13 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
-class CarModelSearchForm(forms.Form):
-    model = forms.CharField(
+class UniversalSearchForm(forms.Form):
+    field = forms.CharField(
         max_length=255,
         label="",
         required=False,
         widget=forms.TextInput(attrs={
-            "placeholder": "Search car by model",
-            "size": "40"
-        })
-    )
-
-
-class ManufacturerNameSearchForm(forms.Form):
-    name = forms.CharField(
-        max_length=255,
-        required=False,
-        label="",
-        widget=forms.TextInput(attrs={
-            "placeholder": "Search manufacturer by name",
+            "placeholder": "Search driver by username",
             "size": "40"
         })
     )
