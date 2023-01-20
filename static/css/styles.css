@@ -60,6 +60,7 @@ svg {
 
 .table {
     color: whitesmoke;
+    margin-top: 5px;
 }
 
 .warning {
@@ -76,6 +77,6 @@ hr {
     background-color: whitesmoke;
 }
 
-.form-inline {
-    margin-bottom: 5px;
+.btn-search {
+    margin-right: 5px;
 }

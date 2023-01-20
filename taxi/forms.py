@@ -43,7 +43,8 @@ class DriverUsernameSearchForm(forms.Form):
         label="",
         required=False,
         widget=forms.TextInput(attrs={
-            "placeholder": "Search by username",
+            "placeholder": "Search driver by username",
+            "size": "40"
         })
     )
 
@@ -58,3 +59,15 @@ class CarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = "__all__"
+
+
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        label="",
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Search car by model",
+            "size": "40"
+        })
+    )

@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
     Car List
     <a class="btn btn-outline-warning float-right" href="{% url 'taxi:car-create' %}">Create</a>
   </h1>
+  <form action="" method="get" class="form-inline">
+    <input class="btn btn-outline-warning btn-search" type="submit" value="&#128270;">
+    {{ search_form|crispy }}
+  </form>
   <ul class="one-pag sidebar-nav">
     {% for car in car_list %}
       <hr>
