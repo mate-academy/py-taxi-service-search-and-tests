@@ -5,26 +5,6 @@ from django.core.validators import RegexValidator, MaxLengthValidator
 from taxi.models import Driver, Car
 
 
-class DriverForm(UserCreationForm):
-    license_number = forms.CharField(
-        validators=[
-            RegexValidator(
-                r"[A-Z]{3}[0-9]{5}",
-                "License number should has format XXXDDDDD, where X is "
-                "uppercase letter and D is digit"
-            )
-        ]
-    )
-
-    class Meta:
-        model = Driver
-        fields = UserCreationForm.Meta.fields + (
-            "first_name",
-            "last_name",
-            "license_number",
-        )
-
-
 class DriverLicenseUpdateForm(forms.ModelForm):
     MAX_LENGTH = 8
     license_number = forms.CharField(
@@ -44,6 +24,17 @@ class DriverLicenseUpdateForm(forms.ModelForm):
     class Meta:
         model = Driver
         fields = ["license_number"]
+
+
+class DriverForm(UserCreationForm, DriverLicenseUpdateForm):
+
+    class Meta:
+        model = Driver
+        fields = UserCreationForm.Meta.fields + (
+            "first_name",
+            "last_name",
+            "license_number",
+        )
 
 
 class CarForm(forms.ModelForm):
