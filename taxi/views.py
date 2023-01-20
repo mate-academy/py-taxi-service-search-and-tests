@@ -50,7 +50,7 @@ class CarCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
+    # model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
 
@@ -66,7 +66,7 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Car
+    # model = Car
     queryset = Car.objects.prefetch_related("drivers")
 
 
@@ -87,7 +87,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Driver
+    # model = Driver
     queryset = Driver.objects.prefetch_related("cars__manufacturer")
 
 
