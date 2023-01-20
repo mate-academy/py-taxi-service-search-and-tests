@@ -2,6 +2,6 @@
 <form action="" method="POST" novalidate>
   {% csrf_token %}
   {{ form|crispy }}
-  <input class="btn btn-outline-warning btn-lg submit" type="submit" value="{{ object|yesno:"Update,Create" }}">
-  <a class="btn btn-outline-warning btn-lg back" href="{{request.META.HTTP_REFERER}}">Back</a>
+  <input class="btn btn-outline-warning submit" type="submit" value="{{ object|yesno:"Update,Create" }}">
+  <a class="btn btn-outline-warning back" href="{{request.META.HTTP_REFERER}}">Back</a>
 </form>

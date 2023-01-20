@@ -5,11 +5,11 @@
   <p><strong>Username:</strong> {{ driver.username }}</p>
   <p><strong>License number:</strong> {{ driver.license_number }}</p>
   <p><strong>Is staff</strong>: {{ driver.is_staff|yesno:"Yes,No" }}</p>
-  {% with driver.cars.all as driver_list %}
-    <h2>Car{{ driver_list|pluralize }}</h2>
-    {% if driver_list %}
-      <ul>
-        {% for car in driver_list %}
+  {% with driver.cars.all as car_list %}
+    <h2>Car{{ car_list|pluralize }}</h2>
+    {% if car_list %}
+      <ul class="sidebar-nav">
+        {% for car in car_list %}
           <hr>
           <li>
             <a class="text-warning link" href="{% url 'taxi:car-detail' pk=car.id %}">{{ car }} (ID: {{ car.id }})</a>
@@ -20,6 +20,6 @@
       <p>There are no cars for {{ driver.first_name }} {{ driver.last_name }}</p>
     {% endif %}
   {% endwith %}
-  <a class="btn btn-sm btn-outline-warning" href="{% url 'taxi:driver-update' pk=driver.id %}">Update Driver's license</a>
-  <a class="btn btn-sm btn-outline-warning delete" href="{% url 'taxi:driver-delete' pk=driver.id %}">Delete Driver</a>
+  <a class="btn btn-outline-warning" href="{% url 'taxi:driver-update' pk=driver.id %}">Update Driver's license</a>
+  <a class="btn btn-outline-warning delete" href="{% url 'taxi:driver-delete' pk=driver.id %}">Delete Driver</a>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
   <h1>
     Car List
-    <a class="btn btn-sm btn-outline-warning float-right" href="{% url 'taxi:car-create' %}">Create</a>
+    <a class="btn btn-outline-warning float-right" href="{% url 'taxi:car-create' %}">Create</a>
   </h1>
   <ul class="one-pag sidebar-nav">
     {% for car in car_list %}
