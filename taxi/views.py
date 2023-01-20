@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from .forms import DriverForm, DriverLicenseUpdateForm, CarForm, \
-    DriverUsernameSearchForm, CarModelSearchForm
+    DriverUsernameSearchForm, CarModelSearchForm, ManufacturerNameSearchForm
 from .models import Driver, Car, Manufacturer
 
 
@@ -33,6 +33,21 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ManufacturerListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = ManufacturerNameSearchForm(initial={
+            "name": name
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = Manufacturer.objects.all()
+        form = ManufacturerNameSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
 
 class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Manufacturer
@@ -58,9 +73,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
-        context["search_form"] = CarModelSearchForm(initial={
-            "model": model
-        })
+        context["search_form"] = CarModelSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self):

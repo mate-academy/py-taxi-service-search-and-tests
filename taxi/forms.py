@@ -37,6 +37,18 @@ class DriverForm(UserCreationForm, DriverLicenseUpdateForm):
         )
 
 
+class SearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        label="",
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Search driver by username",
+            "size": "40"
+        })
+    )
+
+
 class DriverUsernameSearchForm(forms.Form):
     username = forms.CharField(
         max_length=255,
@@ -68,6 +80,18 @@ class CarModelSearchForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={
             "placeholder": "Search car by model",
+            "size": "40"
+        })
+    )
+
+
+class ManufacturerNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Search manufacturer by name",
             "size": "40"
         })
     )

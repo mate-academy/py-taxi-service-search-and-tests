@@ -10,7 +10,8 @@
     <input class="btn btn-outline-warning btn-search" type="submit" value="&#128270;">
     {{ search_form|crispy }}
   </form>
-  <ul class="one-pag sidebar-nav">
+  {% if car_list %}
+    <ul class="one-pag sidebar-nav">
     {% for car in car_list %}
       <hr>
       <li>
@@ -19,5 +20,8 @@
         </p>
       </li>
     {% endfor %}
-  </ul>
+    </ul>
+  {% else %}
+    <p>There are no cars in the service</p>
+  {% endif %}
 {% endblock %}
