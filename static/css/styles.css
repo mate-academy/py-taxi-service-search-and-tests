@@ -75,3 +75,7 @@ svg {
 hr {
     background-color: whitesmoke;
 }
+
+.form-inline {
+    margin-bottom: 5px;
+}

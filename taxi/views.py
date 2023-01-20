@@ -5,7 +5,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import DriverForm, DriverLicenseUpdateForm, CarForm
+from .forms import DriverForm, DriverLicenseUpdateForm, CarForm, \
+    DriverUsernameSearchForm
 from .models import Driver, Car, Manufacturer
 
 
@@ -84,6 +85,23 @@ class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = DriverUsernameSearchForm(initial={
+            "username": username
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = Driver.objects.all()
+        form = DriverUsernameSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):

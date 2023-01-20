@@ -37,6 +37,17 @@ class DriverForm(UserCreationForm, DriverLicenseUpdateForm):
         )
 
 
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        label="",
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Search by username",
+        })
+    )
+
+
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=Driver.objects.all(),

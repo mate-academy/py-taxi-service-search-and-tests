@@ -1,11 +1,12 @@
+{% load query_transform %}
 {% if is_paginated %}
   <div class="pagination">
     <span class="step-links">
       {% if page_obj.has_previous %}
-        <a type="button" class="btn btn-sm btn-outline-warning" href="?page=1">
+        <a type="button" class="btn btn-sm btn-outline-warning" href="?{% query_transform request page=1 %}">
           &laquo;
         </a>
-        <a type="button" class="btn btn-sm btn-outline-warning" href="?page={{ page_obj.previous_page_number }}">
+        <a type="button" class="btn btn-sm btn-outline-warning" href="?{% query_transform request page=page_obj.previous_page_number %}">
           Prev
         </a>
       {% endif %}
@@ -13,10 +14,10 @@
         {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
       </span>
       {% if page_obj.has_next %}
-        <a type="button" class="btn btn-sm btn-outline-warning" href="?page={{ page_obj.next_page_number }}">
+        <a type="button" class="btn btn-sm btn-outline-warning" href="?{% query_transform request page=page_obj.next_page_number %}">
           Next
         </a>
-        <a type="button" class="btn btn-sm btn-outline-warning" href="?page={{ page_obj.paginator.num_pages }}">
+        <a type="button" class="btn btn-sm btn-outline-warning" href="?{% query_transform request page=page_obj.paginator.num_pages %}">
           &raquo;
         </a>
       {% endif %}
