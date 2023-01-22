@@ -55,7 +55,7 @@ class UniversalSearchForm(forms.Form):
         label="",
         required=False,
         widget=forms.TextInput(attrs={
-            "placeholder": "Search driver by username",
+            "placeholder": f"Search here",
             "size": "40"
         })
     )

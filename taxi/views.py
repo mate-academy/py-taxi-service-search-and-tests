@@ -48,14 +48,14 @@ class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     fields = "__all__"
 
 
-class ManufacturerListView(UniversalListView):
-    queryset = Manufacturer.objects.all()
-    key_to_search = "name"
-
-
 class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Manufacturer
     fields = "__all__"
+
+
+class ManufacturerListView(UniversalListView):
+    queryset = Manufacturer.objects.all()
+    key_to_search = "name"
 
 
 class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -69,23 +69,23 @@ class CarCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("taxi:car-list")
 
 
-class CarListView(UniversalListView):
-    queryset = Car.objects.select_related("manufacturer")
-    key_to_search = "model"
-
-
 class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Car
     form_class = CarForm
 
 
-class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
-    model = Car
-    success_url = reverse_lazy("taxi:car-list")
+class CarListView(UniversalListView):
+    queryset = Car.objects.select_related("manufacturer")
+    key_to_search = "model"
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Car.objects.prefetch_related("drivers")
+
+
+class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Car
+    success_url = reverse_lazy("taxi:car-list")
 
 
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
