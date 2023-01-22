@@ -37,10 +37,9 @@ class UniversalListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = UniversalSearchForm(self.request.GET)
         if form.is_valid():
-            kwargs = {
+            return self.queryset.filter(**{
                 f"{self.key_to_search}__icontains": form.cleaned_data["field"]
-            }
-            return self.queryset.filter(**kwargs)
+            })
         return self.queryset
 
 
