@@ -12,7 +12,8 @@ from .forms import (
     CarForm,
     DriverSearchForm,
     CarSearchForm,
-    ManufacturerSearchForm)
+    ManufacturerSearchForm
+)
 
 
 @login_required
