@@ -23,7 +23,7 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class UniversalListView(LoginRequiredMixin, generic.ListView):
+class UniversalListView(generic.ListView):
     paginate_by = 5
     key_to_search = ""
 
@@ -53,7 +53,7 @@ class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = "__all__"
 
 
-class ManufacturerListView(UniversalListView):
+class ManufacturerListView(LoginRequiredMixin, UniversalListView):
     queryset = Manufacturer.objects.all()
     key_to_search = "name"
 
@@ -74,7 +74,7 @@ class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = CarForm
 
 
-class CarListView(UniversalListView):
+class CarListView(LoginRequiredMixin, UniversalListView):
     queryset = Car.objects.select_related("manufacturer")
     key_to_search = "model"
 
@@ -99,7 +99,7 @@ class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = DriverLicenseUpdateForm
 
 
-class DriverListView(UniversalListView):
+class DriverListView(LoginRequiredMixin, UniversalListView):
     queryset = Driver.objects.all()
     key_to_search = "username"
 
