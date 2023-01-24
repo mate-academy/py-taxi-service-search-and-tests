@@ -55,7 +55,7 @@ class UniversalSearchForm(forms.Form):
         label="",
         required=False,
         widget=forms.TextInput(attrs={
-            "placeholder": f"Search here",
+            "placeholder": "Search here",
             "size": "40"
         })
     )

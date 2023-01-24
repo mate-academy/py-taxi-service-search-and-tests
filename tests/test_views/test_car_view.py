@@ -69,7 +69,3 @@ class PrivateManufacturerTests(TestCase):
         response = self.client.get(f"{CARS_LIST_URL}?field={search_word}")
         searched_query = Car.objects.filter(model__icontains=search_word)
         self.assertQuerysetEqual(response.context["car_list"], searched_query)
-
-
-
-

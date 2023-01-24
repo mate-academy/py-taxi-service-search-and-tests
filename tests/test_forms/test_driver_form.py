@@ -38,5 +38,3 @@ class DriverFormTests(TestCase):
     def test_driver_form_license_number_length_bigger_8_digits(self):
         self.form_data["license_number"] = "QWER123456"
         self.assertFalse(DriverForm(self.form_data).is_valid())
-
-

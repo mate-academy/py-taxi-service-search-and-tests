@@ -81,5 +81,3 @@ class PrivateManufacturerTests(TestCase):
         self.assertQuerysetEqual(
             response.context["manufacturer_list"], searched_query
         )
-
-

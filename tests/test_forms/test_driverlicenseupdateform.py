@@ -25,5 +25,3 @@ class DriverLicenseUpdateFormTests(TestCase):
 
     def test_license_number_length_bigger_8_digits(self):
         self.assertFalse(self.create_form("QWER123456").is_valid())
-
-
