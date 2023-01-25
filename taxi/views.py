@@ -11,7 +11,8 @@ from .models import Driver, Car, Manufacturer
 from .forms import (
     DriverCreationForm,
     DriverLicenseUpdateForm,
-    CarForm, CarSearchForm,
+    CarForm,
+    CarSearchForm,
     DriverSearchForm,
     ManufacturerSearchForm
 )
