@@ -35,7 +35,7 @@ class CarSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={"placeholder": "Search by title..."}
+            attrs={"placeholder": "Search by model..."}
         )
 
     )
