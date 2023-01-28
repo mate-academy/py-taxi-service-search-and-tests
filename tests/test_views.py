@@ -26,7 +26,7 @@ class PrivateManufacturerFormatTests(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_manufacturer(self):
-        Manufacturer.objects.create(name="Chevolet")
+        Manufacturer.objects.create(name="Chevrolet")
         Manufacturer.objects.create(name="Nissan")
 
         response = self.client.get(MANUFACTURER_URL)
