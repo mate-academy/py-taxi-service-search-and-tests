@@ -7,6 +7,7 @@ from taxi.models import Driver, Manufacturer, Car
 
 class SearchTests(TestCase):
     NUM_OBJECTS = 5
+
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="new_user",
@@ -17,7 +18,10 @@ class SearchTests(TestCase):
     def test_search_manufacturer_by_name(self):
 
         for manufacturer_num in range(self.NUM_OBJECTS):
-            Manufacturer.objects.create(name=f"BMW{manufacturer_num}", country="Germany")
+            Manufacturer.objects.create(
+                name=f"BMW{manufacturer_num}",
+                country="Germany"
+            )
         Manufacturer.objects.create(name="Mercedes-Benz", country="Germany")
         Manufacturer.objects.create(name="Toyota", country="Japan")
 
@@ -30,10 +34,19 @@ class SearchTests(TestCase):
         )
 
     def test_search_cars_by_model(self):
-        manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
-        manufacturer2 = Manufacturer.objects.create(name="Nissan", country="Japan")
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="Nissan",
+            country="Japan"
+        )
         for car_num in range(self.NUM_OBJECTS):
-            Car.objects.create(model=f"Yaris{car_num}", manufacturer=manufacturer)
+            Car.objects.create(
+                model=f"Yaris{car_num}",
+                manufacturer=manufacturer
+            )
         Car.objects.create(model="Note", manufacturer=manufacturer2)
 
         response = self.client.get(reverse("taxi:car-list") + "?name=Yaris")
