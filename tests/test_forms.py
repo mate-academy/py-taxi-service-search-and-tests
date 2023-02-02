@@ -15,7 +15,7 @@ class DriverSearchFormTest(TestCase):
 
         self.client.login(username=self.user.username, password="User12345")
 
-    def test_driver_creation_form_with_license_number_first_last_names_is_valid(self):
+    def test_driver_creation_form_with_license_first_last_names_is_valid(self):
         form_data = {
             "username": "new_user1",
             "password1": "User1234test1",

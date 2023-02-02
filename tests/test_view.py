@@ -14,7 +14,10 @@ class PublicManufacturerTest(TestCase):
         response = self.client.get(MANUFACTURER_URL)
 
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, expected_url="/accounts/login/?next=/manufacturers/")
+        self.assertRedirects(
+            response,
+            expected_url="/accounts/login/?next=/manufacturers/"
+        )
 
 
 class PrivateManufacturerTest(TestCase):
@@ -50,7 +53,10 @@ class PublicDriverTest(TestCase):
         response = self.client.get(DRIVER_URL)
 
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, expected_url="/accounts/login/?next=/drivers/")
+        self.assertRedirects(
+            response,
+            expected_url="/accounts/login/?next=/drivers/"
+        )
 
 
 class PrivateDriverTest(TestCase):
@@ -83,7 +89,10 @@ class PublicCarTest(TestCase):
         response = self.client.get(CAR_URL)
 
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, expected_url="/accounts/login/?next=/cars/")
+        self.assertRedirects(
+            response,
+            expected_url="/accounts/login/?next=/cars/"
+        )
 
 
 class PrivateCarTest(TestCase):
@@ -117,4 +126,3 @@ class PrivateCarTest(TestCase):
             list(cars)
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
-
