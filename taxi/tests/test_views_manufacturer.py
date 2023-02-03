@@ -83,17 +83,23 @@ class ManufacturerViewTest(TestCase):
             ), list(manufacturers))
 
     def test_manufacturer_list_view_search(self):
-        search_result = self.client.get(
-            MANUFACTURERS_URL,
-            data={"name": "0"}
-        )
+        number_of_manufacturers = 7
+        for manufacturer_id in range(number_of_manufacturers):
+            Manufacturer.objects.create(
+                name=f"Manuf {manufacturer_id}",
+                country=f"Country {manufacturer_id}",
+            )
+        response_list = []
+        for page_number in range(1, 3):
+            search_result = self.client.get(
+                MANUFACTURERS_URL + "?name=Manuf" + f"&page={page_number}",
+            )
+            response_list += list(search_result.context["manufacturer_list"])
         filter_result = Manufacturer.objects.filter(
-            name__icontains="0"
+            name__icontains="Manuf"
         )
-        self.assertEqual(
-            list(search_result.context["manufacturer_list"]),
-            list(filter_result)
-        )
+
+        self.assertEqual(response_list, list(filter_result))
 
     def test_manufacturer_create_view_creates_manufacturer(self):
         form_data = {

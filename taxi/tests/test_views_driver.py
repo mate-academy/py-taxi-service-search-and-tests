@@ -78,18 +78,27 @@ class DriverListViewTest(TestCase):
             ), list(drivers))
 
     def test_driver_list_view_search(self):
-        search_result = self.client.get(
-            DRIVERS_URL,
-            data={"username": "1"}
-        )
-        filter_result = Driver.objects.filter(
-            username__icontains="1"
+        number_of_drivers = 7
+
+        for driver_id in range(number_of_drivers):
+            get_user_model().objects.create_user(
+                username=f"Name {driver_id}",
+                password="Pass12345",
+                first_name=f"Firstname {driver_id}",
+                last_name=f"Lastname {driver_id}",
+                license_number=f"XXX1230{driver_id}"
+            )
+        response_list = []
+        for page_number in range(1, 3):
+            search_result = self.client.get(
+                DRIVERS_URL + "?username=User" + f"&page={page_number}",
+            )
+            response_list += list(search_result.context["driver_list"])
+        filter_result = get_user_model().objects.filter(
+            username__icontains="User"
         )
 
-        self.assertEqual(
-            list(search_result.context["driver_list"]),
-            list(filter_result)
-        )
+        self.assertEqual(response_list, list(filter_result))
 
     def test_driver_create_view_creates_driver(self):
         form_data = {

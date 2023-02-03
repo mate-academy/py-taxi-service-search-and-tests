@@ -81,6 +81,7 @@ class CarListViewTest(TestCase):
     def test_car_list_view_lists_all_cars(self):
         response_sec_page = self.client.get(CARS_URL + "?page=2")
         cars = Car.objects.all()
+
         self.assertEqual(
             list(
                 self.list_response.context["car_list"]
@@ -89,18 +90,27 @@ class CarListViewTest(TestCase):
             ), list(cars))
 
     def test_car_list_view_search(self):
-        search_result = self.client.get(
-            CARS_URL,
-            data={"model": "0"}
+        manufacturer = Manufacturer.objects.create(
+            name="Opel",
+            country="Germany",
         )
+        number_of_cars = 7
+        for car_id in range(number_of_cars):
+            Car.objects.create(
+                model=f"Astra {car_id}",
+                manufacturer=manufacturer,
+            )
+        response_list = []
+        for page_number in range(1, 3):
+            search_result = self.client.get(
+                CARS_URL + "?model=Model" + f"&page={page_number}",
+            )
+            response_list += list(search_result.context["car_list"])
         filter_result = Car.objects.filter(
-            model__icontains="0"
+            model__icontains="Model"
         )
 
-        self.assertEqual(
-            list(search_result.context["car_list"]),
-            list(filter_result)
-        )
+        self.assertEqual(response_list, list(filter_result))
 
     def test_car_create_view_creates_car(self):
         manufacturer = Manufacturer.objects.get(name="Porsche")
