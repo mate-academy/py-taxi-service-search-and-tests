@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from taxi.forms import DriverCreationForm
+
+DRIVERS_URL = reverse("taxi:driver-list")
 
 
 class FormsTest(TestCase):
@@ -39,8 +41,18 @@ class PrivateDriverTests(TestCase):
             "license_number": "TST44444"
         }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_user = get_user_model().objects.get(username=form_data["username"])
+        user = get_user_model().objects.get(username=form_data["username"])
 
-        self.assertEqual(new_user.first_name, form_data["first_name"])
-        self.assertEqual(new_user.last_name, form_data["last_name"])
-        self.assertEqual(new_user.license_number, form_data["license_number"])
+        self.assertEqual(user.first_name, form_data["first_name"])
+        self.assertEqual(user.last_name, form_data["last_name"])
+        self.assertEqual(user.license_number, form_data["license_number"])
+
+
+class PublicDriverTests(TestCase):
+    def setUp(self) -> None:
+        self.client = Client()
+
+    def test_login_required(self):
+        response = self.client.get(DRIVERS_URL)
+
+        self.assertNotEqual(response.status_code, 200)
