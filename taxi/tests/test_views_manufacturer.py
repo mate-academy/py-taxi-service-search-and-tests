@@ -29,11 +29,14 @@ class ManufacturerViewTest(TestCase):
 
         self.list_response = self.client.get(MANUFACTURERS_URL)
         self.create_response = self.client.get(
-            reverse("taxi:manufacturer-create"))
+            reverse("taxi:manufacturer-create")
+        )
         self.update_response = self.client.get(reverse(
-            "taxi:manufacturer-update", args=[1]))
+            "taxi:manufacturer-update", args=[1])
+        )
         self.delete_response = self.client.get(reverse(
-            "taxi:manufacturer-delete", args=[1]))
+            "taxi:manufacturer-delete", args=[1])
+        )
 
     def test_manufacturer_views_url_exists_at_desired_location(self):
         list_view_response = self.client.get("/manufacturers/")
@@ -55,22 +58,27 @@ class ManufacturerViewTest(TestCase):
     def test_manufacturer_views_uses_correct_template(self):
         self.assertTemplateUsed(
             self.list_response,
-            "taxi/manufacturer_list.html")
+            "taxi/manufacturer_list.html"
+        )
         self.assertTemplateUsed(
             self.create_response,
-            "taxi/manufacturer_form.html")
+            "taxi/manufacturer_form.html"
+        )
         self.assertTemplateUsed(
             self.update_response,
-            "taxi/manufacturer_form.html")
+            "taxi/manufacturer_form.html"
+        )
         self.assertTemplateUsed(
             self.delete_response,
-            "taxi/manufacturer_confirm_delete.html")
+            "taxi/manufacturer_confirm_delete.html"
+        )
 
     def test_manufacturer_list_view_pagination_is_five(self):
         self.assertTrue("is_paginated" in self.list_response.context)
         self.assertTrue(self.list_response.context["is_paginated"] is True)
         self.assertEqual(
-            len(self.list_response.context["manufacturer_list"]), 5)
+            len(self.list_response.context["manufacturer_list"]), 5
+        )
 
     def test_manufacturer_list_view_lists_all_manufacturers(self):
         response_sec_page = self.client.get(MANUFACTURERS_URL + "?page=2")
@@ -80,7 +88,8 @@ class ManufacturerViewTest(TestCase):
                 self.list_response.context["manufacturer_list"]
             ) + list(
                 response_sec_page.context["manufacturer_list"]
-            ), list(manufacturers))
+            ), list(manufacturers)
+        )
 
     def test_manufacturer_list_view_search(self):
         number_of_manufacturers = 7
@@ -92,7 +101,7 @@ class ManufacturerViewTest(TestCase):
         response_list = []
         for page_number in range(1, 3):
             search_result = self.client.get(
-                MANUFACTURERS_URL + "?name=Manuf" + f"&page={page_number}",
+                "/manufacturers/", {"name": "Manuf", "page": f"{page_number}"}
             )
             response_list += list(search_result.context["manufacturer_list"])
         filter_result = Manufacturer.objects.filter(
@@ -121,9 +130,11 @@ class ManufacturerViewTest(TestCase):
         self.client.post(reverse(
             "taxi:manufacturer-update",
             args=[manufacturer_id_for_update]),
-            data=form_data)
+            data=form_data
+        )
         updated_manufacturer = Manufacturer.objects.get(
-            id=manufacturer_id_for_update)
+            id=manufacturer_id_for_update
+        )
 
         self.assertEqual(updated_manufacturer.name, form_data["name"])
         self.assertEqual(updated_manufacturer.country, form_data["country"])
@@ -132,6 +143,8 @@ class ManufacturerViewTest(TestCase):
         manufacturer_id_for_delete = Manufacturer.objects.get(name="Name 1").id
         self.client.post(reverse(
             "taxi:manufacturer-delete",
-            args=[manufacturer_id_for_delete]))
+            args=[manufacturer_id_for_delete]
+        )
+        )
 
         self.assertEqual(list(Manufacturer.objects.filter(name="Name 1")), [])

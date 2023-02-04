@@ -42,11 +42,14 @@ class CarListViewTest(TestCase):
         self.client.force_login(self.user)
         self.list_response = self.client.get(CARS_URL)
         self.create_response = self.client.get(
-            reverse("taxi:car-create"))
+            reverse("taxi:car-create")
+        )
         self.update_response = self.client.get(reverse(
-            "taxi:car-update", args=[1]))
+            "taxi:car-update", args=[1])
+        )
         self.delete_response = self.client.get(reverse(
-            "taxi:car-delete", args=[1]))
+            "taxi:car-delete", args=[1])
+        )
 
     def test_car_views_url_exists_at_desired_location(self):
         list_view_response = self.client.get("/cars/")
@@ -69,14 +72,17 @@ class CarListViewTest(TestCase):
         self.assertTemplateUsed(self.list_response, "taxi/car_list.html")
         self.assertTemplateUsed(self.create_response, "taxi/car_form.html")
         self.assertTemplateUsed(self.update_response, "taxi/car_form.html")
-        self.assertTemplateUsed(self.delete_response,
-                                "taxi/car_confirm_delete.html")
+        self.assertTemplateUsed(
+            self.delete_response,
+            "taxi/car_confirm_delete.html"
+        )
 
     def test_car_list_view_pagination_is_five(self):
         self.assertTrue("is_paginated" in self.list_response.context)
         self.assertTrue(self.list_response.context["is_paginated"] is True)
         self.assertEqual(
-            len(self.list_response.context["car_list"]), 5)
+            len(self.list_response.context["car_list"]), 5
+        )
 
     def test_car_list_view_lists_all_cars(self):
         response_sec_page = self.client.get(CARS_URL + "?page=2")
@@ -87,7 +93,8 @@ class CarListViewTest(TestCase):
                 self.list_response.context["car_list"]
             ) + list(
                 response_sec_page.context["car_list"]
-            ), list(cars))
+            ), list(cars)
+        )
 
     def test_car_list_view_search(self):
         manufacturer = Manufacturer.objects.create(
@@ -103,7 +110,7 @@ class CarListViewTest(TestCase):
         response_list = []
         for page_number in range(1, 3):
             search_result = self.client.get(
-                CARS_URL + "?model=Model" + f"&page={page_number}",
+                "/cars/", {"model": "Model", "page": f"{page_number}"}
             )
             response_list += list(search_result.context["car_list"])
         filter_result = Car.objects.filter(
@@ -145,8 +152,10 @@ class CarListViewTest(TestCase):
         car_id_for_update = Car.objects.get(model="Model 1").id
         self.client.post(reverse(
             "taxi:car-update",
-            args=[car_id_for_update]),
-            data=form_data)
+            args=[car_id_for_update]
+        ),
+            data=form_data
+        )
         updated_car = Car.objects.get(id=car_id_for_update)
 
         self.assertEqual(updated_car.model, form_data["model"])
@@ -156,7 +165,8 @@ class CarListViewTest(TestCase):
         car_id_for_delete = Car.objects.get(model="Model 1").id
         self.client.post(reverse(
             "taxi:car-delete",
-            args=[car_id_for_delete]))
+            args=[car_id_for_delete])
+        )
 
         self.assertEqual(list(Car.objects.filter(model="Model 1")), [])
 
@@ -167,7 +177,8 @@ class CarListViewTest(TestCase):
         car2.drivers.add(self.driver)
         car_context_response = self.client.get(reverse(
             "taxi:car-detail",
-            args=[car1.id])).context["car"]
+            args=[car1.id])
+        ).context["car"]
 
         self.assertEqual(
             car_context_response.model,

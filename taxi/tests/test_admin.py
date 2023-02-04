@@ -44,12 +44,18 @@ class DriverAdminTests(TestCase):
         new_driver = get_user_model().objects.get(
             username=form_data["username"])
 
-        self.assertEqual(new_driver.first_name,
-                         form_data["first_name"])
-        self.assertEqual(new_driver.last_name,
-                         form_data["last_name"])
-        self.assertEqual(new_driver.license_number,
-                         form_data["license_number"])
+        self.assertEqual(
+            new_driver.first_name,
+            form_data["first_name"]
+        )
+        self.assertEqual(
+            new_driver.last_name,
+            form_data["last_name"]
+        )
+        self.assertEqual(
+            new_driver.license_number,
+            form_data["license_number"]
+        )
 
 
 class CarAdminTests(TestCase):
@@ -83,4 +89,5 @@ class CarAdminTests(TestCase):
         )
 
         self.assertContains(
-            response, "Mdl 1")
+            response, "Mdl 1"
+        )
