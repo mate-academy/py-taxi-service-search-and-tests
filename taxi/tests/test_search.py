@@ -26,7 +26,6 @@ class SearchDriver(TestCase):
         response = self.client.get(
             reverse("taxi:driver-list") + "?username=" + form["username"]
         )
-        print(response.context)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list(response.context["driver_list"]), list(filtered_drivers)
