@@ -5,6 +5,6 @@
   <form action="" method="post">
     {% csrf_token %}
 
-    <input type="submit" value="Yes" class="btn btn-danger">
+    {% include "includes/submit_btn.html" %}
   </form>
 {% endblock %}
