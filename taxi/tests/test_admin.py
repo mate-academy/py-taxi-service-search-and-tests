@@ -19,13 +19,13 @@ class AdminSiteTest(TestCase):
             password="driver-password",
         )
 
-    def test_license_number_listed(self):
+    def test_license_number_listed(self) -> None:
         url = reverse("admin:taxi_driver_changelist")
         response = self.client.get(url)
 
         self.assertContains(response, self.driver.license_number)
 
-    def test_driver_detailed_licence_number(self):
+    def test_driver_detailed_licence_number(self) -> None:
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         response = self.client.get(url)
 

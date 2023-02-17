@@ -4,18 +4,19 @@ from django.urls import reverse
 
 from taxi.models import Car, Manufacturer
 
-CARS_URLS = reverse("taxi:car-list")
-
 
 class PublicCarTest(TestCase):
-    def test_login_required(self):
-        response = self.client.get(CARS_URLS)
+    cars_urls = reverse("taxi:car-list")
+
+    def test_login_required(self) -> None:
+        response = self.client.get(self.cars_urls)
 
         self.assertNotEqual(response.status_code, 200)
 
 
 class PrivateCarTest(TestCase):
     def setUp(self) -> None:
+        self.cars_urls = reverse("taxi:car-list")
         self.driver = get_user_model().objects.create_user(
             username="Test_driver",
             license_number="AAA11111",
@@ -25,7 +26,7 @@ class PrivateCarTest(TestCase):
         )
         self.client.force_login(self.driver)
 
-    def test_login_required_with_user(self):
+    def test_login_required_with_user(self) -> None:
         manufacturer = Manufacturer.objects.create(
             name="Test_name", country="Test_country"
         )
@@ -34,7 +35,7 @@ class PrivateCarTest(TestCase):
             manufacturer=manufacturer,
         )
 
-        response = self.client.get(CARS_URLS)
+        response = self.client.get(self.cars_urls)
         car = Car.objects.all()
 
         self.assertEqual(response.status_code, 200)
