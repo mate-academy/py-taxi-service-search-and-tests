@@ -1,6 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+)
 
 
 class DriverFormTest(TestCase):
@@ -45,3 +52,21 @@ class DriverFormTest(TestCase):
         form = DriverLicenseUpdateForm(data=data)
 
         self.assertFalse(form.is_valid())
+
+    def test_driver_search_form(self):
+        data = {"username": "a"}
+        form = DriverSearchForm(data=data)
+
+        self.assertTrue(form.is_valid())
+
+    def test_car_search_form(self):
+        data = {"model": "m"}
+        form = CarSearchForm(data=data)
+
+        self.assertTrue(form.is_valid())
+
+    def test_manufacturer_search_form(self):
+        data = {"name": "x"}
+        form = ManufacturerSearchForm(data=data)
+
+        self.assertTrue(form.is_valid())
