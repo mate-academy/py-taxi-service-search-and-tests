@@ -21,18 +21,6 @@ class PublicDriverTest(TestCase):
 
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
-        # Driver.objects.create(
-        #     username="pepsi_user",
-        #     first_name="test_first_name",
-        #     last_name="test_last_name",
-        #     license_number="QWE12345"
-        # )
-        # Driver.objects.create(
-        #     username="cola_user",
-        #     first_name="test_first_name",
-        #     last_name="test_last_name",
-        #     license_number="ASD12345",
-        # )
         self.user = get_user_model().objects.create_user(
             "cola.user",
             "password"
@@ -71,6 +59,18 @@ class PrivateDriverTest(TestCase):
         self.assertEqual(new_user.license_number, form_data["license_number"])
 
     def test_driver_search_form(self):
+        Driver.objects.create(
+            username="pepsi_user",
+            first_name="test_first_name",
+            last_name="test_last_name",
+            license_number="QWE12345"
+        )
+        Driver.objects.create(
+            username="cola_user",
+            first_name="test_first_name",
+            last_name="test_last_name",
+            license_number="ASD12345",
+        )
         res = self.client.get(DRIVERS_URL + "?username=pepsi")
         driver_search_list = Driver.objects.filter(username__icontains="pepsi")
 
