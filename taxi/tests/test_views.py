@@ -21,11 +21,22 @@ class PublicDriverTest(TestCase):
 
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
+        # Driver.objects.create(
+        #     username="pepsi_user",
+        #     first_name="test_first_name",
+        #     last_name="test_last_name",
+        #     license_number="QWE12345"
+        # )
+        # Driver.objects.create(
+        #     username="cola_user",
+        #     first_name="test_first_name",
+        #     last_name="test_last_name",
+        #     license_number="ASD12345",
+        # )
         self.user = get_user_model().objects.create_user(
-            "test",
+            "cola.user",
             "password"
         )
-
         self.client.force_login(self.user)
 
     def test_retrieve_drivers(self):
@@ -59,6 +70,15 @@ class PrivateDriverTest(TestCase):
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
 
+    def test_driver_search_form(self):
+        res = self.client.get(DRIVERS_URL + "?username=pepsi")
+        driver_search_list = Driver.objects.filter(username__icontains="pepsi")
+
+        self.assertEqual(
+            list(res.context["driver_list"]),
+            list(driver_search_list)
+        )
+
 
 class PublicManufacturerTest(TestCase):
     def test_login_required(self):
@@ -72,6 +92,14 @@ class PublicManufacturerTest(TestCase):
 
 class PrivateManufacturerTest(TestCase):
     def setUp(self) -> None:
+        Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
         self.user = get_user_model().objects.create_user(
             "test",
             "password"
@@ -90,6 +118,18 @@ class PrivateManufacturerTest(TestCase):
             list(manufacturers)
         )
 
+    def test_manufacturer_search_form(self):
+        res = self.client.get(MANUFACTURER_URL + "?name=audi")
+
+        manufacturer_search_list = Manufacturer.objects.filter(
+            name__icontains="audi"
+        )
+
+        self.assertEqual(
+            list(res.context["manufacturer_list"]),
+            list(manufacturer_search_list)
+        )
+
 
 class PublicCarTest(TestCase):
     def test_login_required(self):
@@ -103,14 +143,6 @@ class PublicCarTest(TestCase):
 
 class PrivateCarTest(TestCase):
     def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            "test",
-            "password"
-        )
-
-        self.client.force_login(self.user)
-
-    def test_retrieve_manufacturers(self):
         manufacturer = Manufacturer.objects.create(
             name="Tesla",
             country="USA"
@@ -119,6 +151,18 @@ class PrivateCarTest(TestCase):
             model="Model S",
             manufacturer=manufacturer
         )
+        Car.objects.create(
+            model="Model Y",
+            manufacturer=manufacturer
+        )
+        self.user = get_user_model().objects.create_user(
+            "test",
+            "password"
+        )
+
+        self.client.force_login(self.user)
+
+    def test_retrieve_cars(self):
         res = self.client.get(CAR_URL)
 
         cars = Car.objects.all()
@@ -127,4 +171,14 @@ class PrivateCarTest(TestCase):
         self.assertEqual(
             list(res.context["car_list"]),
             list(cars)
+        )
+
+    def test_car_search_form(self):
+        res = self.client.get(CAR_URL + "?model=y")
+
+        car_search_list = Car.objects.filter(model__icontains="y")
+
+        self.assertEqual(
+            list(res.context["car_list"]),
+            list(car_search_list)
         )

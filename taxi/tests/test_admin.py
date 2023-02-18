@@ -21,14 +21,16 @@ class AdminPanelTest(TestCase):
         )
 
     def test_driver_license_number_listed(self):
-        """Test that driver's license_number is in list_display on driver admin page"""
+        """Test that driver's license_number is
+        in list_display on driver admin page"""
         url = reverse("admin:taxi_driver_changelist")
         res = self.client.get(url)
 
         self.assertContains(res, self.driver.license_number)
 
     def test_driver_additional_detail_listed(self):
-        """Test that driver's license_number, first_name and last_name is on driver detail admin page"""
+        """Test that driver's license_number, first_name
+        and last_name is on driver detail admin page"""
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         res = self.client.get(url)
 
@@ -37,7 +39,8 @@ class AdminPanelTest(TestCase):
         self.assertContains(res, self.driver.last_name)
 
     def test_add_driver_additional_detail_listed(self):
-        """Test that driver's license_number, first_name and last_name is on driver add admin page"""
+        """Test that driver's license_number, first_name
+        and last_name is on driver add admin page"""
         url = reverse("admin:taxi_driver_add")
         res = self.client.get(url)
 
