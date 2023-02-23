@@ -43,13 +43,13 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
         context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> list:
         queryset = Manufacturer.objects.all()
 
         form = ManufacturerSearchForm(self.request.GET)
@@ -81,13 +81,13 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
         context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> list:
         queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
 
@@ -122,7 +122,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(
@@ -130,7 +130,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> list:
         queryset = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
 
