@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -126,7 +128,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> Any:
         context = super(DriverListView, self).get_context_data(**kwargs)
         user_name = self.request.GET.get("user_name", "")
         context["search_field"] = DriverSearchForm(
@@ -136,7 +138,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> Any:
         queryset = super().get_queryset()
         username = self.request.GET.get("user_name")
         if username:
