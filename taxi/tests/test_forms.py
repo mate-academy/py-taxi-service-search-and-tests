@@ -14,9 +14,18 @@ from taxi.models import Manufacturer
 
 class CarFormTest(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
-        self.driver1 = get_user_model().objects.create(username="testuser1", license_number=1)
-        self.driver2 = get_user_model().objects.create(username="testuser2", license_number=2)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        self.driver1 = get_user_model().objects.create(
+            username="testuser1",
+            license_number=1
+        )
+        self.driver2 = get_user_model().objects.create(
+            username="testuser2",
+            license_number=2
+        )
 
     def test_car_form_valid(self):
         form_data = {

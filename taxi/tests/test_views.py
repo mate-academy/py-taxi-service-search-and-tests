@@ -22,7 +22,10 @@ class TestIndexView(TestCase):
             name="name",
             country="country"
         )
-        self.car = Car.objects.create(model="model", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(
+            model="model",
+            manufacturer=self.manufacturer
+        )
         self.client.force_login(user)
         response = self.client.get(reverse("taxi:index"))
         self.assertEqual(response.status_code, 200)

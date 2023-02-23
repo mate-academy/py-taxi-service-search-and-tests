@@ -15,13 +15,17 @@ class ModelTest(TestCase):
             name="name",
             country="country"
         )
-        self.car = Car.objects.create(model="model", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(
+            model="model",
+            manufacturer=self.manufacturer
+        )
 
     def test_str_method(self):
         self.assertEqual(str(self.manufacturer), "name country")
         self.assertEqual(
             str(self.driver),
-            f"{self.driver.username} ({self.driver.first_name} {self.driver.last_name})"
+            f"{self.driver.username} "
+            f"({self.driver.first_name} {self.driver.last_name})"
         )
         self.assertEqual(str(self.car), self.car.model)
 
@@ -30,5 +34,3 @@ class ModelTest(TestCase):
             self.driver.get_absolute_url(),
             f"/drivers/{self.driver.pk}/"
         )
-
-

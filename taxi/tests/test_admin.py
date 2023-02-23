@@ -20,11 +20,13 @@ class TestAdmin(TestCase):
         self.assertContains(response, self.admin.license_number)
 
     def test_fieldsets(self):
-        response = self.client.get(f"/admin/taxi/driver/{self.admin.pk}/change/")
+        response = self.client.get(
+            f"/admin/taxi/driver/{self.admin.pk}/change/"
+        )
         self.assertContains(response, self.admin.license_number)
 
     def test_add_fieldsets(self):
-        response = self.client.get(f"/admin/taxi/driver/add/")
+        response = self.client.get("/admin/taxi/driver/add/")
         self.assertContains(response, "Additional info")
         self.assertContains(response, "First name")
         self.assertContains(response, "Last name")
