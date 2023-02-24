@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -6,8 +7,10 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, \
+from .forms import (
+    DriverCreationForm, DriverLicenseUpdateForm, CarForm,
     CarsModelSearchForm, DriverUsernameSearchForm, ManufacturerNameSearchForm
+)
 
 
 @login_required
@@ -45,7 +48,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
-    def get_queryset(self) -> list:
+    def get_queryset(self) -> QuerySet:
         queryset = Manufacturer.objects.all()
         name = self.request.GET.get("name")
         if name:
@@ -80,7 +83,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = CarsModelSearchForm(initial={"model": model})
         return context
 
-    def get_queryset(self) -> list:
+    def get_queryset(self) -> QuerySet:
         queryset = Car.objects.select_related("manufacturer")
         model = self.request.GET.get("model", "")
         if model:
@@ -121,7 +124,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
-    def get_queryset(self) -> list:
+    def get_queryset(self) -> QuerySet:
         queryset = Driver.objects.all()
         username = self.request.GET.get("username")
         if username:
@@ -154,7 +157,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
-        Car.objects.get(id=pk) in driver.cars.all()
+            Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
