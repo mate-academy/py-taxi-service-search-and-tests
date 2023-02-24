@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -48,7 +48,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(
             self,
             *,
-            object_list: list = None,
+            object_list: list[Any] | None = None,
             **kwargs: dict
     ) -> dict:
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
@@ -91,7 +91,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(
             self,
             *,
-            object_list: list = None,
+            object_list: list[Any] | None = None,
             **kwargs: dict
     ) -> dict:
         context = super(CarListView, self).get_context_data(**kwargs)
@@ -137,7 +137,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(
             self,
             *,
-            object_list: list = None,
+            object_list: list[Any] | None = None,
             **kwargs: dict
     ) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
