@@ -5,8 +5,14 @@ from taxi.models import Manufacturer, Car, Driver
 
 class ModelManufacturerTests(TestCase):
     def test_str(self):
-        manufacturer = Manufacturer.objects.create(name="TestMark", country="Antarctica")
-        self.assertEqual(manufacturer.__str__(), f"{manufacturer.name} {manufacturer.country}")
+        manufacturer = Manufacturer.objects.create(
+            name="TestMark",
+            country="Antarctica"
+        )
+        self.assertEqual(
+            manufacturer.__str__(),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
 
 class ModelDriverTests(TestCase):
@@ -30,12 +36,18 @@ class ModelDriverTests(TestCase):
             f"({self.driver_.first_name} {self.driver_.last_name})")
 
     def test_get_absolute_url(self):
-        self.assertEqual(self.driver_.get_absolute_url(), f"/drivers/{self.driver_.id}/")
+        self.assertEqual(
+            self.driver_.get_absolute_url(),
+            f"/drivers/{self.driver_.id}/"
+        )
 
 
 class ModelCarTests(TestCase):
     def test_str(self):
-        manufacturer_ = Manufacturer.objects.create(name="TestMark", country="Antarctica")
+        manufacturer_ = Manufacturer.objects.create(
+            name="Test",
+            country="Antarctica"
+        )
 
         car = Car.objects.create(
             model="TestModel",

@@ -21,7 +21,7 @@ class FormsTests(TestCase):
             data={"license_number": test_license_number}
         )
 
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self):
+    def test_driver_creation_form_with_license_number_name_is_valid(self):
         self.assertTrue(self.driver.is_valid())
         self.assertEqual(self.driver.cleaned_data, self.form_data)
 
