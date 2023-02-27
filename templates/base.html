@@ -24,12 +24,19 @@
             {% endblock %}
 
         </div>
-        <div class="col-sm-10 ">
+        <div class="col-sm-6 mt-1">
 
             {% block content %}{% endblock %}
 
             {% block pagination %}
                 {% include "includes/pagination.html" %}
+            {% endblock %}
+
+        </div>
+        <div class="col-sm-4 mt-1">
+
+            {% block search %}
+                {% include "includes/search.html" %}
             {% endblock %}
 
         </div>
