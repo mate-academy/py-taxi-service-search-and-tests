@@ -11,7 +11,7 @@
           crossorigin="anonymous">
     <!-- Add additional CSS in static file -->
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'taxi/css/styles.css' %}">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
             {% block pagination %}
                 {% include "includes/pagination.html" %}
             {% endblock %}
-
+            <img src="{% static "taxi/img/logo-flying-taxi.jpg" %}" alt= "" height="220" width="320">
         </div>
     </div>
 </div>
