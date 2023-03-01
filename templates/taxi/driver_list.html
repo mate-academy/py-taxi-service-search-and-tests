@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <h1>
@@ -9,6 +10,10 @@
     </h1>
 
     {% if driver_list %}
+      <form action="" method="get" class="form-inline" style="margin-bottom: 5px">
+      {{ search_username_form|crispy }}
+        <input type="submit" class="btn btn-primary" value="Search" style="margin-left: 5px">
+      </form>
     <table class="table">
       <tr>
         <th>ID</th>
