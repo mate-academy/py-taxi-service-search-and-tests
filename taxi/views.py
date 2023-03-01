@@ -7,11 +7,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
 from .forms import (
+    CarForm,
+    CarModelSearchForm,
     DriverCreationForm,
     DriverLicenseUpdateForm,
-    CarForm,
     DriverUsernameSearchForm,
-    CarModelSearchForm,
     ManufacturerNameSearchForm
 )
 
@@ -44,7 +44,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ManufacturerListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         name = self.request.GET.get("name", "")
 
@@ -55,7 +55,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         form = ManufacturerNameSearchForm(self.request.GET)
-        queryset = super(ManufacturerListView, self).get_queryset()
+        queryset = super().get_queryset()
 
         if form.is_valid():
             return queryset.filter(
@@ -86,7 +86,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CarListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         model = self.request.GET.get("model", "")
 
@@ -132,7 +132,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(DriverListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         username = self.request.GET.get("username", "")
 
@@ -143,7 +143,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         form = DriverUsernameSearchForm(self.request.GET)
-        queryset = super(DriverListView, self).get_queryset()
+        queryset = super().get_queryset()
 
         if form.is_valid():
             return queryset.filter(
