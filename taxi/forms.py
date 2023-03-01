@@ -1,15 +1,47 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator, MaxLengthValidator
 
-from taxi.models import Car, Driver
+from taxi.models import Driver, Car
+
+
+class DriverLicenseUpdateForm(forms.ModelForm):
+    MAX_LENGTH = 8
+    license_number = forms.CharField(
+        validators=[
+            RegexValidator(
+                r"[A-Z]{3}[0-9]{5}",
+                "License number should has format XXXDDDDD, where X is "
+                "uppercase letter and D is digit"
+            ),
+            MaxLengthValidator(
+                MAX_LENGTH,
+                "License number should has 8 character"
+            )
+        ]
+    )
+
+    class Meta:
+        model = Driver
+        fields = ["license_number"]
+
+
+class DriverForm(UserCreationForm, DriverLicenseUpdateForm):
+
+    class Meta:
+        model = Driver
+        fields = UserCreationForm.Meta.fields + (
+            "first_name",
+            "last_name",
+            "license_number",
+        )
 
 
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
+        queryset=Driver.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        required=False
     )
 
     class Meta:
@@ -17,36 +49,13 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
-class DriverCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = Driver
-        fields = UserCreationForm.Meta.fields + (
-            "license_number",
-            "first_name",
-            "last_name",
-        )
-
-    def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
-
-
-class DriverLicenseUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Driver
-        fields = ["license_number"]
-
-    def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
-
-
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
-
-    return license_number
+class UniversalSearchForm(forms.Form):
+    field = forms.CharField(
+        max_length=255,
+        label="",
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Search here",
+            "size": "40"
+        })
+    )

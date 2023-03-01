@@ -1,35 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
-    Drivers
-
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
+  <h1>Model: {{ car.model }}</h1>
+  <br>
+  <p><strong>Manufactured:</strong> {{ car.manufacturer}}</p>
+  <br>
+  {% with car.drivers.all as drivers_list %}
+    <h2>
+      Driver{{ drivers_list|pluralize }}
+      {% if request.user in drivers_list %}
+        <a class="btn btn-outline-warning float-right delete" href="{% url 'taxi:driver-addremove' pk=car.id%}">
+          Delete me from this car
+        </a>
+      {% else %}
+        <a class="btn btn-outline-warning float-right" href="{% url  'taxi:driver-addremove' pk=car.id%}">
+          Assign me to this car
+        </a>
+      {% endif %}
+    </h2>
+    <hr>
+    {% if drivers_list %}
+      <ul class="sidebar-nav">
+        {% for driver in drivers_list %}
+          <li>
+            <p>Username: <a class="text-warning link" href="{% url 'taxi:driver-detail' pk=driver.id %}">
+                        {{ driver.username }}</a> {% if driver == request.user %}(Me){% endif %}</p>
+            <p>Full name: {{ driver.first_name }} {{ driver.last_name }}</p>
+            <p>License number: {{ driver.license_number }}</p>
+          </li>
+          <hr>
+        {% endfor %}
+      </ul>
     {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
+      <p>There are no driver for {{ car.model }}</p>
     {% endif %}
-
-  </h1>
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+  {% endwith %}
+  <a class="btn btn-outline-warning" href="{% url 'taxi:car-update' pk=car.id %}">Update Car</a>
+  <a class="btn btn-outline-warning delete" href="{% url 'taxi:car-delete' pk=car.id %}">Delete Car</a>
 {% endblock %}
