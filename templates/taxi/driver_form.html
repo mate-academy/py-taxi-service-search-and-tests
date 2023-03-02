@@ -7,6 +7,6 @@
     {% csrf_token %}
     {{ form|crispy }}
 
-    <input type="submit" value="Submit" class="btn btn-primary">
+    {% include "includes/submit_btn.html" %}
   </form>
 {% endblock %}
