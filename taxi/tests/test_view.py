@@ -20,9 +20,11 @@ class TestDriverListPrivate(TestCase):
             password="user12345"
         )
         self.url = reverse("taxi:driver-create")
-        self.client.login(
-            username="user",
-            password="user12345"
+        self.client.force_login(self.user)
+        self.driver = Driver.objects.create(
+            username="test",
+            password="testtesttesttest",
+            license_number="AAA18345"
         )
 
     def test_private_presentation_driver_list(self):
@@ -42,34 +44,27 @@ class TestDriverListPrivate(TestCase):
     def test_create_driver(self):
         form_driver = {
             "username": "nick",
-            "password1": "12345",
-            "password2": "12345",
+            "password1": "abcdefg12345",
+            "password2": "abcdefg12345",
+            "email": "aaa@ff.com",
             "first_name": "Jo",
             "last_name": "Bush",
-            "license_1number": "AAA12345"
+            "license_number": "AAA12345"
         }
         url = reverse("taxi:driver-create")
         self.client.post(url, data=form_driver)
-        print("!!!!!!!!!!!!!!!!!!!!!!!POST!!!!!!!!!!!!!!!!!!!!!")
 
-        new_driver = get_user_model().objects.get(username=form_driver["username"])
-        print("!!!!!!!!!!!!!!!!!!!!!!!NEWDRIVER!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        self.assertEqual(new_driver.first_name, form_driver["first_name"])
-
-    # def test_delete_driver(self):
-    #     driver = get_user_model().objects.create(
-    #         username="bob",
-    #         first_name="name",
-    #         last_name="name2",
-    #         license_number="AAA12345",
-    #         password="123455522hjhg"
-    #     )
-    #     response = self.client.post(
-    #         reverse("taxi:driver-delete", kwargs={"pk": driver.pk})
-    #     )
-    #     drivers = get_user_model().objects.filter(pk=driver.pk)
-    #     self.assertEqual(drivers.count(),0)
-    #     self.assertEqual(response.status_code, 302)
+        new_driver = get_user_model().objects.get(
+            username=form_driver["username"]
+        )
+        self.assertEqual(
+            new_driver.first_name,
+            form_driver["first_name"]
+        )
+        self.assertEqual(
+            new_driver.license_number,
+            form_driver["license_number"]
+        )
 
 
 class TestManufacturerPublic(TestCase):
@@ -120,6 +115,15 @@ class TestCarPublic(TestCase):
 class TestCarPrivate(TestCase):
 
     def setUp(self) -> None:
+        self.manufacturer = Manufacturer.objects.create(
+            name="Ford",
+            country="Germany"
+        )
+        self.car = Car.objects.create(
+            model="Focus",
+            manufacturer=self.manufacturer
+        )
+
         self.user = get_user_model().objects.create_user(
             username="Bo",
             password="bo12345"
@@ -127,14 +131,7 @@ class TestCarPrivate(TestCase):
         self.client.force_login(self.user)
 
     def test_private_presentation_page_car_list(self):
-        manufacturer = Manufacturer.objects.create(
-            name="Ford",
-            country="Germany"
-        )
-        Car.objects.create(
-            model="Focus",
-            manufacturer=manufacturer
-        )
+
         response = self.client.get(
             reverse("taxi:car-list")
         )

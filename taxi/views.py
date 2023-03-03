@@ -129,7 +129,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
         name_user = self.request.GET.get("name_user", "")
-        context["search_form"] = DriversSearchForm(initial={"name_user": name_user})
+        context["search_form"] = DriversSearchForm(
+            initial={"name_user": name_user}
+        )
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -151,7 +153,6 @@ class DriverDetailView(LoginRequiredMixin, generic.DetailView):
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
     model = Driver
     form_class = DriverCreationForm
-    print("!!!!!!DriverVIEW!!!!!")
 
 
 class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
