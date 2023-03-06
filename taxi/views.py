@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -51,13 +52,15 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Manufacturer.objects.all()
 
         form = ManufacturerSearchForm(self.request.GET)
 
         if form.is_valid():
             return queryset.filter(name__icontains=form.cleaned_data["name"])
+
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -89,13 +92,15 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
-    def get_queryset(self):
-        queryset = Car.objects.all().select_related("manufacturer")
+    def get_queryset(self) -> QuerySet:
+        queryset = Car.objects.select_related("manufacturer")
 
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
             return queryset.filter(model__icontains=form.cleaned_data["model"])
+
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -133,7 +138,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Driver.objects.prefetch_related("cars")
 
         form = DriverSearchForm(self.request.GET)
@@ -142,6 +147,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
             return queryset.filter(
                 username__icontains=form.cleaned_data["username"]
             )
+
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
