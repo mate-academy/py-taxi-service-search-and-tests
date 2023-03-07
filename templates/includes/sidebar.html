@@ -1,15 +1,28 @@
-<ul class="sidebar-nav list-group">
+{% load static %}
+<div id="mySidenav" class="sidenav">
   {% if user.is_authenticated %}
-    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-    <li class="list-group-item"><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-  {% else %}
-    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a>
+    <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+    {% else %}
+    <a href="{% url 'login'%}?next={{request.path}}">Login</a>
   {% endif %}
-
   <br>
+  <a href="{% url 'taxi:index' %}">🏠Home🏠</a>
+  <a href="{% url 'taxi:driver-list' %}">👨All drivers👨</a>
+  <a href="{% url 'taxi:car-list' %}">🚕All cars🚕</a>
+  <a href="{% url 'taxi:manufacturer-list' %}">🏭All manufacturers🏭</a>
+</div>
 
-  <li class="list-group-item"><a href="{% url 'taxi:index' %}">Home</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:driver-list' %}">All drivers</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:car-list' %}">All cars</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a></li>
-</ul>
+<span onclick="openNav()"><img src="/static/images/menu.png" alt="menu" id="menu-btn"></span>
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft = "0";
+}
+</script>

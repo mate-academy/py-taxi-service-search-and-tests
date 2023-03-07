@@ -1,17 +1,78 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
     {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
+    {% if user.is_staff %}
+      <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
 
     <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
       Update
     </a>
+    {% endif %}
+
   </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
+  <table class="table">
+    <tr>
+      <th>Car image {% if user.is_staff %}
+        <a href="{% url "taxi:car-image-update" pk=car.id %}" class="btn btn-secondary" id="avatar-btn">Update</a>
+      {% endif %}
+      </th>
+
+      <th>Car info</th>
+      <th>Car rating</th>
+    </tr>
+  <tr>
+    <th>
+      {% if car.image %}
+      <img src="/media/{{ car.image }}" alt="car-image">
+      {% else %}
+      <img src="/static/images/default_car.png" alt="car-image" id="car-image">
+      {% endif %}
+    </th>
+  <th>
+      <ul>
+        <li>
+          Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})
+        </li>
+        <li>
+          Model: {{ car.model }}
+        </li>
+      </ul>
+    </th>
+    <th>
+      <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Rating</title>
+    </head>
+      <h5 class="card-title">Avg rating:
+        <span class="fa fa-star {% if car.average_rating > 0 %} checked {% endif %}"></span>
+        <span class="fa fa-star {% if car.average_rating > 1 %} checked {% endif %}"></span>
+        <span class="fa fa-star {% if car.average_rating > 2 %} checked {% endif %}"></span>
+        <span class="fa fa-star {% if car.average_rating > 3 %} checked {% endif %}" ></span>
+        <span class="fa fa-star {% if car.average_rating > 4 %} checked {% endif %}"></span>
+      </h5>
+      <ul class="btn btn-light list-inline rating-list">
+        <li onclick="rate(5, {{ car.id }})">
+          <i class="fa fa-star {% if car.user_rating > 4 %} checked {% endif %}" title="Rate 5"></i>*</li>
+        <li onclick="rate(4, {{ car.id }})">
+          <i class="fa fa-star {% if car.user_rating > 3 %} checked {% endif %}" title="Rate 4"></i>*</li>
+        <li onclick="rate(3, {{ car.id }})">
+          <i class="fa fa-star {% if car.user_rating > 2 %} checked {% endif %}" title="Rate 3"></i>*</li>
+        <li onclick="rate(2, {{ car.id }})">
+          <i class="fa fa-star {% if car.user_rating > 1 %} checked {% endif %}" title="Rate 2"></i></li>
+        <li onclick="rate(1, {{ car.id }})">
+          <i class="fa fa-star {% if car.user_rating > 0 %} checked {% endif %}" title="Rate 1"></i></li>
+      </ul>
+    </th>
+  </tr>
+
+  </table>
+
   <h1>
     Drivers
 
@@ -32,4 +93,37 @@
       <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
     {% endfor %}
   </ul>
+
+      <h2>Comments({{ num_comments }})</h2>
+      {% for comment in car_comments %}
+        <p class="comment-user"><img src="/media/{{ comment.user.avatar }}" alt="" id="avatar-comment"><strong
+        >{{ comment.user.username }}</strong> says: {% if user.is_staff or user.id == comment.user.id %}
+          <a href="{% url "taxi:comment-delete" id=car.id pk=comment.pk%}" class="btn btn-danger"
+             id="comment-delete">🗑️</a>{% endif %}</p>
+        <p class="comment-body"> {{ comment.content }}</p>
+      {% endfor %}
+  <br>
+  <form action="." method="post">
+  {% csrf_token %}
+  {{ comment_form|crispy }}
+    <input type="submit" value="Add comment" class="btn btn-primary">
+  </form>
+
+    <script>
+        const rate = (rating, car_id) => {
+            fetch(`/rate/${car_id}/${rating}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(rest => {
+                window.location.reload();
+                // you may want to update the rating here
+                // to simplify stuff, I just reload the page
+            })
+        }
+    </script>
 {% endblock %}
+
+
+
