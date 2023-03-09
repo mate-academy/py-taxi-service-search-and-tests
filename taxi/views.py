@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -17,7 +18,7 @@ from .forms import (
 
 
 @login_required
-def index(request):
+def index(request) -> render:
     """View function for the home page of the site."""
 
     num_drivers = Driver.objects.count()
@@ -43,13 +44,13 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         context["search_form"] = ManufacturerSearchForm()
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Manufacturer.objects.all()
         form = ManufacturerSearchForm(self.request.GET)
 
@@ -82,13 +83,13 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(CarListView, self).get_context_data(**kwargs)
         context["search_form"] = CarSearchForm()
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
 
@@ -125,13 +126,13 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     queryset = Driver.objects.all()
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
         context["search_form"] = DriverSearchForm()
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
 
@@ -164,7 +165,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_assign_to_car(request, pk):
+def toggle_assign_to_car(request, pk) -> HttpResponseRedirect:
     driver = Driver.objects.get(id=request.user.id)
     if (
         Car.objects.get(id=pk) in driver.cars.all()

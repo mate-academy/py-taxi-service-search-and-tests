@@ -10,14 +10,14 @@ CARS_URL = reverse("taxi:car-list")
 
 
 class PublicManufacturerTests(TestCase):
-    def test_login_required(self):
+    def test_login_required(self) -> None:
         res = self.client.get(MANUFACTURERS_URL)
 
         self.assertNotEqual(res.status_code, 200)
 
 
 class PrivateManufacturerTests(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test",
             password="password123",
@@ -25,7 +25,7 @@ class PrivateManufacturerTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_manufacturers(self):
+    def test_retrieve_manufacturers(self) -> None:
         Manufacturer.objects.create(name="Skoda", country="Chech")
         Manufacturer.objects.create(name="Toyota", country="Japan")
         response = self.client.get(MANUFACTURERS_URL)
@@ -42,14 +42,14 @@ class PrivateManufacturerTests(TestCase):
 
 
 class PublicDriverTests(TestCase):
-    def test_login_required(self):
+    def test_login_required(self) -> None:
         res = self.client.get(CARS_URL)
 
         self.assertNotEqual(res.status_code, 200)
 
 
 class PrivateDriverTests(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test",
             password="password123",
@@ -57,7 +57,7 @@ class PrivateDriverTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_driver(self):
+    def test_retrieve_driver(self) -> None:
         get_user_model().objects.create_user(
             username="test1",
             password="password123",
@@ -73,7 +73,7 @@ class PrivateDriverTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
-    def test_create_driver(self):
+    def test_create_driver(self) -> None:
         form_data = {
             "username": "test_username",
             "password1": "1qazcde3",
@@ -91,7 +91,7 @@ class PrivateDriverTests(TestCase):
 
 
 class PrivateCarTests(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test",
             password="password123",
@@ -99,7 +99,7 @@ class PrivateCarTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_cars(self):
+    def test_retrieve_cars(self) -> None:
         manufacturer = Manufacturer.objects.create(
             name="Skoda",
             country="Chech"

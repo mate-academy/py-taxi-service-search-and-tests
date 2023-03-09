@@ -6,7 +6,7 @@ from taxi.models import Manufacturer, Driver, Car
 
 
 class SearchFormTests(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test1",
             password="password123",
@@ -15,7 +15,7 @@ class SearchFormTests(TestCase):
 
         self.client.force_login(self.user)
 
-    def test_search_manufacturer_by_name(self):
+    def test_search_manufacturer_by_name(self) -> None:
         response = self.client.get(
             reverse("taxi:manufacturer-list") + "?name=Skoda"
         )
@@ -24,7 +24,7 @@ class SearchFormTests(TestCase):
             list(Manufacturer.objects.filter(name__icontains="Skoda"))
         )
 
-    def test_search_driver_by_username(self):
+    def test_search_driver_by_username(self) -> None:
         response = self.client.get(
             reverse("taxi:driver-list") + "?username=User"
         )
@@ -33,7 +33,7 @@ class SearchFormTests(TestCase):
             list(Driver.objects.filter(username__icontains="User"))
         )
 
-    def test_search_car_by_model(self):
+    def test_search_car_by_model(self) -> None:
         response = self.client.get(
             reverse("taxi:car-list") + "?model=Octavia"
         )
