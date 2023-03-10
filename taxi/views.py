@@ -1,6 +1,8 @@
+from typing import Optional
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -83,7 +85,11 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+    def get_context_data(
+        self,
+        object_list: Optional[dict] = None,
+        **kwargs
+    ) -> dict:
         context = super(CarListView, self).get_context_data(**kwargs)
         context["search_form"] = CarSearchForm()
 
@@ -126,7 +132,11 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     queryset = Driver.objects.all()
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+    def get_context_data(
+        self,
+        object_list: Optional[dict] = None,
+        **kwargs
+    ) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
         context["search_form"] = DriverSearchForm()
 
@@ -165,7 +175,10 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_assign_to_car(request, pk) -> HttpResponseRedirect:
+def toggle_assign_to_car(
+    request: HttpRequest,
+    pk: int
+) -> HttpResponseRedirect:
     driver = Driver.objects.get(id=request.user.id)
     if (
         Car.objects.get(id=pk) in driver.cars.all()
