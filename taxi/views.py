@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
@@ -44,9 +46,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
-        context = super(ManufacturerListView, self).get_context_data(**kwargs)
-        name = self.request.GET.get("name", "")
+    def get_context_data(self, *, object_list: Optional[list] = None, **kwargs) -> dict:
+        context: dict = super(ManufacturerListView, self).get_context_data(**kwargs)
+        name: str = self.request.GET.get("name", "")
         context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
@@ -79,9 +81,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
-        context = super(CarListView, self).get_context_data(**kwargs)
-        model = self.request.GET.get("model", "")
+    def get_context_data(self, *, object_list: Optional[list] = None, **kwargs) -> dict:
+        context: dict = super(CarListView, self).get_context_data(**kwargs)
+        model: str = self.request.GET.get("model", "")
         context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
@@ -119,9 +121,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Driver.objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
-        context = super(DriverListView, self).get_context_data(**kwargs)
-        username = self.request.GET.get("username", "")
+    def get_context_data(self, *, object_list: Optional[list] = None, **kwargs) -> dict:
+        context: dict = super(DriverListView, self).get_context_data(**kwargs)
+        username: str = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(
             initial={"username": username}
         )
