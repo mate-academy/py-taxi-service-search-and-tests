@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
@@ -49,9 +49,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(
         self,
         *,
-        object_list: Optional[list] = None,
-        **kwargs
-    ) -> dict:
+        object_list: Optional[list[object]] = None,
+        **kwargs: dict[str, Any]
+    ) -> dict[str, Any]:
         context: dict = super(
             ManufacturerListView,
             self
@@ -92,9 +92,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(
         self,
         *,
-        object_list: Optional[list] = None,
-        **kwargs
-    ) -> dict:
+        object_list: Optional[list[object]] = None,
+        **kwargs: dict[str, Any]
+    ) -> dict[str, Any]:
         context: dict = super(CarListView, self).get_context_data(**kwargs)
         model: str = self.request.GET.get("model", "")
         context["search_form"] = CarSearchForm(initial={"model": model})
@@ -137,9 +137,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(
         self,
         *,
-        object_list: Optional[list] = None,
-        **kwargs
-    ) -> dict:
+        object_list: Optional[list[object]] = None,
+        **kwargs: dict[str, Any]
+    ) -> dict[str, Any]:
         context: dict = super(DriverListView, self).get_context_data(**kwargs)
         username: str = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(
