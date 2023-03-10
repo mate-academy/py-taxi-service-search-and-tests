@@ -1,4 +1,7 @@
+from typing import Optional
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -43,7 +46,12 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self,
+            *,
+            object_list: Optional[list] = None,
+            **kwargs
+    ) -> dict:
         context = super(
             ManufacturerListView, self
         ).get_context_data(**kwargs)
@@ -58,7 +66,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Manufacturer.objects.all()
 
         search_form = ManufacturerSearchForm(self.request.GET)
@@ -92,7 +100,12 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self,
+            *,
+            object_list: Optional[list] = None,
+            **kwargs
+    ) -> dict:
         context = super(CarListView, self).get_context_data(**kwargs)
 
         model = self.request.GET.get("model", "")
@@ -105,7 +118,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Car.objects.select_related("manufacturer")
 
         search_form = CarSearchForm(self.request.GET)
@@ -143,7 +156,12 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self,
+            *,
+            object_list: Optional[list] = None,
+            **kwargs
+    ) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
 
         username = self.request.GET.get("username", "")
@@ -156,7 +174,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Driver.objects.all()
 
         search_form = DriverSearchForm(self.request.GET)
