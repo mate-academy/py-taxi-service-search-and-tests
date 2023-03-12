@@ -17,7 +17,7 @@
 
     {% if car in user.cars.all %}
       <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
+        Delete me to this car
       </a>
     {% else %}
       <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
