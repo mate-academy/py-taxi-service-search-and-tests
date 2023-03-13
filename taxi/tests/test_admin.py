@@ -19,7 +19,7 @@ class AdminSiteTests(TestCase):
         )
 
     def test_driver_license_number_listed(self):
-        """Tests that license_number field is in list_admin on driver admin page"""
+        """Tests that license_number field is in list_admin on admin page"""
 
         url = reverse("admin:taxi_driver_changelist")
         res = self.client.get(url)
