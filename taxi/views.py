@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
@@ -20,7 +20,7 @@ from .forms import (
 
 
 @login_required
-def index(request):
+def index(request: Any) -> render:
     """View function for the home page of the site."""
 
     num_drivers = Driver.objects.count()
@@ -49,7 +49,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(
             self, *, object_list: Optional[dict] = None, **kwargs
-    ):
+    ) -> dict:
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
 
         manufacturer_name = self.request.GET.get("name", "")
@@ -92,7 +92,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(
             self, *, object_list: Optional[dict] = None, **kwargs
-    ):
+    ) -> dict:
         context = super(CarListView, self).get_context_data(**kwargs)
 
         car_model = self.request.GET.get("model", "")
@@ -100,7 +100,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         model = self.request.GET.get("model")
 
         if model:
@@ -136,7 +136,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(
             self, *, object_list: Optional[dict] = None, **kwargs
-    ):
+    ) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
 
         driver_username = self.request.GET.get("username", "")
@@ -176,7 +176,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_assign_to_car(request, pk):
+def toggle_assign_to_car(request: Any, pk: int) -> HttpResponseRedirect:
     driver = Driver.objects.get(id=request.user.id)
     if (
         Car.objects.get(id=pk) in driver.cars.all()

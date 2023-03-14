@@ -5,7 +5,7 @@ from taxi.models import Manufacturer, Car
 
 
 class ModelsTests(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         manufacturer_ = Manufacturer.objects.create(
             name="name_",
             country="country_"
