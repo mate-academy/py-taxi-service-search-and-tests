@@ -8,6 +8,10 @@
     </a>
   </h1>
 
+  {% block searching %}
+    {% include "includes/searching.html" %}
+  {% endblock %}
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
