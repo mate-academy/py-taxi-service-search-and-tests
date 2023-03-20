@@ -40,4 +40,3 @@ class AdminPageTest(TestCase):
         res = self.client.get(url)
 
         self.assertContains(res, "Additional info")
- 
