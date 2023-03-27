@@ -97,7 +97,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Car.objects.all().select_related("name")
+        queryset = Car.objects.select_related("name")
 
         form = CarSearchForm(self.request.GET)
 
@@ -144,7 +144,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Driver.objects.all().select_related("model")
+        queryset = Driver.objects.select_related("model")
 
         form = DriverSearchForm(self.request.GET)
 
