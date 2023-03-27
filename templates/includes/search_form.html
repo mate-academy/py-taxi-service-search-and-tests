@@ -1,0 +1,9 @@
+{% load crispy_forms_filters %}
+<section>
+  <form action="" method="get" novalidate class="form-inline">
+    <div class="form-group mr-2">
+      {{ search_form|crispy }}
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</section>
