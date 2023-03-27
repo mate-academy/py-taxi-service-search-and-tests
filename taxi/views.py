@@ -45,16 +45,25 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(
+            self,
+            *,
+            object_list=None,
+            **kwargs
+    ) -> dict:
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
+        context["search_form"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         form = ManufacturerSearchForm(self.request.GET)
         if form.is_valid():
-            return self.queryset.filter(name__icontains=form.cleaned_data["name"])
+            return self.queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
         return self.queryset
 
 
@@ -89,7 +98,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self) -> QuerySet:
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
-            return self.queryset.filter(model__icontains=form.cleaned_data["model"])
+            return self.queryset.filter(
+                model__icontains=form.cleaned_data["model"]
+            )
         return self.queryset
 
 
@@ -122,7 +133,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["search_form"] = DriverSearchForm(initial={"username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self) -> QuerySet:

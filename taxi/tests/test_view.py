@@ -63,7 +63,7 @@ class PrivateDriverTest(TestCase):
         self.client.force_login(self.user)
 
     def test_search_driver_by_username(self) -> None:
-        driver = get_user_model().objects.create_user(
+        get_user_model().objects.create_user(
             username="testUser",
             first_name="Test",
             last_name="User",
@@ -101,7 +101,7 @@ class PrivateManufacturerTest(TestCase):
         self.client.force_login(self.user)
 
     def test_manufacturer_search_by_name(self) -> None:
-        manufacturer = Manufacturer.objects.create(
+        Manufacturer.objects.create(
             name="Mazda", country="Japan"
         )
         key = "mazd"
@@ -112,5 +112,7 @@ class PrivateManufacturerTest(TestCase):
             name__icontains=key
         )
         self.assertEqual(
-            list(response.context["manufacturer_list"]), list(manufacturer_list)
+            list(
+                response.context["manufacturer_list"]),
+            list(manufacturer_list)
         )
