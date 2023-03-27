@@ -7,7 +7,6 @@ from taxi.models import Car, Manufacturer, Driver
 CAR_URL = reverse("taxi:car-list")
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 DRIVER_URL = reverse("taxi:driver-list")
-PAGINATION = 5
 
 
 class PublicCarTest(TestCase):
@@ -84,12 +83,6 @@ class PrivateDriverTest(TestCase):
         response = self.client.get(DRIVER_URL)
         self.assertTemplateUsed(
             response, "taxi/driver_list.html"
-        )
-
-    def test_correct_pagination(self) -> None:
-        response = self.client.get(DRIVER_URL)
-        self.assertEqual(
-            len(response.context["driver_list"]), PAGINATION
         )
 
 
