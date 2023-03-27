@@ -21,7 +21,8 @@ class ModelsTests(TestCase):
             last_name="Test last"
         )
 
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name}"
+                                      f"{driver.last_name})")
 
     def test_car_str(self):
         name_ = Manufacturer.objects.create(
