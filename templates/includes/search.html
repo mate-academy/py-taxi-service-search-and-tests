@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+ <form action="" method="get" class="form-inline">
+  {{ search_form|crispy }}
+  <input type="submit" class="btn btn-outline-primary" name="search" value="🌏 search">
+</form>
