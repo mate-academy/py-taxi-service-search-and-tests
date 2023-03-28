@@ -34,7 +34,6 @@ INTERNAL_IPS = [
 
 # Application definition
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "crispy_forms",
     "crispy_bootstrap4",
+    "bootstrap4",
     "taxi",
 ]
 
@@ -79,6 +79,7 @@ TEMPLATES = [
 ]
 
 # CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 WSGI_APPLICATION = "taxi_service.wsgi.application"
 
