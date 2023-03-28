@@ -42,7 +42,10 @@ class PrivateManufacturerTest(TestCase):
             password="test_password1",
         )
         self.client.force_login(self.user)
-        Manufacturer.objects.create(name="test_manufacturer", country="test_country")
+        Manufacturer.objects.create(
+            name="test_manufacturer",
+            country="test_country"
+        )
 
     def test_retrieve_manufacturers(self):
         response = self.client.get(reverse("taxi:manufacturer-list"))
@@ -87,7 +90,10 @@ class PrivateCarTest(TestCase):
             license_number="BAC12345",
         )
         self.client.force_login(self.user)
-        Manufacturer.objects.create(name="test_manufacturer", country="test_country")
+        Manufacturer.objects.create(
+            name="test_manufacturer",
+            country="test_country"
+        )
         Car.objects.create(
             model="test_model",
             manufacturer=Manufacturer.objects.get(name="test_manufacturer")
