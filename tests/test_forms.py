@@ -9,7 +9,7 @@ from taxi.models import Car
 class DriverCreationFormTest(TestCase):
     def test_driver_creation_with_license_is_valid(self):
         form_data = {
-            "username": "test1",
+            "username": "tester",
             "password1": "test12345",
             "password2": "test12345",
             "first_name": "Test first",
