@@ -2,7 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    ManufacturerNameSearchForm,
+    DriverUsernameSearchForm,
+    CarModelSearchForm
+)
 
 
 class FormTest(TestCase):
@@ -40,3 +46,51 @@ class FormTest(TestCase):
 
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
+
+
+class SearchFormTests(TestCase):
+
+    def test_valid_form_manufacturer(self):
+        form_data = {"name": "Example Manufacturer"}
+        form = ManufacturerNameSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_form_label_manufacturer(self):
+        form = ManufacturerNameSearchForm()
+        self.assertEqual(form.fields["name"].label, "")
+
+    def test_form_widget_manufacturer(self):
+        form = ManufacturerNameSearchForm()
+        self.assertEqual(
+            form.fields["name"].widget.attrs["placeholder"], "Search..."
+        )
+
+    def test_valid_form_driver(self):
+        form_data = {"username": "Example Driver"}
+        form = DriverUsernameSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_form_label_driver(self):
+        form = DriverUsernameSearchForm()
+        self.assertEqual(form.fields["username"].label, "")
+
+    def test_form_widget_driver(self):
+        form = DriverUsernameSearchForm()
+        self.assertEqual(
+            form.fields["username"].widget.attrs["placeholder"], "Search..."
+        )
+
+    def test_valid_form_car(self):
+        form_data = {"model": "Example Model"}
+        form = CarModelSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_form_label_car(self):
+        form = CarModelSearchForm()
+        self.assertEqual(form.fields["model"].label, "")
+
+    def test_form_widget_car(self):
+        form = CarModelSearchForm()
+        self.assertEqual(
+            form.fields["model"].widget.attrs["placeholder"], "Search..."
+        )
