@@ -12,4 +12,4 @@ def query_transform(request, **kwargs):
         else:
             update.pop(key, 0)
 
-    return update.urlcode()
+    return update.urlencode()
