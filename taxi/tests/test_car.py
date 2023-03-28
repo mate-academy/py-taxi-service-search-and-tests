@@ -74,11 +74,17 @@ class PrivateCarTests(TestCase):
 
     def test_retrieve_car_detail_page(self):
         car = Car.objects.create(model="Camry", manufacturer=self.manufacturer)
+        car.drivers.add(self.user)
 
         url = reverse("taxi:car-detail", args=[car.id])
         response = self.client.get(url)
+        drivers = car.drivers.all()
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car"].drivers.all()),
+            list(drivers)
+        )
 
     def test_car_search_by_model(self):
         Car.objects.create(model="Camry", manufacturer=self.manufacturer)

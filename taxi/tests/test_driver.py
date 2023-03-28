@@ -71,6 +71,33 @@ class PrivateManufacturerTests(TestCase):
             list(users)
         )
 
+    def test_retrieve_driver_detail_page(self):
+        user = get_user_model().objects.create_user(
+            username="test_1",
+            password="test12345",
+            license_number="ABC12345")
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        car = Car.objects.create(
+            model="Camry",
+            manufacturer=manufacturer
+        )
+        car.drivers.add(user)
+
+        url = reverse("taxi:driver-detail", args=[user.id])
+        response = self.client.get(url)
+        print(user)
+
+        cars = user.cars.all()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["driver"].cars.all()),
+            list(cars)
+        )
+
     def test_driver_search_by_username(self):
         get_user_model().objects.create_user(
             username="test_1",
