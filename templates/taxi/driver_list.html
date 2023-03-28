@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 {% block content %}
     <h1>
       Driver List
@@ -7,6 +8,16 @@
         Create
       </a>
     </h1>
+
+    <br>
+
+    <form action="" method="get" class="form-inline">
+      {{ search_form|crispy }}
+      <input type="submit" value="search" class="btn btn-primary">
+    </form>
+
+    <br>
+
 
     {% if driver_list %}
     <table class="table">
