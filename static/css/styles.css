@@ -6,3 +6,9 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.misha {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
