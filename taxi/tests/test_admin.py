@@ -15,7 +15,7 @@ class AdminSiteTests(TestCase):
             password="iliketotest",
             first_name="firstname",
             last_name="lastname",
-            license_number="ABC12345"
+            license_number="ABC12345",
         )
 
     def test_driver_license_number_displayed(self):

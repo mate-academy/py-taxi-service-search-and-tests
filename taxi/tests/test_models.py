@@ -19,7 +19,7 @@ class ModelsTests(TestCase):
             password="iliketotest",
             first_name="firstname",
             last_name="lastname",
-            license_number="ABC12345"
+            license_number="ABC12345",
         )
 
     def test_manufacturer_str(self):
@@ -34,5 +34,3 @@ class ModelsTests(TestCase):
     def test_driver_with_license_number(self):
         self.assertEqual(self.driver.license_number, "ABC12345")
         self.assertTrue(self.driver.check_password("iliketotest"))
-
-

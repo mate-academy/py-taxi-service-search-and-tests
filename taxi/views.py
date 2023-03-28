@@ -46,9 +46,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name")
-        context["search_form"] = ManufacturerSearchForm(initial={
-            "name": name
-        })
+        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
@@ -83,9 +81,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         model = self.request.GET.get("model")
-        context["search_form"] = CarSearchForm(initial={
-            "model": model
-        })
+        context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self):
@@ -125,16 +121,18 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = DriverSearchForm(initial={
-            "username": username
-        })
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self):
         query_set = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
         if form.is_valid():
-            return query_set.filter(username__icontains=form.cleaned_data["username"])
+            return query_set.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return query_set
 
 

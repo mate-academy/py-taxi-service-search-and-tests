@@ -11,7 +11,7 @@ class FormsTest(TestCase):
             "password2": "pass12345",
             "first_name": "Test First name",
             "last_name": "Test Last name",
-            "license_number": "ABC12345"
+            "license_number": "ABC12345",
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())

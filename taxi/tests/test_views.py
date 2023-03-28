@@ -24,8 +24,7 @@ class PrivateManufacturerListTests(TestCase):
         )
         for i in range(15):
             Manufacturer.objects.create(
-                name=f"Manufacturer{i}",
-                country=f"Country{i}"
+                name=f"Manufacturer{i}", country=f"Country{i}"
             )
 
     def setUp(self) -> None:
@@ -37,7 +36,7 @@ class PrivateManufacturerListTests(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertEqual(
             list(self.response.context["manufacturer_list"]),
-            list(manufacturer_list)[:5]
+            list(manufacturer_list)[:5],
         )
         self.assertTemplateUsed(self.response, "taxi/manufacturer_list.html")
 
@@ -47,17 +46,9 @@ class PrivateManufacturerListTests(TestCase):
             name__icontains="Man",
         )
         self.assertQuerysetEqual(
-            response.context["manufacturer_list"],
-            queryset_searched[:5]
+            response.context["manufacturer_list"], queryset_searched[:5]
         )
 
     def test_manufacturer_list_pagination_is_five(self):
         self.assertTrue("is_paginated" in self.response.context)
         self.assertEqual(len(self.response.context["manufacturer_list"]), 5)
-
-
-
-
-
-
-
