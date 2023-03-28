@@ -3,6 +3,7 @@
 {% block content %}
   <h1>
     Manufacturer List
+    {% include "includes/search_form.html" %}
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
