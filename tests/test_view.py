@@ -38,11 +38,11 @@ class PublicCarTest(TestCase):
 class PrivateManufacturerTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="testuser",
-            password="testpass123",
+            username="test_driver",
+            password="test_password1",
         )
         self.client.force_login(self.user)
-        Manufacturer.objects.create(name="Toyota", country="Japan")
+        Manufacturer.objects.create(name="test_manufacturer", country="test_country")
 
     def test_retrieve_manufacturers(self):
         response = self.client.get(reverse("taxi:manufacturer-list"))
@@ -60,9 +60,9 @@ class PrivateManufacturerTest(TestCase):
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username="testuser",
-            password="testpass123",
-            license_number="123456789",
+            username="test_driver",
+            password="test_password1",
+            license_number="BAC12345",
         )
         self.client.force_login(self.user)
 
@@ -82,15 +82,15 @@ class PrivateDriverTest(TestCase):
 class PrivateCarTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username="testuser",
-            password="testpass123",
-            license_number="123456789",
+            username="test_driver",
+            password="test_password1",
+            license_number="BAC12345",
         )
         self.client.force_login(self.user)
-        Manufacturer.objects.create(name="Toyota", country="Japan")
+        Manufacturer.objects.create(name="test_manufacturer", country="test_country")
         Car.objects.create(
-            model="testmodel",
-            manufacturer=Manufacturer.objects.get(name="Toyota")
+            model="test_model",
+            manufacturer=Manufacturer.objects.get(name="test_manufacturer")
         )
 
     def test_retrieve_cars(self):

@@ -54,6 +54,13 @@ class TestDriverSearchForm(TestCase):
             password="test_password2",
             license_number="BBC12345",
         )
+        self.driver3 = Driver.objects.create(
+            username="test_DRIVER1",
+            first_name="test_first_name3",
+            last_name="test_last_name3",
+            password="test_password3",
+            license_number="BBB12345",
+        )
 
     def test_search_driver_by_username(self):
         form_data = {"username": "driver1"}
@@ -65,6 +72,7 @@ class TestDriverSearchForm(TestCase):
 
         self.assertIn(self.driver1, queryset)
         self.assertNotIn(self.driver2, queryset)
+        self.assertIn(self.driver3, queryset)
 
 
 class TestDriverCreationForm(TestCase):
