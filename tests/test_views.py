@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 
 from taxi.models import Manufacturer
@@ -58,8 +58,12 @@ class PrivateDriverTests(TestCase):
         }
 
         self.client.post(reverse("taxi:driver-create"), data=form_data)
-        user_created = get_user_model().objects.get(username=form_data["username"])
-
-        self.assertEqual(user_created.first_name, form_data["first_name"])
-        self.assertEqual(user_created.license_number, form_data["license_number"])
-        self.assertEqual(user_created.last_name, form_data["last_name"])
+        user_created = get_user_model().objects.get(
+            username=form_data["username"]
+        )
+        self.assertEqual(user_created.first_name,
+                         form_data["first_name"])
+        self.assertEqual(user_created.license_number,
+                         form_data["license_number"])
+        self.assertEqual(user_created.last_name,
+                         form_data["last_name"])

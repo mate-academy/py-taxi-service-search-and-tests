@@ -20,8 +20,8 @@ class ModelsTests(TestCase):
             first_name="Pimp",
             last_name="Lazo"
         )
-        field_label = Driver._meta.get_field('first_name').verbose_name
-        self.assertEqual(field_label, 'first name')
+        field_label = Driver._meta.get_field("first_name").verbose_name
+        self.assertEqual(field_label, "first name")
 
     def test_get_absolute_url(self):
         driver = get_user_model().objects.create_user(
@@ -30,7 +30,7 @@ class ModelsTests(TestCase):
             first_name="Pimp",
             last_name="Lazo"
         )
-        self.assertEqual(driver.get_absolute_url(), '/drivers/1/')
+        self.assertEqual(driver.get_absolute_url(), "/drivers/1/")
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(
@@ -44,7 +44,7 @@ class ModelsTests(TestCase):
 
         self.assertEqual(str(car), car.model)
 
-    def test_create_driver_with_licesne(self):
+    def test_create_driver_with_license(self):
         username = "test"
         password = "test1234"
         license_number = "ABC12345"
@@ -58,4 +58,3 @@ class ModelsTests(TestCase):
         self.assertEqual(driver.username, username)
         self.assertTrue(driver.check_password(password))
         self.assertEqual(driver.license_number, license_number)
-
