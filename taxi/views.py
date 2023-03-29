@@ -45,9 +45,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
-        username_ = self.request.GET.get("username", "")
+        name = self.request.GET.get("name", "")
         context["search_form"] = ManufacturerSearchForm(
-            initial={"username": username_}
+            initial={"name": name}
         )
         return context
 
