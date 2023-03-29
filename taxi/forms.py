@@ -6,6 +6,14 @@ from django.core.exceptions import ValidationError
 from taxi.models import Car, Driver
 
 
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+    )
+
+
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
@@ -15,6 +23,14 @@ class CarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = "__all__"
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+    )
 
 
 class DriverCreationForm(UserCreationForm):
@@ -37,6 +53,14 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
     def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
+
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+    )
 
 
 def validate_license_number(

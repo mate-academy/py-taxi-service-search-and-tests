@@ -1,15 +1,21 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
+    <h1 class="text-center">
       Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
     </h1>
 
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input type="submit" class="btn-primary" value="Search">
+
+  </form>
+
+  <br>
+
     {% if driver_list %}
-    <table class="table">
+    <table class="table table-striped">
       <tr>
         <th>ID</th>
         <th>Username</th>
@@ -31,4 +37,7 @@
     {% else %}
       <p>There are no drivers in the service.</p>
     {% endif %}
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary">
+        Create
+    </a>
 {% endblock %}
