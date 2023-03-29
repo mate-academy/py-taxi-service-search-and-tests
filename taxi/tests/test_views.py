@@ -15,7 +15,10 @@ class CarTest(TestCase):
         self.client.force_login(self.user)
 
     def test_form_should_return_cars(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test_country")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="test_country"
+        )
 
         Car.objects.create(
             model="test model",
@@ -30,7 +33,10 @@ class CarTest(TestCase):
         self.assertEqual(list(response.context["car_list"]), list(cars))
 
     def test_should_return_current_car(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test_country")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="test_country"
+        )
 
         car = Car.objects.create(
             id=55,
@@ -38,7 +44,10 @@ class CarTest(TestCase):
             manufacturer=manufacturer,
         )
 
-        response = self.client.get(reverse("taxi:car-detail", kwargs={"pk": 55}))
+        response = self.client.get(reverse(
+            "taxi:car-detail",
+            kwargs={"pk": 55})
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/car_detail.html")
@@ -49,14 +58,16 @@ class DriverTest(TestCase):
     def setUp(self):
         user = get_user_model().objects.create_user(
             username="tset",
-            password=f"test12345",
+            password="test12345",
         )
 
         self.client.force_login(user)
 
     def test_form_should_return_drivers(self):
         get_user_model().objects.create_user(
-            username="tset1", license_number=f"test12345", password="test12345"
+            username="tset1",
+            license_number="test12345",
+            password="test12345"
         )
 
         response = self.client.get(reverse("taxi:driver-list"))
@@ -68,10 +79,16 @@ class DriverTest(TestCase):
 
     def test_should_return_current_driver(self):
         driver = get_user_model().objects.create_user(
-            id="55", username="tset1", license_number=f"test12345", password="test12345"
+            id="55",
+            username="tset1",
+            license_number="test12345",
+            password="test12345"
         )
 
-        response = self.client.get(reverse("taxi:driver-detail", kwargs={"pk": 55}))
+        response = self.client.get(reverse(
+            "taxi:driver-detail",
+            kwargs={"pk": 55})
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_detail.html")

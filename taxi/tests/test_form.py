@@ -16,9 +16,15 @@ class TestForm(TestCase):
         self.client.force_login(self.user)
 
     def test_car_should_search_by_name(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test_country")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="test_country"
+        )
 
-        car = Car.objects.create(model="test", manufacturer=manufacturer)
+        Car.objects.create(
+            model="test",
+            manufacturer=manufacturer
+        )
         cars = Car.objects.all()
         response = self.client.get(reverse("taxi:car-list") + "?model=test")
 
@@ -32,15 +38,22 @@ class TestForm(TestCase):
         )
         drivers = Driver.objects.all()
 
-        response = self.client.get(reverse("taxi:driver-list") + "?username=test")
+        response = self.client.get(
+            reverse("taxi:driver-list") + "?username=test"
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_list.html")
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
     def test_manufacturer_should_search_by_name(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test_country")
+        Manufacturer.objects.create(
+            name="test",
+            country="test_country"
+        )
         manufacturers = Manufacturer.objects.all()
-        response = self.client.get(reverse("taxi:manufacturer-list") + "?name=test")
+        response = self.client.get(
+            reverse("taxi:manufacturer-list") + "?name=test"
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")

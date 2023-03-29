@@ -43,7 +43,10 @@ class TestCreateAndDeleteModels(TestCase):
         self.assertNotEqual(before_post, after_post)
 
     def test_should_create_car(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test_country")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="test_country"
+        )
         before_post = Car.objects.all()
 
         self.client.post(
@@ -54,4 +57,3 @@ class TestCreateAndDeleteModels(TestCase):
         after_post = Car.objects.all()
 
         self.assertNotEqual(before_post, after_post)
-
