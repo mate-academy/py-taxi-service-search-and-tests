@@ -49,7 +49,9 @@ class PrivateManufacturerTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(len(response.context["manufacturer_list"]), len(manufacturers))
+        self.assertEqual(
+            len(response.context["manufacturer_list"]), len(manufacturers)
+        )
 
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
