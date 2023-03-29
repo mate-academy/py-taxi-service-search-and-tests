@@ -6,3 +6,10 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.button{
+    background: none;
+    border: none;
+    height: 40px;
+    width: 40px;
+}

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -7,6 +9,10 @@
       Create
     </a>
   </h1>
+  <form action="" method="get" class="form-inline">
+    {{ manufacturer_search|crispy }}
+    <input type="image" id="image" alt="Submit" src="/static/image/searching.png" class="button">
+  </form>
 
   {% if manufacturer_list %}
     <table class="table">
