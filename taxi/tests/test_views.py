@@ -53,4 +53,3 @@ class PrivateViewTests(TestCase):
 
         for test in tests:
             self.assertEqual(test.status_code, 200)
-
