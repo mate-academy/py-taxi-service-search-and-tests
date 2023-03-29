@@ -6,9 +6,26 @@
     <h2>Dynamic content</h2>
     <p>The Taxi service has the following record counts:</p>
     <ul>
-        <li><strong>Cars:</strong> {{ num_cars }}</li>
-        <li><strong>Drivers:</strong> {{ num_drivers }}</li>
-        <li><strong>Manufacturers:</strong> {{ num_manufacturers }}</li>
+        <li>
+          <strong>Cars:</strong> {{ num_cars }}................................
+          <a href="{% url 'taxi:car-list' %}" class="btn btn-outline-secondary alert-link">
+          Cars detailed
+          </a>
+        </li>
+        <br>
+        <li>
+          <strong>Drivers:</strong> {{ num_drivers }}..........................
+          <a href="{% url 'taxi:driver-list' %}" class="btn btn-outline-secondary alert-link">
+          Drivers detailed
+          </a>
+        </li>
+        <br>
+        <li>
+          <strong>Manufacturers:</strong> {{ num_manufacturers }}..........
+          <a href="{% url 'taxi:manufacturer-list' %}" class="btn btn-outline-secondary alert-link">
+          Manufacturers detailed
+          </a>
+        </li>
     </ul>
 
     <p>You have visited this page
