@@ -19,7 +19,12 @@ class FormTests(TestCase):
 
     def test_driver_creation_form_with_invalid_license_number(self):
         invalid_licence_numbers = [
-            "ABC1234", "BC12346", "12345678", "ABCDEFGH", "aBC12346", "ABC1234q"
+            "ABC1234",
+            "BC12346",
+            "12345678",
+            "ABCDEFGH",
+            "aBC12346",
+            "ABC1234q"
         ]
         for licence_number in invalid_licence_numbers:
             form_data = {
