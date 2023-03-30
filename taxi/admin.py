@@ -18,6 +18,7 @@ class DriverAdmin(UserAdmin):
                         "first_name",
                         "last_name",
                         "license_number",
+                        "is_staff",
                     )
                 },
             ),
