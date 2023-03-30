@@ -5,15 +5,8 @@ from django.urls import reverse
 from taxi.models import Car, Manufacturer
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
-MANUFACTURER_URL_WITH_SEARCHING_BY_NAME = reverse(
-    "taxi:manufacturer-list"
-) + "?name=b"
 CAR_URL = reverse("taxi:car-list")
-CAR_URL_WITH_SEARCHING_BY_MODEL = reverse("taxi:car-list") + "?model=mi"
 DRIVER_URL = reverse("taxi:driver-list")
-DRIVER_URL_WITH_SEARCHING_BY_USERNAME = reverse(
-    "taxi:driver-list"
-) + "?username=an"
 
 
 class PublicManufacturerTests(TestCase):
@@ -54,7 +47,7 @@ class PrivateManufacturerTests(TestCase):
         manufacturer_queryset = Manufacturer.objects.filter(
             name__icontains="b"
         )
-        response = self.client.get(MANUFACTURER_URL_WITH_SEARCHING_BY_NAME)
+        response = self.client.get(MANUFACTURER_URL + "?name=b")
 
         self.assertEqual(
             list(
@@ -108,7 +101,7 @@ class PrivateCarTests(TestCase):
 
     def test_retrieve_cars_after_searching_by_model(self):
         cars_queryset = Car.objects.filter(model__icontains="mi")
-        response = self.client.get(CAR_URL_WITH_SEARCHING_BY_MODEL)
+        response = self.client.get(CAR_URL + "?model=mi")
 
         self.assertEqual(
             list(response.context["car_list"]), list(cars_queryset)
@@ -185,7 +178,7 @@ class PrivateDriverTests(TestCase):
         drivers_queryset = get_user_model().objects.filter(
             username__icontains="an"
         )
-        response = self.client.get(DRIVER_URL_WITH_SEARCHING_BY_USERNAME)
+        response = self.client.get(DRIVER_URL + "?username=an")
 
         self.assertEqual(
             list(response.context["driver_list"]), list(drivers_queryset)
