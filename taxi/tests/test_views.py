@@ -5,11 +5,8 @@ from django.urls import reverse
 from taxi.models import Manufacturer, Car, Driver
 
 MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
-MANUFACTURERS_URL_WITH_SEARCH = reverse("taxi:manufacturer-list") + "?name=F"
 CARS_URL = reverse("taxi:car-list")
-CARS_URL_WITH_SEARCH = reverse("taxi:car-list") + "?model=V"
 DRIVERS_URL = reverse("taxi:driver-list")
-DRIVERS_URL_WITH_SEARCH = reverse("taxi:driver-list") + "?username=1"
 
 
 class PublicManufacturerTests(TestCase):
@@ -56,7 +53,7 @@ class PrivateManufacturerTests(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_retrieve_manufacturer_with_search(self):
-        response = self.client.get(MANUFACTURERS_URL_WITH_SEARCH)
+        response = self.client.get(MANUFACTURERS_URL + "?name=F")
 
         manufacturers = Manufacturer.objects.filter(name__icontains="F")
 
@@ -98,7 +95,7 @@ class PrivateCarTests(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_retrieve_car_with_search(self):
-        response = self.client.get(CARS_URL_WITH_SEARCH)
+        response = self.client.get(CARS_URL + "?model=V")
 
         cars = Car.objects.filter(model__icontains="V")
 
@@ -136,7 +133,7 @@ class PrivateDriverTests(TestCase):
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_retrieve_driver_with_search(self):
-        response = self.client.get(DRIVERS_URL_WITH_SEARCH)
+        response = self.client.get(DRIVERS_URL + "?username=1")
 
         drivers = Driver.objects.filter(username__icontains="1")
 

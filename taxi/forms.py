@@ -26,7 +26,7 @@ class DriverCreationForm(UserCreationForm):
             "last_name",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
+    def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
