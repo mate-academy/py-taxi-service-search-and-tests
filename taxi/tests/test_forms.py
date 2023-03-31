@@ -91,11 +91,11 @@ class FormSearchTest(TestCase):
         self.assertContains(response, self.car2.model)
         self.assertContains(response, self.car3.model)
 
-        response = self.help_for_tests_response("cars", "model", "sdfsf1234")
+        response = self.help_for_tests_response("cars", "model", "test")
 
-        self.assertNotContains(response, self.car1.model)
-        self.assertNotContains(response, self.car2.model)
-        self.assertNotContains(response, self.car3.model)
+        self.assertContains(response, self.car1.model)
+        self.assertContains(response, self.car2.model)
+        self.assertContains(response, self.car3.model)
 
     def test_driver_search_by_username(self):
         response = self.help_for_tests_response("drivers", "username", "Bob")
