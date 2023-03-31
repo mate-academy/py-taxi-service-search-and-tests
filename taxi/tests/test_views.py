@@ -105,9 +105,10 @@ class CarListViewTestCase(TestCase):
 
     def test_get_queryset_with_query_params(self):
         self.client.login(username="testuser", password="testpass")
-        response = self.client.get(reverse("taxi:car-list"), {"model": "Camry"})
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": "Camry"}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["object_list"]), 1)
         self.assertEqual(response.context["object_list"][0], self.car1)
-
-
