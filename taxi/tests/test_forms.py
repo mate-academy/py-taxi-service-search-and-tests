@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from taxi.forms import DriverLicenseUpdateForm
 from taxi.models import Car, Manufacturer
-# from taxi.views
 
 
 class LicenseNumberTests(TestCase):
