@@ -6,8 +6,8 @@ from taxi.models import Car, Manufacturer
 
 
 class FormTests(TestCase):
-    def test_driver_creation_form(self):
-        form_data = {
+    def setUp(self) -> None:
+        self.form_data = {
             "username": "new_user",
             "password1": "user123test",
             "password2": "user123test",
@@ -15,9 +15,18 @@ class FormTests(TestCase):
             "last_name": "test last_name",
             "license_number": "ASD12345"
         }
-        form = DriverCreationForm(data=form_data)
+
+    def test_driver_creation_form(self):
+        form = DriverCreationForm(data=self.form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        self.assertEqual(form.cleaned_data, self.form_data)
+
+    def test_driver_creation_form_with_invalid_data(self):
+        self.form_data["license_number"] = "asd12345"
+
+        form = DriverCreationForm(data=self.form_data)
+
+        self.assertFalse(form.is_valid())
 
 
 class FormSearchTest(TestCase):
