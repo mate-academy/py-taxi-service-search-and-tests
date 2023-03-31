@@ -74,7 +74,6 @@ class PrivateListsViewTests(TestCase):
         )
         self.client.force_login(self.driver)
 
-        # Create some test data
         get_user_model().objects.create(
             username="johndoe",
             first_name="John",
