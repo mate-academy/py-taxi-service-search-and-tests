@@ -39,7 +39,8 @@ class PrivateManufacturerTest(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_manufacturer_search(self):
-        Manufacturer.objects.create(name="BMW", country="test2").filter(
+        Manufacturer.objects.create(name="BMW", country="test2")
+        filtered_manufacturer = Manufacturer.objects.filter(
             name__icontains="B"
         )
         response = self.client.get(MANUFACTURER_URL + "?name=B")
@@ -85,7 +86,8 @@ class PrivateCarTests(TestCase):
             name="test3",
             country="test4"
         )
-        Car.objects.create(model="Yaris", manufacturer=manufacturer).filter(
+        Car.objects.create(model="Yaris", manufacturer=manufacturer)
+        filtered_cars = Car.objects.filter(
             model__icontains="Y"
         )
         response = self.client.get(CAR_URL + "?model=Y")
@@ -134,7 +136,8 @@ class PrivateDriverTests(TestCase):
             username="user",
             password="test1",
             license_number="AAA12345"
-        ).filter(username__icontains="u")
+        )
+        filtered_drivers = Driver.objects.filter(username__icontains="u")
         response = self.client.get(DRIVER_URL + "?username=u")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_list.html")
