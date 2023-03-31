@@ -10,10 +10,7 @@
     </a>
   </h1>
 
-  <form action="" method="get" class="form-inline">
-  {{ name_search_form|crispy }}
-    <input type="submit" value="Search">
-  </form>
+  {% include "search_form.html" with search_form=name_search_form %}
 
   {% if manufacturer_list %}
     <table class="table">

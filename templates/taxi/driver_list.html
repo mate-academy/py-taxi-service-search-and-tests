@@ -10,10 +10,7 @@
       </a>
     </h1>
 
-  <form action="" method="get" class="form-inline">
-  {{ driver_search_form|crispy }}
-    <input type="submit" value="Search">
-  </form>
+  {% include "search_form.html" with search_form=driver_search_form %}
 
     {% if driver_list %}
     <table class="table">
