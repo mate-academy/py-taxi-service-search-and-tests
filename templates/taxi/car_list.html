@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
+
+
+{% block search_form %}
+  {% include "includes/search_form.html" %}
+{% endblock %}
 
 {% block content %}
   <h1>
     Car list
-    <form action="" method="get">
-      {{ search_form|crispy }}
-      <input type="submit">
-    </form>
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>

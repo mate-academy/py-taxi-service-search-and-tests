@@ -91,3 +91,25 @@ class CarListViewTestCase(TestCase):
         self.assertContains(response, "Camry")
         self.assertContains(response, "Civic")
         self.assertIsInstance(response.context["search_form"], CarSearchForm)
+
+    def test_get_queryset_without_query_params(self):
+        # Test that the method returns all cars without any filters applied
+        self.client.login(username="testuser", password="testpass")
+        response = self.client.get(reverse("taxi:car-list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["object_list"]), 2)
+        self.assertQuerysetEqual(
+            response.context["object_list"],
+            [self.car1, self.car2],
+            ordered=False
+        )
+
+    def test_get_queryset_with_query_params(self):
+        # Test that the method filters cars based on query params
+        self.client.login(username="testuser", password="testpass")
+        response = self.client.get(reverse("taxi:car-list"), {"model": "Camry"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["object_list"]), 1)
+        self.assertEqual(response.context["object_list"][0], self.car1)
+
+
