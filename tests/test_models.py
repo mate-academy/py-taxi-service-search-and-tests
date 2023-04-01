@@ -12,7 +12,7 @@ class ModelTests(TestCase):
             first_name="John",
             last_name="Smith",
             password="admin.admin",
-            license_number="ADC43567"
+            license_number="ADC43567",
         )
 
         self.manufacturer = Manufacturer.objects.create(
@@ -29,7 +29,7 @@ class ModelTests(TestCase):
     def test_manufacturer_str(self) -> None:
         self.assertEqual(
             str(self.manufacturer),
-            f"{self.manufacturer.name} {self.manufacturer.country}"
+            f"{self.manufacturer.name} {self.manufacturer.country}",
         )
 
     def test_car_str(self) -> None:
@@ -40,7 +40,7 @@ class ModelTests(TestCase):
             str(self.driver),
             f"{self.driver.username}"
             f" ({self.driver.first_name}"
-            f" {self.driver.last_name})"
+            f" {self.driver.last_name})",
         )
 
     def test_driver_get_absolute_url(self) -> None:

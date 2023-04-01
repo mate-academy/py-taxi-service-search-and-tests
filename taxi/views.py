@@ -46,9 +46,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["manufacturer_search_form"] = ManufacturerSearchForm(initial={
-            "name": name
-        })
+        context["manufacturer_search_form"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
         return context
 
     def get_queryset(self):
@@ -56,9 +56,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         form = ManufacturerSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
 
@@ -87,18 +85,14 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
-        context["car_search_form"] = CarSearchForm(initial={
-            "model": model
-        })
+        context["car_search_form"] = CarSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self):
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
-            return self.queryset.filter(
-                model__icontains=form.cleaned_data["model"]
-            )
+            return self.queryset.filter(model__icontains=form.cleaned_data["model"])
 
         return self.queryset
 
@@ -132,9 +126,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["driver_search_form"] = DriverSearchForm(initial={
-            "username": username
-        })
+        context["driver_search_form"] = DriverSearchForm(initial={"username": username})
         return context
 
     def get_queryset(self):

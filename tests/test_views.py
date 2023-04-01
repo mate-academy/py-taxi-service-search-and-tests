@@ -5,20 +5,32 @@ from django.urls import reverse
 from taxi.models import Manufacturer, Car
 
 URL_LIST = [
-    {'manufacturer_list_view_url': reverse('taxi:manufacturer-list')},
-    {'manufacturer_create_view_url': reverse('taxi:manufacturer-create')},
-    {'manufacturer_update_view_url': reverse('taxi:manufacturer-update', args=[1])},
-    {'manufacturer_delete_view_url': reverse('taxi:manufacturer-delete', args=[1])},
-    {'car_list_view_url': reverse('taxi:car-list')},
-    {'car_detail_view_url': reverse('taxi:car-detail', args=[1])},
-    {'car_create_view_url': reverse('taxi:car-create')},
-    {'car_update_view_url': reverse('taxi:car-update', args=[1])},
-    {'car_delete_view_url': reverse('taxi:car-delete', args=[1])},
-    {'driver_list_view_url': reverse('taxi:driver-list')},
-    {'driver_detail_view_url': reverse('taxi:driver-detail', args=[1])},
-    {'driver_create_view_url': reverse('taxi:driver-create')},
-    {'driver_update_license_view_url': reverse('taxi:driver-update', args=[1])},
-    {'driver_delete_view_url': reverse('taxi:driver-delete', args=[1])},
+    {"manufacturer_list_view_url": reverse("taxi:manufacturer-list")},
+    {"manufacturer_create_view_url": reverse("taxi:manufacturer-create")},
+    {"car_list_view_url": reverse("taxi:car-list")},
+    {"car_detail_view_url": reverse("taxi:car-detail", args=[1])},
+    {"car_create_view_url": reverse("taxi:car-create")},
+    {"car_update_view_url": reverse("taxi:car-update", args=[1])},
+    {"car_delete_view_url": reverse("taxi:car-delete", args=[1])},
+    {"driver_list_view_url": reverse("taxi:driver-list")},
+    {"driver_detail_view_url": reverse("taxi:driver-detail", args=[1])},
+    {"driver_create_view_url": reverse("taxi:driver-create")},
+    {"driver_delete_view_url": reverse("taxi:driver-delete", args=[1])},
+    {
+        "manufacturer_update_view_url": reverse(
+            "taxi:manufacturer-update", args=[1]
+        )
+    },
+    {
+        "driver_update_license_view_url": reverse(
+            "taxi:driver-update", args=[1]
+        )
+    },
+    {
+        "manufacturer_delete_view_url": reverse(
+            "taxi:manufacturer-delete", args=[1]
+        )
+    },
 ]
 
 
@@ -30,7 +42,8 @@ class PublicViewsTest(TestCase):
                 self.assertNotEqual(
                     response.status_code,
                     200,
-                    f"Access to this {name} view is denied for logged out users"
+                    f"Access to this {name} view is"
+                    f" denied for logged out users",
                 )
 
 
@@ -58,7 +71,8 @@ class PrivateViewsTest(TestCase):
                 self.assertEqual(
                     response.status_code,
                     200,
-                    f"Access to this {name} view is should not denied for logged in users"
+                    f"Access to this {name} view is should"
+                    f" not denied for logged in users",
                 )
 
 
@@ -82,8 +96,13 @@ class PrivateDriverCreateTest(TestCase):
         }
 
         self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = get_user_model().objects.get(username=form_data["username"])
+        new_driver = get_user_model().objects.get(
+            username=form_data["username"]
+        )
 
         self.assertEqual(new_driver.first_name, form_data["first_name"])
         self.assertEqual(new_driver.last_name, form_data["last_name"])
-        self.assertEqual(new_driver.license_number, form_data["license_number"])
+        self.assertEqual(
+            new_driver.license_number,
+            form_data["license_number"]
+        )
