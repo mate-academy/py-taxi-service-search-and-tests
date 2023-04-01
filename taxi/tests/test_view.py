@@ -13,15 +13,21 @@ CAR_URL = reverse("taxi:car-list")
 CAR_SEARCH_URL = reverse("taxi:car-list") + "?model=a"
 
 
-class PublicIndexTest(TestCase):
-    def test_login_required(self):
+class PublicPagesTest(TestCase):
+    def test_index_login_required(self):
         res = self.client.get(INDEX_URL)
         self.assertNotEqual(res.status_code, 200)
 
-
-class PublicManufacturerTest(TestCase):
-    def test_login_required(self):
+    def test_manufacturers_login_required(self):
         res = self.client.get(MANUFACTURERS_URL)
+        self.assertNotEqual(res.status_code, 200)
+
+    def test_drivers_login_required(self):
+        res = self.client.get(DRIVERS_URL)
+        self.assertNotEqual(res.status_code, 200)
+
+    def test_cars_login_required(self):
+        res = self.client.get(CAR_URL)
         self.assertNotEqual(res.status_code, 200)
 
 
@@ -47,12 +53,6 @@ class PrivateManufacturerTest(TestCase):
             list(manufacturers)
         )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
-
-
-class PublicDriverTest(TestCase):
-    def test_login_required(self):
-        res = self.client.get(DRIVERS_URL)
-        self.assertNotEqual(res.status_code, 200)
 
 
 class PrivateDriverTest(TestCase):
@@ -89,12 +89,6 @@ class PrivateDriverTest(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(res, "taxi/driver_list.html")
-
-
-class PublicCarTest(TestCase):
-    def test_login_required(self):
-        res = self.client.get(CAR_URL)
-        self.assertNotEqual(res.status_code, 200)
 
 
 class PrivateCarTest(TestCase):
