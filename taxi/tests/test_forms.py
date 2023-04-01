@@ -22,10 +22,21 @@ class FormTests(TestCase):
         self.assertEqual(form.cleaned_data, self.form_data)
 
     def test_driver_creation_form_with_invalid_data(self):
-        self.form_data["license_number"] = "asd12345"
-
+        get_user_model().objects.create_user(
+            username="new_user",
+            password="user123test",
+            license_number="ASD12345"
+        )
         form = DriverCreationForm(data=self.form_data)
+        self.assertFalse(form.is_valid())
 
+        self.form_data["password1"] = "user"
+        form = DriverCreationForm(data=self.form_data)
+        self.assertFalse(form.is_valid())
+
+        self.form_data["password1"] = "user123test"
+        self.form_data["license_number"] = "asd12345"
+        form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
 
 
