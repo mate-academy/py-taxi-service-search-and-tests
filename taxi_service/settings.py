@@ -91,6 +91,7 @@ DATABASES = {
     }
 }
 
+GDAL_LIBRARY_PATH = "/usr/local/opt/gdal/lib/libgdal.dylib"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
