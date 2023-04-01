@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from taxi.forms import DriverLicenseUpdateForm, DriverCreationForm
 from taxi.models import Manufacturer, Car
 
 
@@ -49,21 +51,7 @@ class ModelsTests(TestCase):
         self.assertTrue(driver.check_password(password))
         self.assertEqual(driver.license_number, license_number)
 
-    def test_length_and_correct_value_for_driver_license(self):
-        username = "test"
-        password = "test12345"
-        license_number = "LOL12345"
-        driver = get_user_model().objects.create_user(
-            username=username,
-            password=password,
-            license_number=license_number
-        )
-        self.assertEqual(
-            len(driver.license_number),
-            8
-        )
-        self.assertTrue(
-            driver.license_number[:3].isalpha()
-            and driver.license_number[:3].isupper()
-        )
-        self.assertTrue(driver.license_number[3:].isdigit())
+    def test_driver_license_update_form_with_invalid_license_number(self):
+        form_data = {"license_number": "12345LOL"}
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertFalse(form.is_valid())
