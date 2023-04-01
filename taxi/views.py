@@ -92,7 +92,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
-            return self.queryset.filter(model__icontains=form.cleaned_data["model"])
+            return self.queryset.filter(
+                model__icontains=form.cleaned_data["model"]
+            )
 
         return self.queryset
 
@@ -126,7 +128,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["driver_search_form"] = DriverSearchForm(initial={"username": username})
+        context["driver_search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self):
