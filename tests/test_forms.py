@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 
 from taxi.forms import (
     DriverUsernameSearchForm,
     ManufacturerNameSearchForm,
-    CarModelSearchForm
+    CarModelSearchForm, DriverCreationForm, DriverLicenseUpdateForm
 )
 from taxi.models import Driver, Manufacturer, Car
 
@@ -106,3 +108,73 @@ class CarListSearchTest(TestCase):
         self.assertIn(self.car2, queryset)
         self.assertNotIn(self.car3, queryset)
         self.assertNotIn(self.car4, queryset)
+
+
+class DriverLicenseValidationTest(TestCase):
+    def setUp(self) -> None:
+        self.form_data = {
+            "username": "test_driver",
+            "password1": "12345t4335et552REre",
+            "password2": "12345t4335et552REre",
+            "first_name": "first",
+            "last_name": "last_name",
+            "license_number": ""
+        }
+
+    def test_driver_form_license_number_too_long(self):
+
+        self.form_data["license_number"] = "ABC123456"
+        error = "License number should consist of 8 characters"
+
+        form = DriverCreationForm(data=self.form_data)
+        form1 = DriverLicenseUpdateForm(data=self.form_data)
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            [error],
+            form.errors.get("license_number")
+        )
+
+        self.assertFalse(form1.is_valid())
+        self.assertEqual(
+            [error],
+            form1.errors.get("license_number")
+        )
+
+    def test_driver_form_license_number_not_uppercase(self):
+
+        self.form_data["license_number"] = "Abc12345"
+        error = "First 3 characters should be uppercase letters"
+
+        form = DriverCreationForm(data=self.form_data)
+        form1 = DriverLicenseUpdateForm(data=self.form_data)
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual([error], form.errors.get("license_number"))
+
+        self.assertFalse(form1.is_valid())
+        self.assertEqual([error], form1.errors.get("license_number"))
+
+    def test_driver_form_license_number_not_digit(self):
+
+        self.form_data["license_number"] = "ABC123b5"
+        error = "Last 5 characters should be digits"
+
+        form = DriverCreationForm(data=self.form_data)
+        form1 = DriverLicenseUpdateForm(data=self.form_data)
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual([error], form.errors.get("license_number"))
+
+        self.assertFalse(form1.is_valid())
+        self.assertEqual([error], form1.errors.get("license_number"))
+
+    def test_driver_form_license_number_correct(self):
+
+        self.form_data["license_number"] = "ABC12345"
+
+        form = DriverCreationForm(data=self.form_data)
+        form1 = DriverLicenseUpdateForm(data=self.form_data)
+
+        self.assertTrue(form.is_valid())
+        self.assertTrue(form1.is_valid())
