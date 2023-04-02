@@ -27,7 +27,13 @@ class TestForms(TestCase):
             "password2": "pastest456",
         }
 
-        license_numbers = [" ", "yt23727", "TY567777", "********", "GHTghghgh", "1", "ATB6765T"]
+        license_numbers = [" ",
+                           "yt23727",
+                           "TY567777",
+                           "********",
+                           "GHTghghgh",
+                           "1",
+                           "ATB6765T"]
 
         for license_num in license_numbers:
             form_data["license_number"] = license_num
