@@ -15,9 +15,10 @@ class TestModels(TestCase):
                                        password="pastest",
                                        first_name="Test",
                                        last_name="Testovich")
-        self.assertEqual(str(driver), f"{driver.username}"
-                                      f" ({driver.first_name}"
-                                      f" {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_car_str(self) -> None:
         manu = Manufacturer.objects.create(name="Citroen",

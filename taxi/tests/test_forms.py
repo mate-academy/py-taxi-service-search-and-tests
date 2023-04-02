@@ -25,9 +25,11 @@ class TestForms(TestCase):
             "last_name": "Testovich",
             "password1": "pastest456",
             "password2": "pastest456",
-            "license_number": "AT912345",
         }
-        form = DriverCreationForm(form_data)
 
-        self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form_data)
+        license_numbers = [" ", "yt23727", "TY567777", "********", "GHTghghgh", "1", "ATB6765T"]
+
+        for license_num in license_numbers:
+            form_data["license_number"] = license_num
+            form = DriverCreationForm(form_data)
+            self.assertFalse(form.is_valid())
