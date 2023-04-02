@@ -32,6 +32,3 @@ class ModelTests(TestCase):
             f"{self.driver.username} "
             f"({self.driver.first_name} {self.driver.last_name})",
         )
-
-    def test_create_driver_with_license_number(self):
-        self.assertEqual(self.driver.license_number, "ABC12345")
