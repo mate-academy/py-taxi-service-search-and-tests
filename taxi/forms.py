@@ -50,3 +50,42 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(
+        label="",
+        required=False,
+        max_length=150,
+        widget=forms.TextInput(attrs={"placeholder": "Username"}),
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        if not get_user_model().objects.filter(username=username).exists():
+            raise ValidationError("User with this username does not exist")
+        return username
+
+
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(
+        label="",
+        required=False,
+        max_length=150,
+        widget=forms.TextInput(attrs={"placeholder": "Enter model"}),
+    )
+
+    def clean_model(self):
+        model = self.cleaned_data["model"]
+        if not Car.objects.filter(model=model).exists():
+            raise ValidationError("Car with this model does not exist")
+        return model
+
+
+class ManufacturerNameSearchForm(forms.Form):
+    manufacturer = forms.CharField(
+        label="",
+        required=False,
+        max_length=150,
+        widget=forms.TextInput(attrs={"placeholder": "Name"}),
+    )
