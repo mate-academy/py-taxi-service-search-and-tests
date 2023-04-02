@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
 from taxi.models import Car
 
 
@@ -19,6 +19,26 @@ class DriverCreationFormTest(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+    def test_invalid_license_number(self):
+
+        invalid_license_numbers = [
+            "AB12345",
+            "ABC1234",
+            "12345678",
+            "abc12345",
+            "ABC1234X",
+            "ABC1234+",
+            "A1234B56",
+            "ABCD1234",
+            "ABC12345X",
+        ]
+
+        for invalid_license_number in invalid_license_numbers:
+            form_data = {"license_number": invalid_license_number}
+            form = DriverLicenseUpdateForm(data=form_data)
+            self.assertFalse(form.is_valid())
+            self.assertIn("license_number", form.errors)
 
 
 class SearchFeatureTest(TestCase):
