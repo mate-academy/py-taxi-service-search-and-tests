@@ -66,7 +66,10 @@ class PrivateManufacturerTest(TestCase):
         response = self.client.get(MANUFACTURER_URL + "?manufacturer=to")
         manufacturers = Manufacturer.objects.filter(name__icontains="to")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(list(response.context["manufacturer_list"]), list(manufacturers))
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
 
 
 class PrivateDriverTest(TestCase):
@@ -92,7 +95,9 @@ class PrivateDriverTest(TestCase):
 
     def test_retrieve_drivers_with_search(self):
         response = self.client.get(DRIVER_URL + "?username=testuser2")
-        drivers = get_user_model().objects.filter(username__icontains="testuser2")
+        drivers = get_user_model().objects.filter(
+            username__icontains="testuser2"
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
