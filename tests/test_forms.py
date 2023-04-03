@@ -110,7 +110,8 @@ class DriverSearchFormTestCase(TestCase):
 
     def test_form_field_widget(self):
         form = DriverSearchForm()
-        self.assertIn("placeholder=\"Search by username\"", str(form["username"]))
+        self.assertIn("placeholder=\'Search by username\'",
+                      str(form["username"]))
 
 
 class CarSearchFormTests(TestCase):
@@ -130,7 +131,7 @@ class CarSearchFormTests(TestCase):
 
     def test_form_field_widget(self):
         form = CarSearchForm()
-        self.assertIn("placeholder=\"Search by model\"", str(form["model"]))
+        self.assertIn("placeholder=\'Search by model\'", str(form["model"]))
 
 
 class ManufacturerSearchFormTest(TestCase):
@@ -150,4 +151,4 @@ class ManufacturerSearchFormTest(TestCase):
 
     def test_form_field_widget(self):
         form = ManufacturerSearchForm()
-        self.assertIn("placeholder=\"Search by name\"", str(form["name"]))
+        self.assertIn("placeholder=\'Search by name\'", str(form["name"]))

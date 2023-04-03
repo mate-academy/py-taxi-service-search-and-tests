@@ -22,7 +22,8 @@ class AdminTestCase(TestCase):
     def test_driver_license_number_field(self):
         self.assertEqual(self.driver.license_number, "ABC12345")
         self.driver.save()
-        self.assertTrue(get_user_model().objects.filter(license_number="ABC12345").exists())
+        self.assertTrue(get_user_model().objects.filter(
+            license_number="ABC12345").exists())
 
     def test_car_custom_fields(self):
         self.assertEqual(self.car.model, "Camry")
