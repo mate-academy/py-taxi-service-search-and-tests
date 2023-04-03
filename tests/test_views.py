@@ -54,13 +54,15 @@ class PrivateCarTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_car(self):
-        manufacturer = Manufacturer.objects.create(
+        self.manufacturer = Manufacturer.objects.create(
             name="test3",
             country="test4"
         )
-        Car.objects.create(model="test1", manufacturer=manufacturer)
-        Car.objects.create(model="test2", manufacturer=manufacturer)
+
+    def test_retrieve_car(self):
+
+        Car.objects.create(model="test1", manufacturer=self.manufacturer)
+        Car.objects.create(model="test2", manufacturer=self.manufacturer)
 
         cars = Car.objects.all()
         response = self.client.get(CAR_URL)
