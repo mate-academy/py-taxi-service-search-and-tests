@@ -40,7 +40,9 @@ class DriverLicenseTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_all_wrong_license_number(self):
-        form = DriverLicenseUpdateForm(data={"license_number": "TEsq12342Fsa4"})
+        form = DriverLicenseUpdateForm(
+            data={"license_number": "TEsq12342Fsa4"}
+        )
         self.assertFalse(form.is_valid())
 
 
