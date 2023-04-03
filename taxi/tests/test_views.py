@@ -72,19 +72,32 @@ class PrivateManufacturerTest(TestCase):
 
 class ToggleAssignToCarViewTest(TestCase):
     def setUp(self):
-        self.driver = Driver.objects.create_user(username='testuser', password='TES12345')
-        self.manufacturer = Manufacturer.objects.create(name='Test Manufacturer')
-        self.car = Car.objects.create(model='Test car model', manufacturer=self.manufacturer)
+        self.driver = Driver.objects.create_user(
+            username="testuser",
+            password="TES12345"
+        )
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test Manufacturer"
+        )
+        self.car = Car.objects.create(
+            model="Test car model",
+            manufacturer=self.manufacturer
+        )
 
     def test_toggle_assign_to_car(self):
-        self.assertFalse(self.car in self.driver.cars.all())
+        self.assertFalse(
+            self.car in self.driver.cars.all()
+        )
 
         self.client.force_login(self.driver)
-        response = self.client.post(reverse('taxi:toggle-car-assign', args=[self.car.id]))
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[self.car.id])
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(self.car in self.driver.cars.all())
 
-        response = self.client.post(reverse('taxi:toggle-car-assign', args=[self.car.id]))
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[self.car.id])
+        )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(self.car in self.driver.cars.all())
-
