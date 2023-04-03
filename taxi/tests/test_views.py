@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -148,27 +149,33 @@ class ToggleAssignToCarTestCase(TestCase):
         self.assertTrue(self.car not in self.driver.cars.all())
 
 
-class TestSearchForms(TestCase):
-    def test_driver_search_form_valid_data(self):
-        form = DriverSearchForm(data={"username": "test"})
-        self.assertTrue(form.is_valid())
+class ModelsSearchListViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user = Driver.objects.create(
+            username="test12",
+            first_name="Test",
+            last_name="Test",
+            license_number="LOL12345"
+        )
+        self.client.force_login(self.user)
 
-    def test_driver_search_form_no_data(self):
-        form = DriverSearchForm(data={})
-        self.assertTrue(form.is_valid())
+    def test_search_driver_form(self):
+        response = self.client.get(DRIVER_URL + "?username=Test")
 
-    def test_car_search_form_valid_data(self):
-        form = CarSearchForm(data={"model": "Toyota"})
-        self.assertTrue(form.is_valid())
+        self.assertContains(response, "Test")
+        self.assertNotContains(response, "Example")
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
 
-    def test_car_search_form_no_data(self):
-        form = CarSearchForm(data={})
-        self.assertTrue(form.is_valid())
+    def test_search_car_form(self):
+        response = self.client.get(CAR_URL + "?model=Camry")
 
-    def test_manufacturer_search_form_valid_data(self):
-        form = ManufacturerSearchForm(data={"name": "Toyota"})
-        self.assertTrue(form.is_valid())
+        self.assertContains(response, "Camry")
+        self.assertNotContains(response, "Prado")
+        self.assertTemplateUsed(response, "taxi/car_list.html")
 
-    def test_manufacturer_search_form_no_data(self):
-        form = ManufacturerSearchForm(data={})
-        self.assertTrue(form.is_valid())
+    def test_search_manufacturer_form(self):
+        response = self.client.get(MANUFACTURER_URL + "?name=Toyota")
+
+        self.assertContains(response, "Toyota")
+        self.assertNotContains(response, "Jeep")
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
