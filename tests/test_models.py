@@ -24,25 +24,23 @@ class ModelsTest(TestCase):
         )
 
     def test_manufacturer_str(self):
-        manufacturer = self.manufacturer
         self.assertEqual(
-            str(manufacturer),
-            f"{manufacturer.name} {manufacturer.country}"
+            str(self.manufacturer),
+            f"{self.manufacturer.name} {self.manufacturer.country}"
         )
 
     def test_driver_str(self):
-        driver = self.driver
         self.assertEqual(
-            str(driver),
-            f"{driver.username} ({driver.first_name} {driver.last_name})"
+            str(self.driver),
+            f"{self.driver.username} "
+            f"({self.driver.first_name} "
+            f"{self.driver.last_name})"
         )
 
     def test_create_driver_with_license_number(self):
-        driver = self.driver
-        self.assertEqual(driver.username, "Test")
-        self.assertTrue(driver.check_password("test1234"))
-        self.assertEqual(driver.license_number, "ABC12345")
+        self.assertEqual(self.driver.username, "Test")
+        self.assertTrue(self.driver.check_password("test1234"))
+        self.assertEqual(self.driver.license_number, "ABC12345")
 
     def test_car_str(self):
-        car = self.car
-        self.assertEqual(str(self.car), car.model)
+        self.assertEqual(str(self.car), self.car.model)
