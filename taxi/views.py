@@ -39,7 +39,7 @@ def index(request):
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
-    # context_object_name = "manufacturer_list"  # by default, it will the same name
+    # context_object_name = "manufacturer_list"  # by default, the same
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
@@ -88,7 +88,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(model__icontains=form.cleaned_data["model"])
+            return queryset.filter(
+                model__icontains=form.cleaned_data["model"]
+            )
         return queryset
 
 
@@ -127,7 +129,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         form = DriverSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return queryset
 
 
