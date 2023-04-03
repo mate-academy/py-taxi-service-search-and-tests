@@ -17,7 +17,7 @@ class PublicManufacturer(TestCase):
 
 
 class PrivateManufacturer(TestCase):
-    def SetUp(self) -> None:
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test",
             password="password1234"
@@ -61,7 +61,7 @@ class PublicCar(TestCase):
 
 
 class PrivateCar(TestCase):
-    def SetUp(self):
+    def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="test",
             password="password1234"
@@ -114,7 +114,7 @@ class PublicDriver(TestCase):
 
 
 class PrivateDriver(TestCase):
-    def SetUp(self):
+    def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="test",
             password="password1234"
@@ -122,8 +122,8 @@ class PrivateDriver(TestCase):
 
         self.client.force_login(self.user)
 
-        Driver.objects.create(username="driver_1")
-        Driver.objects.create(username="driver_2")
+        Driver.objects.create(username="driver_1", license_number="BOB09631")
+        Driver.objects.create(username="driver_2", license_number="BIL39231")
 
     def test_retrieve_drivers(self):
         response = self.client.get(DRIVER_URL)
@@ -139,8 +139,8 @@ class PrivateDriver(TestCase):
     def test_driver_search(self):
         response = self.client.get(DRIVER_URL + "?username=driver_1")
 
-        driver = Car.objects.filter(
-            model__icontains="driver_1"
+        driver = Driver.objects.filter(
+            username__icontains="driver_1"
         )
 
         self.assertEqual(response.status_code, 200)
@@ -154,5 +154,3 @@ class PrivateDriver(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_detail.html")
-
-
