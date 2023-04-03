@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, ManufacturerSearchForm, CarSearchForm, DriverSearchForm
+from taxi.models import Manufacturer
 
 
 class FormsTests(TestCase):
@@ -16,3 +17,27 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, data)
+
+
+class ManufacturerSearchFormTest(TestCase):
+    def test_search_by_name(self):
+        form_data = {"name": "Honda"}
+        form = ManufacturerSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["name"], "Honda")
+
+
+class CarSearchFormTest(TestCase):
+    def test_search_by_model(self):
+        form_data = {"model": "Accord"}
+        form = CarSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["model"], "Accord")
+
+
+class DriverSearchFormTest(TestCase):
+    def test_search_by_username(self):
+        form_data = {"username": "test"}
+        form = DriverSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["username"], "test")
