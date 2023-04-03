@@ -166,3 +166,35 @@ class PrivateViewDriverTest(TestCase):
         self.assertEqual(
             list(result.context["driver_list"]), list(driver_list)
         )
+
+
+class PrivateAssignDriverTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="12345",
+            first_name="first_test",
+            last_name="last_test",
+        )
+        self.client.force_login(user=self.user)
+
+    def test_assign_user(self):
+        manufacturer = Manufacturer.objects.create(
+            name="TestName", country="TestCountry"
+        )
+        car = Car.objects.create(model="TestModel", manufacturer=manufacturer)
+        self.client.get(reverse("taxi:toggle-car-assign", args=[car.id]))
+        self.assertIn(self.user, car.drivers.all())
+
+    def test_delete_user(self):
+        manufacturer = Manufacturer.objects.create(
+            name="TestName", country="TestCountry"
+        )
+        car = Car.objects.create(
+            model="TestModel",
+            manufacturer=manufacturer,
+        )
+        car.drivers.add(self.user)
+        car.save()
+        self.client.get(reverse("taxi:toggle-car-assign", args=[car.id]))
+        self.assertNotIn(self.user, car.drivers.all())
