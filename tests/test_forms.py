@@ -1,5 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 
 from taxi.forms import (DriverSearchForm,
                         CarSearchForm,
@@ -7,26 +9,6 @@ from taxi.forms import (DriverSearchForm,
                         DriverCreationForm,
                         DriverLicenseUpdateForm,
                         validate_license_number)
-
-
-class TestSearchForms(TestCase):
-    def test_driver_search_form(self):
-        form_data = {"username": "johndoe"}
-        form = DriverSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
-
-    def test_car_search_form(self):
-        form_data = {"model": "Toyota Camry"}
-        form = CarSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
-
-    def test_manufacturer_search_form(self):
-        form_data = {"name": "Toyota"}
-        form = ManufacturerSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
 
 
 class DriverCreationFormTestCase(TestCase):
@@ -109,3 +91,63 @@ class ValidateLicenseNumberTest(TestCase):
         invalid_license_number = "ABC12D45"
         with self.assertRaises(ValidationError):
             validate_license_number(invalid_license_number)
+
+
+class DriverSearchFormTestCase(TestCase):
+    def test_valid_form(self):
+        form = DriverSearchForm(data={"username": "john"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, {"username": "john"})
+
+    def test_empty_form(self):
+        form = DriverSearchForm({})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, {"username": ""})
+
+    def test_invalid_form(self):
+        form = DriverSearchForm({"username": "a" * 256})  # exceeds max_length
+        self.assertFalse(form.is_valid())
+
+    def test_form_field_widget(self):
+        form = DriverSearchForm()
+        self.assertIn("placeholder=\"Search by username\"", str(form["username"]))
+
+
+class CarSearchFormTests(TestCase):
+    def test_valid_form(self):
+        form = CarSearchForm(data={"model": "Mustang"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, {"model": "Mustang"})
+
+    def test_empty_form(self):
+        form = CarSearchForm(data={})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, {"model": ""})
+
+    def test_invalid_form(self):
+        form = CarSearchForm({"model": "a" * 256})  # exceeds max_length
+        self.assertFalse(form.is_valid())
+
+    def test_form_field_widget(self):
+        form = CarSearchForm()
+        self.assertIn("placeholder=\"Search by model\"", str(form["model"]))
+
+
+class ManufacturerSearchFormTest(TestCase):
+    def test_valid_form(self):
+        form = ManufacturerSearchForm(data={"name": "Ford"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, {"name": "Ford"})
+
+    def test_empty_form(self):
+        form = ManufacturerSearchForm(data={})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, {"name": ""})
+
+    def test_invalid_form(self):
+        form = ManufacturerSearchForm(data={"name": "A" * 256})
+        self.assertFalse(form.is_valid())
+
+    def test_form_field_widget(self):
+        form = ManufacturerSearchForm()
+        self.assertIn("placeholder=\"Search by name\"", str(form["name"]))
