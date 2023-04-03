@@ -40,6 +40,21 @@ class DriverLicenseUpdateFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
 
+    def test_clean_license_number_too_long(self):
+        form = DriverLicenseUpdateForm(data={"license_number": "abc12345A"})
+        self.assertFalse(form.is_valid())
+        self.assertIn("license_number", form.errors)
+
+    def test_clean_license_number_invalid_first_three_chars(self):
+        form = DriverLicenseUpdateForm(data={"license_number": "Abc12345"})
+        self.assertFalse(form.is_valid())
+        self.assertIn("license_number", form.errors)
+
+    def test_clean_license_number_invalid_last_five_chars(self):
+        form = DriverLicenseUpdateForm(data={"license_number": "ABC1234A"})
+        self.assertFalse(form.is_valid())
+        self.assertIn("license_number", form.errors)
+
 
 class DriverSearchFormTest(TestCase):
     def test_form_fields(self):

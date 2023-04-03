@@ -6,7 +6,6 @@ from taxi.forms import DriverLicenseUpdateForm, DriverCreationForm
 from taxi.models import Manufacturer, Car
 
 
-# Create your tests here.
 class ModelsTests(TestCase):
 
     def test_manufacturer_str(self):
