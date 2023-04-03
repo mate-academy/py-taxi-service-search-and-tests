@@ -10,10 +10,11 @@
     </h1>
   <form action="" method="get" class="form-inline">
     {{ search_form|crispy }}
-    <input class="btn-primary" type="submit" name="submit" value="go">
+    <input class="btn-primary" type="submit" value="go">
   </form>
 
     {% if driver_list %}
+
     <table class="table">
       <tr>
         <th>ID</th>
