@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer
+from taxi.models import Manufacturer, Driver, Car
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
@@ -65,3 +65,22 @@ class PrivateManufacturerTest(TestCase):
         self.assertEqual(new_user.first_name, form_data["first_name"])
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
+
+
+class ToggleAssignToCarViewTest(TestCase):
+    def setUp(self):
+        self.driver = Driver.objects.create_user(username="user", password="TES12345")
+        self.manufacturer = Manufacturer.objects.create(name="Test Manufacturer")
+        self.car = Car.objects.create(model="Test car model", manufacturer=self.manufacturer)
+
+    def test_toggle_assign_to_car(self):
+        self.assertFalse(self.car in self.driver.cars.all())
+
+        self.client.force_login(self.driver)
+        response = self.client.post(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(self.car in self.driver.cars.all())
+
+        response = self.client.post(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(self.car in self.driver.cars.all())
