@@ -19,7 +19,7 @@ class PublicDriverTest(TestCase):
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
         self.driver = get_user_model().objects.create_user(
-            "Danylo",
+            "Den",
             "Driver123"
         )
         self.client.force_login(self.driver)
@@ -44,6 +44,28 @@ class PrivateDriverTest(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_search_driver(self):
+        Driver.objects.create(
+            username="Test",
+            password="1876545",
+            license_number="LOM54572"
+        )
+        Driver.objects.create(
+            username="Test2",
+            password="987654325",
+            license_number="GOI76545"
+        )
+        response = self.client.get(DRIVER_URL)
+        drivers = Driver.objects.filter(username__icontains="e")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
+        for driver in response.context["driver_list"]:
+            self.assertIn("e", driver.username)
 
 
 class PublicManufacturerTest(TestCase):
@@ -72,6 +94,25 @@ class PrivateManufacturerTest(TestCase):
         )
         response = self.client.get(MANUFACTURER_URL)
         manufacturers = Manufacturer.objects.filter(name__icontains="d")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+    def test_search_manufacturer(self):
+        Manufacturer.objects.create(
+            name="Cadillac",
+            country="USA"
+        )
+        Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        response = self.client.get(MANUFACTURER_URL)
+        manufacturers = Manufacturer.objects.filter(name__icontains="l")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -111,6 +152,29 @@ class PrivateCarTest(TestCase):
         )
         response = self.client.get(CAR_URL)
         cars = Car.objects.filter(model__icontains="M")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(cars)
+        )
+        self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_search_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Renault",
+            country="French"
+        )
+        Car.objects.create(
+            model="Vauxhall",
+            manufacturer=manufacturer
+        )
+        Car.objects.create(
+            model="Nissan",
+            manufacturer=manufacturer
+        )
+        response = self.client.get(CAR_URL)
+        cars = Car.objects.filter(model__icontains="a")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
