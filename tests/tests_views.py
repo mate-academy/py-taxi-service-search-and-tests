@@ -10,15 +10,15 @@ DRIVER_URL = reverse("taxi:driver-list")
 
 
 class PublicAccessTests(TestCase):
-    def test_manufacturer_public(self) -> None:
+    def test_manufacturer(self) -> None:
         response = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(response.status_code, 200)
 
-    def test_car_public(self) -> None:
+    def test_car(self) -> None:
         response = self.client.get(CAR_URL)
         self.assertNotEqual(response.status_code, 200)
 
-    def test_driver_public(self) -> None:
+    def test_driver(self) -> None:
         response = self.client.get(DRIVER_URL)
         self.assertNotEqual(response.status_code, 200)
 
@@ -47,7 +47,7 @@ class PrivateAccessTests(TestCase):
             model="RAV4", manufacturer=self.manufacturer2
         )
 
-    def test_manufacturers_privat(self) -> None:
+    def test_manufacturers(self) -> None:
         response = self.client.get(MANUFACTURER_URL)
         manufacturers = list(Manufacturer.objects.all())
         self.assertEqual(response.status_code, 200)
@@ -57,7 +57,7 @@ class PrivateAccessTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
-    def test_cars_privat(self):
+    def test_cars(self):
         response = self.client.get(CAR_URL)
         cars = list(Car.objects.all())
         self.assertEqual(response.status_code, 200)
@@ -67,7 +67,7 @@ class PrivateAccessTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
-    def test_drivers_privat(self):
+    def test_drivers(self):
         drivers = list(get_user_model().objects.all())
         response = self.client.get(DRIVER_URL)
         self.assertEqual(response.status_code, 200)
