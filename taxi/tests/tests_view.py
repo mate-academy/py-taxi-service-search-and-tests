@@ -49,16 +49,24 @@ class PrivateManufacturerTest(TestCase):
             expected_queryset
         )
 
-    def test_driver_creation(self):
-        form_data = {
-            "username": "driver_user",
-            "password1": "drive12345",
-            "password2": "drive12345",
-            "first_name": "Driver First",
-            "last_name": "Driver Last",
-            "license_number": "TES12345",
-        }
 
+class PrivateDriverTests(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            "test",
+            "password123"
+        )
+        self.client.force_login(self.user)
+
+    def test_create_driver(self):
+        form_data = {
+            "username": "test_username",
+            "license_number": "AAA12345",
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
+            "password1": "test_password",
+            "password2": "test_password"
+        }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
         new_user = get_user_model().objects.get(username=form_data["username"])
 
@@ -69,18 +77,32 @@ class PrivateManufacturerTest(TestCase):
 
 class ToggleAssignToCarViewTest(TestCase):
     def setUp(self):
-        self.driver = Driver.objects.create_user(username="user", password="TES12345")
-        self.manufacturer = Manufacturer.objects.create(name="Test Manufacturer")
-        self.car = Car.objects.create(model="Test car model", manufacturer=self.manufacturer)
+        self.driver = Driver.objects.create_user(
+            username="user",
+            password="TES12345"
+        )
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test Manufacturer"
+        )
+        self.car = Car.objects.create(
+            model="Test car model",
+            manufacturer=self.manufacturer
+        )
 
     def test_toggle_assign_to_car(self):
         self.assertFalse(self.car in self.driver.cars.all())
 
         self.client.force_login(self.driver)
-        response = self.client.post(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        response = self.client.post(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.id])
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(self.car in self.driver.cars.all())
 
-        response = self.client.post(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        response = self.client.post(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.id])
+        )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(self.car in self.driver.cars.all())
