@@ -41,7 +41,7 @@ class AdminCarTest(TestCase):
     def test_car_filter_by_manufacturer(self):
         response = self.client.get(
             reverse("admin:taxi_car_changelist"),
-            {"manufacturer__id__exact": self.manufacturer2.id},
+            {"manufacturer__id": self.manufacturer2.id},
         )
         self.assertContains(response, self.second_car.model)
         self.assertNotContains(response, self.first_car.model)
