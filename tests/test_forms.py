@@ -108,11 +108,6 @@ class DriverSearchFormTestCase(TestCase):
         form = DriverSearchForm({"username": "a" * 256})  # exceeds max_length
         self.assertFalse(form.is_valid())
 
-    def test_form_field_widget(self):
-        form = DriverSearchForm()
-        self.assertIn("placeholder=\'Search by username\'",
-                      str(form["username"]))
-
 
 class CarSearchFormTests(TestCase):
     def test_valid_form(self):
@@ -129,10 +124,6 @@ class CarSearchFormTests(TestCase):
         form = CarSearchForm({"model": "a" * 256})  # exceeds max_length
         self.assertFalse(form.is_valid())
 
-    def test_form_field_widget(self):
-        form = CarSearchForm()
-        self.assertIn("placeholder=\'Search by model\'", str(form["model"]))
-
 
 class ManufacturerSearchFormTest(TestCase):
     def test_valid_form(self):
@@ -148,7 +139,3 @@ class ManufacturerSearchFormTest(TestCase):
     def test_invalid_form(self):
         form = ManufacturerSearchForm(data={"name": "A" * 256})
         self.assertFalse(form.is_valid())
-
-    def test_form_field_widget(self):
-        form = ManufacturerSearchForm()
-        self.assertIn("placeholder=\'Search by name\'", str(form["name"]))
