@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
-from django.urls import reverse
+from django.contrib.auth.models import User
+from django.test import TestCase, Client
+from django.urls import reverse, reverse_lazy
 
 from taxi.models import Manufacturer, Car, Driver
 
@@ -60,7 +61,6 @@ class PrivateCarTests(TestCase):
         )
 
     def test_retrieve_car(self):
-
         Car.objects.create(model="test1", manufacturer=self.manufacturer)
         Car.objects.create(model="test2", manufacturer=self.manufacturer)
 
@@ -110,3 +110,50 @@ class PrivateDriverTests(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+
+class ToggleAssignToCarViewTestCase(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test1",
+            password="test2",
+        )
+        self.client.force_login(self.user)
+        self.manufacturer = Manufacturer.objects.create(name="test")
+
+    def test_toggle_assign_to_car_driver_is_assigned(self):
+        self.driver = Driver.objects.create(
+            username="testuser",
+            password="testpass",
+            license_number="AAA23425"
+        )
+
+        self.car = Car.objects.create(
+            model="Test Car",
+            manufacturer=self.manufacturer
+        )
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.pk]
+        ))
+        self.car.drivers.set([self.driver])
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(self.car in self.driver.cars.all())
+
+    def test_toggle_assign_to_car_driver_is_not_assigned(self):
+        self.driver = Driver.objects.create(
+            username="testuser",
+            password="testpass",
+            license_number="AAA23425"
+        )
+        self.car = Car.objects.create(
+            model="Test Car",
+            manufacturer=self.manufacturer
+        )
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.pk]
+        )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(self.car in self.driver.cars.all())

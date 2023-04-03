@@ -4,12 +4,12 @@ from taxi.forms import (
     DriverCreationForm,
     ManufacturerSearchForm,
     CarSearchForm,
-    DriverSearchForm
+    DriverSearchForm, DriverLicenseUpdateForm
 )
 from taxi.models import Manufacturer
 
 
-class FormsTests(TestCase):
+class DriverCreateFormTests(TestCase):
     def test_driver_create(self):
         data = {
             "username": "test1",
@@ -22,6 +22,41 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, data)
+
+
+class DriverLicenseUpdateFormTestCase(TestCase):
+    def test_valid_license_number(self):
+        form_data = {"license_number": "ABC12345"}
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["license_number"], "ABC12345")
+
+    def test_invalid_license_number_length(self):
+        form_data = {"license_number": "ABC123"}
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn(
+            "License number should consist of 8 characters",
+            form.errors["license_number"]
+        )
+
+    def test_invalid_license_number_first_three_chars_not_uppercase(self):
+        form_data = {"license_number": "abc12345"}
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn(
+            "First 3 characters should be uppercase letters",
+            form.errors["license_number"]
+        )
+
+    def test_invalid_license_number_last_five_chars_not_digits(self):
+        form_data = {"license_number": "ABC1X345"}
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn(
+            "Last 5 characters should be digits",
+            form.errors["license_number"]
+        )
 
 
 class ManufacturerSearchFormTest(TestCase):
