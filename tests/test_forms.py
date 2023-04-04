@@ -4,28 +4,23 @@ from taxi.forms import DriverCreationForm
 
 
 class FormsTests(TestCase):
-    def test_driver_creation_form_with_valid_data(self):
-        form_data = {
-            "username": "new_user",
-            "password1": "user123test",
-            "password2": "user123test",
-            "first_name": "test name",
-            "last_name": "test last",
-            "license_number": "ABC12345"
+    def setUp(self):
+        self.driver_data = {
+            "username": "testdriver",
+            "password1": "testpassword123",
+            "password2": "testpassword123",
+            "first_name": "testfirst",
+            "last_name": "testlast",
+            "license_number": "TTT11111"
         }
-        form = DriverCreationForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
 
-    def test_driver_creation_form_with_invalid_data(self):
-        form_data = {
-            "username": "new_user",
-            "password1": "user123test",
-            "password2": "user123test",
-            "first_name": "Test_First",
-            "last_name": "Test_Last",
-            "license_number": "license",
-        }
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form.data)
+    def test_create_license_number_is_valid(self):
+        driver_form = DriverCreationForm(self.driver_data)
+        self.assertTrue(driver_form.is_valid())
+        self.assertEqual(driver_form.cleaned_data, self.driver_data)
+
+    def test_create_license_number_is_not_valid(self):
+        wrong_license = self.driver_data.copy()
+        wrong_license["license_number"] = "1T2E3S4T"
+        driver_form = DriverCreationForm(wrong_license)
+        self.assertFalse(driver_form.is_valid())

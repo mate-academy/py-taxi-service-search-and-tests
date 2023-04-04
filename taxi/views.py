@@ -102,7 +102,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         if form.is_valid():
             return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
+                model__icontains=form.cleaned_data["model"]
             )
         return queryset
 
@@ -147,7 +147,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         if form.is_valid():
             return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
+                username__icontains=form.cleaned_data["username"]
             )
         return queryset
 
