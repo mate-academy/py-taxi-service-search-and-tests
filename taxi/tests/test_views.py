@@ -1,11 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
-from taxi.forms import SearchForm
-from taxi.models import Manufacturer
+from taxi.models import Manufacturer, Car
 from taxi.urls import urlpatterns
-from taxi.views import ManufacturerListView
+from taxi.views import toggle_assign_to_car
 
 
 class PublicAccessTest(TestCase):
@@ -68,3 +67,25 @@ class ManufacturerListViewTest(TestCase):
             list(response_empty_criteria.context.get("manufacturer_list")),
             list(non_filtered_manufacturer_list),
         )
+
+
+class ToggleAssignToCarTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="TestUser", password="123456789"
+        )
+        self.client.force_login(self.user)
+        self.manufacturer = Manufacturer.objects.create(
+            name="VolksWagen", country="Germany"
+        )
+        self.car = Car.objects.create(
+            model="Golf", manufacturer=self.manufacturer
+        )
+
+    def test_toggle_assign_to_car_driver_in_car_drivers(self):
+        self.client.get(reverse("taxi:toggle-car-assign", args=([1])))
+        self.assertIn(self.user, self.car.drivers.all())
+
+    def test_toggle_assign_to_car_driver_not_in_car_drivers(self):
+        self.client.get(reverse("taxi:toggle-car-assign", args=([1])))
+        self.assertIn(self.user, self.car.drivers.all())
