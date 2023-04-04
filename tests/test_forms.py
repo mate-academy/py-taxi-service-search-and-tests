@@ -17,3 +17,18 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+    def test_driver_creation_form_with_no_data(self):
+        form = DriverCreationForm(data={})
+        self.assertFalse(form.is_valid())
+
+    def test_driver_createion_form_with_invalid_data(self):
+        form_data = {
+            "username": "test" * 200,
+            "password1": "1234",
+            "password2": "1245",
+            "license_number": "CBa12"
+        }
+
+        form = DriverCreationForm(data=form_data)
+        self.assertFalse(form.is_valid())
