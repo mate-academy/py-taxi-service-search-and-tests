@@ -2,40 +2,42 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.forms import DriverSearchForm, CarSearchForm
 from taxi.models import Manufacturer, Car, Driver
 
 
 class TestCarSearch(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(
+        self.user = get_user_model().objects.create_user(
+            username="test_driver1",
+            first_name="test_first_name1",
+            last_name="test_last_name1",
+            password="test_password1",
+            license_number="BAC12345",
+        )
+        self.client.force_login(self.user)
+        manufacturer = Manufacturer.objects.create(
             name="test_manufacturer", country="test_country"
         )
-        self.car1 = Car.objects.create(
-            model="car1_test", manufacturer=self.manufacturer
+        Car.objects.create(
+            model="car1_test", manufacturer=manufacturer
         )
-        self.car2 = Car.objects.create(
-            model="car2_test", manufacturer=self.manufacturer
+        Car.objects.create(
+            model="car2_test", manufacturer=manufacturer
         )
-        self.car3 = Car.objects.create(
-            model="CAR1_test", manufacturer=self.manufacturer
-        )
-
-    def test_search_car_by_model(self):
-        form_data = {"model": "car1"}
-        form = CarSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        queryset = Car.objects.filter(
-            model__icontains=form.cleaned_data["model"]
+        Car.objects.create(
+            model="car3_test", manufacturer=manufacturer
         )
 
-        self.assertIn(self.car1, queryset)
-        self.assertNotIn(self.car2, queryset)
-        self.assertIn(self.car3, queryset)
+    def test_car_search(self):
+        response = self.client.get(reverse("taxi:car-list") + "?model=r1")
+        cars = Car.objects.filter(model__icontains="car1")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context["car_list"]), list(cars))
 
 
 class TestDriverSearch(TestCase):
     def setUp(self):
+
         self.driver1 = Driver.objects.create(
             username="test_driver1",
             first_name="test_first_name1",
@@ -51,24 +53,21 @@ class TestDriverSearch(TestCase):
             license_number="BBC12345",
         )
         self.driver3 = Driver.objects.create(
-            username="test_DRIVER1",
+            username="test_driver3",
             first_name="test_first_name3",
             last_name="test_last_name3",
             password="test_password3",
             license_number="BBB12345",
         )
+        self.client.force_login(self.driver1)
 
     def test_search_driver_by_username(self):
-        form_data = {"username": "driver1"}
-        form = DriverSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        queryset = get_user_model().objects.filter(
-            username__icontains=form.cleaned_data["username"]
+        response = self.client.get(reverse("taxi:driver-list") + "?username=ver3")
+        drivers = get_user_model().objects.filter(
+            username__icontains="driver3"
         )
-
-        self.assertIn(self.driver1, queryset)
-        self.assertNotIn(self.driver2, queryset)
-        self.assertIn(self.driver3, queryset)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
 
 class PublicManufacturerTest(TestCase):
