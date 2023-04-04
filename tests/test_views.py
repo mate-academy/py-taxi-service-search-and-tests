@@ -107,6 +107,11 @@ class PrivateCarTests(TestCase):
             list(response.context["car_list"]), list(car_filtered)
         )
 
+    def test_car_was_assigned(self):
+        url = reverse("taxi:toggle-car-assign", args=[self.car_1.id])
+        self.client.get(url)
+        self.assertTrue(self.car_1 in self.user.cars.all())
+
 
 class PrivateDriverTests(TestCase):
     def setUp(self) -> None:
