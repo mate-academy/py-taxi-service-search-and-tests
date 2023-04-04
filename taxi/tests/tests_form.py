@@ -1,20 +1,29 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from taxi.forms import DriverCreationForm
-from taxi.models import Manufacturer, Car
 
 
 class FormsTests(TestCase):
-    def test_driver_creation_form_with_license_first_last_name_is_valid(self):
-        form_data = {
-            "username": "new_user",
-            "password1": "user123test",
-            "password2": "user123test",
-            "first_name": "Test first",
-            "last_name": "Test last",
-            "license_number": "TES12345"
+    def test_driver_creation_form_with_license_first_last(self):
+        valid_form_data = {
+            "username": "driver_user",
+            "password1": "drive12345",
+            "password2": "drive12345",
+            "first_name": "Driver First",
+            "last_name": "Driver Last",
+            "license_number": "TES12345",
         }
-        form = DriverCreationForm(data=form_data)
+        form = DriverCreationForm(data=valid_form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        self.assertEqual(form.cleaned_data, valid_form_data)
+
+        invalid_license_numbers = [
+            {"license_number": "tes12345"},
+            {"license_number": "TES123"},
+            {"license_number": "123TES"},
+            {"license_number": "TES123456"},
+            {"license_number": "TES1234A"},
+        ]
+        for data in invalid_license_numbers:
+            form = DriverCreationForm(data={**valid_form_data, **data})
+            self.assertFalse(form.is_valid())
