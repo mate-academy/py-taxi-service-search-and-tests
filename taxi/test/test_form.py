@@ -14,7 +14,7 @@ class TestForm(TestCase):
 
         self.client.force_login(self.user)
 
-    def test_car_should_search_by_name(self):
+    def test_search_form_for_car(self):
         manufacturer = Manufacturer.objects.create(
             name="test",
             country="test_country"
@@ -31,7 +31,7 @@ class TestForm(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
         self.assertEqual(list(response.context["car_list"]), list(cars))
 
-    def test_driver_should_search_by_username(self):
+    def test_search_form_for_driver(self):
         Driver.objects.create(
             username="test", password="test12345", license_number="ABC12345"
         )
@@ -44,7 +44,7 @@ class TestForm(TestCase):
         self.assertTemplateUsed(response, "taxi/driver_list.html")
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
-    def test_manufacturer_should_search_by_name(self):
+    def test_search_form_for_manufacturer(self):
         Manufacturer.objects.create(
             name="test",
             country="test_country"
