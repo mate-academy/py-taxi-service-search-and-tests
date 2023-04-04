@@ -63,27 +63,30 @@ class SearchFeatureTest(TestCase):
         )
 
     def test_car_search_feature(self):
-        model_query = ["test", "test2", "avavababab"]
-        for model in model_query:
-            response = self.client.get(
-                reverse("taxi:car-list"),
-                data={"model": model}
-            )
-            self.assertEqual(response.status_code, 200)
-            self.assertQuerysetEqual(
-                response.context["car_list"],
-                Car.objects.filter(model__icontains=model),
-            )
+        manufacturer = Manufacturer.objects.create(name="Nissan", country="Japan")
+        Car.objects.create(model="Jiguli", manufacturer=manufacturer)
+        Car.objects.create(model="Nivy", manufacturer=manufacturer)
+        model_query = "Nivy"
+
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            data={"model": model_query}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains=model_query),
+        )
 
     def test_manufacturer_search_feature(self):
-        name_query = ["test", "test2", "avavababab", "test3"]
-        for name in name_query:
-            response = self.client.get(
-                reverse("taxi:manufacturer-list"),
-                data={"name": name}
-            )
-            self.assertEqual(response.status_code, 200)
-            self.assertQuerysetEqual(
-                response.context["manufacturer_list"],
-                Manufacturer.objects.filter(name__icontains=name),
-            )
+        Manufacturer.objects.create(name="Nissan", country="Japan")
+        name_query = "Ni"
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            data={"name": name_query}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains=name_query),
+        )

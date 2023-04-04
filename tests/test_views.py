@@ -108,3 +108,10 @@ class PrivateCarTests(TestCase):
             list(response.context["car_list"]),
             list(cars)
         )
+
+    def test_assign_user_to_car(self):
+        car = Car.objects.create(model="test1", manufacturer=self.manufacturer)
+        self.client.post(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": car.pk}),
+        )
+        self.assertTrue(self.user in car.drivers.all())
