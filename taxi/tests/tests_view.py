@@ -5,6 +5,7 @@ from django.urls import reverse
 from taxi.models import Manufacturer, Driver, Car
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
+TOGGLE_CAR_URL = reverse("taxi:toggle-car-assign")
 
 
 class PublicManufacturerTest(TestCase):
@@ -93,16 +94,9 @@ class ToggleAssignToCarViewTest(TestCase):
         self.assertFalse(self.car in self.driver.cars.all())
 
         self.client.force_login(self.driver)
-        response = self.client.post(reverse(
-            "taxi:toggle-car-assign",
-            args=[self.car.id])
-        )
+        response = self.client.post(TOGGLE_CAR_URL, args=[self.car.id])
         self.assertEqual(response.status_code, 302)
         self.assertTrue(self.car in self.driver.cars.all())
-
-        response = self.client.post(reverse(
-            "taxi:toggle-car-assign",
-            args=[self.car.id])
-        )
+        response = self.client.post(TOGGLE_CAR_URL, args=[self.car.id])
         self.assertEqual(response.status_code, 302)
         self.assertFalse(self.car in self.driver.cars.all())
