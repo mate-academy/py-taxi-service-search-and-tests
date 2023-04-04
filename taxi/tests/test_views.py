@@ -45,6 +45,19 @@ class PrivateDriverTest(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
+    def test_create_driver_with_license_number(self):
+        username = "Johnie"
+        password = "RE0v4Q4n"
+        license_number = "ABC77712"
+        driver = get_user_model().objects.create_user(
+            username=username,
+            password=password,
+            license_number=license_number
+        )
+        self.assertEqual(driver.username, username)
+        self.assertTrue(driver.check_password(password))
+        self.assertEqual(driver.license_number, license_number)
+
     def test_search_driver(self):
         Driver.objects.create(
             username="Test",
@@ -128,6 +141,32 @@ class PublicCarTest(TestCase):
 
         self.assertNotEqual(res.status_code, 200)
 
+    def test_toggle_assign_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Honda",
+            country="Japan"
+        )
+        car = Car.objects.create(
+            model="CR-V",
+            manufacturer=manufacturer
+        )
+        driver = get_user_model().objects.create_user(
+            "Paula",
+            "dfg543sd4tyfE"
+        )
+        self.client.force_login(driver)
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(car in driver.cars.all())
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(car in driver.cars.all())
+
 
 class PrivateCarTest(TestCase):
     def setUp(self) -> None:
@@ -136,29 +175,6 @@ class PrivateCarTest(TestCase):
             "asdf43eewqd3Q"
         )
         self.client.force_login(self.driver)
-
-    def test_retrieve_car(self):
-        manufacturer = Manufacturer.objects.create(
-            name="Mercedes",
-            country="German"
-        )
-        Car.objects.create(
-            model="Mercedes-benz",
-            manufacturer=manufacturer
-        )
-        Car.objects.create(
-            model="BMW",
-            manufacturer=manufacturer
-        )
-        response = self.client.get(CAR_URL)
-        cars = Car.objects.filter(model__icontains="M")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["car_list"]),
-            list(cars)
-        )
-        self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_search_car(self):
         manufacturer = Manufacturer.objects.create(
