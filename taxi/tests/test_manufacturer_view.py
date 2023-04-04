@@ -19,7 +19,7 @@ class PrivateManufacturerTests(TestCase):
             username="test",
             password="test123456",
             first_name="test",
-            last_name="test"
+            last_name="test",
         )
         self.client.force_login(self.user)
 

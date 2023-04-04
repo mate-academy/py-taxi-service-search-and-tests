@@ -8,16 +8,14 @@ class AdminTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-            username="admin",
-            email="admin@example.com",
-            password="admin123"
+            username="admin", email="admin@example.com", password="admin123"
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create(
             first_name="John",
             last_name="Doe",
             email="john@example.com",
-            license_number="ABC12345"
+            license_number="ABC12345",
         )
 
     def test_driver_license_on_admin_page(self):

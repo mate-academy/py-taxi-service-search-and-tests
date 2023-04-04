@@ -13,7 +13,7 @@ class FormTests(TestCase):
             "password2": "user123test",
             "first_name": "test name",
             "last_name": "test last_name",
-            "license_number": "ASD12345"
+            "license_number": "ASD12345",
         }
 
     def test_driver_creation_form(self):
@@ -25,7 +25,7 @@ class FormTests(TestCase):
         get_user_model().objects.create_user(
             username="new_user",
             password="user123test",
-            license_number="ASD12345"
+            license_number="ASD12345",
         )
         form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
@@ -46,47 +46,35 @@ class FormSearchTest(TestCase):
             username="test1",
             password="test123456",
             first_name="test",
-            last_name="test"
+            last_name="test",
         )
         self.client.force_login(self.user)
         self.manufacturer1 = Manufacturer.objects.create(
-            name="Audi",
-            country="German"
+            name="Audi", country="German"
         )
         self.manufacturer2 = Manufacturer.objects.create(
-            name="BMW",
-            country="German"
+            name="BMW", country="German"
         )
         self.manufacturer3 = Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan"
+            name="Toyota", country="Japan"
         )
         self.car1 = Car.objects.create(
-            model="test1",
-            manufacturer=self.manufacturer1
+            model="test1", manufacturer=self.manufacturer1
         )
         self.car2 = Car.objects.create(
-            model="test2",
-            manufacturer=self.manufacturer2
+            model="test2", manufacturer=self.manufacturer2
         )
         self.car3 = Car.objects.create(
-            model="test3",
-            manufacturer=self.manufacturer3
+            model="test3", manufacturer=self.manufacturer3
         )
         self.driver1 = get_user_model().objects.create_user(
-            username="Bob",
-            password="test12345",
-            license_number="ASD12345"
+            username="Bob", password="test12345", license_number="ASD12345"
         )
         self.driver2 = get_user_model().objects.create_user(
-            username="Den",
-            password="test12345",
-            license_number="TES12345"
+            username="Den", password="test12345", license_number="TES12345"
         )
         self.driver3 = get_user_model().objects.create_user(
-            username="Odin",
-            password="test12345",
-            license_number="LOL12345"
+            username="Odin", password="test12345", license_number="LOL12345"
         )
 
     def test_car_search_by_model(self):
@@ -122,9 +110,7 @@ class FormSearchTest(TestCase):
         self.assertContains(response, self.driver3.username)
 
         response = self.help_for_tests_response(
-            "drivers",
-            "username",
-            "asda13"
+            "drivers", "username", "asda13"
         )
 
         self.assertNotContains(response, self.driver1.username)
@@ -147,9 +133,7 @@ class FormSearchTest(TestCase):
         self.assertContains(response, self.manufacturer3.name)
 
         response = self.help_for_tests_response(
-            "manufacturers",
-            "name",
-            "2fsdfsf"
+            "manufacturers", "name", "2fsdfsf"
         )
 
         self.assertNotContains(response, self.manufacturer1.name)

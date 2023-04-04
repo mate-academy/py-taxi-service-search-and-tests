@@ -26,7 +26,7 @@ class PrivateDriverTests(TestCase):
             username="test",
             password="test123456",
             first_name="test",
-            last_name="test"
+            last_name="test",
         )
         self.client.force_login(self.user)
 
@@ -47,7 +47,7 @@ class PrivateDriverTests(TestCase):
             "password2": "user123test",
             "first_name": "test name",
             "last_name": "test last_name",
-            "license_number": "ASD12345"
+            "license_number": "ASD12345",
         }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
         new_user = get_user_model().objects.get(username=form_data["username"])
