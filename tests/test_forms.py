@@ -31,7 +31,7 @@ class DriverLicenseTest(TestCase):
         expected_fields = ["license_number"]
         self.assertSequenceEqual(list(form.fields), expected_fields)
 
-    def test_wrong_license_number(self):
+    def test_wrong_count_of_letters_license(self):
         form = DriverLicenseUpdateForm(data={"license_number": "TEST1234"})
         self.assertFalse(form.is_valid())
 
@@ -39,9 +39,27 @@ class DriverLicenseTest(TestCase):
         form = DriverLicenseUpdateForm(data={"license_number": "TES12345"})
         self.assertTrue(form.is_valid())
 
-    def test_all_wrong_license_number(self):
+    def test_wrong_len_license(self):
         form = DriverLicenseUpdateForm(
-            data={"license_number": "TEsq12342Fsa4"}
+            data={"license_number": "TVTS12342"}
+        )
+        self.assertFalse(form.is_valid())
+
+    def test_wrong_case_license(self):
+        form = DriverLicenseUpdateForm(
+            data={"license_number": "dfa12344"}
+        )
+        self.assertFalse(form.is_valid())
+
+    def test_numbers_in_letters_license(self):
+        form = DriverLicenseUpdateForm(
+            data={"license_number": "34212344"}
+        )
+        self.assertFalse(form.is_valid())
+
+    def test_letters_in_numbers_license(self):
+        form = DriverLicenseUpdateForm(
+            data={"license_number": "testsads"}
         )
         self.assertFalse(form.is_valid())
 
