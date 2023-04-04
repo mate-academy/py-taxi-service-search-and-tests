@@ -22,7 +22,7 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data={})
         self.assertFalse(form.is_valid())
 
-    def test_driver_createion_form_with_invalid_data(self):
+    def test_driver_creation_form_with_invalid_data(self):
         form_data = {
             "username": "test" * 200,
             "password1": "1234",
