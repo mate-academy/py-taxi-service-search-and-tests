@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
-from taxi.models import Car
+from taxi.models import Car, Manufacturer
 
 
 class DriverCreationFormTest(TestCase):
@@ -63,13 +63,27 @@ class SearchFeatureTest(TestCase):
         )
 
     def test_car_search_feature(self):
-        model_query = "test"
-        response = self.client.get(
-            reverse("taxi:car-list"),
-            data={"model": model_query}
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(
-            response.context["car_list"],
-            Car.objects.filter(model__icontains=model_query),
-        )
+        model_query = ["test", "test2", "avavababab"]
+        for model in model_query:
+            response = self.client.get(
+                reverse("taxi:car-list"),
+                data={"model": model}
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertQuerysetEqual(
+                response.context["car_list"],
+                Car.objects.filter(model__icontains=model),
+            )
+
+    def test_manufacturer_search_feature(self):
+        name_query = ["test", "test2", "avavababab", "test3"]
+        for name in name_query:
+            response = self.client.get(
+                reverse("taxi:manufacturer-list"),
+                data={"name": name}
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertQuerysetEqual(
+                response.context["manufacturer_list"],
+                Manufacturer.objects.filter(name__icontains=name),
+            )

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from django.test import TestCase, Client
 
-from taxi.models import Manufacturer
+from taxi.models import Manufacturer, Car
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 CAR_URL = reverse("taxi:car-list")
@@ -79,4 +79,32 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(
             new_driver.license_number,
             form_data["license_number"]
+        )
+
+
+class PrivateCarTests(TestCase):
+    def setUp(self) -> None:
+        self.manufacturer = Manufacturer.objects.create(
+            name="test1",
+            country="test1"
+        )
+
+        self.user = get_user_model().objects.create_user(
+            username="test1",
+            password="somestupidpass2345",
+            first_name="Test first",
+            last_name="Test last",
+            license_number="ABC12345"
+
+        )
+        self.client.force_login(self.user)
+
+    def test_retrieve_cars(self):
+        Car.objects.create(model="test1", manufacturer=self.manufacturer)
+        response = self.client.get(CAR_URL)
+        cars = Car.objects.all()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(cars)
         )
