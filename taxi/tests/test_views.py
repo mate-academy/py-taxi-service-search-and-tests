@@ -53,6 +53,17 @@ class PrivateCarTest(TestCase):
             response, "taxi/car_list.html"
         )
 
+    def test_car_detail_page(self) -> None:
+        manufacturer = Manufacturer.objects.create(
+            name="Mazda", country="Japan")
+        car = Car.objects.create(model="CX-5", manufacturer=manufacturer
+                                 )
+        response = self.client.get(reverse(
+            "taxi:car-detail", args=[car.pk])
+        )
+
+        self.assertEqual(response.status_code, 200)
+
 
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
@@ -78,6 +89,13 @@ class PrivateDriverTest(TestCase):
         self.assertEqual(
             list(response.context["driver_list"]), list(driver_list)
         )
+
+    def test_driver_detail_page(self) -> None:
+        response = self.client.get(reverse(
+            "taxi:driver-detail", args=[self.user.id])
+        )
+
+        self.assertEqual(response.status_code, 200)
 
     def test_template_for_driver_list(self) -> None:
         response = self.client.get(DRIVER_URL)
