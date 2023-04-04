@@ -113,6 +113,18 @@ class PrivateCarTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
+    def test_car_was_assigned(self):
+        Car.objects.create(
+            model="Testmodel",
+            manufacturer=self.manufacturer
+        )
+        car = Car.objects.get(model="Testmodel")
+        user = get_user_model().objects.get(username="test")
+        self.client.force_login(user)
+        address = reverse("taxi:toggle-car-assign", args=[car.id])
+        self.client.get(address)
+        self.assertTrue(car in user.cars.all())
+
 
 class PrivateDriverTests(TestCase):
     def setUp(self) -> None:
