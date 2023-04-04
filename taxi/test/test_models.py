@@ -11,7 +11,7 @@ class TestModels(TestCase):
             country="Country"
         )
 
-        self.assertEqual(str(manufacturer), f"Test Country")
+        self.assertEqual(str(manufacturer), "Test Country")
 
     def test_driver_str(self):
         driver = get_user_model().objects.create_user(
