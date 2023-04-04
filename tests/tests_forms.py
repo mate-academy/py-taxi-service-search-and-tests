@@ -2,8 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
-
+from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
 
 form_data_valid = {
     "username": "vasya.pupkin",
@@ -34,7 +33,7 @@ class DriverCreationFormTest(TestCase):
         self.assertFalse(form.is_valid())
 
 
-class PrivateDriverTests(TestCase):
+class DriverTests(TestCase):
     def setUp(self) -> None:
         self.driver = get_user_model().objects.create_user(form_data_valid)
         self.client.force_login(self.driver)
@@ -54,3 +53,31 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(
             new_user.license_number, form_data_valid["license_number"]
         )
+
+
+class LicenseTests(TestCase):
+    def test_update_license_form_is_valid(self):
+        license_form = {"license_number": "ABC12345"}
+        form = DriverLicenseUpdateForm(data=license_form)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data, license_form)
+
+    def test_update_license_form_first_3_letter(self):
+        license_form = {"license_number": "A9812345"}
+        form = DriverLicenseUpdateForm(data=license_form)
+        self.assertFalse(form.is_valid())
+
+    def test_update_license_form_first_3_upper(self):
+        license_form = {"license_number": "Abc12345"}
+        form = DriverLicenseUpdateForm(data=license_form)
+        self.assertFalse(form.is_valid())
+
+    def test_update_license_form_last_5_digits(self):
+        license_form = {"license_number": "ABC1234"}
+        form = DriverLicenseUpdateForm(data=license_form)
+        self.assertFalse(form.is_valid())
+
+    def test_update_license_form_8_chars(self):
+        license_form = {"license_number": "ABC12345678"}
+        form = DriverLicenseUpdateForm(data=license_form)
+        self.assertFalse(form.is_valid())
