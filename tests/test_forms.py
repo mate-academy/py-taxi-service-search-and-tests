@@ -16,3 +16,21 @@ class FormsTest(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+    def test_update_license_form_if_one_letter(self):
+        form_data = {"license_number": "A12345"}
+        form = DriverCreationForm(data=form_data)
+
+        self.assertFalse(form.is_valid())
+
+    def test_update_license_form_if_four_digits(self):
+        form_data = {"license_number": "ABC1234"}
+        form = DriverCreationForm(data=form_data)
+
+        self.assertFalse(form.is_valid())
+
+    def test_update_license_form_if_char_more_than_eight(self):
+        form_data = {"license_number": "ABCD123456"}
+        form = DriverCreationForm(data=form_data)
+
+        self.assertFalse(form.is_valid())
