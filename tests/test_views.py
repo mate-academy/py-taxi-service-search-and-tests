@@ -185,3 +185,33 @@ class UpdateDriverLicenseTests(TestCase):
             data={"license_number": test_license_number},
         )
         self.assertEqual(response.status_code, 200)
+
+
+class ToggleAssignToCarTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.manufacturer = Manufacturer.objects.create(
+            name='Test Manufacturer'
+        )
+        self.car = Car.objects.create(
+            model='Test Model',
+            manufacturer=self.manufacturer
+        )
+        self.driver = Driver.objects.create(
+            username='testuser',
+            password='testpass',
+            license_number='1234'
+        )
+
+    def test_toggle_assign_to_car(self):
+        self.client.force_login(self.driver)
+        url = reverse('taxi:toggle-car-assign', args=[self.car.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        self.assertIn(self.driver, self.car.drivers.all())
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        self.assertNotIn(self.driver, self.car.drivers.all())
