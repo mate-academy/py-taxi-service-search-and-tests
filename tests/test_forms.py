@@ -63,7 +63,10 @@ class SearchFeatureTest(TestCase):
         )
 
     def test_car_search_feature(self):
-        manufacturer = Manufacturer.objects.create(name="Nissan", country="Japan")
+        manufacturer = Manufacturer.objects.create(
+            name="Nissan",
+            country="Japan"
+        )
         Car.objects.create(model="Jiguli", manufacturer=manufacturer)
         Car.objects.create(model="Nivy", manufacturer=manufacturer)
         model_query = "Nivy"
