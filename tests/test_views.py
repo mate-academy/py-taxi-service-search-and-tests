@@ -191,21 +191,18 @@ class ToggleAssignToCarTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.manufacturer = Manufacturer.objects.create(
-            name='Test Manufacturer'
+            name="Test Manufacturer"
         )
         self.car = Car.objects.create(
-            model='Test Model',
-            manufacturer=self.manufacturer
+            model="Test Model", manufacturer=self.manufacturer
         )
         self.driver = Driver.objects.create(
-            username='testuser',
-            password='testpass',
-            license_number='1234'
+            username="testuser", password="testpass", license_number="1234"
         )
 
     def test_toggle_assign_to_car(self):
         self.client.force_login(self.driver)
-        url = reverse('taxi:toggle-car-assign', args=[self.car.pk])
+        url = reverse("taxi:toggle-car-assign", args=[self.car.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
