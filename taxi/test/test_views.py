@@ -14,7 +14,7 @@ class CarTest(TestCase):
 
         self.client.force_login(self.user)
 
-    def test_form_should_return_cars(self):
+    def test_endpoint_car_list_should_work_correct(self):
         manufacturer = Manufacturer.objects.create(
             name="test",
             country="test_country"
@@ -32,7 +32,7 @@ class CarTest(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
         self.assertEqual(list(response.context["car_list"]), list(cars))
 
-    def test_should_return_current_car(self):
+    def test_endpoint_car_detail_should_display_right_car(self):
         manufacturer = Manufacturer.objects.create(
             name="test",
             country="test_country"
@@ -63,7 +63,7 @@ class DriverTest(TestCase):
 
         self.client.force_login(user)
 
-    def test_form_should_return_drivers(self):
+    def test_endpoint_driver_list_should_work_correct(self):
         get_user_model().objects.create_user(
             username="tset1",
             license_number="test12345",
@@ -77,7 +77,7 @@ class DriverTest(TestCase):
         self.assertTemplateUsed(response, "taxi/driver_list.html")
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
-    def test_should_return_current_driver(self):
+    def test_endpoint_driver_detail_should_display_right_car(self):
         driver = get_user_model().objects.create_user(
             id="55",
             username="tset1",
@@ -104,7 +104,7 @@ class ManufacturerTest(TestCase):
 
         self.client.force_login(user)
 
-    def test_form_should_return_manufacturers(self):
+    def test_endpoint_manufacturer_list_should_work_correct(self):
         Manufacturer.objects.create(name="test", country="test_county")
         manufacturers = Manufacturer.objects.all()
         response = self.client.get(reverse("taxi:manufacturer-list"))
