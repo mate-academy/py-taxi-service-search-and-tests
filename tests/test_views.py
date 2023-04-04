@@ -122,12 +122,6 @@ class ToggleAssignToCarViewTestCase(TestCase):
         self.manufacturer = Manufacturer.objects.create(name="test")
 
     def test_toggle_assign_to_car_driver_is_assigned(self):
-        self.driver = Driver.objects.create(
-            username="testuser",
-            password="testpass",
-            license_number="AAA23425"
-        )
-
         self.car = Car.objects.create(
             model="Test Car",
             manufacturer=self.manufacturer
@@ -136,9 +130,9 @@ class ToggleAssignToCarViewTestCase(TestCase):
             "taxi:toggle-car-assign",
             args=[self.car.pk]
         ))
-        self.car.drivers.set([self.driver])
+        self.car.drivers.set([self.user])
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(self.car in self.driver.cars.all())
+        self.assertTrue(self.car in self.user.cars.all())
 
     def test_toggle_assign_to_car_driver_is_not_assigned(self):
         self.driver = Driver.objects.create(

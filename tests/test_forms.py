@@ -4,9 +4,9 @@ from taxi.forms import (
     DriverCreationForm,
     ManufacturerSearchForm,
     CarSearchForm,
-    DriverSearchForm, DriverLicenseUpdateForm
+    DriverSearchForm,
+    DriverLicenseUpdateForm
 )
-from taxi.models import Manufacturer
 
 
 class DriverCreateFormTests(TestCase):
