@@ -29,7 +29,9 @@ class TestCarSearch(TestCase):
         )
 
     def test_car_search(self):
-        response = self.client.get(reverse("taxi:car-list") + "?model=r1")
+        response = self.client.get(
+            reverse("taxi:car-list") + "?model=r1"
+        )
         cars = Car.objects.filter(model__icontains="car1")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["car_list"]), list(cars))
@@ -62,7 +64,9 @@ class TestDriverSearch(TestCase):
         self.client.force_login(self.driver1)
 
     def test_search_driver_by_username(self):
-        response = self.client.get(reverse("taxi:driver-list") + "?username=ver3")
+        response = self.client.get(
+            reverse("taxi:driver-list") + "?username=ver3"
+        )
         drivers = get_user_model().objects.filter(
             username__icontains="driver3"
         )
