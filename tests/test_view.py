@@ -6,7 +6,7 @@ from taxi.forms import DriverSearchForm, CarSearchForm
 from taxi.models import Manufacturer, Car, Driver
 
 
-class TestCarSearchForm(TestCase):
+class TestCarSearch(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(
             name="test_manufacturer", country="test_country"
@@ -34,7 +34,7 @@ class TestCarSearchForm(TestCase):
         self.assertIn(self.car3, queryset)
 
 
-class TestDriverSearchForm(TestCase):
+class TestDriverSearch(TestCase):
     def setUp(self):
         self.driver1 = Driver.objects.create(
             username="test_driver1",
