@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Delete manufacturer?</h1>
-  <form action="" method="post">
+  <h1>Delete {{ object.name }}</h1>
+  <br>
+  <p><i>Are you sure about this ?</i></p>
+  <p><strong>This action will delete all cars associated with this manufacturer</strong></p>
+  <form action="" method="post" id="del-form">
     {% csrf_token %}
 
-    <input type="submit" value="Yes" class="btn btn-danger">
+    <input type="submit" value="🗑 Yes, Delete" class="btn btn-outline-danger">
+    <a href="{% url 'taxi:manufacturer-list' %}" class = "btn btn-outline-secondary"> <i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
   </form>
 {% endblock %}

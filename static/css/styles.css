@@ -1,8 +1,68 @@
 body {
-    margin-top: 20px;
+    padding-top: 20px;
+    position: relative;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+}
+.sidebar-nav {
+    padding-top: 103px;
+}
+
+.add-button {
+    color: black;
+    background-color: #ECECF6;
+    background-image: none;
+    border-color: #ECECF6;
+}
+
+.scroller {
+    background-color: #ECECF6;
+}
+
+.add-button:hover {
+    background-color: #aaaaf3;
+    border-color: #aaaaf3;
+}
+
+a {
+    color: lightblue;
+}
+
+.search-btn {
+    background-color: #ECECF6;
+}
+
+.search-btn:hover {
+    background-color: #aaaaf3;
+}
+
+.auth-field {
+    margin-bottom: 30px;
+    margin-top: 15px;
+}
+
+.tr-head {
+    background-color: #ECECF6;
+}
+
+#logout-list:hover {
+    background-color: #bdbdf8;
+}
+
+.image-logo {
+    height: 100px;
+    position: fixed;
+    top: 20px;
+    left: 105px;
+}
+
+.col-sm-10 {
+    padding-left: 50px;
+}
+
+.next-prev:hover {
+    background-color: #aaaaf3;
 }
