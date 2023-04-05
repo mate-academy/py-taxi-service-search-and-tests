@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 CAR_LIST_URL = reverse("taxi:car-list")
 
@@ -40,3 +40,31 @@ class LoginCarListTest(TestCase, UserCarManufacturer):
         response = self.client.get(CAR_LIST_URL)
 
         self.assertEqual(response.status_code, 200)
+
+
+class PublicCarListTests(TestCase, UserCarManufacturer):
+    def test_login_required(self):
+        res = self.client.get(CAR_LIST_URL)
+
+        self.assertNotEqual(res.status_code, 200)
+
+
+class ToggleCarAssignTest(TestCase, UserCarManufacturer):
+    def setUp(self) -> None:
+        self.generate_data()
+        self.client.force_login(self.user)
+
+    def test_assign_new_driver_to_car(self):
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", args=[self.car.pk])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(self.car, self.user.cars.all())
+
+    def test_removed_driver_from_car(self):
+        self.user.cars.add(self.car)
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", args=[self.car.pk])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertNotIn(self.car, self.user.cars.all())
