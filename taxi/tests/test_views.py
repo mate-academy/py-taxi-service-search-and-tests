@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from taxi.models import Car, Manufacturer, Driver
 
@@ -29,15 +29,16 @@ class PrivateCarTest(TestCase):
             username="testuser", password="12345"
         )
         self.client.force_login(self.user)
-
-    def test_search_car(self) -> None:
-        manufacturer = Manufacturer.objects.create(
+        self.manufacturer = Manufacturer.objects.create(
             name="Mazda", country="Japan"
         )
-        key = "c"
-        car = Car.objects.create(
-            model="CX-5", manufacturer=manufacturer
+        self.car = Car.objects.create(
+            model="CX-5", manufacturer=self.manufacturer
         )
+
+    def test_search_car(self) -> None:
+        car = self.car
+        key = "c"
         car.drivers.add(self.user)
         response = self.client.get(
             reverse("taxi:car-list") + f"?model={key}")
@@ -54,33 +55,31 @@ class PrivateCarTest(TestCase):
         )
 
     def test_car_detail_page(self) -> None:
-        manufacturer = Manufacturer.objects.create(
-            name="Mazda", country="Japan")
-        car = Car.objects.create(model="CX-5", manufacturer=manufacturer
-                                 )
+        car = self.car
         response = self.client.get(reverse(
             "taxi:car-detail", args=[car.pk])
         )
 
         self.assertEqual(response.status_code, 200)
 
-    def test_assign_driver_to_the_car(self) -> None:
-        manufacturer = Manufacturer.objects.create(
-            name="Mazda", country="Japan")
-        car = Car.objects.create(
-            model="CX-5", manufacturer=manufacturer
+    def test_add_car_to_driver(self) -> None:
+        response = self.client.post(reverse_lazy(
+            "taxi:toggle-car-assign", args=[self.car.pk])
         )
-        self.user.cars.add(car)
-        self.assertIn(car, self.user.cars.all())
+        self.assertRedirects(
+            response, reverse_lazy("taxi:car-detail", args=[self.car.pk])
+        )
+        self.assertTrue(self.car in self.user.cars.all())
 
-    def test_remove_driver_from_car(self) -> None:
-        manufacturer = Manufacturer.objects.create(
-            name="Mazda", country="Japan")
-        car = Car.objects.create(
-            model="CX-5", manufacturer=manufacturer
+    def test_remove_car_from_driver(self) -> None:
+        self.user.cars.add(self.car)
+        response = self.client.post(reverse_lazy(
+            "taxi:toggle-car-assign", args=[self.car.pk])
         )
-        self.user.cars.remove(car)
-        self.assertNotIn(car, self.user.cars.all())
+        self.assertRedirects(
+            response, reverse_lazy("taxi:car-detail", args=[self.car.pk])
+        )
+        self.assertFalse(self.car in self.user.cars.all())
 
 
 class PrivateDriverTest(TestCase):
