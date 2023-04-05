@@ -87,5 +87,6 @@ class ToggleAssignToCarTest(TestCase):
         self.assertIn(self.user, self.car.drivers.all())
 
     def test_toggle_assign_to_car_driver_not_in_car_drivers(self):
+        self.user.cars.add(self.car)
         self.client.get(reverse("taxi:toggle-car-assign", args=([1])))
-        self.assertIn(self.user, self.car.drivers.all())
+        self.assertNotIn(self.user, self.car.drivers.all())
