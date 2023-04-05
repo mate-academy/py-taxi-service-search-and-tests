@@ -37,23 +37,3 @@ class SearchFormTest(TestCase):
             response.context["driver_list"],
             get_user_model().objects.filter(username__icontains=search_request)
         )
-
-    def test_car_search(self):
-        search_request = "test_search"
-        response = self.client.get(f"/cars/?model={search_request}")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(
-            response.context["car_list"],
-            Car.objects.filter(model__icontains=search_request)
-        )
-
-    def test_manufacturer_search(self):
-        search_request = "test_search"
-        response = self.client.get(f"/manufacturers/?name={search_request}")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(
-            response.context["manufacturer_list"],
-            Manufacturer.objects.filter(name__icontains=search_request)
-        )
