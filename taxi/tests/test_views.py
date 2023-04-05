@@ -64,6 +64,24 @@ class PrivateCarTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_assign_driver_to_the_car(self) -> None:
+        manufacturer = Manufacturer.objects.create(
+            name="Mazda", country="Japan")
+        car = Car.objects.create(
+            model="CX-5", manufacturer=manufacturer
+        )
+        self.user.cars.add(car)
+        self.assertIn(car, self.user.cars.all())
+
+    def test_remove_driver_from_car(self) -> None:
+        manufacturer = Manufacturer.objects.create(
+            name="Mazda", country="Japan")
+        car = Car.objects.create(
+            model="CX-5", manufacturer=manufacturer
+        )
+        self.user.cars.remove(car)
+        self.assertNotIn(car, self.user.cars.all())
+
 
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
