@@ -117,37 +117,58 @@ class CarFormTestCase(TestCase):
 class SearchFormTestCase(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username="test",
-            password="test@test"
+            username="test", password="test@test"
         )
         self.client.force_login(self.user)
 
+        # create test objects
+        self.manufacturer1 = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
+        self.manufacturer2 = Manufacturer.objects.create(
+            name="Ford", country="USA"
+        )
+        self.driver1 = Driver.objects.create_user(
+            username="driver1", password="test@test", license_number="ABC12345"
+        )
+        self.driver2 = Driver.objects.create_user(
+            username="driver2", password="test@test", license_number="XYZ78901"
+        )
+        self.car1 = Car.objects.create(
+            model="Corolla", manufacturer=self.manufacturer1
+        )
+        self.car1.drivers.add(self.driver1)
+        self.car2 = Car.objects.create(
+            model="Mustang", manufacturer=self.manufacturer2
+        )
+        self.car2.drivers.add(self.driver2)
+
     def test_search_car(self):
-        search_info = "qwerty"
-        response = self.client.get(f"/cars/?username={search_info}")
+        search_info = "Mustang"
+        response = self.client.get(f"/cars/?model={search_info}")
 
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["car_list"],
-            Car.objects.filter(model__icontains=search_info)
+            Car.objects.filter(model__icontains=search_info),
         )
 
     def test_search_driver(self):
-        search_info = "test"
+        search_info = "driver1"
         response = self.client.get(f"/drivers/?username={search_info}")
 
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["driver_list"],
-            Driver.objects.filter(username__icontains=search_info)
+            Driver.objects.filter(username__icontains=search_info),
         )
 
     def test_search_manufacturer(self):
-        search_info = "test"
-        response = self.client.get(f"/manufacturers/?username={search_info}")
+        search_info = "Ford"
+        response = self.client.get(f"/manufacturers/?name={search_info}")
 
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["manufacturer_list"],
-            Manufacturer.objects.filter(name__icontains=search_info)
+            Manufacturer.objects.filter(name__icontains=search_info),
         )
