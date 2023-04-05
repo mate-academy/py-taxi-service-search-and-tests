@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
 CARS_URL = reverse("taxi:car-list")
@@ -65,3 +65,25 @@ class PrivateViewTest(TestCase):
             list(cars)
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_retrieve_drivers(self):
+        get_user_model().objects.create(
+            username="test_username1",
+            password="test_password1",
+            license_number="AAA84930"
+        )
+        get_user_model().objects.create(
+            username="test_username2",
+            password="test_password2",
+            license_number="AAA93876"
+        )
+
+        response = self.client.get(DRIVER_URL)
+        drivers = Driver.objects.all()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
