@@ -151,4 +151,3 @@ class SearchFormTestCase(TestCase):
             response.context["manufacturer_list"],
             Manufacturer.objects.filter(name__icontains=search_info)
         )
-

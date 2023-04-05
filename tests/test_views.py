@@ -212,4 +212,3 @@ class ToggleAssignToCarTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
         self.assertNotIn(self.driver, self.car.drivers.all())
-
