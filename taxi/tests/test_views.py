@@ -22,7 +22,7 @@ class PrivateManufacturerTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_private_manufacturer(self):
+    def test_retrieve_manufacturer(self):
         Manufacturer.objects.create(name="Test Manufacturer")
         Manufacturer.objects.create(name="Test Manufacturer 2")
 
