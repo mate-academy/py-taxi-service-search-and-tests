@@ -27,7 +27,18 @@ class DriverCreationForm(UserCreationForm):
         )
 
     def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
+        license_number = self.cleaned_data["license_number"]
+        if any(
+                (
+                    len(license_number) != 8,
+                    not license_number[:3].isalpha(),
+                    not license_number[:3].isupper(),
+                    not license_number[-5:].isdigit(),
+                )
+        ):
+            raise ValidationError("License number format is wrong!")
+
+        return license_number
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
@@ -50,3 +61,12 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class SearchForm(forms.Form):
+    search_keyword = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search"})
+    )
