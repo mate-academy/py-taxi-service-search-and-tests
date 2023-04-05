@@ -73,3 +73,4 @@ urlpatterns = [
 ]
 
 app_name = "taxi"
+

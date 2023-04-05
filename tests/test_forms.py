@@ -114,34 +114,41 @@ class CarFormTestCase(TestCase):
         self.assertIn("drivers", form.errors)
 
 
-class CarSearchFormTestCase(TestCase):
-    def test_car_search_form_with_valid_data_is_valid(self):
-        form_data = {"model": "Camry"}
-        form = CarSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
+class SearchFormTestCase(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="test@test"
+        )
+        self.client.force_login(self.user)
 
-    def test_car_search_form_with_empty_data_is_valid(self):
-        form = CarSearchForm(data={})
-        self.assertTrue(form.is_valid())
+    def test_search_car(self):
+        search_info = "qwerty"
+        response = self.client.get(f"/cars/?username={search_info}")
 
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains=search_info)
+        )
 
-class DriverSearchFormTestCase(TestCase):
-    def test_driver_search_form_with_valid_data_is_valid(self):
-        form_data = {"username": "testdriver"}
-        form = DriverSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
+    def test_search_driver(self):
+        search_info = "test"
+        response = self.client.get(f"/drivers/?username={search_info}")
 
-    def test_driver_search_form_with_empty_data_is_valid(self):
-        form = DriverSearchForm(data={})
-        self.assertTrue(form.is_valid())
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            Driver.objects.filter(username__icontains=search_info)
+        )
 
+    def test_search_manufacturer(self):
+        search_info = "test"
+        response = self.client.get(f"/manufacturers/?username={search_info}")
 
-class ManufacturerSearchFormTestCase(TestCase):
-    def test_manufacturer_search_form_with_valid_data_is_valid(self):
-        form_data = {"name": "Toyota"}
-        form = ManufacturerSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains=search_info)
+        )
 
-    def test_manufacturer_search_form_with_empty_data_is_valid(self):
-        form = ManufacturerSearchForm(data={})
-        self.assertTrue(form.is_valid())
