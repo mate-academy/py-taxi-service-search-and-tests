@@ -5,7 +5,20 @@
   <h1>{{ object|yesno:"Update,Create" }} car</h1>
   <form action="" method="post" novalidate>
     {% csrf_token %}
-    {{ form|crispy }}
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-sm-2">
+            <h3>Choose car model</h3>
+            {{ form.model }}
+            <h3>Choose car manufacturer</h3>
+            {{ form.manufacturer }}
+          </div>
+          <div class="col-sm-8 ">
+            <h3>Select your drivers</h3>
+              {{ form.drivers }}
+          </div>
+      </div>
+  </div>
 
     <input type="submit" value="Submit" class="btn btn-primary">
   </form>
