@@ -19,13 +19,20 @@ class TestForm(TestCase):
             name="test",
             country="test_country"
         )
-
         Car.objects.create(
-            model="test",
+            model="test1",
+            manufacturer=manufacturer
+        )
+        Car.objects.create(
+            model="test2",
+            manufacturer=manufacturer
+        )
+        Car.objects.create(
+            model="test3",
             manufacturer=manufacturer
         )
         cars = Car.objects.all()
-        response = self.client.get(reverse("taxi:car-list") + "?model=test")
+        response = self.client.get(reverse("taxi:car-list") + "?model=test3")
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/car_list.html")
