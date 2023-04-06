@@ -10,7 +10,10 @@ class ModelsTests(TestCase):
             country="USA"
         )
 
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self):
         driver = Driver.objects.create(
@@ -20,7 +23,11 @@ class ModelsTests(TestCase):
             license_number="test"
         )
 
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} "
+            f"({driver.first_name} {driver.last_name})"
+        )
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(
@@ -32,5 +39,5 @@ class ModelsTests(TestCase):
             model="Tesla",
             manufacturer=manufacturer,
         )
-        
+
         self.assertEqual(str(car), car.model)
