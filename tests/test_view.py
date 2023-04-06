@@ -8,6 +8,7 @@ DRIVER_URL = reverse("taxi:driver-list")
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 CAR_URL = reverse("taxi:car-list")
 
+
 class PublicViewsLoginRequiredTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -318,4 +319,3 @@ class PublicCarTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(car in driver.cars.all())
-
