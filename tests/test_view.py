@@ -2,7 +2,11 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
+
+DRIVER_URL = reverse("taxi:driver-list")
+MANUFACTURER_URL = reverse("taxi:manufacturer-list")
+CAR_URL = reverse("taxi:car-list")
 
 class PublicViewsLoginRequiredTest(TestCase):
     @classmethod
@@ -183,13 +187,27 @@ class PrivateDriverTests(TestCase):
         driver = get_user_model().objects.get(pk=self.user1.pk)
         self.assertEqual(driver.license_number, form_data["license_number"])
 
-    def test_search_drivers_by_username(self):
-        response = self.client.get(
-            reverse("taxi:driver-list"), {"username": "1"}
+    def test_search_driver(self):
+        Driver.objects.create(
+            username="Test",
+            password="1876545",
+            license_number="LOM54572"
         )
+        Driver.objects.create(
+            username="Test2",
+            password="987654325",
+            license_number="GOI76545"
+        )
+        response = self.client.get(DRIVER_URL)
+        drivers = Driver.objects.filter(username__icontains="e")
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "user2")
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
+        for driver in response.context["driver_list"]:
+            self.assertIn("e", driver.username)
 
 
 class PrivateManufacturerTests(TestCase):
@@ -267,3 +285,37 @@ class PrivateCarTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.car1.model)
         self.assertTemplateUsed(response, "taxi/car_detail.html")
+
+
+class PublicCarTest(TestCase):
+    def test_login_required(self):
+        res = self.client.get(CAR_URL)
+
+        self.assertNotEqual(res.status_code, 200)
+
+    def test_toggle_assign_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Honda",
+            country="Japan"
+        )
+        car = Car.objects.create(
+            model="CR-V",
+            manufacturer=manufacturer
+        )
+        driver = get_user_model().objects.create_user(
+            "Paula",
+            "dfg543sd4tyfE"
+        )
+        self.client.force_login(driver)
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(car in driver.cars.all())
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(car in driver.cars.all())
+
