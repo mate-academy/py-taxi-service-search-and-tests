@@ -189,7 +189,9 @@ class ToggleAssignToCarTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.driver = get_user_model().objects.create_user(
-            username="bobross123", password="pass12345", license_number="HHH12345"
+            username="bobross123",
+            password="pass12345",
+            license_number="HHH12345"
         )
         self.manufacturer = Manufacturer.objects.create(
             name="Toyota",
