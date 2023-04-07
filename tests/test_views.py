@@ -119,3 +119,22 @@ class PrivateCarTest(TestCase):
             cars,
         )
         self.assertTemplateUsed(res, "taxi/car_list.html")
+
+    def test_toggle_assign_to_car(self):
+
+        car = Car.objects.create(
+            model="Model-X",
+            manufacturer=self.manufacturer
+        )
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(car in self.driver.cars.all())
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(car in self.driver.cars.all())

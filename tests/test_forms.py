@@ -38,3 +38,11 @@ class DriverLicenseUpdateFormTest(TestCase):
             instance=driver
         )
         self.assertTrue(form.is_valid())
+
+    def test_license_update_form_invalid(self):
+        driver = get_user_model().objects.create(username="driver")
+        form = DriverLicenseUpdateForm(
+            data={"license_number": "5VO45N96"},
+            instance=driver
+        )
+        self.assertFalse(form.is_valid())
