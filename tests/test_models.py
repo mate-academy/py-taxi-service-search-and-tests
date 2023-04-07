@@ -15,12 +15,17 @@ class ModelsTest(TestCase):
             country="Germany"
         )
 
-        self.driver = get_user_model().objects.create_user(  # type: ignore
+        self.driver = get_user_model().objects.create_user(
             username=USERNAME,
             password=PASSWORD,
             first_name="Test",
             last_name="testovich",
             license_number=LICENSE_NUMBER
+        )
+
+        self.car = Car.objects.create(
+            model="BMW",
+            manufacturer=self.manufacturer
         )
 
         return super().setUp()
@@ -39,15 +44,9 @@ class ModelsTest(TestCase):
         )
 
     def test_car_str(self):
-        car = Car.objects.create(
-            model="BMW",
-            manufacturer=self.manufacturer
-        )
-        car.drivers.add(self.driver)
-
         self.assertEqual(
-            str(car),
-            car.model
+            str(self.car),
+            self.car.model
         )
 
     def test_driver_with_license_number(self):
