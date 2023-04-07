@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block search_form %}
+  {% include "includes/search_form.html" %}
+{% endblock %}
+
 {% block content %}
     <h1>
       Driver List
@@ -7,7 +11,6 @@
         Create
       </a>
     </h1>
-
     {% if driver_list %}
     <table class="table">
       <tr>
