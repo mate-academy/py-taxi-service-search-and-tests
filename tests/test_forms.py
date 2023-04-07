@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from taxi.forms import DriverCreationForm
-from taxi.models import Car, Manufacturer
+from taxi.models import Car, Manufacturer, Driver
 
 
 class FormTests(TestCase):
@@ -69,29 +69,77 @@ class SearchFormTests(TestCase):
         )
         self.car.drivers.add(self.user)
 
-    def test_manufacturer_search_form(self):
+    def test_manufacturer_search(self):
+        manufacturer = Manufacturer.objects.create(name="BMW")
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertContains(response, manufacturer.name)
+
+        Manufacturer.objects.create(name="Audi")
         search_term = {"name": "BMW"}
-        response = self.client.get(
-            path=reverse("taxi:manufacturer-list"),
-            data=search_term
-        )
+        response = self.client.get(reverse("taxi:manufacturer-list"), data=search_term)
 
         self.assertContains(response, search_term["name"])
+        self.assertNotContains(response, "Audi")
 
-    def test_driver_search_form(self):
+        Manufacturer.objects.create(name="Mercedes")
+        search_term = {"name": "Porsche"}
+        response = self.client.get(reverse("taxi:manufacturer-list"), data=search_term)
+
+        self.assertNotContains(response, search_term["name"])
+        self.assertNotContains(response, "Audi")
+        self.assertNotContains(response, "BMW")
+        self.assertNotContains(response, "Mercedes")
+
+    def test_driver_search(self):
+        driver = Driver.objects.create_user(username="test_name", password="password123")
+        response = self.client.get(reverse("taxi:driver-list"))
+        self.assertContains(response, driver.username)
+
+        Driver.objects.create_user(username="another_name", password="password123")
         search_term = {"username": "test_name"}
-        response = self.client.get(
-            path=reverse("taxi:driver-list"),
-            data=search_term
-        )
+        response = self.client.get(reverse("taxi:driver-list"), data=search_term)
 
         self.assertContains(response, search_term["username"])
+        self.assertNotContains(response, "another_name")
 
-    def test_car_search_form(self):
-        search_term = {"model": "BMW"}
-        response = self.client.get(
-            path=reverse("taxi:car-list"),
-            data=search_term
+        Driver.objects.create_user(username="third_name", password="password123")
+        search_term = {"username": "non_existing"}
+        response = self.client.get(reverse("taxi:driver-list"), data=search_term)
+
+        self.assertNotContains(response, search_term["username"])
+        self.assertNotContains(response, "test_name")
+        self.assertNotContains(response, "another_name")
+        self.assertNotContains(response, "third_name")
+
+    def test_car_search(self):
+        manufacturer = Manufacturer.objects.create(name="BMW")
+        car = Car.objects.create(
+            model="TestModel",
+            manufacturer=manufacturer
         )
+        response = self.client.get(reverse("taxi:car-list"))
+        self.assertContains(response, car.model)
+
+        manufacturer = Manufacturer.objects.create(name="Audi")
+        Car.objects.create(
+            model="AnotherModel",
+            manufacturer=manufacturer
+        )
+        search_term = {"model": "TestModel"}
+        response = self.client.get(reverse("taxi:car-list"), data=search_term)
 
         self.assertContains(response, search_term["model"])
+        self.assertNotContains(response, "AnotherModel")
+
+        manufacturer = Manufacturer.objects.create(name="Toyota")
+        Car.objects.create(
+            model="ThirdModel",
+            manufacturer=manufacturer
+        )
+        search_term = {"model": "NonExistingModel"}
+        response = self.client.get(reverse("taxi:car-list"), data=search_term)
+
+        self.assertNotContains(response, search_term["model"])
+        self.assertNotContains(response, "TestModel")
+        self.assertNotContains(response, "AnotherModel")
+        self.assertNotContains(response, "ThirdModel")
