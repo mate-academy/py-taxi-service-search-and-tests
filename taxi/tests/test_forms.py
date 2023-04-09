@@ -96,7 +96,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["license_number"],
-            ["First 3 characters should be uppercase letters."]
+            ["First 3 characters should be uppercase letters"]
         )
 
     def test_form_invalid_duplicate_license_number(self):
@@ -106,8 +106,14 @@ class DriverLicenseUpdateFormTest(TestCase):
             email="testuser1@example.com",
             license_number="ABC12345",
         )
-        data = {"license_number": "ABC12345"}
-        form = DriverLicenseUpdateForm(instance=driver1, data=data)
+        driver2 = Driver.objects.create(
+            username="testuser2",
+            password="testpassword",
+            email="testuser2@example.com",
+            license_number="ABC67890",
+        )
+        data = {"license_number": f"{driver1.license_number}"}
+        form = DriverLicenseUpdateForm(instance=driver2, data=data)
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["license_number"],
