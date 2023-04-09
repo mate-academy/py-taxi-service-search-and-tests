@@ -51,7 +51,7 @@ class DataFormsTests(TestCase):
 
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('license_number', form.errors)
+        self.assertIn("license_number", form.errors)
 
 
 class SearchFormTest(TestCase):
@@ -75,12 +75,18 @@ class SearchFormTest(TestCase):
         )
 
         search_request = "test_username1"
-        response = self.client.get(reverse("taxi:driver-list"), {"username": search_request})
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": search_request}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "test_username1")
 
         search_request = "not_exist_username"
-        response = self.client.get(reverse("taxi:driver-list"), {"username": search_request})
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": search_request}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "")
 
@@ -93,12 +99,18 @@ class SearchFormTest(TestCase):
         Car.objects.create(model="test_model_2", manufacturer=manufacturer)
 
         search_request = "test_model_1"
-        response = self.client.get(reverse("taxi:car-list"), {"model": search_request})
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": search_request}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "test_model_1")
 
         search_request = "not_exist_model"
-        response = self.client.get(reverse("taxi:car-list"), {"model": search_request})
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": search_request}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "")
 
@@ -107,11 +119,17 @@ class SearchFormTest(TestCase):
         Manufacturer.objects.create(name="test_name2", country="test_country2")
 
         search_request = "test_name1"
-        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": search_request})
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            {"name": search_request}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "test_name1")
 
         search_request = "not_exist_name"
-        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": search_request})
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            {"name": search_request}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "")
