@@ -53,3 +53,38 @@ class PrivateViewTests(TestCase):
 
         for test in tests:
             self.assertEqual(test.status_code, 200)
+
+
+class PrivateManufacturerListTests(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.user = get_user_model().objects.create_user(
+            "test",
+            "password",
+        )
+        for i in range(5):
+            Manufacturer.objects.create(
+                name=f"Manufacturer{i}", country=f"Country{i}"
+            )
+
+    def setUp(self) -> None:
+        self.client.force_login(self.user)
+        self.response = self.client.get(MANUFACTURERS_URL)
+
+    def test_retrieve_manufacturers(self):
+        manufacturer_list = Manufacturer.objects.all()
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(
+            list(self.response.context["manufacturer_list"]),
+            list(manufacturer_list),
+        )
+        self.assertTemplateUsed(self.response, "taxi/manufacturer_list.html")
+
+    def test_manufacturer_list_search(self):
+        response = self.client.get(MANUFACTURERS_URL + "?name=artur")
+        queryset_searched = Manufacturer.objects.filter(
+            name__icontains="artur",
+        )
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"], queryset_searched
+        )

@@ -70,23 +70,48 @@ class DriverLicenseUpdateFormTest(TestCase):
         driver = form.save()
         self.assertEqual(driver.license_number, "DEF67890")
 
+    def test_form_invalid_blank_license_number(self):
+        driver = Driver.objects.create(
+            username="testuser",
+            password="testpassword",
+            email="testuser@example.com",
+            license_number="ABC12345",
+        )
+        data = {"license_number": ""}
+        form = DriverLicenseUpdateForm(instance=driver, data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["license_number"], ["This field is required."])
 
-class DriverSearchFormTest(TestCase):
-    def test_form_valid(self):
-        data = {"username": "testuser"}
-        form = DriverSearchForm(data=data)
-        self.assertTrue(form.is_valid())
+    def test_form_invalid_license_number_format(self):
+        driver = Driver.objects.create(
+            username="testuser",
+            password="testpassword",
+            email="testuser@example.com",
+            license_number="ABC12345",
+        )
+        data = {"license_number": "12345678"}
+        form = DriverLicenseUpdateForm(instance=driver, data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["license_number"], ["First 3 characters should be uppercase letters."]
+        )
 
-
-class CarSearchFormTest(TestCase):
-    def test_form_valid(self):
-        data = {"model": "Test Car"}
-        form = CarSearchForm(data=data)
-        self.assertTrue(form.is_valid())
-
-
-class ManufacturerSearchFormTest(TestCase):
-    def test_form_valid(self):
-        data = {"name": "Test Manufacturer"}
-        form = ManufacturerSearchForm(data=data)
-        self.assertTrue(form.is_valid())
+    def test_form_invalid_duplicate_license_number(self):
+        driver1 = Driver.objects.create(
+            username="testuser1",
+            password="testpassword",
+            email="testuser1@example.com",
+            license_number="ABC12345",
+        )
+        driver2 = Driver.objects.create(
+            username="testuser2",
+            password="testpassword",
+            email="testuser2@example.com",
+            license_number="DEF67890",
+        )
+        data = {"license_number": "ABC12345"}
+        form = DriverLicenseUpdateForm(instance=driver2, data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["license_number"], ["Driver with this License number already exists."]
+        )
