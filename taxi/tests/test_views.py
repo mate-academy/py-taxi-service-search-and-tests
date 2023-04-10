@@ -1,10 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 
 from taxi.forms import ManufacturerSearchForm
 from taxi.models import Manufacturer
-
-
-from django.test import TestCase, Client
 
 
 class ManufacturerListViewTests(TestCase):
