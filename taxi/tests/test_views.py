@@ -35,6 +35,7 @@ class PublicDriversTest(TestCase):
 
 
 class PrivateManufacturerTest(TestCase):
+
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="testuser",
@@ -42,17 +43,19 @@ class PrivateManufacturerTest(TestCase):
         )
         self.client.force_login(self.user)
 
+        self.manufacturer1 = Manufacturer.objects.create(name="Ford", country="USA")
+        self.manufacturer2 = Manufacturer.objects.create(name="Ferrari", country="Italy")
+        self.manufacturer3 = Manufacturer.objects.create(name="Toyota", country="Japan")
+
     def test_retrieve_manufacturer(self):
         response = self.client.get(MANUFACTURERS_URL)
 
         manufacturers = Manufacturer.objects.all()
 
         self.assertEqual(response.status_code, 200)
-
         self.assertEqual(
             len(response.context["manufacturer_list"]), len(manufacturers)
         )
-
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_search_manufacturer(self):
@@ -65,7 +68,6 @@ class PrivateManufacturerTest(TestCase):
             list(response.context["manufacturer_list"]),
             list(manufacturers)
         )
-
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
 
@@ -77,15 +79,19 @@ class PrivateCarTest(TestCase):
         )
         self.client.force_login(self.user)
 
+        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+
+        self.car1 = Car.objects.create(model="Camry", manufacturer=self.manufacturer)
+        self.car2 = Car.objects.create(model="Corolla", manufacturer=self.manufacturer)
+        self.car3 = Car.objects.create(model="Avalon", manufacturer=self.manufacturer)
+
     def test_retrieve_car(self):
         response = self.client.get(CARS_URL)
 
         cars = Car.objects.all()
 
         self.assertEqual(response.status_code, 200)
-
         self.assertEqual(len(response.context["car_list"]), len(cars))
-
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_search_car(self):
@@ -98,7 +104,6 @@ class PrivateCarTest(TestCase):
             list(response.context["car_list"]),
             list(cars)
         )
-
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
 
@@ -110,15 +115,17 @@ class PrivateDriverTest(TestCase):
         )
         self.client.force_login(self.user)
 
+        self.driver1 = Driver.objects.create(username="driver1", password="testpass", license_number="D001")
+        self.driver2 = Driver.objects.create(username="driver2", password="testpass", license_number="D002")
+        self.driver3 = Driver.objects.create(username="driver3", password="testpass", license_number="D003")
+
     def test_retrieve_driver(self):
         response = self.client.get(DRIVERS_URL)
 
         drivers = Driver.objects.all()
 
         self.assertEqual(response.status_code, 200)
-
         self.assertEqual(len(response.context["driver_list"]), len(drivers))
-
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_search_driver(self):
@@ -131,5 +138,4 @@ class PrivateDriverTest(TestCase):
             list(response.context["driver_list"]),
             list(drivers)
         )
-
         self.assertTemplateUsed(response, "taxi/driver_list.html")
