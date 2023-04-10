@@ -59,14 +59,14 @@ class DriverLicenseUpdateFormTest(TestCase):
             context.exception.message, "Last 5 characters should be digits"
         )
 
-    def test_validate_license_number_First_three_characters_should_be_Letters(self):
+    def test_validate_license_number_first_three_char_should_be_Ltrs(self):
         with self.assertRaises(ValidationError) as context:
             validate_license_number("A8C12345")
         self.assertEqual(
             context.exception.message, "First 3 characters should be letters"
         )
 
-    def test_validate_license_number_fist_three_characters_not_upper_case(self):
+    def test_validate_license_number_fist_three_characters_not_upper(self):
         with self.assertRaises(ValidationError) as context:
             validate_license_number("abc12345")
         self.assertEqual(
