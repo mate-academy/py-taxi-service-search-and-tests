@@ -25,7 +25,9 @@ class PrivateDriverTests(TestCase):
 
         self.client.post(reverse("taxi:driver-create"), data=user_data)
 
-        test_user = get_user_model().objects.get(username=user_data["username"])
+        test_user = get_user_model().objects.get(
+            username=user_data["username"]
+        )
 
         self.assertEqual(test_user.first_name, user_data["first_name"])
         self.assertEqual(test_user.last_name, user_data["last_name"])
