@@ -87,3 +87,22 @@ class PrivateViewTest(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_toggle_assign_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="test_name1",
+            country="test_country1"
+        )
+        car = Car.objects.create(model="test_model_1", manufacturer=manufacturer)
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(car in self.user.cars.all())
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(car in self.user.cars.all())
