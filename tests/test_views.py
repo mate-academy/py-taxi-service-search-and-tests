@@ -4,30 +4,22 @@ from django.urls import reverse
 
 from taxi.models import Manufacturer, Driver, Car
 
-INDEX_URL = reverse("taxi:index")
-MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
-MANUFACTURERS_SEARCH_URL = reverse("taxi:manufacturer-list") + "?name=a"
-DRIVERS_URL = reverse("taxi:driver-list")
-DRIVERS_SEARCH_URL = reverse("taxi:driver-list") + "?username=a"
-CAR_URL = reverse("taxi:car-list")
-CAR_SEARCH_URL = reverse("taxi:car-list") + "?model=a"
-
 
 class PublicPagesTest(TestCase):
     def test_index_login_required(self):
-        res = self.client.get(INDEX_URL)
+        res = self.client.get(reverse("taxi:index"))
         self.assertNotEqual(res.status_code, 200)
 
     def test_manufacturers_login_required(self):
-        res = self.client.get(MANUFACTURERS_URL)
+        res = self.client.get(reverse("taxi:manufacturer-list"))
         self.assertNotEqual(res.status_code, 200)
 
     def test_drivers_login_required(self):
-        res = self.client.get(DRIVERS_URL)
+        res = self.client.get(reverse("taxi:driver-list"))
         self.assertNotEqual(res.status_code, 200)
 
     def test_cars_login_required(self):
-        res = self.client.get(CAR_URL)
+        res = self.client.get(reverse("taxi:car-list"))
         self.assertNotEqual(res.status_code, 200)
 
 
@@ -46,7 +38,7 @@ class PrivateManufacturerTest(TestCase):
         Manufacturer.objects.create(name="Miwa", country="Test")
         Manufacturer.objects.create(name="Vovchoik", country="Test")
         Manufacturer.objects.create(name="Vasilivich", country="Test")
-        res = self.client.get(MANUFACTURERS_SEARCH_URL)
+        res = self.client.get(reverse("taxi:manufacturer-list") + "?name=a")
         manufacturers = Manufacturer.objects.filter(name__icontains="a")
         self.assertEqual(
             list(res.context["manufacturer_list"]),
@@ -82,7 +74,7 @@ class PrivateDriverTest(TestCase):
             password="password",
             license_number="VOM79663"
         )
-        res = self.client.get(DRIVERS_SEARCH_URL)
+        res = self.client.get(reverse("taxi:driver-list") + "?username=a")
         drivers = Driver.objects.filter(username__icontains="a")
         self.assertEqual(
             list(res.context["driver_list"]),
@@ -112,7 +104,7 @@ class PrivateCarTest(TestCase):
         cars = list(Car.objects.filter(
             model__icontains="a"
         ))
-        res = self.client.get(CAR_SEARCH_URL)
+        res = self.client.get(reverse("taxi:car-list") + "?model=a")
 
         self.assertEqual(
             list(res.context["car_list"]),
