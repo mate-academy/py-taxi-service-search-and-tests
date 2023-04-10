@@ -1,6 +1,11 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    validate_license_number
+)
 
 
 class DriverCreationFormTest(TestCase):
@@ -46,3 +51,25 @@ class DriverLicenseUpdateFormTest(TestCase):
             instance=driver
         )
         self.assertFalse(form.is_valid())
+
+    def test_validate_license_number_last_five_characters_are_not_digits(self):
+        with self.assertRaises(ValidationError) as context:
+            validate_license_number("ABC1234B")
+        self.assertEqual(
+            context.exception.message, "Last 5 characters should be digits"
+        )
+
+    def test_validate_license_number_First_three_characters_should_be_Letters(self):
+        with self.assertRaises(ValidationError) as context:
+            validate_license_number("A8C12345")
+        self.assertEqual(
+            context.exception.message, "First 3 characters should be letters"
+        )
+
+    def test_validate_license_number_fist_three_characters_not_upper_case(self):
+        with self.assertRaises(ValidationError) as context:
+            validate_license_number("abc12345")
+        self.assertEqual(
+            context.exception.message,
+            "First 3 characters should be uppercase letters"
+        )
