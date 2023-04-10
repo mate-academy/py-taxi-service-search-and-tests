@@ -66,3 +66,19 @@ class DriverLicenseUpdateFormTest(TestCase):
             context.exception.message,
             "First 3 characters should be uppercase letters"
         )
+
+    def test_validate_license_number_should_have_eight_characters(self):
+        with self.assertRaises(ValidationError) as context:
+            validate_license_number("ab1245")
+        self.assertEqual(
+            context.exception.message,
+            "License number should consist of 8 characters"
+        )
+
+    def test_validate_license_number_first_three_chars_should_be_letters(self):
+        with self.assertRaises(ValidationError) as context:
+            validate_license_number("AV312455")
+        self.assertEqual(
+            context.exception.message,
+            "First 3 characters should be uppercase letters"
+        )
