@@ -59,8 +59,14 @@ class PrivateDriverTests(TestCase):
             password="test12345",
         )
         self.client.force_login(self.user)
-        self.manufacturer = Manufacturer.objects.create(name="test1", country="test1")
-        self.car = Car.objects.create(model="test1", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="test1",
+            country="test1"
+        )
+        self.car = Car.objects.create(
+            model="test1",
+            manufacturer=self.manufacturer
+        )
 
     def test_create_driver(self):
         form_data = {
@@ -100,8 +106,14 @@ class PrivateCarTests(TestCase):
 
         )
         self.client.force_login(self.user)
-        self.manufacturer = Manufacturer.objects.create(name="test12345", country="test1")
-        self.car = Car.objects.create(model="test12345", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="test12345",
+            country="test1"
+        )
+        self.car = Car.objects.create(
+            model="test12345",
+            manufacturer=self.manufacturer
+        )
 
     def test_retrieve_cars(self):
         response = self.client.get(CAR_URL)
