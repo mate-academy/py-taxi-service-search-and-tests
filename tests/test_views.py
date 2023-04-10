@@ -59,6 +59,8 @@ class PrivateDriverTests(TestCase):
             password="test12345",
         )
         self.client.force_login(self.user)
+        self.manufacturer = Manufacturer.objects.create(name="test1", country="test1")
+        self.car = Car.objects.create(model="test1", manufacturer=self.manufacturer)
 
     def test_create_driver(self):
         form_data = {
@@ -98,9 +100,10 @@ class PrivateCarTests(TestCase):
 
         )
         self.client.force_login(self.user)
+        self.manufacturer = Manufacturer.objects.create(name="test12345", country="test1")
+        self.car = Car.objects.create(model="test12345", manufacturer=self.manufacturer)
 
     def test_retrieve_cars(self):
-        Car.objects.create(model="test1", manufacturer=self.manufacturer)
         response = self.client.get(CAR_URL)
         cars = Car.objects.all()
         self.assertEqual(response.status_code, 200)
@@ -110,8 +113,14 @@ class PrivateCarTests(TestCase):
         )
 
     def test_assign_user_to_car(self):
-        car = Car.objects.create(model="test1", manufacturer=self.manufacturer)
         self.client.post(
-            reverse("taxi:toggle-car-assign", kwargs={"pk": car.pk}),
+            reverse("taxi:toggle-car-assign", kwargs={"pk": self.car.pk}),
         )
-        self.assertTrue(self.user in car.drivers.all())
+        self.assertTrue(self.user in self.car.drivers.all())
+
+    def test_unassign_user_from_car(self):
+        self.car.drivers.add(self.user)
+        self.client.post(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": self.car.pk}),
+        )
+        self.assertFalse(self.user in self.car.drivers.all())
