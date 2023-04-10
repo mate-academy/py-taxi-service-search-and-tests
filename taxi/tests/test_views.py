@@ -28,7 +28,10 @@ class ManufacturerListViewTests(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.context["search_form"], ManufacturerSearchForm)
+        self.assertIsInstance(
+            response.context["search_form"],
+            ManufacturerSearchForm
+        )
 
     def test_get_queryset_filtered(self):
         url = "/manufacturers/?name=Toy"

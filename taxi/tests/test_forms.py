@@ -36,7 +36,7 @@ class SearchFormsTests(TestCase):
             response.context["search_form"].initial["name"],
             "Toyota"
         )
-    
+
     def test_car_get_context_data_with_search_form(self):
         self.car1 = Car.objects.create(
             model="Toyota Yaris",
@@ -61,7 +61,7 @@ class SearchFormsTests(TestCase):
             response.context["search_form"].initial["model"],
             "Toyota"
         )
-        
+
     def test_driver_get_context_data_with_search_form(self):
         self.driver1 = get_user_model().objects.create_user(
             username="admin101",
