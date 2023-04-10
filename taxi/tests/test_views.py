@@ -43,9 +43,18 @@ class PrivateManufacturerTest(TestCase):
         )
         self.client.force_login(self.user)
 
-        self.manufacturer1 = Manufacturer.objects.create(name="Ford", country="USA")
-        self.manufacturer2 = Manufacturer.objects.create(name="Ferrari", country="Italy")
-        self.manufacturer3 = Manufacturer.objects.create(name="Toyota", country="Japan")
+        self.manufacturer1 = Manufacturer.objects.create(
+            name="Ford",
+            country="USA"
+        )
+        self.manufacturer2 = Manufacturer.objects.create(
+            name="Ferrari",
+            country="Italy"
+        )
+        self.manufacturer3 = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
 
     def test_retrieve_manufacturer(self):
         response = self.client.get(MANUFACTURERS_URL)
@@ -79,11 +88,23 @@ class PrivateCarTest(TestCase):
         )
         self.client.force_login(self.user)
 
-        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
 
-        self.car1 = Car.objects.create(model="Camry", manufacturer=self.manufacturer)
-        self.car2 = Car.objects.create(model="Corolla", manufacturer=self.manufacturer)
-        self.car3 = Car.objects.create(model="Avalon", manufacturer=self.manufacturer)
+        self.car1 = Car.objects.create(
+            model="Camry",
+            manufacturer=self.manufacturer
+        )
+        self.car2 = Car.objects.create(
+            model="Corolla",
+            manufacturer=self.manufacturer
+        )
+        self.car3 = Car.objects.create(
+            model="Avalon",
+            manufacturer=self.manufacturer
+        )
 
     def test_retrieve_car(self):
         response = self.client.get(CARS_URL)
@@ -115,9 +136,21 @@ class PrivateDriverTest(TestCase):
         )
         self.client.force_login(self.user)
 
-        self.driver1 = Driver.objects.create(username="driver1", password="testpass", license_number="D001")
-        self.driver2 = Driver.objects.create(username="driver2", password="testpass", license_number="D002")
-        self.driver3 = Driver.objects.create(username="driver3", password="testpass", license_number="D003")
+        self.driver1 = Driver.objects.create(
+            username="driver1",
+            password="testpass",
+            license_number="D001"
+        )
+        self.driver2 = Driver.objects.create(
+            username="driver2",
+            password="testpass",
+            license_number="D002"
+        )
+        self.driver3 = Driver.objects.create(
+            username="driver3",
+            password="testpass",
+            license_number="D003"
+        )
 
     def test_retrieve_driver(self):
         response = self.client.get(DRIVERS_URL)
