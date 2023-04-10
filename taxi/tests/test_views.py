@@ -93,7 +93,10 @@ class PrivateViewTest(TestCase):
             name="test_name1",
             country="test_country1"
         )
-        car = Car.objects.create(model="test_model_1", manufacturer=manufacturer)
+        car = Car.objects.create(
+            model="test_model_1",
+            manufacturer=manufacturer
+        )
 
         response = self.client.post(
             reverse("taxi:toggle-car-assign", args=[car.id])
