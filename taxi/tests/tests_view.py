@@ -88,7 +88,10 @@ class ToggleAssignToCarViewTest(TestCase):
             model="Test car model",
             manufacturer=self.manufacturer
         )
-        self.TOGGLE_ASSIGN_URL = reverse("taxi:toggle-car-assign", args=[self.car.id])
+        self.TOGGLE_ASSIGN_URL = reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.id]
+        )
 
     def test_toggle_assign_to_car(self):
         self.assertFalse(self.car in self.driver.cars.all())
