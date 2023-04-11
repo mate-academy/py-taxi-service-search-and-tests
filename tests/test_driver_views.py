@@ -71,8 +71,13 @@ class PrivateDriverTests(TestCase):
             "license_number": "ASD11111"
         }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = get_user_model().objects.get(username=form_data["username"])
+        new_driver = get_user_model().objects.get(
+            username=form_data["username"]
+        )
 
         self.assertEqual(new_driver.first_name, form_data["first_name"])
         self.assertEqual(new_driver.last_name, form_data["last_name"])
-        self.assertEqual(new_driver.license_number, form_data["license_number"])
+        self.assertEqual(
+            new_driver.license_number,
+            form_data["license_number"]
+        )
