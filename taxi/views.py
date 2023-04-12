@@ -50,7 +50,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Manufacturer.objects.all().order_by("id")
+        queryset = Manufacturer.objects.order_by("id")
         name = self.request.GET.get("name")
 
         if name:
@@ -127,7 +127,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Driver.objects.all().order_by("id")
+        queryset = Driver.objects.order_by("id")
         username = self.request.GET.get("username")
 
         if username:
