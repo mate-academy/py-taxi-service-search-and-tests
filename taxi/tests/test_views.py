@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 DRIVERS_URL = reverse("taxi:driver-list")
 CARS_URL = reverse("taxi:car-list")
@@ -85,6 +85,30 @@ class PrivateManufacturerListTests(TestCase):
         queryset_searched = Manufacturer.objects.filter(
             name__icontains="artur",
         )
+
         self.assertQuerysetEqual(
             response.context["manufacturer_list"], queryset_searched
         )
+
+
+class ToggleAssignToCarViewTest(TestCase):
+    def setUp(self):
+        self.manufacturer = Manufacturer.objects.create(name="Test Manufacturer")
+        self.car = Car.objects.create(
+            model="Test Model", manufacturer=self.manufacturer
+        )
+        self.driver = Driver.objects.create_user(
+            username="driver",
+            password="testpass123",
+            license_number="ABC12345"
+        )
+
+    def test_toggle_assign_to_car(self):
+        self.client.force_login(self.driver)
+        response = self.client.get(reverse("taxi:toggle-car-assign", args=[self.car.pk]))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(self.car, self.driver.cars.all())
+
+        response = self.client.get(reverse("taxi:toggle-car-assign", args=[self.car.pk]))
+        self.assertEqual(response.status_code, 302)
+        self.assertNotIn(self.car, self.driver.cars.all())
