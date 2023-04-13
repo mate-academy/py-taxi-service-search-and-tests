@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_filters %}
 {% block content %}
     <h1>
       Driver List
@@ -8,6 +8,9 @@
       </a>
     </h1>
 
+  {% include "includes/search_form.html" %}
+
+  <br>
     {% if driver_list %}
     <table class="table">
       <tr>
