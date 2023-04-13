@@ -8,10 +8,7 @@
       </a>
     </h1>
 
-    <form action="" method="get" class="form-inline" novalidate>
-      {{ search_form|crispy }}
-      <input type="submit" value="Search" class="btn btn-secondary">
-    </form>
+  {% include "includes/search_form.html" %}
 
   <br>
     {% if driver_list %}
