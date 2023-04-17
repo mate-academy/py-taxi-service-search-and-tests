@@ -61,9 +61,29 @@ class CarModelTest(TestCase):
             name="TestName",
             country="TestCountry")
 
-        Car.objects.create(
+        driver1 = Driver.objects.create(
+            username="test_1",
+            password="test12345_1",
+            license_number="AAA11111",
+            first_name="TestFirstName1",
+            last_name="TestLastName1"
+        )
+
+        driver2 = Driver.objects.create(
+            username="test_2",
+            password="test12345_2",
+            license_number="AAA22222",
+            first_name="TestFirstName2",
+            last_name="TestLastName2"
+        )
+
+        test_car = Car.objects.create(
             model="TestModel",
             manufacturer=manufacturer)
+
+        drivers_for_car = Driver.objects.all()
+        test_car.drivers.set(drivers_for_car)
+        test_car.save()
 
     def test_model_label(self):
         car = Car.objects.get(id=1)
