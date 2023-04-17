@@ -13,7 +13,7 @@ class PublicManufacturerListViewTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
     
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('taxi:manufacturer-list'))
+        response = self.client.get(MANUFACTURERS_URL)
         self.assertRedirects(response, '/accounts/login/?next=/manufacturers/')
 
 
@@ -65,4 +65,8 @@ class PrivateManufacturerListViewTest(TestCase):
         self.assertTrue(response.context["is_paginated"])
         self.assertEqual(len(response.context["manufacturer_list"]), 3)
 
-
+    def test_search_form(self):
+        response = self.client.get(MANUFACTURERS_URL+"?name=1")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["is_paginated"])
+        self.assertEqual(len(response.context["manufacturer_list"]), 4)
