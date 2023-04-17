@@ -13,10 +13,10 @@ class PublicManufacturerListViewTest(TestCase):
     def test_login_required(self):
         response = self.client.get(MANUFACTURERS_URL)
         self.assertNotEqual(response.status_code, 200)
-    
+
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(MANUFACTURERS_URL)
-        self.assertRedirects(response, '/accounts/login/?next=/manufacturers/')
+        self.assertRedirects(response, "/accounts/login/?next=/manufacturers/")
 
 
 class PrivateManufacturerListViewTest(TestCase):
@@ -61,14 +61,14 @@ class PrivateManufacturerListViewTest(TestCase):
 
     def test_lists_all_manufacturers(self):
         # Get second page and confirm it has (exactly) remaining 3 items
-        response = self.client.get(MANUFACTURERS_URL+"?page=3")
+        response = self.client.get(MANUFACTURERS_URL + "?page=3")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"])
         self.assertEqual(len(response.context["manufacturer_list"]), 3)
 
     def test_search_form(self):
-        response = self.client.get(MANUFACTURERS_URL+"?name=1")
+        response = self.client.get(MANUFACTURERS_URL + "?name=1")
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context["is_paginated"])
         self.assertEqual(len(response.context["manufacturer_list"]), 4)
@@ -81,7 +81,7 @@ class PublicCarListViewTest(TestCase):
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(CARS_URL)
-        self.assertRedirects(response, '/accounts/login/?next=/cars/')
+        self.assertRedirects(response, "/accounts/login/?next=/cars/")
 
 
 class PrivateCarListViewTest(TestCase):
@@ -90,7 +90,7 @@ class PrivateCarListViewTest(TestCase):
         # Create 13 cars for pagination tests
         number_of_cars = 13
 
-        driver1 = Driver.objects.create(
+        Driver.objects.create(
             username="test_1",
             password="test12345_1",
             license_number="AAA11111",
@@ -98,7 +98,7 @@ class PrivateCarListViewTest(TestCase):
             last_name="TestLastName1"
         )
 
-        driver2 = Driver.objects.create(
+        Driver.objects.create(
             username="test_2",
             password="test12345_2",
             license_number="AAA22222",
@@ -161,8 +161,8 @@ class PrivateCarListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context["is_paginated"])
         self.assertEqual(len(response.context["car_list"]), 4)
-        
-        
+
+
 class PublicDriverListViewTest(TestCase):
     def test_login_required(self):
         response = self.client.get(DRIVERS_URL)
@@ -170,7 +170,7 @@ class PublicDriverListViewTest(TestCase):
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(DRIVERS_URL)
-        self.assertRedirects(response, '/accounts/login/?next=/drivers/')
+        self.assertRedirects(response, "/accounts/login/?next=/drivers/")
 
 
 class PrivateDriverListViewTest(TestCase):

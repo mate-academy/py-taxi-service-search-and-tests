@@ -45,7 +45,8 @@ class DriverModelTest(TestCase):
 
     def test_driver_str(self):
         driver = Driver.objects.get(id=1)
-        expected_object_name = f"{driver.username} ({driver.first_name} {driver.last_name})"
+        expected_object_name = f"{driver.username} " \
+                               f"({driver.first_name} {driver.last_name})"
         self.assertEqual(str(driver), expected_object_name)
 
     def test_get_absolute_url(self):
@@ -61,7 +62,7 @@ class CarModelTest(TestCase):
             name="TestName",
             country="TestCountry")
 
-        driver1 = Driver.objects.create(
+        Driver.objects.create(
             username="test_1",
             password="test12345_1",
             license_number="AAA11111",
@@ -69,7 +70,7 @@ class CarModelTest(TestCase):
             last_name="TestLastName1"
         )
 
-        driver2 = Driver.objects.create(
+        Driver.objects.create(
             username="test_2",
             password="test12345_2",
             license_number="AAA22222",

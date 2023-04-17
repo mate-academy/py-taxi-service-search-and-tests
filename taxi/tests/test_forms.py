@@ -130,12 +130,12 @@ class UpdateFormsHaveInitialValuesTest(TestCase):
 
         manufacturer = Manufacturer.objects.create(
             name="TestName",
-            country=f"TestCountry",
+            country="TestCountry",
         )
 
         drivers_for_car = Driver.objects.all()
         test_car = Car.objects.create(
-            model=f"TestModel",
+            model="TestModel",
             manufacturer=manufacturer)
 
         test_car.drivers.set(drivers_for_car)
@@ -146,6 +146,47 @@ class UpdateFormsHaveInitialValuesTest(TestCase):
         self.client.force_login(user)
 
     def test_driver_update_form_has_initial_value(self):
-        response = self.client.get(reverse('taxi:driver-update', kwargs={'pk': 1}))
+        response = self.client.get(reverse(
+            "taxi:driver-update",
+            kwargs={"pk": 1}
+        ))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['form'].initial['license_number'], "AAA11111")
+        self.assertEqual(
+            response.context["form"].initial["license_number"],
+            "AAA11111"
+        )
+
+    def test_manufacturer_update_form_has_initial_value(self):
+        response = self.client.get(reverse(
+            "taxi:manufacturer-update",
+            kwargs={"pk": 1}
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.context["form"].initial["name"],
+            "TestName"
+        )
+        self.assertEqual(
+            response.context["form"].initial["country"],
+            "TestCountry"
+        )
+
+    def test_car_update_form_has_initial_value(self):
+        drivers_for_car = Driver.objects.all()
+        response = self.client.get(reverse(
+            "taxi:car-update",
+            kwargs={"pk": 1}
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.context["form"].initial["model"],
+            "TestModel"
+        )
+        self.assertEqual(
+            response.context["form"].initial["manufacturer"],
+            1
+        )
+        self.assertEqual(
+            response.context["form"].initial["drivers"],
+            list(drivers_for_car)
+        )
