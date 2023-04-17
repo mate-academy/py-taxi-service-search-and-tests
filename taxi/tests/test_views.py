@@ -4,8 +4,20 @@ from django.urls import reverse
 
 from taxi.models import Manufacturer
 
+MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
 
-class ManufacturerListViewTest(TestCase):
+
+class PublicManufacturerListViewTest(TestCase):
+    def test_login_required(self):
+        response = self.client.get(MANUFACTURERS_URL)
+        self.assertNotEqual(response.status_code, 200)
+    
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('taxi:manufacturer-list'))
+        self.assertRedirects(response, '/accounts/login/?next=/manufacturers/')
+
+
+class PrivateManufacturerListViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Create 13 manufacturers for pagination tests
@@ -30,16 +42,16 @@ class ManufacturerListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"))
+        response = self.client.get(MANUFACTURERS_URL)
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"))
+        response = self.client.get(MANUFACTURERS_URL)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_pagination_is_5(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"))
+        response = self.client.get(MANUFACTURERS_URL)
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"])
@@ -47,8 +59,10 @@ class ManufacturerListViewTest(TestCase):
 
     def test_lists_all_manufacturers(self):
         # Get second page and confirm it has (exactly) remaining 3 items
-        response = self.client.get(reverse("taxi:manufacturer-list")+"?page=3")
+        response = self.client.get(MANUFACTURERS_URL+"?page=3")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"])
         self.assertEqual(len(response.context["manufacturer_list"]), 3)
+
+
