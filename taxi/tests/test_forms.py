@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django.test import TestCase
 from django.urls import reverse
 
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
-from taxi.models import Driver
+from taxi.models import Driver, Manufacturer, Car
 
 
 class DriverCreationFormTest(TestCase):
@@ -107,17 +108,44 @@ class DriverLicenseUpdateFormTest(TestCase):
         form = DriverLicenseUpdateForm(data=data)
         self.assertTrue(form.is_valid())
 
-    def test_driver_update_form_license_number_has_initial_value(self):
-        self.user = get_user_model().objects.create_user(
-            username="test",
-            password="test12345",
+
+class UpdateFormsHaveInitialValuesTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        get_user_model().objects.create_user(
+            username="test_1",
+            password="test12345_1",
             license_number="AAA11111",
-            first_name="TestFirstName",
-            last_name="TestLastName"
+            first_name="TestFirstName_1",
+            last_name="TestLastName_1"
         )
 
-        self.client.force_login(self.user)
+        get_user_model().objects.create_user(
+            username="test_2",
+            password="test12345_2",
+            license_number="AAA22222",
+            first_name="TestFirstName_2",
+            last_name="TestLastName_2"
+        )
 
+        manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country=f"TestCountry",
+        )
+
+        drivers_for_car = Driver.objects.all()
+        test_car = Car.objects.create(
+            model=f"TestModel",
+            manufacturer=manufacturer)
+
+        test_car.drivers.set(drivers_for_car)
+        test_car.save()
+
+    def setUp(self):
+        user = get_object_or_404(Driver, username="test_1")
+        self.client.force_login(user)
+
+    def test_driver_update_form_has_initial_value(self):
         response = self.client.get(reverse('taxi:driver-update', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['form'].initial['license_number'], "AAA11111")
