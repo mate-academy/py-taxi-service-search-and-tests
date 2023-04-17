@@ -6,6 +6,7 @@ from taxi.models import Manufacturer, Car, Driver
 
 MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
 CARS_URL = reverse("taxi:car-list")
+DRIVERS_URL = reverse("taxi:driver-list")
 
 
 class PublicManufacturerListViewTest(TestCase):
@@ -160,3 +161,71 @@ class PrivateCarListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context["is_paginated"])
         self.assertEqual(len(response.context["car_list"]), 4)
+        
+        
+class PublicDriverListViewTest(TestCase):
+    def test_login_required(self):
+        response = self.client.get(DRIVERS_URL)
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(DRIVERS_URL)
+        self.assertRedirects(response, '/accounts/login/?next=/drivers/')
+
+
+class PrivateDriverListViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create 8 drivers for pagination tests
+        number_of_drivers = 8
+
+        for driver_id in range(number_of_drivers):
+            Driver.objects.create(
+                username=f"test_{driver_id}",
+                password=f"test12345_{driver_id}",
+                license_number=f"AAA1111{driver_id}",
+                first_name=f"TestFirstName{driver_id}",
+                last_name=f"TestLastName{driver_id}"
+            )
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            "test",
+            "test12345"
+        )
+
+        self.client.force_login(self.user)
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get("/drivers/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(DRIVERS_URL)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(DRIVERS_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_pagination_is_5(self):
+        response = self.client.get(DRIVERS_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("is_paginated" in response.context)
+        self.assertTrue(response.context["is_paginated"])
+        self.assertEqual(len(response.context["driver_list"]), 5)
+
+    def test_lists_all_drivers(self):
+        # Get second page and confirm it has (exactly) remaining 3 items
+        response = self.client.get(DRIVERS_URL + "?page=2")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("is_paginated" in response.context)
+        self.assertTrue(response.context["is_paginated"])
+        self.assertEqual(len(response.context["driver_list"]), 4)
+
+    def test_search_form(self):
+        response = self.client.get(DRIVERS_URL + "?username_=1")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["is_paginated"])
+        self.assertEqual(len(response.context["driver_list"]), 1)
