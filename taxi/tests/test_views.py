@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 
 class ResponseNonLoggedTest(TestCase):
@@ -51,9 +51,31 @@ class ResponseLoggedTest(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
+    def test_retrieve_manufacturers_with_search(self):
+        url_with_search = reverse("taxi:manufacturer-list") + "?name=Lanos"
+        response = self.client.get(url_with_search)
+        manufacturers = Manufacturer.objects.filter(name__icontains="Lanos")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
     def test_get_drivers_list(self):
         response = self.client.get(reverse("taxi:driver-list"))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_get_drivers_list_with_search(self):
+        url_with_search = reverse("taxi:driver-list") + "?username=test"
+        response = self.client.get(url_with_search)
+        drivers = Driver.objects.filter(username__icontains="test")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_get_driverds_detail(self):
@@ -66,6 +88,17 @@ class ResponseLoggedTest(TestCase):
     def test_get_cars_list(self):
         response = self.client.get(reverse("taxi:car-list"))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_get_cars_list_with_search(self):
+        url_with_search = reverse("taxi:car-list") + "?model=test"
+        response = self.client.get(url_with_search)
+        cars = Car.objects.filter(model__icontains="test")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(cars)
+        )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_get_cars_detail(self):
