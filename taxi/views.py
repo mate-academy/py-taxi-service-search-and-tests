@@ -36,6 +36,12 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        query = self.request.GET.get('query-manufacturer')
+        if query:
+            return Manufacturer.objects.filter(name__icontains=query)
+        return Manufacturer.objects.all()
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
