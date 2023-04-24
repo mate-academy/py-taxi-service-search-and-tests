@@ -59,6 +59,12 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
 
+    def get_queryset(self):
+        query = self.request.GET.get('query-cars')
+        if query:
+            return Car.objects.filter(model__icontains=query)
+        return Car.objects.all()
+
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
@@ -86,7 +92,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('query-drivers')
         if query:
             return Driver.objects.filter(username__icontains=query)
         return Driver.objects.all()

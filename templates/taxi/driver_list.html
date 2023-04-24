@@ -9,7 +9,7 @@
     </h1>
 
     <form action="{% url 'taxi:driver-list' %}" method="get">
-        <input type="text" name="q" id="search" placeholder="Search drivers...">
+      <label for="search"></label><input type="text" name="query-drivers" id="search" placeholder="Search drivers...">
     </form>
 
     {% if driver_list %}
@@ -39,11 +39,11 @@
     <script>
         // Real-time search functionality using jQuery
         $('#search').keyup(function() {
-            var query = $(this).val();
+            var query_driver = $(this).val();
             $.ajax({
                 url: '{% url "taxi:driver-list" %}',
                 data: {
-                    'q': query
+                    'query-drivers': query_driver
                 },
                 success: function(data) {
                     $('table').html($(data).find('table').html());
