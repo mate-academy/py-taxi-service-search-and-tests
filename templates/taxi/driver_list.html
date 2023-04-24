@@ -8,6 +8,10 @@
       </a>
     </h1>
 
+    <form action="{% url 'taxi:driver-list' %}" method="get">
+        <input type="text" name="q" id="search" placeholder="Search drivers...">
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -31,4 +35,21 @@
     {% else %}
       <p>There are no drivers in the service.</p>
     {% endif %}
+
+    <script>
+        // Real-time search functionality using jQuery
+        $('#search').keyup(function() {
+            var query = $(this).val();
+            $.ajax({
+                url: '{% url "taxi:driver-list" %}',
+                data: {
+                    'q': query
+                },
+                success: function(data) {
+                    $('table').html($(data).find('table').html());
+                }
+            });
+        });
+    </script>
+
 {% endblock %}

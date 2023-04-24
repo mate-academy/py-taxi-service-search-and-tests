@@ -85,6 +85,12 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Driver.objects.filter(username__icontains=query)
+        return Driver.objects.all()
+
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
