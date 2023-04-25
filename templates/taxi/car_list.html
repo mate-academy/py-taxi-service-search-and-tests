@@ -7,16 +7,41 @@
       Create
     </a>
   </h1>
-  {% if car_list %}
-    <ul>
-      {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no cars in taxi</p>
-  {% endif %}
+  <form id="search-form" method="get">
+    <label for="search"></label>
+    <input type="text" name="query-cars" id="search" placeholder="Search cars...">
+  </form>
+  <div id="car-list-container">
+    {% if car_list %}
+      <ul>
+        {% for car in car_list %}
+          <li>
+            <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+            {{ car.model }} ({{ car.manufacturer.name }})
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>There are no cars in taxi</p>
+    {% endif %}
+  </div>
+
+<script>
+  $(document).ready(function() {
+    // Real-time search functionality using jQuery
+    $('#search').on('input', function() {
+      var query_cars = $(this).val();
+      $.ajax({
+        url: $('#search-form').attr('action'),
+        data: {
+          'query-cars': query_cars
+        },
+        success: function(data) {
+          $('#car-list-container').html($(data).find('#car-list-container').html());
+        }
+      });
+    });
+  });
+</script>
+
 {% endblock %}

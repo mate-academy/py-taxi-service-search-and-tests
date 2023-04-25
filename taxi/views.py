@@ -36,6 +36,17 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        query = self.request.GET.get("query-manufacturer")
+        if query:
+            return Manufacturer.objects.filter(name__icontains=query)
+        return Manufacturer.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["manufacturer_list"] = self.get_queryset()
+        return context
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -56,8 +67,20 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
+    context_object_name = "car_list"
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
+
+    def get_queryset(self):
+        query = self.request.GET.get("query-cars")
+        if query:
+            return Car.objects.filter(model__icontains=query)
+        return Car.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["car_list"] = self.get_queryset()
+        return context
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -83,7 +106,19 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
+    context_object_name = "driver_list"
     paginate_by = 5
+
+    def get_queryset(self):
+        query = self.request.GET.get("query-drivers")
+        if query:
+            return Driver.objects.filter(username__icontains=query)
+        return Driver.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["driver_list"] = self.get_queryset()
+        return context
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
