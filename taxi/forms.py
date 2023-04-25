@@ -51,4 +51,5 @@ def validate_license_number(
 
     return license_number
 
+
 # class DriverSearchForm(forms.Form):

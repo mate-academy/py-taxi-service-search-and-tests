@@ -37,14 +37,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        query = self.request.GET.get('query-manufacturer')
+        query = self.request.GET.get("query-manufacturer")
         if query:
             return Manufacturer.objects.filter(name__icontains=query)
         return Manufacturer.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['manufacturer_list'] = self.get_queryset()
+        context["manufacturer_list"] = self.get_queryset()
         return context
 
 
@@ -72,14 +72,14 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     queryset = Car.objects.all().select_related("manufacturer")
 
     def get_queryset(self):
-        query = self.request.GET.get('query-cars')
+        query = self.request.GET.get("query-cars")
         if query:
             return Car.objects.filter(model__icontains=query)
         return Car.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['car_list'] = self.get_queryset()
+        context["car_list"] = self.get_queryset()
         return context
 
 
@@ -110,14 +110,14 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        query = self.request.GET.get('query-drivers')
+        query = self.request.GET.get("query-drivers")
         if query:
             return Driver.objects.filter(username__icontains=query)
         return Driver.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['driver_list'] = self.get_queryset()
+        context["driver_list"] = self.get_queryset()
         return context
 
 
