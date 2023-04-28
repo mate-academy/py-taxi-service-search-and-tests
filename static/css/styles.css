@@ -6,3 +6,13 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.link {
+    text-decoration: none;
+    color: rgba(0, 0, 0, .7)
+}
+
+.link:hover {
+  text-decoration: none;
+  color: rgba(0, 0, 0, .7)
+}
