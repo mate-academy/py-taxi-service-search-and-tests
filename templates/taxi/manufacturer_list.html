@@ -3,10 +3,14 @@
 {% block content %}
   <h1>
     Manufacturer List
-    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
+    <a style="float: right" href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
+
+  {% block search_form %}
+    {% include "includes/searc_form.html" %}
+  {% endblock %}
 
   {% if manufacturer_list %}
     <table class="table">
