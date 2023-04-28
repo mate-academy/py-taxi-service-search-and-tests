@@ -3,20 +3,48 @@
 {% block content %}
   <h1>
     Car list
-    <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
+    <a href="{% url 'taxi:car-create' %}" class="btn btn-outline-primary link-to-page">
       Create
     </a>
   </h1>
+
+  <br>
+  {% include "includes/search_form.html" %}
+  <br>
+
   {% if car_list %}
-    <ul>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Model</th>
+          <th scope="col">Manufacturer</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
       {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
+        <tbody>
+          <tr>
+            <td><a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.id }}</a></td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.manufacturer.name }}</td>
+            <td>
+              <a href="{% url 'taxi:car-update' pk=car.id %}">
+                <img src="/static/edit-3.svg">
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'taxi:car-delete' pk=car.id %}">
+                <img src="/static/trash-2.svg">
+              </a>
+            </td>
+          </tr>
+        </tbody>
       {% endfor %}
-    </ul>
+    </table>
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
+
 {% endblock %}
