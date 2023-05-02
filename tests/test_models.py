@@ -45,3 +45,44 @@ class ModelsTests(TestCase):
         self.assertEqual(driver.username, "JaneDoe")
         self.assertEqual(driver.license_number, "ASD45678")
         self.assertTrue(driver.check_password("somepassword456"))
+
+
+class SearchFormsTests(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test_user",
+            password="somepassword123",
+        )
+        self.client.force_login(self.user)
+
+    def test_manufacturer_search(self):
+        search_term = "test_manufacturer"
+        response = self.client.get(
+            f"/manufacturers/?username={search_term}"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"],
+            Manufacturer.objects.filter(name__icontains=search_term)
+        )
+
+    def test_car_search(self):
+        search_term = "test_car"
+        response = self.client.get(f"/cars/?username={search_term}")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["car_list"],
+            Car.objects.filter(model__icontains=search_term)
+        )
+
+    def test_driver_search(self):
+        search_term = "test_driver"
+        response = self.client.get(f"/drivers/?username={search_term}")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context["driver_list"],
+            get_user_model().objects.filter(username__icontains=search_term)
+        )

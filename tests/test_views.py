@@ -30,7 +30,7 @@ class PrivateRetrieveTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             "testuser",
-            "somepassword123",
+            "somepassword123"
         )
 
         self.client.force_login(self.user)
@@ -61,6 +61,28 @@ class PrivateRetrieveTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["car_list"]), list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_toggle_assign_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
+        car = Car.objects.create(
+            model="X5",
+            manufacturer=manufacturer
+        )
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(car in self.user.cars.all())
+
+        response = self.client.post(
+            reverse("taxi:toggle-car-assign", args=[car.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(car in self.user.cars.all())
 
     def test_retrieve_driver_list(self):
         Driver.objects.create(
