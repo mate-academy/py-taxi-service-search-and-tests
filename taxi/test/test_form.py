@@ -94,7 +94,10 @@ class TestToggle(TestCase):
     def test_toggle_assign_to_car_assign(self):
         # Try to assign a driver to a car
         self.client.force_login(self.driver)
-        response = self.client.get(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.id]
+        ))
         self.assertEqual(response.status_code, 302)
         self.assertTrue(self.car.drivers.filter(id=self.driver.id).exists())
 
@@ -102,6 +105,9 @@ class TestToggle(TestCase):
         # Assign a driver to the car and then try to remove them
         self.car.drivers.add(self.driver)
         self.client.force_login(self.driver)
-        response = self.client.get(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.id]
+        ))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(self.car.drivers.filter(id=self.driver.id).exists())
