@@ -38,7 +38,7 @@ class ManufacturerModelTest(TestCase):
 class DriverModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        driver = get_user_model().objects.create_user(
+        cls.user = get_user_model().objects.create_user(
             username="test",
             password="test12345",
             first_name="Test first",
@@ -48,7 +48,8 @@ class DriverModelTest(TestCase):
 
     def test_driver_str(self):
         driver = Driver.objects.get(id=1)
-        expected_object_name = f"{driver.username} ({driver.first_name} {driver.last_name})"
+        expected_object_name = f"{driver.username} ({driver.first_name} " \
+                               f"{driver.last_name})"
         self.assertEqual(str(driver), expected_object_name)
 
     def test_license_number_label(self):
@@ -63,13 +64,16 @@ class DriverModelTest(TestCase):
 
     def test_get_absolute_url(self):
         driver = Driver.objects.get(id=1)
-        self.assertEqual(driver.get_absolute_url(), '/drivers/1/')
+        self.assertEqual(driver.get_absolute_url(), "/drivers/1/")
 
 
 class CarModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        manufacturer = Manufacturer.objects.create(name="Fiat", country="Italy")
+        manufacturer = Manufacturer.objects.create(
+            name="Fiat",
+            country="Italy"
+        )
         Car.objects.create(
             model="Fiat Tipo",
             manufacturer=manufacturer

@@ -6,8 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriversUsernameSearchForm, CarsModelSearchForm, \
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    DriversUsernameSearchForm,
+    CarsModelSearchForm,
     ManufacturersNameSearchForm
+)
 
 
 @login_required
@@ -41,7 +47,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = ManufacturersNameSearchForm(initial={"name": name})
+        context["search_form"] = ManufacturersNameSearchForm(
+            initial={"name": name}
+        )
         return context
 
     def get_queryset(self):
@@ -78,7 +86,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
-        context["search_form"] = CarsModelSearchForm(initial={"model": model})
+        context["search_form"] = CarsModelSearchForm(
+            initial={"model": model}
+        )
         return context
 
     def get_queryset(self):
@@ -119,7 +129,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("Username", "")
-        context["search_form"] = DriversUsernameSearchForm(initial={"Username": username})
+        context["search_form"] = DriversUsernameSearchForm(
+            initial={"Username": username}
+        )
         return context
 
     def get_queryset(self):
