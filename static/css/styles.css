@@ -6,3 +6,8 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.btn-dark-blue {
+    background-color: #00009B;
+    color: white;
+  }
