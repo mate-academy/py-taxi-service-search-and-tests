@@ -6,10 +6,7 @@
   <span class="flex-grow-1 text-light">Manufacturer List</span>
   <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-dark-blue link-to-page ml-auto" style="width: 20%;">Create</a>
   </h1>
-    <form action="" method="get" class="form-inline">
-      {{ manufacturer_search_form|crispy }}
-      <input type="submit" class="btn btn-primary" value="🔍">
-    </form>
+    {% include "includes/search_line.html" %}
 
   {% if manufacturer_list %}
     <table class="table table-striped table-bordered">
