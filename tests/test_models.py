@@ -71,4 +71,3 @@ class CarTest(TestCase):
         car = Car.objects.get(id=1)
         manufacturer = Manufacturer.objects.get(id=1)
         self.assertEqual(car.manufacturer, manufacturer)
-

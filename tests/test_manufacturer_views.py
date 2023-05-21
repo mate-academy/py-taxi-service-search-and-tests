@@ -45,4 +45,3 @@ class PrivateManufacturerTest(TestCase):
             list(response.context["manufacturer_list"]),
             list(Manufacturer.objects.filter(name="test12"))
         )
-
