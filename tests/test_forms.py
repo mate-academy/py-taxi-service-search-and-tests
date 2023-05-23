@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from taxi.forms import (
     DriverCreationForm,
@@ -63,7 +64,9 @@ class SearchFormsTests(TestCase):
             manufacturer=self.manufacturer_two,
         )
 
-        url = "/cars/"
+        url = reverse(
+            "taxi:car-list"
+        )
         car_search_data = {"model": "Lexus"}
 
         response = self.client.get(url, data=car_search_data)
@@ -90,7 +93,9 @@ class SearchFormsTests(TestCase):
             license_number="QWE33454",
         )
 
-        url = "/drivers/"
+        url = reverse(
+            "taxi:driver-list"
+        )
         driver_search_data = {"username": "admin"}
 
         response = self.client.get(url, data=driver_search_data)
@@ -106,7 +111,9 @@ class SearchFormsTests(TestCase):
         )
 
     def test_manufacturer_search_form_get_correct_result(self) -> None:
-        url = "/manufacturers/"
+        url = reverse(
+            "taxi:manufacturer-list"
+        )
         manufacturer_search_data = {"name": "Lexus"}
 
         response = self.client.get(url, data=manufacturer_search_data)
