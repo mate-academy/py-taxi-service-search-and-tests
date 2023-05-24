@@ -8,9 +8,9 @@
       Create
     </a>
   </h1>
-  <form action="" method="get">
-    {{ search_manufacturer_form|crispy }}
-  </form>
+
+  {% include "includes/search_form.html" %}
+  <br>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
