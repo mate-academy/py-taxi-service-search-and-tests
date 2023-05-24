@@ -2,7 +2,11 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from taxi.models import Manufacturer, Car
-from taxi.forms import ManufacturerNameSearchForm, CarModelSearchForm, DriverUsernameSearchForm
+from taxi.forms import (
+    ManufacturerNameSearchForm,
+    CarModelSearchForm,
+    DriverUsernameSearchForm
+)
 
 
 class SearchFormsTests(TestCase):
