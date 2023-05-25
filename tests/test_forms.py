@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import reverse
 from django.test import TestCase
 
 from taxi.models import Manufacturer, Car
@@ -26,7 +27,7 @@ class SearchFormsTests(TestCase):
         )
 
     def test_manufacturer_get_context_data_with_search_form(self):
-        url = "/manufacturers/"
+        url = reverse("taxi:manufacturer-list")
         data = {"name": "BMW"}
 
         response = self.client.get(url, data=data)
@@ -51,7 +52,7 @@ class SearchFormsTests(TestCase):
             manufacturer=self.manufacturer2,
         )
 
-        url = "/cars/"
+        url = reverse("taxi:car-list")
         data = {"model": "BMW X6"}
 
         response = self.client.get(url, data=data)
@@ -78,7 +79,7 @@ class SearchFormsTests(TestCase):
             license_number="ADM19088"
         )
 
-        url = "/drivers/"
+        url = reverse("taxi:driver-list")
         data = {"username": "admin"}
 
         response = self.client.get(url, data=data)

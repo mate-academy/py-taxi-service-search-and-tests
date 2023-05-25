@@ -10,12 +10,9 @@
 </h1>
 
 <br>
-<div class="search-line">
-  <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="🔍" class="btn btn-info">
-  </form>
-</div>
+{% block search %}
+  {% include "includes/search_form.html" %}
+{% endblock %}
 <br>
 
 {% if car_list %}

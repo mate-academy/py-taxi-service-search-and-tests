@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
 
 {% block content %}
 <h1>
@@ -10,12 +9,9 @@
 </h1>
 
 <br>
-<div class="search-line">
-  <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="🔍" class="btn btn-info">
-  </form>
-</div>
+  {% block search %}
+    {% include "includes/search_form.html" %}
+  {% endblock %}
 <br>
 
 {% if driver_list %}
