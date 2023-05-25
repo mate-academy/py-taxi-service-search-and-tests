@@ -1,32 +1,49 @@
-from django.test import TestCase
-
 from taxi.forms import DriverCreationForm
+
+from parameterized import parameterized
+from django.test import TestCase
 
 
 class FormsTest(TestCase):
-    def test_driver_creation_form_with_license_number_is_valid(self):
-
+    @parameterized.expand(
+        [("test",
+          "t1e2s3t4",
+          "t1e2s3t4",
+          "1-800-123-456",
+          "Test",
+          "Test",
+          False),
+         ("test", "t1e2s3t4", "t1e2s3t4", "12312347", "Test", "Test", False),
+         ("test", "t1e2s3t4", "t1e2s3t4", "tst12347", "Test", "Test", False),
+         ("test", "t1e2s3t4", "t1e2s3t4", "TSQWERTY", "Test", "Test", False),
+         ("test", "t1e2s3t4", "t1e2s3t4", "T$T12347", "Test", "Test", False),
+         ("test", "t1e2s3t4", "t1e2s3t4", "TST12347", "Test", "Test", True)],
+        ids=[
+            "not valid, phone number",
+            "not valid, only digits, correct length",
+            "not valid, lowercase letters",
+            "not valid, only letters, correct length",
+            "not valid, symbol used",
+            "valid",
+        ]
+    )
+    def test_driver_creation_form_with_license_number(
+            self,
+            username: str,
+            password1: str,
+            password2: str,
+            license_number: str,
+            first_name: str,
+            last_name: str,
+            result: bool
+    ) -> None:
         form_data = {
-            "username": "test",
-            "password1": "t1e2s3t4",
-            "password2": "t1e2s3t4",
-            "license_number": "TST12347",
-            "first_name": "Test",
-            "last_name": "Test",
+            "username": username,
+            "password1": password1,
+            "password2": password2,
+            "license_number": license_number,
+            "first_name": first_name,
+            "last_name": last_name,
         }
         form = DriverCreationForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form.data)
-
-    def test_driver_creation_form_with_license_number_not_valid(self):
-        form_data = {
-            "username": "test",
-            "password1": "t1e2s3t4",
-            "password2": "t1e2s3t4",
-            "license_number": "1-800-123-456",
-            "first_name": "Test",
-            "last_name": "Test",
-        }
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form.data)
+        self.assertEqual(form.is_valid(), result)

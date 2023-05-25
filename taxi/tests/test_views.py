@@ -39,7 +39,8 @@ class ResponseLoggedTest(TestCase):
         self.client.force_login(self.user)
         self.manufacturer = Manufacturer.objects.create(name="Daewoo Lanos",
                                                         country="Ukraine")
-        Car.objects.create(model="test", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(model="test",
+                                      manufacturer=self.manufacturer)
 
     def test_retrieve_manufacturers(self):
         response = self.client.get(reverse("taxi:manufacturer-list"))
@@ -107,3 +108,18 @@ class ResponseLoggedTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/car_detail.html")
+
+    def test_toggle_assign_to_car(self):
+        self.assertNotIn(self.car, self.user.cars.all())
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": 1})
+        )
+        self.assertEqual(response.status_code, 302)
+        self.user.refresh_from_db()
+        self.assertIn(self.car, self.user.cars.all())
+
+        self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": 1})
+        )
+        self.user.refresh_from_db()
+        self.assertNotIn(self.car, self.user.cars.all())
