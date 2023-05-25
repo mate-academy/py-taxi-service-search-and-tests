@@ -1,5 +1,9 @@
 body {
-    margin-top: 20px;
+    margin-top: 0;
+}
+
+.navbar-text  {
+    text-decoration: none;
 }
 
 .link-to-page {
