@@ -51,4 +51,3 @@ class PrivateCarTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["car_list"]),
                          list(Car.objects.filter(model="model_test_1")))
-        

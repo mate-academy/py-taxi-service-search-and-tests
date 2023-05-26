@@ -42,4 +42,3 @@ class PrivateManufacturerTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["manufacturer_list"]),
                          list(Manufacturer.objects.filter(name="test")))
-        

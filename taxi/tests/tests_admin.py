@@ -39,4 +39,3 @@ class AdminSiteTests(TestCase):
         self.assertContains(response, "First name:")
         self.assertContains(response, "Last name:")
         self.assertContains(response, "License number:")
-       
