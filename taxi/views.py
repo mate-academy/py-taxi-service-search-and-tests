@@ -16,7 +16,7 @@ from .forms import (
 
 
 @login_required
-def index(request) -> render:
+def index(request):
     """View function for the home page of the site."""
 
     num_drivers = Driver.objects.count()
@@ -42,7 +42,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         title = self.request.GET.get("searched_name", "")
         context["search_form"] = ManufacturerSearchForm(initial={
@@ -51,7 +51,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self) -> dict:
+    def get_queryset(self):
         queryset = Manufacturer.objects.all()
         form = ManufacturerSearchForm(self.request.GET)
         if form.is_valid():
@@ -91,7 +91,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self) -> dict:
+    def get_queryset(self):
         queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
@@ -126,7 +126,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(initial={
@@ -135,7 +135,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         return context
 
-    def get_queryset(self) -> dict:
+    def get_queryset(self):
         queryset = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
 
