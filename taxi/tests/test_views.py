@@ -13,7 +13,7 @@ DRIVER_LIST_URL = reverse("taxi:driver-list")
 class PublicCarListTests(TestCase):
     def test_login_required(self):
         response = self.client.get(CARS_LIST_URL)
-        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.status_code, 200)
 
 
 class PrivateCarListTests(TestCase):
