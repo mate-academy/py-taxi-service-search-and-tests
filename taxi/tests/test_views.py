@@ -18,24 +18,24 @@ class PrivateManufacturerListViewTest(TestCase):
         )
         self.client.force_login(self.test_user)
 
-    # def test_url_accessable_if_logged_in(self):
-    #     response = self.client.get(ManufacturerListPath)
-    #     self.assertEqual(response.status_code, 200)
-    #
-    # def test_view_uses_correct_template(self):
-    #     response = self.client.get(ManufacturerListPath)
-    #     self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
-    #
-    # def test_context_data(self):
-    #     Manufacturer.objects.create(name="BMW", country="Germany")
-    #     Manufacturer.objects.create(name="Fiat", country="Italy")
-    #     manufacturers = Manufacturer.objects.all()
-    #     response = self.client.get(ManufacturerListPath)
-    #
-    #     self.assertEqual(
-    #         list(response.context["manufacturer_list"]),
-    #         list(manufacturers)
-    #     )
+    def test_url_accessable_if_logged_in(self):
+        response = self.client.get(ManufacturerListPath)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(ManufacturerListPath)
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+    def test_context_data(self):
+        Manufacturer.objects.create(name="BMW", country="Germany")
+        Manufacturer.objects.create(name="Fiat", country="Italy")
+        manufacturers = Manufacturer.objects.all()
+        response = self.client.get(ManufacturerListPath)
+
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
 
     def test_search_by_name(self):
         for i in range(10):
