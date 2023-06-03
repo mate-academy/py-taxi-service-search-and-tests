@@ -7,8 +7,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm, CarSearchForm, \
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    DriverSearchForm,
+    CarSearchForm,
     ManufacturerSearchForm
+)
 
 
 @login_required
@@ -43,8 +49,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("name", "")
 
-        context['search_form'] = ManufacturerSearchForm(initial={
-         "name": name})
+        context["search_form"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -78,15 +85,17 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer").prefetch_related('drivers')
+    queryset = Car.objects.all().select_related(
+        "manufacturer").prefetch_related("drivers")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
 
         model = self.request.GET.get("model", "")
 
-        context['search_form'] = DriverSearchForm(initial={
-         "model": model})
+        context["search_form"] = DriverSearchForm(
+            initial={"model": model}
+        )
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -130,8 +139,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get("title", "")
 
-        context['search_form'] = DriverSearchForm(initial={
-         "username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -140,7 +150,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         form = DriverSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"])
 
         return queryset
 

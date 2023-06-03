@@ -30,9 +30,11 @@ class PrivateManufacturerListTests(TestCase):
 
     def test_manufacturer_search(self):
         Manufacturer.objects.create(name="Lincoln", country="USA")
-
-        search_manufacturer = Manufacturer.objects.filter(name="lincoln")
-        manufacturers = Manufacturer.objects.all()
+        response = self.client.get(MANUFACTURER_LIST_URL, {"name": "Lincoln"})
+        search_manufacturer = Manufacturer.objects.filter(name="Lincoln")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context["manufacturer_list"]),
+                         list(search_manufacturer))
 
 
 class PublicManufacturerListTests(TestCase):
@@ -74,11 +76,12 @@ class PrivateCarListTests(TestCase):
             country="Italy"
         )
         Car.objects.create(model="Veyron", manufacturer=manufacturer)
-        response = self.client.get("taxi:car-list")
-        cars_search = Car.objects.filter(model="Bugatti S")
+        response = self.client.get(CAR_LIST_URL, {"model": "Veyron"})
+        cars_search = Car.objects.filter(model="Veyron")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["car_list"]),
                          list(cars_search))
+        self.assertTemplateUsed(response, "taxi/car_list.html")
 
 
 class PublicDriverListTests(TestCase):
@@ -97,24 +100,28 @@ class PrivateDriverTests(TestCase):
 
     def test_retrieve_drivers(self):
         form_driver = {
-            "username": "Woo12345",
-            "password1": "Woo12345",
-            "password2": "Woo12345",
-            "license_number": "WOO12345",
+            "username": "new_yorker",
+            "password1": "test12345",
+            "password2": "test12345",
             "first_name": "Woody",
-            "last_name": "Allen"
+            "last_name": "Allen",
+            "license_number": "POW12345"
         }
         self.client.post(reverse("taxi:driver-create"), data=form_driver)
         response = self.client.get(DRIVER_LIST_URL)
-        new_user = get_user_model().objects.get(username=form_driver["username"])
+        new_user = get_user_model().objects.get(
+            username=form_driver["username"]
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(new_user.last_name, "Allen")
         self.assertEqual(new_user.first_name, form_driver["first_name"])
-        self.assertTemplateUsed(response, "taxi:driver-list")
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_driver_search(self):
-        response = self.client.get(DRIVER_LIST_URL, {"username": "test3"})
-        driver_search = get_user_model().objects.filter(username="test3")
+        response = self.client.get(
+            DRIVER_LIST_URL, {"username": "new_yorker3"}
+        )
+        driver_search = get_user_model().objects.filter(username="new_yorker")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["driver_list"]),
                          list(driver_search))
