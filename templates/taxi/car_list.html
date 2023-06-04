@@ -8,11 +8,11 @@
       Create
     </a>
   </h1>
-
-  <form  class="form-inline" action="" method="get" >
-  {{ search_form |crispy }}
-  <input  class="btn btn-primary" type="submit" value="👆️" >
-  </form>
+  {% include "includes/button-primary.html" %}
+{#  <form  class="form-inline" action="" method="get" >#}
+{#  {{ search_form |crispy }}#}
+{#  <input  class="btn btn-primary" type="submit" value="👆️" >#}
+{#  </form>#}
 
   {% if car_list %}
     <ul>

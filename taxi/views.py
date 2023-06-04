@@ -13,7 +13,7 @@ from .forms import (
     CarForm,
     DriverSearchForm,
     CarSearchForm,
-    ManufacturerSearchForm
+    ManufacturerSearchForm,
 )
 
 
@@ -49,9 +49,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("name", "")
 
-        context["search_form"] = ManufacturerSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -85,17 +83,16 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related(
-        "manufacturer").prefetch_related("drivers")
+    queryset = (
+        Car.objects.select_related("manufacturer").prefetch_related("drivers")
+    )
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
 
         model = self.request.GET.get("model", "")
 
-        context["search_form"] = DriverSearchForm(
-            initial={"model": model}
-        )
+        context["search_form"] = DriverSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -151,14 +148,15 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         if form.is_valid():
             return queryset.filter(
-                username__icontains=form.cleaned_data["username"])
+                username__icontains=form.cleaned_data["username"]
+            )
 
         return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
-    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+    queryset = Driver.objects.prefetch_related("cars__manufacturer")
 
 
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
