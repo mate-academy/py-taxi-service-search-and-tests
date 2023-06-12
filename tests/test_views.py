@@ -1,17 +1,21 @@
-import pprint
-
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from taxi.models import Manufacturer, Car
 
-MANUFACTURER_URL = reverse("taxi:driver-list")
+MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 DRIVER_URL = reverse("taxi:driver-list")
 CAR_URL = reverse("taxi:car-list")
 
 
+class BaseTestCase(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user("test", "password111")
+        self.client.force_login(self.user)
+
+
 class PublicTests(TestCase):
-    def test_manufacture_list_login_required(self):
+    def test_manufacturer_list_login_required(self):
         response = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(response.status_code, 200)
 
@@ -24,17 +28,11 @@ class PublicTests(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
 
-class PrivateManufacturer(TestCase):
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user("test", "password111")
-        self.client.force_login(self.user)
-
+class PrivateManufacturer(BaseTestCase):
     def test_retrieve_manufacturer(self):
         Manufacturer.objects.create(name="Test name", country="Test country")
         response = self.client.get(MANUFACTURER_URL)
         manufacturers = Manufacturer.objects.all()
-        pp = pprint.PrettyPrinter(indent=1)
-        pp.pprint(response.context)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list(response.context["manufacturer_list"]),
@@ -43,11 +41,7 @@ class PrivateManufacturer(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
 
-class PrivateDriverTests(TestCase):
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user("test", "password111")
-        self.client.force_login(self.user)
-
+class PrivateDriverTests(BaseTestCase):
     def test_create_driver(self):
         form_data = {
             "username": "new_user",
@@ -64,11 +58,7 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(new_user.license_number, form_data["license_number"])
 
 
-class PrivateCar(TestCase):
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user("test", "password111")
-        self.client.force_login(self.user)
-
+class PrivateCar(BaseTestCase):
     def test_retrieve_car(self):
         response = self.client.get(CAR_URL)
         cars = Car.objects.all()
