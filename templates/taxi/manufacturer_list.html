@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+  {% block form %}
+    {% include "includes/form.html" %}
+  {% endblock %}
+  <br>
 
   {% if manufacturer_list %}
     <table class="table">
@@ -48,3 +52,4 @@
       <p>There are no manufacturers in the service.</p>
   {% endif %}
 {% endblock %}
+

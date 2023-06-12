@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+ {% block form %}
+   {% include "includes/form.html" %}
+ {% endblock %}
+  <br>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
@@ -20,3 +24,5 @@
     <p>There are no cars in taxi</p>
   {% endif %}
 {% endblock %}
+
+
