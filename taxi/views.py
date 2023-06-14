@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -178,8 +178,8 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
-            Car.objects.get(id=pk) in driver.cars.all()
-    ):  # probably could check if car exists
+            get_object_or_404(Car, id=pk) in driver.cars.all()
+    ):
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
