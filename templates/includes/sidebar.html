@@ -1,15 +1,46 @@
-<ul class="sidebar-nav list-group">
-  {% if user.is_authenticated %}
-    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-    <li class="list-group-item"><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-  {% else %}
-    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-  {% endif %}
+<nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
 
-  <br>
+  <div class="position-sticky">
+    <div class="list-group list-group-flush mx-3 mt-2">
+      {% if user.is_authenticated %}
+        {% if user.is_superuser %}
+          <a href="{% url "admin:index" %}" class="list-group-item list-group-item-action py-2 ripple">
+            <i class="bi bi-display"></i>
+            <span>Admin page</span>
+          </a>
+        {% endif %}
+        <a href="{{ user.get_absolute_url }}" class="list-group-item list-group-item-action py-2 ripple">
+          <i class="bi bi-person-check"></i>
+          <span>{{ user.get_username }} <strong>(Me)</strong></span>
+        </a>
+        <a href="{% url 'logout' %}?next={{ request.path }}" class="list-group-item list-group-item-action py-2 ripple">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Logout</span>
+        </a>
+      {% else %}
+        <a href="{% url 'login' %}?next={{ request.path }}" class="list-group-item list-group-item-action py-2 ripple">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
 
-  <li class="list-group-item"><a href="{% url 'taxi:index' %}">Home</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:driver-list' %}">All drivers</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:car-list' %}">All cars</a></li>
-  <li class="list-group-item"><a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a></li>
-</ul>
+  <div class="list-group list-group-flush mx-3 mt-4">
+    <a href="{% url 'taxi:index' %}" class="list-group-item list-group-item-action py-2 ripple">
+      <i class="bi bi-house-door"></i>
+      <span>Home page</span>
+    </a>
+    <a href="{% url 'taxi:car-list' %}" class="list-group-item list-group-item-action py-2 ripple">
+      <i class="bi bi-car-front"></i>
+      <span>Cars</span>
+    </a>
+    <a href="{% url 'taxi:driver-list' %}" class="list-group-item list-group-item-action py-2 ripple">
+      <i class="bi bi-people"></i>
+      <span>Drivers</span></a>
+    <a href="{% url 'taxi:manufacturer-list' %}" class="list-group-item list-group-item-action py-2 ripple">
+      <i class="bi bi-building"></i>
+      <span>Manufacturers</span>
+    </a>
+  </div>
+</nav>
