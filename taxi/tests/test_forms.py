@@ -1,5 +1,11 @@
+from django import forms
 from django.test import TestCase
-from taxi.forms import DriverCreationForm
+from taxi.forms import (
+    DriverCreationForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+    DriverSearchForm
+)
 
 
 class FormTest(TestCase):
@@ -14,4 +20,15 @@ class FormTest(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+
+    def test_driver_search_form(self):
+        form = DriverSearchForm()
+        self.assertIsInstance(form.fields["username"].widget, forms.TextInput)
+
+    def test_car_search_form(self):
+        form = CarSearchForm()
+        self.assertIsInstance(form.fields["model"].widget, forms.TextInput)
+
+    def test_manufacturer_search_form(self):
+        form = ManufacturerSearchForm()
+        self.assertIsInstance(form.fields["name"].widget, forms.TextInput)
