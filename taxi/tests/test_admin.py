@@ -12,7 +12,7 @@ class DriverAdminTest(TestCase):
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
-            username="test",
+            username="tests",
             password="test1234",
             license_number="TES12345"
         )
