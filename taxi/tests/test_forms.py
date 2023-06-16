@@ -2,10 +2,10 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, ManufacturerSearchForm
 
 
-class FormsTests(TestCase):
+class DriverCreationFormsTests(TestCase):
     def test_driver_creation_form_license_number_first_last_name_is_valid(
             self):
         form_data = {
@@ -19,6 +19,17 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+
+class ManufacturerSearchFormTest(TestCase):
+    def test_manufacturer_search_form_is_valid(self):
+        form_data = {
+            "name": "Volvo",
+        }
+        manufacturer_search_form = ManufacturerSearchForm(data=form_data)
+
+        self.assertTrue(manufacturer_search_form.is_valid())
+        self.assertEqual(manufacturer_search_form.cleaned_data, form_data)
 
 
 class PrivateDriverTests(TestCase):
