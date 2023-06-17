@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -9,10 +8,7 @@
     </a>
   </h1>
 
-    <form action="" method="GET" class="form-inline mb-3">
-      {{ search_form|crispy }}
-      <input type="submit" value="Search" class="btn btn-primary link-to-page">
-    </form>
+  {% include 'includes/searchbar.html' %}
 
   {% if manufacturer_list %}
     <table class="table">
