@@ -6,7 +6,15 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .mixins import SearchFormMixin
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    DriverSearchForm,
+    CarForm,
+    ManufacturerSearchForm,
+    CarSearchForm,
+)
 
 
 @login_required
@@ -30,11 +38,19 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+class ManufacturerListView(
+    LoginRequiredMixin,
+    SearchFormMixin,
+    generic.ListView
+):
     model = Manufacturer
+    queryset = Manufacturer.objects.all()
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+
+    search_form_class = ManufacturerSearchForm
+    search_param = "name"
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -54,10 +70,13 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class CarListView(LoginRequiredMixin, SearchFormMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
+
+    search_form_class = CarSearchForm
+    search_param = "model"
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -81,9 +100,13 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:car-list")
 
 
-class DriverListView(LoginRequiredMixin, generic.ListView):
+class DriverListView(LoginRequiredMixin, SearchFormMixin, generic.ListView):
     model = Driver
+    queryset = Driver.objects.all()
     paginate_by = 5
+
+    search_form_class = DriverSearchForm
+    search_param = "username"
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
