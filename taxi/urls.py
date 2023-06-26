@@ -13,10 +13,16 @@ from .views import (
     DriverLicenseUpdateView,
     DriverDeleteView,
     ManufacturerListView,
+    ManufacturerDetailView,
     ManufacturerCreateView,
     ManufacturerUpdateView,
     ManufacturerDeleteView,
     toggle_assign_to_car,
+    RegistrationView,
+    CommentDeleteView,
+    DriverSettingsView,
+    registration_complete,
+    like_and_unlike,
 )
 
 urlpatterns = [
@@ -41,6 +47,16 @@ urlpatterns = [
         ManufacturerDeleteView.as_view(),
         name="manufacturer-delete",
     ),
+    path(
+        "manufacturers/<int:pk>/",
+        ManufacturerDetailView.as_view(),
+        name="manufacturer-detail",
+    ),
+    path(
+        "cars/<int:id>/comment/<int:pk>/delete",
+        CommentDeleteView.as_view(),
+        name="delete_comment",
+    ),
     path("cars/", CarListView.as_view(), name="car-list"),
     path("cars/<int:pk>/", CarDetailView.as_view(), name="car-detail"),
     path("cars/create/", CarCreateView.as_view(), name="car-create"),
@@ -59,6 +75,11 @@ urlpatterns = [
     path(
         "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
     ),
+    path(
+        "drivers/<int:pk>/settings/",
+        DriverSettingsView.as_view(),
+        name="driver-settings",
+    ),
     path("drivers/create/", DriverCreateView.as_view(), name="driver-create"),
     path(
         "drivers/<int:pk>/update/",
@@ -69,6 +90,21 @@ urlpatterns = [
         "drivers/<int:pk>/delete/",
         DriverDeleteView.as_view(),
         name="driver-delete",
+    ),
+    path(
+        "login/registration/",
+        RegistrationView.as_view(),
+        name="driver-registration",
+    ),
+    path(
+        "login/registration/complete/",
+        registration_complete,
+        name="registration-complete",
+    ),
+    path(
+        "cars/<int:id>/comment/<int:pk>/like",
+        like_and_unlike,
+        name="like_comment",
     ),
 ]
 

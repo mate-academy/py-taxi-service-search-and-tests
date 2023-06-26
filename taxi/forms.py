@@ -2,8 +2,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django.forms import Textarea, FileInput
 
-from taxi.models import Car, Driver
+from taxi.models import Car, Driver, CarComments
 
 
 class CarForm(forms.ModelForm):
@@ -24,6 +25,7 @@ class DriverCreationForm(UserCreationForm):
             "license_number",
             "first_name",
             "last_name",
+            "avatar",
         )
 
     def clean_license_number(self):  # this logic is optional, but possible
@@ -50,3 +52,65 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name..."}),
+    )
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by model..."}),
+    )
+
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by username...",
+            }
+        ),
+    )
+
+
+class CarCommentForm(forms.ModelForm):
+    class Meta:
+        model = CarComments
+        fields = ("text",)
+        labels = {
+            "text": "",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs["class"] = "form-control"
+        self.fields["text"].widget = Textarea(
+            attrs={"rows": 3, "placeholder": "Add ur comment..."}
+        )
+
+
+class DriverSettingsForm(forms.ModelForm):
+    avatar = forms.FileField(widget=FileInput)
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "license_number",
+            "avatar",
+        ]

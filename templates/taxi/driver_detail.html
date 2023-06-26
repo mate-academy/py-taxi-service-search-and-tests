@@ -2,32 +2,74 @@
 
 {% block content %}
   <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+    {{ driver.username }}
+    {% if user.is_staff and user.id != driver.id %}
+      <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+        Delete this user
+      </a>
+      <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-success link-to-page">
+        Update user license
+      </a>
+    {% endif %}
 
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
+    {% if user.id == driver.id %}
+      <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-success link-to-page">
+        Update my license number
+      </a>
+      <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+        Delete my profile
+      </a>
+    {% endif %}
+
   </h1>
+  <div class="driver_info_features">
+    <div class="driver_info">
+      <div class="driver_avatar"><img src="{{ driver.avatar.url }}" alt="" class="avatar"></div>
+      <div class="driver_name">
+        <p><strong>First name:</strong> {{ driver.first_name }}</p>
+        <p><strong>Last name:</strong> {{ driver.last_name }}</p>
+      </div>
+      <div>
+        <p><strong>License number:</strong> {{ driver.license_number }}</p>
+        <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
+      </div>
+    </div>
+    <div>
+      {% if user.id == driver.id %}
+        <a href="{% url "taxi:driver-settings" pk=driver.id %}" class="settings_btn btn btn-primary link_color_white">settings⚙
+        </a>
+      {% endif %}
+    </div>
+  </div>
 
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
 
-  <div class="ml-3">
-    <h4>Cars</h4>
 
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
 
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
+  <tr>
+  <h3>Cars</h3>
+
+  <div class="car_list_features">
+    <table class="table table_style">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Model</th>
+        <th scope="col">Manufacturer</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      {% for car in driver.cars.all %}
+        <tr>
+          <td>{{ car.id }}</td>
+          <td><a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.model }}</a></td>
+          <td><a href="{% url "taxi:manufacturer-detail" pk=car.manufacturer.pk %}">
+            {{ car.manufacturer.name }}</a>
+          </td>
+        </tr>
+      {% endfor %}
+
+      </tbody>
+    </table>
   </div>
 {% endblock %}
