@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>All cars from  {{ manufacturer.name }}</h1>
+   {% if manufacturer.car_set.all %}
+    <table class="table">
+      <tr>
+        <th>Model</th>
+        {% if user.is_staff %}
+          <th>Update</th>
+          <th>Delete</th>
+        {% endif %}
+      </tr>
+
+      {% for car in manufacturer.car_set.all %}
+        <tr>
+          <td>
+            <a href="{% url "taxi:car-detail"  pk=car.id%}">{{ car.model }}</a>
+          </td>
+          {% if user.is_staff %}
+            <td>
+              <a href="{% url 'taxi:car-update' pk=car.id %}" class="link_color">
+                📝
+              </a>
+            </td>
+            <td>
+              <a style="color: red"
+                href="{% url 'taxi:car-delete' pk=car.id %}" class="link_color" >
+                🗑
+              </a>
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+      <p>Manufacturer not found.</p>
+  {% endif %}
+   </table>
+{% endblock %}

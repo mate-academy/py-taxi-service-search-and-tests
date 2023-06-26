@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="confirm_delete">
+    <h3>Do you really set out to delete this comment?</h3>
+    <form action="" method="post">
+      {% csrf_token %}
+
+      <button type="submit" class="btn btn-danger">Yes</button>
+      <button class="btn btn-primary">
+        <a href="{% url "taxi:car-detail"  pk=carcomments.car.pk %}" class="link_color link_color_white" >No</a>
+      </button>
+
+    </form>
+  </div>
+{% endblock %}

@@ -1,35 +1,115 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
     {{ car.model }}
+  </h1>
+  <div>{% if car in user.cars.all %}
+      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-warning link-to-page">
+        Delete me from this car
+      </a>
+    {% else %}
+      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-primary link-to-page">
+        Assign me from this car
+      </a>
+    {% endif %}</div>
+
+  <p>Manufacturer: (<a href="{% url "taxi:manufacturer-detail" pk=car.manufacturer.id %}">
+    {{ car.manufacturer.name }}</a>, {{ car.manufacturer.country }})</p>
+  {% if user.is_staff %}
     <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
 
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
+    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-success link-to-page">
       Update
     </a>
-  </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
+  {% endif %}
+
+  <h2>
     Drivers
-
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
-    {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
-    {% endif %}
-
-  </h1>
+  </h2>
   <hr>
-  <ul>
+  <ul class="driver_list">
     {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
+      {% if driver.first_name %}
+        <li class="driver_item">
+          <img src="{{ driver.avatar.url }}" alt="" class="driver_image">
+          <span class="driver_name">
+            {{ driver.first_name }} {{ driver.last_name }}
+            <span class="driver_nickname">
+              {{ driver.username }}
+            </span>
+          </span>
+        </li>
+      {% else %}
+        <li class="driver_item">
+          <img src="{{ driver.avatar.url }}" alt="" class="driver_image">
+          <span class="driver_nickname">
+            {{ driver.username }}
+          </span>
+        </li>
+      {% endif %}
+    {% empty %}
+      <h4>This car doesn't have a driver :c</h4>
+
     {% endfor %}
   </ul>
+
+  <h2>Comments</h2>
+  <hr>
+
+  {% for comment in car.comments_car.all %}
+    <div class="comment">
+      <div class="comment_user">
+        <div class="comment_user_name">
+          {{ comment.driver.username }}
+        </div>
+        <div class="comment_user_img">
+          <a href="{% url "taxi:driver-detail" pk=comment.driver.id %}">
+            <img src="{{ comment.driver.avatar.url }}" alt="" class="driver_image">
+          </a>
+        </div>
+      </div>
+      <div class="comment_text">
+        {{ comment.text}}
+        <div class="comment_date">{{ comment.created }}</div>
+      </div>
+      {% if user.is_staff  or comment.driver.id == user.id %}
+       <a href="{% url 'taxi:delete_comment' id=car.id pk=comment.pk %}" class="btn btn-danger link-to-page">
+        X
+      </a>
+      {% endif %}
+
+    </div>
+    <form action="{% url "taxi:like_comment" id=car.id pk=comment.pk %}" method="POST">
+  {% csrf_token %}
+      {% if user in comment.likes.all %}
+        <button type="submit" name="car.comment.id" value="{{ comment.id }}" class="like_btn">
+          Unlike it ❤ | {{ comment.likes.count }}
+        </button>
+        {% else %}
+  <button type="submit" name="car.comment.id" value="{{ comment.id }}" class="like_btn link-to-page">
+    like it ❤ | {{ comment.likes.count }}
+  </button>
+
+      {% endif %}
+  </form>
+
+  {% endfor %}
+
+  <div class="col3">
+    <form action="" id="add_form" method=POST>
+      {% csrf_token %}
+      {{ form|crispy }}
+
+    </form>
+    <button form="add_form" type="submit" class="btn btn-primary btn-xs">Send</button>
+
+  </div>
+
+
+
+
 {% endblock %}
