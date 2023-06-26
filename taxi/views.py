@@ -76,7 +76,11 @@ class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class ManufacturerUpdateView(LoginRequiredMixin, SweetifySuccessMixin, generic.UpdateView):
+class ManufacturerUpdateView(
+    LoginRequiredMixin,
+    SweetifySuccessMixin,
+    generic.UpdateView
+):
     model = Manufacturer
     fields = "__all__"
     success_url = reverse_lazy("taxi:manufacturer-list")
@@ -183,7 +187,11 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("taxi:driver-list")
 
 
-class DriverLicenseUpdateView(LoginRequiredMixin, SweetifySuccessMixin, generic.UpdateView):
+class DriverLicenseUpdateView(
+    LoginRequiredMixin,
+    SweetifySuccessMixin,
+    generic.UpdateView
+):
     model = Driver
     form_class = DriverLicenseUpdateForm
     success_url = reverse_lazy("taxi:driver-list")
@@ -199,10 +207,17 @@ class DriverLicenseUpdateView(LoginRequiredMixin, SweetifySuccessMixin, generic.
         return HttpResponseRedirect("/")
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy("taxi:driver-detail", kwargs={"pk": self.get_object().id})
+        return reverse_lazy(
+            "taxi:driver-detail",
+            kwargs={"pk": self.get_object().id}
+        )
 
 
-class DriverDeleteView(LoginRequiredMixin, SweetifySuccessMixin, generic.DeleteView):
+class DriverDeleteView(
+    LoginRequiredMixin,
+    SweetifySuccessMixin,
+    generic.DeleteView
+):
     model = Driver
     success_url = reverse_lazy("taxi:driver-list")
     permission_required = "taxi.delete-driver"
