@@ -15,10 +15,7 @@ class PublicManufacturerTests(TestCase):
 
 class PrivateManufacturerTests(TestCase):
     def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-           "test",
-           "password123"
-        )
+        self.user = get_user_model().objects.create_user("test", "password123")
         self.client.force_login(self.user)
 
     def test_retrieve_manufacturer(self) -> None:
