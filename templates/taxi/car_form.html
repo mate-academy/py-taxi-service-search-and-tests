@@ -2,12 +2,17 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>{{ object|yesno:"Update,Create" }} car</h1>
-  <form action="" method="post" novalidate>
+  {% if object %}
+    {% if object.id %}
+      <a href="{% url 'taxi:car-detail' pk=object.id %}" class="btn btn-primary" role="button">Redirect to car detail</a>
+    {% else %}
+      <a href="{% url 'taxi:car-list' %}" class="btn btn-primary" role="button">Redirect to car list</a>
+    {% endif %}
+  {% else %}
+    <h1>{{ object|yesno:"Update,Create" }} car</h1>
     {% csrf_token %}
     {{ form|crispy }}
 
     <input type="submit" value="Submit" class="btn btn-success">
-     <a href="{% url "taxi:car-detail" pk=car.id %}" class="btn btn-primary" role="button">Cancel</a>
-  </form>
+  {% endif %}
 {% endblock %}

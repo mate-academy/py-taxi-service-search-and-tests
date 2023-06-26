@@ -9,13 +9,6 @@
 
     <input type="submit" value="Submit" class="btn btn-primary">
   </form>
-{% endblock %}
-
-Manufacturer list
-{% extends "base.html" %}
-{% load crispy_forms_filters %}
-
-{% block content %}
 
   <div class="car_list_features">
     <h1>
@@ -55,7 +48,7 @@ Manufacturer list
             {{ manufacturer.id }}
           </td>
           <td>
-            <a href="{% url "taxi:manufacturer-detail" pk=manufacturer.id %}"
+            <a href="{% url 'taxi:manufacturer-detail' pk=manufacturer.id %}"
                class="link_color">{{ manufacturer.name }}</a>
           </td>
           <td>
@@ -76,7 +69,6 @@ Manufacturer list
         </tr>
       {% endfor %}
     </table>
-
   {% else %}
     <p>There are no manufacturers in the service.</p>
   {% endif %}
