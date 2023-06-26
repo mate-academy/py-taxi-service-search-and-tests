@@ -2,16 +2,18 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="🔎">
-  </form>
+
   <h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
+
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🔎">
+  </form>
 
   {% if car_list %}
     <ul>
