@@ -1,10 +1,8 @@
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormMixin
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -72,25 +70,20 @@ class ManufacturerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Manufacturer
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
-class ManufacturerUpdateView(
-    LoginRequiredMixin, SweetifySuccessMixin, generic.UpdateView
-):
+class ManufacturerUpdateView(LoginRequiredMixin, SweetifySuccessMixin, generic.UpdateView):
     model = Manufacturer
     fields = "__all__"
     success_url = reverse_lazy("taxi:manufacturer-list")
     success_message = "Manufacturer successfully update"
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
-class ManufacturerDeleteView(generic.DeleteView):
+class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Manufacturer
     success_url = reverse_lazy("taxi:manufacturer-list")
 
@@ -140,22 +133,19 @@ class CarDetailView(LoginRequiredMixin, FormMixin, generic.DetailView):
         return super().form_valid(form)
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
 class CarCreateView(LoginRequiredMixin, generic.CreateView):
     model = Car
     form_class = CarForm
     success_url = reverse_lazy("taxi:car-list")
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
-class CarUpdateView(generic.UpdateView):
+class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Car
     form_class = CarForm
     success_url = reverse_lazy("taxi:car-list")
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
-class CarDeleteView(generic.DeleteView):
+class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("taxi:car-list")
 
@@ -187,16 +177,13 @@ class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
-class DriverCreateView(generic.CreateView):
+class DriverCreateView(LoginRequiredMixin, generic.CreateView):
     model = Driver
     form_class = DriverCreationForm
     success_url = reverse_lazy("taxi:driver-list")
 
 
-class DriverLicenseUpdateView(
-    LoginRequiredMixin, SweetifySuccessMixin, generic.UpdateView
-):
+class DriverLicenseUpdateView(LoginRequiredMixin, SweetifySuccessMixin, generic.UpdateView):
     model = Driver
     form_class = DriverLicenseUpdateForm
     success_url = reverse_lazy("taxi:driver-list")
@@ -206,25 +193,16 @@ class DriverLicenseUpdateView(
         driver = self.get_object()
         if not request.user.is_staff:
             if request.user.id == driver.id:
-                return super(DriverLicenseUpdateView, self).get(
-                    request, *args, **kwargs
-                )
+                return super().get(request, *args, **kwargs)
         if request.user.is_staff:
-            return super(DriverLicenseUpdateView, self).get(
-                request, *args, **kwargs
-            )
+            return super().get(request, *args, **kwargs)
         return HttpResponseRedirect("/")
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy(
-            "taxi:driver-detail", kwargs={"pk": self.get_object().id}
-        )
+        return reverse_lazy("taxi:driver-detail", kwargs={"pk": self.get_object().id})
 
 
-@method_decorator(staff_member_required(login_url="/"), name="dispatch")
-class DriverDeleteView(
-    LoginRequiredMixin, SweetifySuccessMixin, generic.DeleteView
-):
+class DriverDeleteView(LoginRequiredMixin, SweetifySuccessMixin, generic.DeleteView):
     model = Driver
     success_url = reverse_lazy("taxi:driver-list")
     permission_required = "taxi.delete-driver"
