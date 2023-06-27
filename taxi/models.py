@@ -24,7 +24,7 @@ class Driver(AbstractUser):
     def __str__(self) -> str:
         return f"{self.username} ({self.first_name} {self.last_name})"
 
-    def get_absolute_url(self) -> None:
+    def get_absolute_url(self) -> str:
         return reverse("taxi:driver-detail", kwargs={"pk": self.pk})
 
 
