@@ -15,7 +15,7 @@ class FormTest(TestCase):
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
 
-    def test_driver_creation_form_with_license_number_first_name_last_name_is_valid(
+    def test_driver_creation_form_with_licensenumber_first_last_name_is_valid(
         self,
     ):
         form_data = {

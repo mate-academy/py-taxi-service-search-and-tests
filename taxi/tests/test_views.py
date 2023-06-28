@@ -38,12 +38,12 @@ class ViewsTest(TestCase):
         resp = self.client.get(reverse("taxi:driver-list"))
         self.assertEqual(resp.status_code, 200)
         self.assertTrue("is_paginated" in resp.context)
-        self.assertTrue(resp.context["is_paginated"] == True)
+        self.assertTrue(resp.context["is_paginated"] is True)
         self.assertTrue(len(resp.context["driver_list"]) == 5)
 
     def test_lists_all_drivers(self):
         resp = self.client.get(reverse("taxi:driver-list") + "?page=2")
         self.assertEqual(resp.status_code, 200)
         self.assertTrue("is_paginated" in resp.context)
-        self.assertTrue(resp.context["is_paginated"] == True)
+        self.assertTrue(resp.context["is_paginated"] is True)
         self.assertTrue(len(resp.context["driver_list"]) == 2)
