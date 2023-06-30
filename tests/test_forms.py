@@ -16,9 +16,9 @@ class PrivateTest(TestSetUp):
         )
         response = self.client.get(url)
         manufacturers = [
-            i
-            for i in self.manufacturers
-            if i.name[2:] == self.manufacturer_data["name"][2:]
+            manufacturer
+            for manufacturer in self.manufacturers
+            if manufacturer.name[2:] == self.manufacturer_data["name"][2:]
         ]
 
         self.assertEqual(response.status_code, 200)
@@ -35,9 +35,9 @@ class PrivateTest(TestSetUp):
         )
         response = self.client.get(url)
         drivers = [
-            i
-            for i in self.drivers
-            if i.username[2:] == self.driver_data["username"][2:]
+            driver
+            for driver in self.drivers
+            if driver.username[2:] == self.driver_data["username"][2:]
         ]
 
         self.assertEqual(response.status_code, 200)
@@ -47,8 +47,9 @@ class PrivateTest(TestSetUp):
         url = reverse("taxi:car-list") + "?model=" + self.car_data["model"][2:]
         response = self.client.get(url)
         cars = [
-            i for i in self.cars
-            if i.model[2:] == self.car_data["model"][2:]
+            car
+            for car in self.cars
+            if car.model[2:] == self.car_data["model"][2:]
         ]
 
         self.assertEqual(response.status_code, 200)
