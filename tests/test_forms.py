@@ -9,10 +9,15 @@ class PrivateTest(TestSetUp):
         self.client.force_login(self.driver)
 
     def test_search_manufacturers(self):
-        url = reverse("taxi:manufacturer-list") + "?name=" + self.manufacturer_data["name"][2:]
+        url = (
+            reverse("taxi:manufacturer-list")
+            + "?name="
+            + self.manufacturer_data["name"][2:]
+        )
         response = self.client.get(url)
         manufacturers = [
-            i for i in self.manufacturers
+            i
+            for i in self.manufacturers
             if i.name[2:] == self.manufacturer_data["name"][2:]
         ]
 
@@ -23,18 +28,20 @@ class PrivateTest(TestSetUp):
         )
 
     def test_search_drivers(self):
-        url = reverse("taxi:driver-list") + "?username=" + self.driver_data["username"][2:]
+        url = (
+            reverse("taxi:driver-list")
+            + "?username="
+            + self.driver_data["username"][2:]
+        )
         response = self.client.get(url)
         drivers = [
-            i for i in self.drivers
+            i
+            for i in self.drivers
             if i.username[2:] == self.driver_data["username"][2:]
         ]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["driver_list"]),
-            drivers
-        )
+        self.assertEqual(list(response.context["driver_list"]), drivers)
 
     def test_search_cars(self):
         url = reverse("taxi:car-list") + "?model=" + self.car_data["model"][2:]
@@ -45,7 +52,4 @@ class PrivateTest(TestSetUp):
         ]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["car_list"]),
-            cars
-        )
+        self.assertEqual(list(response.context["car_list"]), cars)

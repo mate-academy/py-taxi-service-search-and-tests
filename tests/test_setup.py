@@ -12,7 +12,9 @@ class TestSetUp(TestCase):
             "name": "Test Name",
             "country": "Test Country"
         }
-        self.manufacturer = Manufacturer.objects.create(**self.manufacturer_data)
+        self.manufacturer = Manufacturer.objects.create(
+            **self.manufacturer_data
+        )
         self.manufacturers = Manufacturer.objects.all()
 
         self.driver_data = {
@@ -20,7 +22,7 @@ class TestSetUp(TestCase):
             "password": "password123",
             "first_name": "First",
             "last_name": "Last",
-            "license_number": "TES12345"
+            "license_number": "TES12345",
         }
         self.driver = get_user_model().objects.create_user(**self.driver_data)
         self.drivers = Driver.objects.all()

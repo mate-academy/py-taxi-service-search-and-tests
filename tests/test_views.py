@@ -51,9 +51,7 @@ class PrivateTests(TestSetUp):
             list(response.context["manufacturer_list"]),
             list(self.manufacturers)
         )
-        self.assertTemplateUsed(
-            response, "taxi/manufacturer_list.html"
-        )
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_retrieve_drivers(self):
         response = self.client.get(DRIVER_LIST_URL)
@@ -63,18 +61,11 @@ class PrivateTests(TestSetUp):
             list(response.context["driver_list"]),
             list(self.drivers)
         )
-        self.assertTemplateUsed(
-            response, "taxi/driver_list.html"
-        )
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_retrieve_cars(self):
         response = self.client.get(CAR_LIST_URL)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(response.context["car_list"]),
-            list(self.cars)
-        )
-        self.assertTemplateUsed(
-            response, "taxi/car_list.html"
-        )
+        self.assertEqual(list(response.context["car_list"]), list(self.cars))
+        self.assertTemplateUsed(response, "taxi/car_list.html")
