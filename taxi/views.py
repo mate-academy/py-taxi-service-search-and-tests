@@ -7,13 +7,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
 from .forms import (
+    CarForm,
     DriverCreationForm,
     DriverLicenseUpdateForm,
-    CarForm,
     DriversUsernameSearchForm,
     ManufacturersNameSearchForm,
     CarsModelSearchForm
-    )
+)
 
 
 @login_required
