@@ -8,12 +8,8 @@
         Create
       </a>
     </h1>
-    <form class="form-inline" action="" method="get" autocomplete="off">
-      {% csrf_token %}
-      <input autocomplete="false" name="hidden" type="text" style="display:none;">
-      {{ search_form|crispy }}
-      <input class="btn btn-secondary" type="submit" value="🔎">
-    </form>
+      {% include "includes/search_form.html" %}
+
     {% if driver_list %}
     <table class="table">
       <tr>
