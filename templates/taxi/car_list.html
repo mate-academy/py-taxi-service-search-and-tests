@@ -9,16 +9,13 @@
     </a>
   </h1>
 
-  <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="Search" class="btn btn-secondary">
-  </form>
+  {% include "includes/search_form.html" %}
 
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %} ">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
