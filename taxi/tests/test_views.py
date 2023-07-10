@@ -38,6 +38,18 @@ class PrivateManufacturerTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
+    def test_manufacturer_list_search(self):
+        Manufacturer.objects.create(
+            name="test_name",
+            country="test_country"
+        )
+        response = self.client.get(MANUFACTURERS_URL, {"name": "test_name"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(Manufacturer.objects.filter(name="test_name"))
+        )
+
 
 class PublicCarTests(TestCase):
     def test_login_required(self):
@@ -80,6 +92,20 @@ class PrivateCarTests(TestCase):
             list(cars)
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_car_list_search(self):
+        manufacturer = Manufacturer.objects.create(
+            name="test_name",
+            country="test_country"
+        )
+        Car.objects.create(model="test_model", manufacturer=manufacturer)
+        response = self.client.get(CARS_URL, {"model": "test_model"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(Car.objects.filter(model="test_model"))
+        )
 
 
 class PrivateDriverTests(TestCase):
