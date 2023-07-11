@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, ManufacturerSearchForm, CarSearchForm, DriverSearchForm
 
 
 class DriverFormTest(TestCase):
@@ -34,3 +34,20 @@ class DriverFormTest(TestCase):
         self.assertTrue(form.cleaned_data["license_number"][:3].upper())
         self.assertTrue(form.cleaned_data["license_number"][:3].isalpha())
         self.assertTrue(form.cleaned_data["license_number"][3:].isdigit())
+
+
+class TestSearchForm(TestCase):
+    def test_manufacturer_search_form(self):
+        test_data = {"name": "Mazda"}
+        form = ManufacturerSearchForm(data=test_data)
+        self.assertTrue(form.is_valid())
+
+    def test_car_search_form(self):
+        test_data = {"model": "RX8"}
+        form = CarSearchForm(data=test_data)
+        self.assertTrue(form.is_valid())
+
+    def test_driver_search_form(self):
+        test_data = {"username": "Shuma"}
+        form = DriverSearchForm(data=test_data)
+        self.assertTrue(form.is_valid())
