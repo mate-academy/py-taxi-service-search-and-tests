@@ -1,14 +1,15 @@
 from django.test import TestCase
 
-from taxi.forms import DriverLicenseUpdateForm, ManufacturerSearchForm, CarSearchForm
+from taxi.forms import (
+    DriverLicenseUpdateForm,
+    ManufacturerSearchForm,
+    CarSearchForm)
 
 
 class FormTest(TestCase):
     @staticmethod
     def create_form(license_number):
-        return DriverLicenseUpdateForm(
-            data={"license_number": license_number}
-        )
+        return DriverLicenseUpdateForm(data={"license_number": license_number})
 
     def test_license_number_is_valid(self):
         self.assertTrue(self.create_form("ABC12345").is_valid())

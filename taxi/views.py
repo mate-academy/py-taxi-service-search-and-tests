@@ -7,8 +7,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, CarSearchForm, DriverSearchForm, \
-    ManufacturerSearchForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    CarSearchForm,
+    DriverSearchForm,
+    ManufacturerSearchForm,
+)
 
 
 @login_required
@@ -42,11 +48,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
 
         name = self.request.GET.get("name", "")
-        context["search_form"] = ManufacturerSearchForm(
-            initial={
-                "name": name
-            }
-        )
+        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
@@ -83,11 +85,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         context = super(CarListView, self).get_context_data(**kwargs)
 
         model = self.request.GET.get("model", "")
-        context["search_form"] = CarSearchForm(
-            initial={
-                "model": model
-            }
-        )
+        context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self):
@@ -129,10 +127,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(
-            initial={
-                "username": username
-            }
-        )
+            initial={"username": username})
         return context
 
     def get_queryset(self):
@@ -140,7 +135,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         form = DriverSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"])
         return queryset
 
 
