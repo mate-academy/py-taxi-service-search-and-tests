@@ -64,6 +64,16 @@ class PrivateManufacturerListTest(TestCase):
         )
         self.assertTemplateUsed(resp, "taxi/manufacturer_list.html")
 
+    def test_queryset_with_filtered_data(self):
+        resp = self.client.get(MANUFACTURERS_URL, {"name": "Suzuki"})
+        self.assertEqual(resp.status_code, 200)
+
+        filtered_queryset = Manufacturer.objects.filter(name__icontains="Suz")
+
+        self.assertEqual(
+            list(resp.context["manufacturer_list"]), list(filtered_queryset)
+        )
+
 
 class PublicCarListTest(TestCase):
     def setUp(self) -> None:
@@ -127,6 +137,25 @@ class PrivateCarListTest(TestCase):
         )
         self.assertTemplateUsed(resp, "taxi/car_list.html")
 
+    def test_queryset_with_filtered_data(self):
+        manufacturer1 = Manufacturer.objects.create(
+            name="Suzuki", country="Japan"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="Volvo", country="Sweden"
+        )
+        Car.objects.create(model="Jihmny", manufacturer=manufacturer1)
+        Car.objects.create(model="XC90", manufacturer=manufacturer2)
+
+        resp = self.client.get(CARS_URL, {"model": "Jimhny"})
+        self.assertEqual(resp.status_code, 200)
+
+        filtered_queryset = Car.objects.filter(model__icontains="Jim")
+
+        self.assertEqual(
+            list(resp.context["car_list"]), list(filtered_queryset)
+        )
+
 
 class PublicDriverListTest(TestCase):
     def setUp(self) -> None:
@@ -187,3 +216,21 @@ class PrivateDriverListTest(TestCase):
             list(resp.context["driver_list"]), list(Driver.objects.all())
         )
         self.assertTemplateUsed(resp, "taxi/driver_list.html")
+
+    def test_queryset_with_filtered_data(self):
+        Driver.objects.create(
+            username="JohnWick", password="test1234", license_number="ABC12345"
+        )
+        Driver.objects.create(
+            username="MichaelShumacher",
+            password="test1234",
+            license_number="ABC12346"
+        )
+        resp = self.client.get(DRIVER_URL, {"username": "MichaelShumacher"})
+        self.assertEqual(resp.status_code, 200)
+
+        filtered_queryset = Driver.objects.filter(username__icontains="Shuma")
+
+        self.assertEqual(
+            list(resp.context["driver_list"]), list(filtered_queryset)
+        )
