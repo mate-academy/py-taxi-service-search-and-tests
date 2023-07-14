@@ -30,13 +30,6 @@ class ModelsTests(TestCase):
         )
 
     def test_car_str(self):
-        driver = get_user_model().objects.create_user(
-            username="test",
-            password="test1234",
-            first_name="first_test",
-            last_name="last_test",
-            license_number="license number test"
-        )
         manufacturer = Manufacturer.objects.create(
             name="test",
             country="test country"
