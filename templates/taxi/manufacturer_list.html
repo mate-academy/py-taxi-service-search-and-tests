@@ -8,10 +8,8 @@
       Create
     </a>
   </h1>
-  <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="🌏">
-  </form>
+
+  {% include "includes/search_form.html" %}
 
   {% if manufacturer_list %}
     <table class="table">

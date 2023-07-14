@@ -79,8 +79,8 @@ class PrivateCarTests(TestCase):
             model="test_model_2",
             manufacturer=manufacturer
         )
-        car1.drivers.add(self.user, )
-        car2.drivers.add(self.user, )
+        car1.drivers.add(self.user)
+        car2.drivers.add(self.user)
 
         response = self.client.get(CARS_URL)
 

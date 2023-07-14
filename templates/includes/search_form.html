@@ -1,0 +1,8 @@
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🌏">
+  </form>
+{% endblock %}
