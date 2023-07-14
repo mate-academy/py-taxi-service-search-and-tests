@@ -41,7 +41,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
 def validate_license_number(
     license_number,
-):  # regex validation is also possible here
+):
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
     elif not license_number[:3].isupper() or not license_number[:3].isalpha():

@@ -6,10 +6,10 @@ register = template.Library()
 @register.simple_tag
 def query_transform(request, **kwargs):
     updated = request.GET.copy()
-    for k, v in kwargs.items():
-        if v is not None:
-            updated[k] = v
+    for index, value in kwargs.items():
+        if value is not None:
+            updated[index] = value
         else:
-            updated.pop(k, 0)
+            updated.pop(index, 0)
 
         return updated.urlencode()

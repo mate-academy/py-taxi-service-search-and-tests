@@ -81,8 +81,6 @@ class PrivateManufacturerTests(TestCase):
             country="test country2"
         )
 
-#        response = self.client.get("http://127.0.0.1:8000/manufacturers/?value_=1")
-#        self.client.get(reverse("taxi:driver-list"), data=context)
         response = self.client.get(MANUFACTURER_URL + "?value_=1")
         self.assertEqual(
             list(response.context["manufacturer_list"]),
