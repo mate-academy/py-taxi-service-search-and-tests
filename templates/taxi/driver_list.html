@@ -7,10 +7,9 @@
         Create
       </a>
     </h1>
-    <form action="" method="get">
-      {{ search_form }}
-      <input type="submit" value="👏">
-    </form>
+    {% block search %}
+        {% include "includes/search.html" %}
+    {% endblock %}
 
     {% if driver_list %}
     <table class="table">
