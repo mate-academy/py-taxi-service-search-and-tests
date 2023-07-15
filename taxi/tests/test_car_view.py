@@ -98,7 +98,7 @@ class PrivateCarTests(TestCase):
         response = self.client.get(CAR_LIST + "?model=test")
 
         self.assertNotContains(response, "New car")
-        self.assertContains(response, "name=\"model\" value=\"test\"")
+        self.assertContains(response, 'name="model" value="test"')
 
     def test_search_by_name_pagination(self):
         for _ in range(15):
@@ -110,7 +110,7 @@ class PrivateCarTests(TestCase):
         response = self.client.get(CAR_LIST + "?model=new&page=2")
 
         self.assertNotContains(response, "Test model 1")
-        self.assertContains(response, "name=\"model\" value=\"new\"")
+        self.assertContains(response, 'name="model" value="new"')
         self.assertContains(response, "New car 5")
 
     def test_retrieve_car_detail(self):

@@ -77,7 +77,7 @@ class PrivateManufacturerTests(TestCase):
         response = self.client.get(MANUFACTURER_LIST + "?name=test")
 
         self.assertNotContains(response, "New manufacturer")
-        self.assertContains(response, "name=\"name\" value=\"test\"")
+        self.assertContains(response, 'name="name" value="test"')
 
     def test_search_by_name_pagination(self):
         for _ in range(15):
@@ -89,7 +89,7 @@ class PrivateManufacturerTests(TestCase):
         response = self.client.get(MANUFACTURER_LIST + "?name=new&page=2")
 
         self.assertNotContains(response, "Test 1")
-        self.assertContains(response, "name=\"name\" value=\"new\"")
+        self.assertContains(response, 'name="name" value="new"')
         self.assertContains(response, "New manufacturer 13")
 
     def test_retrieve_manufacturer_create(self):

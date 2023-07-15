@@ -108,7 +108,7 @@ class PrivateDriverTests(TestCase):
         response = self.client.get(DRIVER_LIST + "?username=test")
 
         self.assertNotContains(response, "new_user")
-        self.assertContains(response, "name=\"username\" value=\"test\"")
+        self.assertContains(response, 'name="username" value="test"')
 
     def test_search_by_username_pagination(self):
         for _ in range(15):
@@ -123,7 +123,7 @@ class PrivateDriverTests(TestCase):
         response = self.client.get(DRIVER_LIST + "?username=new&page=2")
 
         self.assertNotContains(response, "test1")
-        self.assertContains(response, "name=\"username\" value=\"new\"")
+        self.assertContains(response, 'name="username" value="new"')
         self.assertContains(response, "new_user_5")
 
     def test_retrieve_driver_detail(self):
