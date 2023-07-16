@@ -1,8 +1,13 @@
 body {
     margin-top: 20px;
 }
+input[type=text] {
+  width: 130px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
 
-.link-to-page {
-    float: right;
-    margin: 0 2px 0 2px;
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+  width: 100%;
 }
