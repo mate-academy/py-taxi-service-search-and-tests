@@ -1,16 +1,34 @@
+{% load query_transform %}
 {% if is_paginated %}
-  <ul class="pagination">
+  <ul class="pagination justify-content-center">
     {% if page_obj.has_previous %}
       <li class="page-item">
-        <a href="?page= {{ page_obj.previous_page_number }}" class="page-link">prev</a>
+        <a href="?{% query_transform request page=1 %}" class="page-link">First page</a>
+      </li>
+      <li class="page-item">
+        <a href="?{% query_transform request page=page_obj.previous_page_number %}" class="page-link">Previous page</a>
       </li>
     {% endif %}
-    <li class="page-item active">
-      <span class="page-link">{{ page_obj.number }} of {{ paginator.num_pages }}</span>
-    </li>
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="page-item active">
+          <span class="page-link">{{ num }}</span>
+        </li>
+      {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" or num <= 3 or num > paginator.num_pages|add:"-3" %}
+        <li class="page-item">
+          <a href="?{% query_transform request page=num %}" class="page-link">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+
     {% if page_obj.has_next %}
       <li class="page-item">
-        <a href="?page= {{ page_obj.next_page_number }}" class="page-link">next</a>
+        <a href="?{% query_transform request page=page_obj.next_page_number %}" class="page-link">Next page</a>
+      </li>
+      <li class="page-item">
+        <a href="?{% query_transform request page=paginator.num_pages %}" class="page-link">Last page</a>
       </li>
     {% endif %}
   </ul>
