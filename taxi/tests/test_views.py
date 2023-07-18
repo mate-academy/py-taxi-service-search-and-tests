@@ -43,6 +43,10 @@ class PrivateManufacturerTests(TestCase):
             name="test_name",
             country="test_country"
         )
+        Manufacturer.objects.create(
+            name="ZAZ",
+            country="Ukraine"
+        )
         response = self.client.get(MANUFACTURERS_URL, {"name": "test_name"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -98,7 +102,12 @@ class PrivateCarTests(TestCase):
             name="test_name",
             country="test_country"
         )
+        manufacturer2 = Manufacturer.objects.create(
+            name="ZAZ",
+            country="Ukraine"
+        )
         Car.objects.create(model="test_model", manufacturer=manufacturer)
+        Car.objects.create(model="new", manufacturer=manufacturer2)
         response = self.client.get(CARS_URL, {"model": "test_model"})
 
         self.assertEqual(response.status_code, 200)
