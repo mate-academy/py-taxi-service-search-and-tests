@@ -149,14 +149,14 @@ class PrivateViewsTests(TestCase):
         manufacturers = [
             Manufacturer.objects.create
             (
-                name="ManName1",
-                country="ManCountry1"
-                ),
+                name="ManufacturerName1",
+                country="ManufacturerCountry1"
+            ),
             Manufacturer.objects.create
             (
-                name="ManName2",
-                country="ManCountry2"
-                )
+                name="ManufacturerName2",
+                country="ManufacturerCountry2"
+            )
         ]
 
         Car.objects.create(model="CarModel1", manufacturer=manufacturers[0])
@@ -247,12 +247,12 @@ class SearchFormsTest(TestCase):
     def test_search_cars(self) -> None:
         manufacturers = [
             Manufacturer.objects.create
-                (
+            (
                 name="ManName1",
                 country="ManCountry1"
             ),
             Manufacturer.objects.create
-                (
+            (
                 name="ManName2",
                 country="ManCountry2"
             )
@@ -273,25 +273,15 @@ class SearchFormsTest(TestCase):
         self.assertTemplateUsed(res, "taxi/car_list.html")
 
     def test_search_manufacturers(self) -> None:
-        manufacturers = [
-            Manufacturer.objects.create
-                (
-                name="ManName1",
-                country="ManCountry1"
-            ),
-            Manufacturer.objects.create
-                (
-                name="ManName2",
-                country="ManCountry2"
-            )
-        ]
+        Manufacturer.objects.create(name="ManName1", country="ManCountry1"),
+        Manufacturer.objects.create(name="ManName2", country="ManCountry2")
 
         res = self.client.get(MANUFACTURERS_URL + "?name=M")
 
-        cars = Manufacturer.objects.filter(name__icontains="M")
+        manufacturers = Manufacturer.objects.filter(name__icontains="M")
 
         self.assertEqual(
             list(res.context["manufacturer_list"]),
-            list(cars)
+            list(manufacturers)
         )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
