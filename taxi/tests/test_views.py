@@ -51,7 +51,10 @@ class ListViewsTests(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_retrieve_cars(self):
-        manufacturer = Manufacturer.objects.create(name="Test1", country="TestCountry1")
+        manufacturer = Manufacturer.objects.create(
+            name="Test1",
+            country="TestCountry1"
+        )
         Car.objects.create(model="Test1", manufacturer=manufacturer)
         Car.objects.create(model="Test2", manufacturer=manufacturer)
 
@@ -67,8 +70,16 @@ class ListViewsTests(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_retrieve_drivers(self):
-        Driver.objects.create(username="Testusername1", password="passwd1", license_number="ABC12345")
-        Driver.objects.create(username="Testusername2", password="passwd2", license_number="QWE12345")
+        Driver.objects.create(
+            username="Testusername1",
+            password="passwd1",
+            license_number="ABC12345"
+        )
+        Driver.objects.create(
+            username="Testusername2",
+            password="passwd2",
+            license_number="QWE12345"
+        )
 
         response = self.client.get(DRIVERS_URL)
 

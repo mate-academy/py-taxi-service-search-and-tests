@@ -6,7 +6,10 @@ from taxi.models import Car, Manufacturer
 
 class ModelsTests(TestCase):
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="TestName", country="LaLaLand")
+        manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country="LaLaLand"
+        )
         car = Car.objects.create(
             model="test",
             manufacturer=manufacturer
@@ -14,8 +17,11 @@ class ModelsTests(TestCase):
         self.assertEqual(str(car), "test")
 
     def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.create(name="TestName", country="LaLaLand")
-        self.assertEqual(str(manufacturer), 'TestName LaLaLand')
+        manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country="LaLaLand"
+        )
+        self.assertEqual(str(manufacturer), "TestName LaLaLand")
 
     def test_driver_str(self):
         driver = get_user_model().objects.create(
@@ -24,7 +30,9 @@ class ModelsTests(TestCase):
             first_name="Rick",
             last_name="Astley"
         )
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(str(driver), f"{driver.username} ("
+                                      f"{driver.first_name} "
+                                      f"{driver.last_name})")
 
     def test_create_driver_with_license_number(self):
         username = "test"

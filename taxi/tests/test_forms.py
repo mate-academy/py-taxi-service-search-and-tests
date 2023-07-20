@@ -7,7 +7,7 @@ from taxi.forms import DriverCreationForm, ManufacturerSearchForm
 
 
 class FormsTests(TestCase):
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self):
+    def test_driver_creation_form_with_license_number_names_is_valid(self):
 
         form_data = {
             "username": "new_driver",
@@ -74,7 +74,7 @@ class ManufacturerSearchFormTest(TestCase):
 
     def test_blank_search(self):
         url = reverse("taxi:manufacturer-list")
-        response = self.client.get(url, {'name': ''})
+        response = self.client.get(url, {"name": ""})
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, "form")
@@ -84,13 +84,13 @@ class ManufacturerSearchFormTest(TestCase):
         self.assertContains(response, "Honda")
 
     def test_invalid_search(self):
-        url = reverse('taxi:manufacturer-list')
-        response = self.client.get(url, {'name': 'InvalidManufacturer'})
+        url = reverse("taxi:manufacturer-list")
+        response = self.client.get(url, {"name": "InvalidManufacturer"})
         self.assertEqual(response.status_code, 200)
 
-        self.assertContains(response, 'form')
+        self.assertContains(response, "form")
         self.assertContains(response, 'value="InvalidManufacturer"')
 
-        self.assertNotContains(response, 'Toyota')
-        self.assertNotContains(response, 'Tesla')
-        self.assertNotContains(response, 'Honda')
+        self.assertNotContains(response, "Toyota")
+        self.assertNotContains(response, "Tesla")
+        self.assertNotContains(response, "Honda")
