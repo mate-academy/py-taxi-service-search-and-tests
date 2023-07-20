@@ -60,12 +60,6 @@ class DriverTests(TestCase):
             "Last 5 characters should be digits"
         )
 
-    def test_driver_search_form(self):
-        form_data = {"username": "username"}
-        form = DriverSearchForm(data=form_data)
-
-        self.assertTrue(form.is_valid())
-
 
 class CarTests(TestCase):
     def setUp(self) -> None:
@@ -125,17 +119,79 @@ class CarTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Car.objects.filter(id=car.id).exists())
 
+
+class SearchFormTests(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="search_test",
+            license_number="ABC12345",
+            first_name="Search",
+            last_name="Test",
+            password="searchtest123",
+        )
+        self.client.force_login(self.user)
+
     def test_car_search_form(self):
-        form_data = {"model": "model"}
+        manufacturer = Manufacturer.objects.create(
+            name="Fiat",
+            country="Italy",
+        )
+        Car.objects.create(
+            model="Panda",
+            manufacturer=manufacturer,
+        )
+        form_data = {"model": "Pan"}
         form = CarSearchForm(data=form_data)
 
         self.assertTrue(form.is_valid())
 
+        expected_result = Car.objects.filter(model="Panda")
 
-class ManufacturerTests(TestCase):
+        response = self.client.get(
+            reverse("taxi:car-list") + "?model=" + form_data["model"]
+        )
+        self.assertEqual(
+            list(response.context["car_list"]), list(expected_result)
+        )
 
     def test_manufacturer_search_form(self):
-        form_data = {"name": "name"}
+        Manufacturer.objects.create(
+            name="Citroen",
+            country="France"
+        )
+        form_data = {"name": "Citroen"}
         form = ManufacturerSearchForm(data=form_data)
 
         self.assertTrue(form.is_valid())
+
+        expected_result = Manufacturer.objects.filter(name="Citroen")
+
+        response = self.client.get(
+            reverse("taxi:manufacturer-list") + "?name=" + form_data["name"]
+        )
+        self.assertEqual(
+            list(response.context["manufacturer_list"]), list(expected_result)
+        )
+
+    def test_search_form_driver(self) -> None:
+        get_user_model().objects.create_user(
+            username="adam_smith",
+            password="smith12345",
+            license_number="BCD15443",
+        )
+
+        form_data = {"username": "Adam"}
+        form = DriverSearchForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
+
+        expected_result = get_user_model().objects.filter(
+            username="adam_smith"
+        )
+
+        response = self.client.get(
+            reverse("taxi:driver-list") + "?username=" + form_data["username"]
+        )
+        self.assertEqual(
+            list(response.context["driver_list"]), list(expected_result)
+        )
