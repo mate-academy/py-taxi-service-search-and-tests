@@ -13,7 +13,10 @@ class PublicDriverTests(TestCase):
             password="test_1234"
         )
 
-        driver_detail_url = reverse("taxi:car-detail", kwargs={"pk": driver.pk})
+        driver_detail_url = reverse(
+            "taxi:car-detail",
+            kwargs={"pk": driver.pk}
+        )
 
         driver_urls = [DRIVER_LIST_URL, driver_detail_url]
 
@@ -52,7 +55,10 @@ class PrivateDriverTests(TestCase):
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_retrieve_driver_detail(self):
-        driver_detail_url = reverse("taxi:driver-detail", kwargs={"pk": self.user.pk})
+        driver_detail_url = reverse(
+            "taxi:driver-detail",
+            kwargs={"pk": self.user.pk}
+        )
 
         response = self.client.get(driver_detail_url)
 
@@ -62,5 +68,3 @@ class PrivateDriverTests(TestCase):
             self.user
         )
         self.assertTemplateUsed(response, "taxi/driver_detail.html")
-
-
