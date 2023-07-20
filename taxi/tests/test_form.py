@@ -56,7 +56,7 @@ class FormTest(TestCase):
         self.assertTrue(form_not_empty.is_valid())
         self.assertEqual(
             form_empty.fields["title"].widget.attrs["placeholder"],
-            "Search by name:"
+            "Search by username:"
         )
 
     def test_search_car_is_valid(self):
@@ -72,7 +72,7 @@ class FormTest(TestCase):
         self.assertTrue(form_not_empty.is_valid())
         self.assertEqual(
             form_empty.fields["title"].widget.attrs["placeholder"],
-            "Search by name:"
+            "Search by model:"
         )
 
     def test_search_manufacturer_form_is_valid(self):
