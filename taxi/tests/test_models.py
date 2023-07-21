@@ -48,6 +48,3 @@ class ModelsTests(TestCase):
         )
         self.assertTrue(driver.check_password(password_))
         self.assertEquals(driver.license_number, license_number_)
-
-
-
