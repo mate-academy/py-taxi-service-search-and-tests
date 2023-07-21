@@ -15,7 +15,7 @@ class ManufacturerPublicTest(TestCase):
         self.assertNotEquals(res.status_code, 200)
 
 
-class ManufacturedListTest(TestCase):
+class ManufacturedPrivateTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test",
@@ -23,8 +23,13 @@ class ManufacturedListTest(TestCase):
         )
         self.client.force_login(self.user)
 
+        self.instance = Manufacturer.objects.create(
+            name="test1",
+            country="TestCountry1"
+        )
+
     def test_manufacturer_list(self):
-        Manufacturer.objects.create(name="test1", country="TestCountry1")
+        Manufacturer.objects.create(name="test3", country="TestCountry1")
         Manufacturer.objects.create(name="test2", country="TestCountry2")
 
         manufacturers = Manufacturer.objects.all()
@@ -41,19 +46,6 @@ class ManufacturedListTest(TestCase):
             "taxi/manufacturer_list.html"
         )
 
-
-class ManufacturerCreateTest(TestCase):
-
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            username="user",
-            license_number="ADM12345",
-            first_name="Admin",
-            last_name="User",
-            password="1qazcde3",
-        )
-        self.client.force_login(self.user)
-
     def test_manufacturer_create(self):
         url = reverse("taxi:manufacturer-create")
         data = {"name": "test1", "country": "TestCountry1"}
@@ -63,21 +55,6 @@ class ManufacturerCreateTest(TestCase):
 
         self.assertEqual(manufacturer.name, "test1")
         self.assertEquals(manufacturer.country, "TestCountry1")
-
-
-class ManufacturerUpdateTest(TestCase):
-
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            username="test",
-            password="testuser123"
-        )
-        self.client.force_login(self.user)
-
-        self.instance = Manufacturer.objects.create(
-            name="test1",
-            country="TestCountry1"
-        )
 
     def test_manufacturer_update(self):
         url = reverse(
@@ -93,21 +70,6 @@ class ManufacturerUpdateTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.instance.name, "changename")
         self.assertEqual(self.instance.country, "ChangeCountry")
-
-
-class ManufacturerDeleteTest(TestCase):
-
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            username="test",
-            password="testuser123"
-        )
-        self.client.force_login(self.user)
-
-        self.instance = Manufacturer.objects.create(
-            name="test1",
-            country="TestCountry1"
-        )
 
     def test_manufacturer_delete(self):
         url = reverse(

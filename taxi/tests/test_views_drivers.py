@@ -9,13 +9,13 @@ DRIVER_LIST_URL = reverse("taxi:driver-list")
 
 class DriverPublicTest(TestCase):
 
-    def test_car_list_logout(self):
+    def test_driver_list_logout(self):
         response = self.client.get(DRIVER_LIST_URL)
 
         self.assertNotEquals(response.status_code, 200)
         self.assertRedirects(response, "/accounts/login/?next=%2Fdrivers%2F")
 
-    def test_car_detail(self):
+    def test_driver_detail(self):
         driver = get_user_model().objects.create_user(
             username="test_driver",
             first_name="test_fn",
@@ -31,7 +31,7 @@ class DriverPublicTest(TestCase):
         self.assertRedirects(response, "/accounts/login/?next=%2Fcars%2F1%2F")
 
 
-class DriverTest(TestCase):
+class DriverPrivateTest(TestCase):
 
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(

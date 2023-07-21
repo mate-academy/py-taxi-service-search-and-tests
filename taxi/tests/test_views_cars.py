@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Car, Manufacturer
+from taxi.models import Car, Manufacturer, Driver
 
 CAR_LIST_URL = reverse("taxi:car-list")
 
@@ -29,7 +29,7 @@ class CarPublicTest(TestCase):
         self.assertRedirects(response, "/accounts/login/?next=%2Fcars%2F1%2F")
 
 
-class CarCreateTest(TestCase):
+class CarPrivateTest(TestCase):
 
     def setUp(self) -> None:
         self.driver = get_user_model().objects.create_user(
@@ -40,42 +40,6 @@ class CarCreateTest(TestCase):
             license_number="TES12345"
         )
 
-        self.client.force_login(self.driver)
-
-        self.manufacturer = Manufacturer.objects.create(
-            name="test1",
-            country="TestCountry1"
-        )
-
-    def test_car_create(self):
-        url = reverse("taxi:car-create")
-        data = {
-            "model": "testmodel",
-            "manufacturer": self.manufacturer.id,
-            "drivers": [self.driver.id]
-        }
-
-        response = self.client.post(url, data)
-
-        self.assertEqual(response.status_code, 302)
-
-        car = Car.objects.get()
-
-        self.assertEqual(car.model, "testmodel")
-        self.assertEqual(car.manufacturer.name, "test1")
-        self.assertEquals(list(car.drivers.all()), [self.driver])
-
-
-class CarUpdateTest(TestCase):
-
-    def setUp(self) -> None:
-        self.driver = get_user_model().objects.create_user(
-            username="test_driver",
-            first_name="test_fn",
-            last_name="test_ln",
-            password="test_pass123",
-            license_number="TES12345"
-        )
         self.driver2 = get_user_model().objects.create_user(
             username="test_driver2",
             first_name="test_fn2",
@@ -101,6 +65,33 @@ class CarUpdateTest(TestCase):
         )
         self.instance.drivers.add(self.driver)
 
+        self.driver3 = get_user_model().objects.create_user(
+            username="testuser",
+            password="testpassword"
+        )
+        self.client.login(
+            username="testuser",
+            password="testpassword"
+        )
+
+    def test_car_create(self):
+        url = reverse("taxi:car-create")
+        data = {
+            "model": "testmodel",
+            "manufacturer": self.manufacturer.id,
+            "drivers": [self.driver.id]
+        }
+
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, 302)
+
+        car = Car.objects.get(id=1)
+
+        self.assertEqual(car.model, "testmodel")
+        self.assertEqual(car.manufacturer.name, "test1")
+        self.assertEquals(list(car.drivers.all()), [self.driver])
+
     def test_car_update(self):
         url = reverse("taxi:car-update", kwargs={"pk": self.instance.id})
         data = {
@@ -118,30 +109,6 @@ class CarUpdateTest(TestCase):
         self.assertEquals(self.instance.manufacturer, self.manufacturer2)
         self.assertEquals(list(self.instance.drivers.all()), [self.driver2])
 
-
-class CarDeleteTest(TestCase):
-
-    def setUp(self) -> None:
-        self.driver = get_user_model().objects.create_user(
-            username="test_driver",
-            first_name="test_fn",
-            last_name="test_ln",
-            password="test_pass123",
-            license_number="TES12345"
-        )
-
-        self.client.force_login(self.driver)
-
-        self.manufacturer = Manufacturer.objects.create(
-            name="test1",
-            country="TestCountry1"
-        )
-        self.instance = Car.objects.create(
-            model="testmodel",
-            manufacturer=self.manufacturer
-        )
-        self.instance.drivers.add(self.driver)
-
     def test_car_delete(self):
         url = reverse("taxi:car-delete", kwargs={"pk": self.instance.id})
 
@@ -150,3 +117,45 @@ class CarDeleteTest(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertFalse(Car.objects.filter(id=self.instance.id).exists())
         self.assertRedirects(response, reverse("taxi:car-list"))
+
+    def test_car_assign(self):
+        self.assertEqual(
+            Driver.objects.get(
+                id=self.driver3.id
+            ).cars.count(),
+            0
+        )
+
+        response = self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                args=[self.instance.pk]
+            )
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            Driver.objects.get(
+                id=self.driver3.id
+            ).cars.count(),
+            1
+        )
+        self.assertEqual(
+            Driver.objects.get(
+                id=self.driver3.id
+            ).cars.first(),
+            self.instance
+        )
+
+        response = self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                args=[self.instance.pk]
+            )
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            Driver.objects.get(
+                id=self.driver3.id
+            ).cars.count(), 0)
