@@ -30,6 +30,21 @@ class PublicDriverViewsTest(TestCase):
 
 class PrivateDriverViewsTest(TestCase):
     def setUp(self):
+        self.pagination = 5
+        self.pagination_data = (
+            {
+                "view_name": "taxi:car-list",
+                "response_context": "car_list"
+            },
+            {
+                "view_name": "taxi:manufacturer-list",
+                "response_context": "manufacturer_list"
+            },
+            {
+                "view_name": "taxi:driver-list",
+                "response_context": "driver_list"
+            },
+        )
         for num in range(8):
             get_user_model().objects.create_user(
                 username=f"testusername{num}",
@@ -95,26 +110,17 @@ class PrivateDriverViewsTest(TestCase):
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
 
-    def test_car_list_pagination_is_five(self):
-        response = self.client.get(reverse("taxi:car-list"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context["is_paginated"] is True)
-        self.assertEqual(len(response.context["car_list"]), 5)
-
-    def test_manufacturer_list_pagination_is_five(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context["is_paginated"] is True)
-        self.assertEqual(len(response.context["manufacturer_list"]), 5)
-
-    def test_driver_list_pagination_is_five(self):
-        response = self.client.get(reverse("taxi:driver-list"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context["is_paginated"] is True)
-        self.assertEqual(len(response.context["driver_list"]), 5)
+    def test_all_list_pagination_is_five(self):
+        for pagination in self.pagination_data:
+            response = self.client.get(reverse(pagination["view_name"]))
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue("is_paginated" in response.context)
+            self.assertTrue(response.context["is_paginated"] is True)
+            self.assertEqual(
+                len(
+                    response.context[pagination["response_context"]]
+                ),
+                self.pagination)
 
     def test_search_manufacturer_using_form(self):
         Manufacturer.objects.create(name="Toyota", country="Japan")
