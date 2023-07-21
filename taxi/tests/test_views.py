@@ -45,8 +45,12 @@ class PrivateManufacturerTests(TestCase):
             {"name": searched_name}
         )
         self.assertEqual(response.status_code, 200)
-        manufacturer_in_context = Manufacturer.objects.filter(name__icontains=searched_name)
-        self.assertQuerysetEqual(response.context["manufacturer_list"], manufacturer_in_context)
+        manufacturer_in_context = Manufacturer.objects.filter(
+            name__icontains=searched_name
+        )
+        self.assertQuerysetEqual(
+            response.context["manufacturer_list"], manufacturer_in_context
+        )
 
 
 class PublicCarTests(TestCase):
@@ -67,7 +71,7 @@ class PrivateCarTest(TestCase):
 
     def test_retrieve_car(self):
         manufacturer = Manufacturer.objects.create(name="BMW")
-        car = Car.objects.create(
+        Car.objects.create(
             model="test",
             manufacturer=manufacturer
         )
@@ -135,5 +139,9 @@ class PrivateDriverTests(TestCase):
             {"username": searched_username}
         )
         self.assertEqual(response.status_code, 200)
-        driver_in_context = Driver.objects.filter(username__icontains=searched_username)
-        self.assertQuerysetEqual(response.context["driver_list"], driver_in_context, ordered=False)
+        driver_in_context = Driver.objects.filter(
+            username__icontains=searched_username
+        )
+        self.assertQuerysetEqual(
+            response.context["driver_list"], driver_in_context, ordered=False
+        )
