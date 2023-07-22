@@ -11,20 +11,19 @@ DRIVERS_URL = reverse("taxi:driver-list")
 
 class NoLoginAccessTests(TestCase):
 
-    def test_manufacturer_login_required(self):
-        response = self.client.get(MANUFACTURERS_URL)
+    def assert_login_required(self, url):
+        response = self.client.get(url)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/manufacturers/")
+        self.assertRedirects(response, f"/accounts/login/?next={url}")
+
+    def test_manufacturer_login_required(self):
+        self.assert_login_required(MANUFACTURERS_URL)
 
     def test_car_login_required(self):
-        response = self.client.get(CARS_URL)
-        self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/cars/")
+        self.assert_login_required(CARS_URL)
 
     def test_driver_login_required(self):
-        response = self.client.get(DRIVERS_URL)
-        self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/drivers/")
+        self.assert_login_required(DRIVERS_URL)
 
 
 class ListViewsTests(TestCase):
