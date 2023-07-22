@@ -100,6 +100,24 @@ class PrivateCarViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.user1.license_number, "GHD98745")
 
+        response = self.client.post(url, {"license_number": "G2D98745"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEquals(self.user1.license_number, "G2D98745")
+        self.assertEqual(self.user1.license_number, "GHD98745")
+
+        response = self.client.post(url, {"license_number": "GHD98HF5"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEquals(self.user1.license_number, "GHD98HF5")
+        self.assertEqual(self.user1.license_number, "GHD98745")
+
+        response = self.client.post(url, {"license_number": "GHD9854"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEquals(self.user1.license_number, "GHD9854")
+        self.assertEqual(self.user1.license_number, "GHD98745")
+
     def test_driver_create_view(self):
         driver_data = {
             "username": "test3",
