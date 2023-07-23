@@ -11,7 +11,7 @@ class Manufacturer(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name} {self.country}"
+        return f"{self.name} ({self.country})"
 
 
 class Driver(AbstractUser):
@@ -34,4 +34,4 @@ class Car(models.Model):
     drivers = models.ManyToManyField(Driver, related_name="cars")
 
     def __str__(self):
-        return self.model
+        return f"{self.model}"
