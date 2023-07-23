@@ -23,7 +23,8 @@ class AdminSiteTests(TestCase):
         )
 
     def test_driver_license_number_listed(self):
-        """Tests that driver's license number is in list_display an driver admin page"""
+        """Tests that driver's license number is in list_display
+         an driver admin page"""
 
         url = reverse("admin:taxi_driver_changelist")
         res = self.client.get(url)
@@ -31,7 +32,8 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, self.driver.license_number)
 
     def test_driver_detail_license_number_listed(self):
-        """Tests that driver's license number is in an driver detail admin page"""
+        """Tests that driver's license number is in an driver detail
+         admin page"""
 
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         res = self.client.get(url)
@@ -39,7 +41,8 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, self.driver.license_number)
 
     def test_driver_add_fields_listed(self):
-        """Tests that driver's first name, last name, license number are an driver add admin page"""
+        """Tests that driver's first name, last name,
+         license number are an driver add admin page"""
 
         url = reverse("admin:taxi_driver_add")
         res = self.client.get(url)
