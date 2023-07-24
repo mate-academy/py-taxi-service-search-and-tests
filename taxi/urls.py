@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .forms import CarSearchForm
 from .views import (
     index,
     CarListView,
@@ -75,6 +76,13 @@ urlpatterns = [
         toggle_assign_to_car,
         name="toggle-car-assign",
     ),
+
+    path(
+        "cars/search-form/",
+        CarSearchForm,
+        name="search-form"
+    ),
+
     path(
         "drivers/",
         DriverListView.as_view(),
