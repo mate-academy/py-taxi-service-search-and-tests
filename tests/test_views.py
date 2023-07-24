@@ -125,3 +125,29 @@ class PrivateViewsTests(TestCase):
             list(response.context["driver_list"]),
             list(Driver.objects.filter(username__icontains=searched_driver))
         )
+
+    def test_assign_driver_to_car(self):
+        driver = Driver.objects.create(
+            username=f"Kevin123",
+            password=f"TestPassword12",
+            email="example@example.com",
+            first_name=f"Robot",
+            last_name=f"Smith",
+            license_number="ABC12345"
+        )
+        car = Car.objects.create(model="Lamder",
+                                 manufacturer=Manufacturer.objects.create(
+                                     name="Test",
+                                     country="Test"
+                                 ))
+        car.drivers.add(driver)
+        car.save()
+        url = reverse('taxi:toggle-car-assign', args=[car.pk])
+
+        self.assertIn(car, driver.cars.all())
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertIn(car, driver.cars.all())
