@@ -142,7 +142,7 @@ class PrivateViewsTests(TestCase):
                                  ))
         car.drivers.add(driver)
         car.save()
-        url = reverse('taxi:toggle-car-assign', args=[car.pk])
+        url = reverse("taxi:toggle-car-assign", args=[car.pk])
 
         self.assertIn(car, driver.cars.all())
 
