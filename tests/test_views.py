@@ -128,11 +128,11 @@ class PrivateViewsTests(TestCase):
 
     def test_assign_driver_to_car(self):
         driver = Driver.objects.create(
-            username=f"Kevin123",
-            password=f"TestPassword12",
+            username="Kevin123",
+            password="TestPassword12",
             email="example@example.com",
-            first_name=f"Robot",
-            last_name=f"Smith",
+            first_name="Robot",
+            last_name="Smith",
             license_number="ABC12345"
         )
         car = Car.objects.create(model="Lamder",
