@@ -21,7 +21,7 @@ class DriverAdminTest(TestCase):
         driver_admin_instance = DriverAdmin(get_user_model(), self.site)
         self.assertEqual(
             driver_admin_instance.list_display,
-            UserAdmin.list_display + ('license_number',)
+            UserAdmin.list_display + ("license_number",),
         )
 
 
@@ -46,8 +46,8 @@ class CarAdminTest(TestCase):
 
     def test_search_fields(self):
         car_admin_instance = CarAdmin(Car, self.site)
-        self.assertEqual(car_admin_instance.search_fields, ('model',))
+        self.assertEqual(car_admin_instance.search_fields, ("model",))
 
     def test_list_filter(self):
         car_admin_instance = CarAdmin(Car, self.site)
-        self.assertEqual(car_admin_instance.list_filter, ('manufacturer',))
+        self.assertEqual(car_admin_instance.list_filter, ("manufacturer",))

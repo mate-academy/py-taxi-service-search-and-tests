@@ -5,8 +5,8 @@ from django.urls import reverse
 from taxi.models import Manufacturer, Car
 
 DRIVERS_URL = reverse("taxi:driver-list")
-CARS_URL = reverse('taxi:car-list')
-MANUFACTURERS_URL = reverse('taxi:manufacturer-list')
+CARS_URL = reverse("taxi:car-list")
+MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
 
 
 class DriverListViewTest(TestCase):
@@ -88,6 +88,7 @@ class ManufacturerListViewTest(TestCase):
         response = self.client.get(MANUFACTURERS_URL)
         manufacturers = Manufacturer.objects.all()
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(list(response.context["manufacturer_list"]),
-                         list(manufacturers))
+        self.assertEqual(
+            list(response.context["manufacturer_list"]), list(manufacturers)
+        )
         self.assertIn(self.manufacturer, response.context["manufacturer_list"])

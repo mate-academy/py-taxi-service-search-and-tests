@@ -17,12 +17,14 @@ class DriverTest(TestCase):
     def test_driver_str_method(self):
         self.assertEqual(
             str(self.driver),
-            f"{self.driver.username} ({self.driver.first_name} {self.driver.last_name})"
+            f"{self.driver.username} "
+            f"({self.driver.first_name} {self.driver.last_name})",
         )
 
     def test_driver_absolute_url(self):
-        expected_url = reverse("taxi:driver-detail",
-                               kwargs={"pk": self.driver.pk})
+        expected_url = reverse(
+            "taxi:driver-detail", kwargs={"pk": self.driver.pk}
+        )
         self.assertEqual(self.driver.get_absolute_url(), expected_url)
 
     def test_driver_verbose_names(self):
@@ -33,7 +35,8 @@ class DriverTest(TestCase):
 class CarTest(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(
-            name="Test Manufacturer")
+            name="Test Manufacturer"
+        )
         self.car = Car.objects.create(
             model="Test Model",
             manufacturer=self.manufacturer,
@@ -45,28 +48,24 @@ class CarTest(TestCase):
 
 class ManufacturerModelTest(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(
-            name="Test Manufacturer",
-            country="Test Country",
-        )
+        data = {
+            ("Test Manufacturer", "Test Country"),
+            ("Apple", "USA"),
+            ("Samsung", "South Korea"),
+        }
+        for name, country in data:
+            Manufacturer.objects.create(name=name, country=country)
 
     def test_manufacturer_str_method(self):
-        expected_str = f"{self.manufacturer.name} {self.manufacturer.country}"
-        self.assertEqual(str(self.manufacturer), expected_str)
+        manufacturers = Manufacturer.objects.all()
+        for manufacturer in manufacturers:
+            expected_str = f"{manufacturer.name} {manufacturer.country}"
+            self.assertEqual(str(manufacturer), expected_str)
 
     def test_manufacturer_ordering(self):
-        manufacturer2 = Manufacturer.objects.create(
-            name="Apple",
-            country="USA",
-        )
-        manufacturer3 = Manufacturer.objects.create(
-            name="Samsung",
-            country="South Korea",
-        )
-
         manufacturers_by_name = list(
-            Manufacturer.objects.values_list("name", flat=True))
+            Manufacturer.objects.values_list("name", flat=True)
+        )
         self.assertEqual(
-            manufacturers_by_name,
-            ["Apple", "Samsung", "Test Manufacturer"]
+            manufacturers_by_name, ["Apple", "Samsung", "Test Manufacturer"]
         )
