@@ -119,3 +119,11 @@ class PrivateViewsTest(TestCase):
             response.context["driver_list"][0],
             Driver.objects.get(username=driver_username)
         )
+
+    def test_user_assign_to_car(self):
+        car = Car.objects.get(id=1)
+        driver = Driver.objects.get(id=1)
+        self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": 1}))
+        self.assertEqual(driver.cars.first(), car)
+        self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": 1}))
+        self.assertEqual(driver.cars.count(), 0)
