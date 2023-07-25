@@ -52,7 +52,6 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = ManufacturerSearchForm(initial={"name": name})
 
         form = ManufacturerSearchForm(self.request.GET)
-        print(form)
 
         return context
 

@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
-from taxi.models import Manufacturer
-
+from taxi.models import Manufacturer, Driver
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
+DRIVER_URL = reverse("taxi:driver-list")
 
 
 class PublicManufacturerTests(TestCase):
@@ -44,9 +44,18 @@ class PrivateManufacturerTests(TestCase):
 class PrivetDriverTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            "test",
-            "password123"
+            username="testuser",
+            license_number="ABC12345",
+            first_name="fime",
+            last_name="lame",
         )
+        self.user777 = get_user_model().objects.create_user(
+            username="James777",
+            license_number="ABC54321",
+            first_name="James777",
+            last_name="Bond",
+        )
+        self.client.force_login(self.user777)
         self.client.force_login(self.user)
 
     def test_create_driver(self):
@@ -64,3 +73,29 @@ class PrivetDriverTest(TestCase):
         self.assertEquals(new_user.first_name, form_data["first_name"])
         self.assertEquals(new_user.last_name, form_data["last_name"])
         self.assertEquals(new_user.license_number, form_data["license_number"])
+
+    def test_driver_list(self):
+        result = self.client.get(DRIVER_URL)
+        drivers = Driver.objects.all()
+        self.assertEquals(
+            list(result.context["driver_list"]),
+            list(drivers)
+        )
+
+
+class PublicDriverTests(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="testuser",
+            license_number="ABC12345",
+            first_name="fime",
+            last_name="lame",
+        )
+        self.client.force_login(self.user)
+        self.client = Client()
+
+    def test_login_required(self):
+        result = self.client.get(DRIVER_URL)
+
+        self.assertNotEquals(result.status_code, 200)
+
