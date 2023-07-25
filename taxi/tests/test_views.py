@@ -111,3 +111,21 @@ class PrivateDriverTests(TestCase):
             list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_toggle_assign_car(self):
+        manufacturer = Manufacturer.objects.create(name="test_name", country="Test")
+        car = Car.objects.create(model="test_model", manufacturer=manufacturer)
+
+        self.assertNotIn(car, self.driver.cars.all())
+
+        response = self.client.post(reverse("taxi:toggle-car-assign", args=[car.pk]))
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertIn(car, self.driver.cars.all())
+
+        response = self.client.post(reverse("taxi:toggle-car-assign", args=[car.pk]))
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertNotIn(car, self.driver.cars.all())
