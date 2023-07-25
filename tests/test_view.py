@@ -89,7 +89,10 @@ class PrivateViewsTests(TestCase):
 
     def test_search_car_by_model(self):
         searched_car = "BrokenFromStart"
-        response = self.client.get(reverse("taxi:car-list"), {"model": searched_car})
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": searched_car}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
