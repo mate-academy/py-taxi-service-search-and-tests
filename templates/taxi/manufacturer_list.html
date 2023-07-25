@@ -8,6 +8,10 @@
     </a>
   </h1>
 
+    {% block search_form %}
+      {% include "includes/search_form.html" %}
+    {% endblock %}
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
