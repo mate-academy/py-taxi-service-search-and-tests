@@ -138,7 +138,9 @@ class PrivateViewsTests(TestCase):
             license_number="JPN12569"
         )
         car = Car.objects.create(model="X5",
-                                 manufacturer=Manufacturer.objects.get(name="BMW"))
+                                 manufacturer=Manufacturer.objects.get(
+                                     name="BMW"
+                                 ))
         car.drivers.add(driver)
         car.save()
         url = reverse("taxi:toggle-car-assign", args=[car.pk])
