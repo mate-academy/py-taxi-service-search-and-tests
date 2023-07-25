@@ -98,4 +98,3 @@ class PublicDriverTests(TestCase):
         result = self.client.get(DRIVER_URL)
 
         self.assertNotEquals(result.status_code, 200)
-
