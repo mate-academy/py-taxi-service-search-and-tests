@@ -49,9 +49,24 @@ class DriverLicenseUpdateFormTest(TestCase):
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_invalid_license_number(self):
-        form_data = {
-            "license_number": "TST123"
-        }
-        form = DriverLicenseUpdateForm(data=form_data)
-        self.assertFalse(form.is_valid())
+    def test_invalid_license_number_length(self):
+        license_numbers = [
+            "TS1234567", "TST1234", "TST 12345"
+        ]
+        for license_number in license_numbers:
+            form_data = {
+                "license_number": license_number
+            }
+            form = DriverLicenseUpdateForm(data=form_data)
+            self.assertFalse(form.is_valid())
+
+    def test_invalid_license_number_format(self):
+        license_numbers = [
+            "TS123456", "tst12345", "12345678", "TEST1234", "1T2S3T45", "12345TST"
+        ]
+        for license_number in license_numbers:
+            form_data = {
+                "license_number": license_number
+            }
+            form = DriverLicenseUpdateForm(data=form_data)
+            self.assertFalse(form.is_valid())
