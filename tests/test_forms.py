@@ -62,7 +62,12 @@ class DriverLicenseUpdateFormTest(TestCase):
 
     def test_invalid_license_number_format(self):
         license_numbers = [
-            "TS123456", "tst12345", "12345678", "TEST1234", "1T2S3T45", "12345TST"
+            "TS123456",
+            "tst12345",
+            "12345678",
+            "TEST1234",
+            "1T2S3T45",
+            "12345TST"
         ]
         for license_number in license_numbers:
             form_data = {
