@@ -42,3 +42,26 @@ class PrivateManufacturerTests(TestCase):
 
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+
+class SearchManufacturerViewTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test_user", password="fghjkvbndfgh678"
+        )
+        self.client.force_login(self.user)
+
+        self.manufacturer1 = Manufacturer.objects.create(
+            name="Manufacturer1", country="Country1"
+        )
+        self.manufacturer2 = Manufacturer.objects.create(
+            name="Manufacturer2", country="Country2"
+        )
+
+    def test_manufacturer_list_view_with_search(self):
+        search_param = "?name=Manufacturer1"
+        response = self.client.get(MANUFACTURER_URL + search_param)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Manufacturer1")
+        self.assertNotContains(response, "Manufacturer2")

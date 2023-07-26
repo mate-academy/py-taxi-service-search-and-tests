@@ -1,4 +1,5 @@
 from django.test import TestCase
+from parameterized import parameterized
 
 from taxi.models import Manufacturer
 from taxi.forms import (DriverCreationForm,
@@ -38,8 +39,13 @@ class FieldsFormTest(TestCase):
 
 
 class CleanLicenseNumberTest(TestCase):
-    def test_update_license_number_with_non_valid_date(self):
-        form_date = {"license_number": "abc1235"}
+    @parameterized.expand([
+        ("InvalidLength", "ABC1234", "License should consist of 8 char"),
+        ("InvalidCharacters", "AB!12345", "First 3 char must be uppercase"),
+        ("InvalidDigits", "ABC12XYZ", "Last 5 char must be digits"),
+    ])
+    def test_license_number_with_invalid_date(self, license_number, *args):
+        form_date = {"license_number": license_number}
         form = DriverLicenseUpdateForm(form_date)
         self.assertFalse(form.is_valid())
 

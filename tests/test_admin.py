@@ -22,7 +22,7 @@ class AdminTest(TestCase):
         res = self.client.get(url)
         self.assertContains(res, self.driver.license_number)
 
-    def test_driver_detailed_list_display(self):
+    def test_license_number_display(self):
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         res = self.client.get(url)
         self.assertContains(res, self.driver.license_number)
