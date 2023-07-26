@@ -43,7 +43,7 @@ class PrivateCarTest(TestCase):
         )
         self.client.force_login(user)
 
-    def test_all_cars(self):
+    def test_car_list_view(self):
         paginated_by = 5
         response = self.client.get(CAR_LIST_URL)
         cars = Car.objects.select_related("manufacturer")
