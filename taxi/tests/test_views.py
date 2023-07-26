@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
-from taxi.models import Manufacturer, Driver
+from taxi.models import Manufacturer, Driver, Car
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 DRIVER_URL = reverse("taxi:driver-list")
@@ -81,6 +81,23 @@ class PrivetDriverTest(TestCase):
             list(result.context["driver_list"]),
             list(drivers)
         )
+
+    def test_toggle_driver_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="mitsubishi",
+            country="Japan"
+        )
+        car = Car.objects.create(model="lancer", manufacturer=manufacturer)
+        self.client.post(reverse(
+            "taxi:toggle-car-assign",
+            args=[car.pk]
+        ))
+        self.assertIn(car, self.user.cars.all())
+        self.client.post(reverse(
+            "taxi:toggle-car-assign",
+            args=[car.pk]
+        ))
+        self.assertNotIn(car, self.user.cars.all())
 
 
 class PublicDriverTests(TestCase):
