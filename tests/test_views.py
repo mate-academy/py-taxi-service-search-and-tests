@@ -175,14 +175,14 @@ class PublicCarTests(TestCase):
 
 class PrivateCarTests(TestCase):
     def setUp(self) -> None:
-        manufacturer = Manufacturer.objects.create(
+        self.manufacturer = Manufacturer.objects.create(
             name="test_name",
             country="test_country"
         )
         for i in range(24):
             Car.objects.create(
                 model=f"test{i}",
-                manufacturer=manufacturer,
+                manufacturer=self.manufacturer,
             )
         self.driver = get_user_model().objects.create_user(
             username="test",
@@ -226,3 +226,20 @@ class PrivateCarTests(TestCase):
                 list(response.context["car_list"]),
                 list(paginator.get_page(num_of_page))
             )
+
+    def test_assign_driver_to_car(self):
+        car = Car.objects.create(
+            model="test_model",
+            manufacturer=self.manufacturer
+        )
+        car.drivers.add(self.driver)
+
+        url = reverse("taxi:toggle-car-assign", args=[car.pk])
+
+        self.assertIn(car, self.driver.cars.all())
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertNotIn(car, self.driver.cars.all())
