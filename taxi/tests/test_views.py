@@ -85,7 +85,6 @@ class PrivateCarTests(TestCase):
         )
 
 
-
 class PublicDriverTests(TestCase):
     def test_login_required(self):
         response = self.client.get(DRIVER_URL)
