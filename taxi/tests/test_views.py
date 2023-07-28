@@ -1,17 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from taxi.models import Manufacturer, Car
 
 PK = 1
 
-MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
-CAR_LIST_URL = reverse("taxi:car-list")
-CAR_DETAIL_URL = reverse("taxi:car-detail", args=[PK])
-DRIVER_LIST_URL = reverse("taxi:driver-list")
+MANUFACTURER_LIST_URL = reverse_lazy("taxi:manufacturer-list")
+CAR_LIST_URL = reverse_lazy("taxi:car-list")
+CAR_DETAIL_URL = reverse_lazy("taxi:car-detail", args=[PK])
+DRIVER_LIST_URL = reverse_lazy("taxi:driver-list")
 
-TOGGLE_CAR_ASSIGN = reverse("taxi:toggle-car-assign", args=[PK])
+TOGGLE_CAR_ASSIGN = reverse_lazy("taxi:toggle-car-assign", args=[PK])
 
 
 class PublicCarTests(TestCase):
@@ -20,7 +20,7 @@ class PublicCarTests(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_car_create_login_required(self):
-        response = self.client.get(reverse("taxi:car-create"))
+        response = self.client.get(reverse_lazy("taxi:car-create"))
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -98,7 +98,7 @@ class PublicManufacturerTests(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_manufacturer_create_login_required(self):
-        response = self.client.get(reverse("taxi:manufacturer-create"))
+        response = self.client.get(reverse_lazy("taxi:manufacturer-create"))
         self.assertNotEqual(response.status_code, 200)
 
 
@@ -142,11 +142,11 @@ class PrivateManufacturerTest(TestCase):
 
 class PublicDriverTests(TestCase):
     def test_driver_list_login_required(self):
-        response = self.client.get(reverse("taxi:driver-list"))
+        response = self.client.get(reverse_lazy("taxi:driver-list"))
         self.assertNotEqual(response.status_code, 200)
 
     def test_driver_create_login_required(self):
-        response = self.client.get(reverse("taxi:driver-list"))
+        response = self.client.get(reverse_lazy("taxi:driver-list"))
         self.assertNotEqual(response.status_code, 200)
 
 
