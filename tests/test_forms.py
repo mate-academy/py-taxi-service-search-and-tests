@@ -1,6 +1,10 @@
 from django.test import TestCase
 
-from taxi.forms import DriverUsernameSearchForm, CarModelSearchForm, ManufacturerNameSearchForm
+from taxi.forms import (
+    DriverUsernameSearchForm,
+    CarModelSearchForm,
+    ManufacturerNameSearchForm
+)
 
 
 class FormsTests(TestCase):
