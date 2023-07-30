@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from taxi.models import Manufacturer, Car, Driver
 
-MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
-CARS_URL = reverse("taxi:car-list")
-CARS_CREATE_URL = reverse("taxi:car-create")
-DRIVERS_URL = reverse("taxi:driver-list")
+MANUFACTURERS_URL = reverse_lazy("taxi:manufacturer-list")
+CARS_URL = reverse_lazy("taxi:car-list")
+CARS_CREATE_URL = reverse_lazy("taxi:car-create")
+DRIVERS_URL = reverse_lazy("taxi:driver-list")
 
 
 class PublicManufacturerTests(TestCase):
