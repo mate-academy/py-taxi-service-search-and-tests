@@ -12,20 +12,19 @@ class DriverListViewTest(TestCase):
             password="testpassword",
         )
         self.client.force_login(self.user)
-
-    def test_driver_list_view(self):
-        driver1 = get_user_model().objects.create(
+        self.driver1 = get_user_model().objects.create(
             username="driver1",
             first_name="John",
             last_name="Doe",
             license_number="ABC12345"
         )
-        driver2 = get_user_model().objects.create(
+        self.driver2 = get_user_model().objects.create(
             username="driver2",
             first_name="Alice",
             last_name="Smith",
             license_number="ADC12345")
 
+    def test_driver_list_view(self):
         url = reverse("taxi:driver-list")
 
         response = self.client.get(url)
