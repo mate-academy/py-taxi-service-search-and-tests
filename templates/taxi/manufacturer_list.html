@@ -9,10 +9,9 @@
     </a>
   </h1>
 
-  <form action="" method="get" novalidate class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="Search" class="btn btn-light">
-  </form>
+  {% block search_from %}
+    {% include "includes/search_form.html" %}
+  {% endblock %}
 
   {% if manufacturer_list %}
     <table class="table">

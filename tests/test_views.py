@@ -31,7 +31,7 @@ class PrivateDataTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="test",
-            password="test12345"
+            password="test12345",
         )
 
         self.client.force_login(self.user)
@@ -97,3 +97,73 @@ class PrivateDataTest(TestCase):
             list(manufacturers)
         )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
+
+    def test_button_assign_user_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
+        driver = get_user_model().objects.create_user(
+            username="new_driver",
+            password="123456783",
+            license_number="ABC12345"
+        )
+        car = Car.objects.create(
+            model="M3",
+            manufacturer=manufacturer,
+        )
+        car.drivers.add(driver)
+
+        form_data = {
+            "username": self.user.username,
+            "license_number": self.user.license_number
+        }
+
+        self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": str(car.id)}),
+            data=form_data
+        )
+        driver_in_car = car.drivers.get(
+            license_number=self.user.license_number
+        )
+
+        self.assertEqual(driver_in_car.username, self.user.username)
+        self.assertEqual(
+            driver_in_car.license_number,
+            self.user.license_number
+        )
+
+    def test_button_delete_user_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
+        driver = get_user_model().objects.create_user(
+            username="new_driver",
+            password="123456783",
+            license_number="ABC12345"
+        )
+        driver.save()
+        car = Car.objects.create(
+            model="M3",
+            manufacturer=manufacturer,
+        )
+        car.drivers.add(driver)
+        car.drivers.add(self.user)
+
+        form_data = {
+            "username": self.user.username,
+            "license_number": self.user.license_number
+        }
+
+        self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                kwargs={"pk": str(car.id)}
+            ),
+            data=form_data)
+        driver_in_car = car.drivers.filter(
+            license_number=self.user.license_number
+        )
+
+        self.assertEqual(len(driver_in_car), 0)
