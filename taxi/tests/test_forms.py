@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.test import TestCase
 
 from taxi.forms import CarForm, DriverCreationForm, DriverLicenseUpdateForm
@@ -90,3 +91,6 @@ class DriverLicenseUpdateFormTest(TestCase):
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
+=======
+
+>>>>>>> 129dc268db71fd9c3cc9eaa5d519a587e20ccc59
