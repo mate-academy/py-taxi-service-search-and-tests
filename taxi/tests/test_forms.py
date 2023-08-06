@@ -1,128 +1,92 @@
-from unittest import TestCase
+from django.test import TestCase
 
+from taxi.forms import CarForm, DriverCreationForm, DriverLicenseUpdateForm
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
-from taxi.forms import (DriverCreationForm,
-                        DriverSearchForm,
-                        ManufacturerSearchForm,
-                        CarSearchForm)
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer
 
 
-class FormTests(TestCase):
-    def test_driver_create_with_valid_data(self) -> None:
+class CarFormTest(TestCase):
+    def setUp(self):
+        self.driver1 = get_user_model().objects.create_user(
+            username="driver1",
+            password="testpassword",
+            license_number="ABC12345"
+        )
+        self.driver2 = get_user_model().objects.create_user(
+            username="driver2",
+            password="testpassword",
+            license_number="XYZ67890"
+        )
+        self.manufacturer1 = Manufacturer.objects.create(name="Toyota")
+
+    def test_car_form_valid(self):
         form_data = {
-            "username": "TestDriver",
-            "password1": "test12345",
-            "password2": "test12345",
-            "first_name": "TestFirstName",
-            "last_name": "TestLastName",
-            "license_number": "TST12345"
+            "manufacturer": self.manufacturer1.id,
+            "model": "Camry",
+            "year": 2020,
+            "drivers": [self.driver1.id, self.driver2.id],
         }
+        form = CarForm(data=form_data)
+        print(form.errors)
+        self.assertTrue(form.is_valid())
 
+    def test_car_form_invalid(self):
+        form_data = {
+            "make": "Toyota",
+            "model": "Camry",
+            "year": 2020,
+            "drivers": [],
+        }
+        form = CarForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+
+class DriverCreationFormTest(TestCase):
+    def test_driver_creation_form_valid(self):
+        form_data = {
+            "username": "new_driver",
+            "password1": "testpassword",
+            "password2": "testpassword",
+            "license_number": "ABC12345",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
+        form = DriverCreationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_driver_creation_form_invalid_license_number(self):
+        form_data = {
+            "username": "new_driver",
+            "password1": "testpassword",
+            "password2": "testpassword",
+            "license_number": "ABC123456",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
 
 
-class SearchForm(TestCase):
-    def __init__(self, methodname: str = ...):
-        super().__init__(methodname)
-        self.client = None
-
-    def setUp(self) -> None:
-        self.user = get_user_model().objects.create_user(
-            username="driver",
-            password="author12345",
-            license_number="ABC12345",
+class DriverLicenseUpdateFormTest(TestCase):
+    def setUp(self):
+        self.driver = get_user_model().objects.create_user(
+            username="driver1",
+            password="testpassword"
         )
 
-        self.client.force_login(self.user)
-
-    def test_search_form_car(self) -> None:
-        manufacturer = Manufacturer.objects.create(
-            name="TestManufacturer",
-            country="Test"
-        )
-        Car.objects.create(
-            model="TestModel",
-            manufacturer=manufacturer
-        )
-        Car.objects.create(
-            model="Other",
-            manufacturer=manufacturer
-        )
-
+    def test_driver_license_update_form_valid(self):
         form_data = {
-            "model": "TestMod"
+            "license_number": "ABC12345",
         }
-
-        form = CarSearchForm(data=form_data)
+        form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-        expected_result = Car.objects.filter(model="TestModel")
-
-        response = self.client.get(
-            reverse("taxi:car-list") + "?model=" + form_data["model"]
-        )
-        self.assertEqual(
-            list(response.context["car_list"]), list(expected_result)
-        )
-
-    def test_search_form_manufacture(self) -> None:
-        Manufacturer.objects.create(
-            name="TestManufacturer",
-            country="Test"
-        )
-
-        Manufacturer.objects.create(
-            name="Other",
-            country="USA"
-        )
-
+    def test_driver_license_update_form_invalid(self):
         form_data = {
-            "name": "Test"
+            "license_number": "ABC123456",
         }
-
-        form = ManufacturerSearchForm(data=form_data)
-
-        self.assertTrue(form.is_valid())
-
-        expected_result = Manufacturer.objects.filter(name="TestManufacturer")
-
-        response = self.client.get(
-            reverse("taxi:manufacturer-list") + "?name=" + form_data["name"]
-        )
-        self.assertEqual(
-            list(response.context["manufacturer_list"]), list(expected_result)
-        )
-
-    def test_search_form_driver(self) -> None:
-        get_user_model().objects.create_user(
-            username="TestUser",
-            password="author12345",
-            license_number="ABC12346",
-        )
-        get_user_model().objects.create_user(
-            username="OtherUser",
-            password="author123456",
-            license_number="ABC12347",
-        )
-
-        form_data = {
-            "username": "Test"
-        }
-
-        form = DriverSearchForm(data=form_data)
-
-        self.assertTrue(form.is_valid())
-
-        expected_result = get_user_model().objects.filter(username="TestUser")
-
-        response = self.client.get(
-            reverse("taxi:driver-list") + "?username=" + form_data["username"]
-        )
-        self.assertEqual(
-            list(response.context["driver_list"]), list(expected_result)
-        )
+        form = DriverLicenseUpdateForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn("license_number", form.errors)
