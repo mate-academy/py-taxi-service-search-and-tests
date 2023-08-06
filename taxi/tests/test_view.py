@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 
 from taxi.models import Manufacturer, Car, Driver
@@ -116,13 +116,7 @@ class PrivateDriverTest(TestCase):
         self.assertEquals(list(res.context["driver_list"]), list(driver))
 
     def test_search_driver(self):
-        Driver.objects.create(
-            username="limon13",
-            first_name="Bruce",
-            last_name="Strong",
-            license_number="LHR6935752"
-        )
-        res = self.client.get(DRIVER_URL)
+        res = self.client.get(DRIVER_URL, {"username": "limon13"})
         search = Driver.objects.filter(username="limon13")
         self.assertEquals(res.status_code, 200)
         self.assertEquals(list(res.context["driver_list"]), list(search))
