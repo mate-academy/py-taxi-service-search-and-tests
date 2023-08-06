@@ -59,6 +59,7 @@ class DriverUsernameSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search by username"}))
 
+
 class CarModelSearchForm(forms.Form):
     model = forms.CharField(
         max_length=63,
@@ -66,10 +67,10 @@ class CarModelSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search by model"}))
 
+
 class ManufacturersNameSearchForm(forms.Form):
     name = forms.CharField(
         max_length=63,
         required=False,
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search by name"}))
-

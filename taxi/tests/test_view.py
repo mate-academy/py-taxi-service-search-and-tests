@@ -8,6 +8,7 @@ MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 CAR_URL = reverse("taxi:car-list")
 DRIVER_URL = reverse("taxi:driver-list")
 
+
 class PublicManufacturerTests(TestCase):
     def test_login_required(self):
         res = self.client.get(MANUFACTURER_URL)
@@ -72,7 +73,9 @@ class PrivateCarTests(TestCase):
         self.assertEquals(list(res.context["car_list"]), list(car))
 
     def test_search_car(self):
-        manufacturer = Manufacturer.objects.create(name="tests", country="tests")
+        manufacturer = Manufacturer.objects.create(
+            name="tests", country="tests"
+        )
         Car.objects.create(model="test", manufacturer=manufacturer)
         res = self.client.get(CAR_URL)
         search = Car.objects.filter(model="test")
@@ -120,6 +123,6 @@ class PrivateDriverTest(TestCase):
             license_number="LHR6935752"
         )
         res = self.client.get(DRIVER_URL)
-        search = Driver.objects.filter(username='limon13')
+        search = Driver.objects.filter(username="limon13")
         self.assertEquals(res.status_code, 200)
         self.assertEquals(list(res.context["driver_list"]), list(search))

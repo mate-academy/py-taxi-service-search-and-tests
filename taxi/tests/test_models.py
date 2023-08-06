@@ -15,7 +15,10 @@ class ModelsTests(TestCase):
             first_name="admin first",
             last_name="admin last"
         )
-        self.assertEquals(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEquals(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_create_driver_with_license_number(self):
         username = "test_username"
