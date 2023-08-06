@@ -1,5 +1,5 @@
+from unittest import TestCase
 
-<<<<<<< HEAD
 from taxi.models import Manufacturer, Car
 
 
@@ -54,5 +54,3 @@ class ModelsTests(TestCase):
         self.assertEqual(driver.username, username)
         self.assertTrue(driver.check_password(password))
         self.assertEqual(driver.license_number, license_number)
-=======
->>>>>>> 129dc268db71fd9c3cc9eaa5d519a587e20ccc59
