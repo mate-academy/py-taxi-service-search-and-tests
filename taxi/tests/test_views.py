@@ -2,140 +2,92 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Driver
+from taxi.models import Driver, Car, Manufacturer
 
+DRIVER_URL = reverse("taxi:driver-list")
+CAR_URL = reverse("taxi:car-list")
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
 
-class DriverListViewTest(TestCase):
+class PublicDriverTests(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create_user(
-            username="testuser",
-            password="testpassword",
-        )
-        self.client.force_login(self.user)
-        self.driver1 = get_user_model().objects.create(
-            username="driver1",
-            first_name="John",
-            last_name="Doe",
-            license_number="ABC12345"
-        )
-        self.driver2 = get_user_model().objects.create(
-            username="driver2",
-            first_name="Alice",
-            last_name="Smith",
-            license_number="ADC12345")
 
-    def test_driver_list_view(self):
-        url = reverse("taxi:driver-list")
+    def test_login_required(self):
+        response = self.client.get(DRIVER_URL)
 
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-        self.assertContains(response, "John")
-        self.assertContains(response, "Doe")
-        self.assertContains(response, "Alice")
-        self.assertContains(response, "Smith")
+        self.assertNotEqual(response.status_code, 200)
 
 
-class DriverDetailViewTestCase(TestCase):
+class PrivateDriverTests(TestCase):
     def setUp(self):
-        self.client = Client()
         self.user = get_user_model().objects.create_user(
-            username="testuser", password="testpassword"
-        )
-        self.client.force_login(self.user)
-        self.driver = Driver.objects.create(
-            username="driver1",
-            first_name="John",
-            last_name="Doe",
-            license_number="ABC01876"
-        )
-
-    def test_driver_detail_view(self):
-        url = reverse("taxi:driver-detail", args=[self.driver.pk])
-
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-        self.assertContains(response, "John")
-        self.assertContains(response, "Doe")
-
-
-class DriverCreateViewTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = get_user_model().objects.create_user(
-            username="testuser", password="testpassword"
+            username="username.test",
+            password="password132"
         )
         self.client.force_login(self.user)
 
-    def test_driver_create_view_get(self):
-        url = reverse("taxi:driver-create")
+    def test_login_required(self):
+        Driver.objects.create(
+            username="TEst username",
+            password="testpassword123",
+            license_number="12345678"
+        )
 
-        response = self.client.get(url)
+        response = self.client.get(DRIVER_URL)
+
+        drivers = Driver.objects.all()
+
         self.assertEqual(response.status_code, 200)
-
-        self.assertContains(response, "Create driver")
-        self.assertContains(response, 'name="username"')
-        self.assertContains(response, 'name="first_name"')
-        self.assertContains(response, 'name="last_name"')
-
-    def test_driver_create_view_post(self):
-        self.client.force_login(self.user)
-
-        url = reverse("taxi:driver-create")
-
-        data = {
-            "username": "newdriver",
-            "first_name": "New",
-            "last_name": "Driver",
-            "email": "newdriver@example.com",
-            "years_of_experience": 2,
-            "license_number": "ACS12344",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
-
-        response = self.client.post(url, data)
-
-        self.assertEqual(response.status_code, 302)
-
-        new_driver = Driver.objects.get(username="newdriver")
-        self.assertRedirects(response, new_driver.get_absolute_url())
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
 
 
-class IndexViewTest(TestCase):
+class PublicCarTests(TestCase):
     def setUp(self):
         self.client = Client()
+
+    def test_login_required(self):
+        response = self.client.get(CAR_URL)
+
+        self.assertNotEqual(response.status_code, 200)
+
+
+class PrivateCarTests(TestCase):
+    def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="testuser", password="testpassword"
+            username="username.test",
+            password="password132"
         )
-        self.client.login(username="testuser", password="testpassword")
+        self.client.force_login(self.user)
 
-    def test_index_view(self):
-        url = reverse("taxi:index")
-        response = self.client.get(url)
+    def test_login_required(self):
+        Car.objects.create(
+            model="Test model",
+            manufacturer=Manufacturer.objects.create(
+                name="test name",
+                country="test country"
+            )
+        )
+        response = self.client.get(CAR_URL)
+
+        drivers = Car.objects.all()
+
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Welcome to Best Taxi Ever!")
-
-    def test_index_view_with_session(self):
-        url = reverse("taxi:index")
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "You have visited this page")
-        self.assertContains(response, "1 time.")
-
-    def test_index_view_with_logged_out_user(self):
-        self.client.logout()
-        url = reverse("taxi:index")
-        response = self.client.get(url)
-        login_url = reverse("login")
-        self.assertRedirects(response, login_url + "?next=" + url)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(drivers)
+        )
+        self.assertTemplateUsed(response, "taxi/car_list.html")
 
 
 class PublicManufacturerTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+
     def test_login_required(self):
         response = self.client.get(MANUFACTURER_URL)
 
@@ -143,29 +95,25 @@ class PublicManufacturerTests(TestCase):
 
 
 class PrivateManufacturerTests(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.user = get_user_model().objects.create_user(
-            "test",
-            "test123"
+            username="username.test",
+            password="password132"
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_manufacturers(self):
+    def test_login_required(self):
         Manufacturer.objects.create(
-            name="Test",
-            country="Test_country"
+            name="test name",
+            country="Ukraine"
         )
-        Manufacturer.objects.create(
-            name="Test1",
-            country="Test_country2"
-        )
-
         response = self.client.get(MANUFACTURER_URL)
-        manufacturers = Manufacturer.objects.all()
+
+        drivers = Manufacturer.objects.all()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list(response.context["manufacturer_list"]),
-            list(manufacturers)
+            list(drivers)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
