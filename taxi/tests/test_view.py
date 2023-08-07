@@ -62,10 +62,10 @@ class PrivateCarTests(TestCase):
 
     def test_retrieve_car(self):
         manufacturer = Manufacturer.objects.create(
-            name="test_car",
-            country="test_car_country"
+            name="Volkswagen",
+            country="Germany"
         )
-        Car.objects.create(model="test_model", manufacturer=manufacturer)
+        Car.objects.create(model="Golf", manufacturer=manufacturer)
 
         res = self.client.get(CAR_URL)
         car = Car.objects.all()
@@ -74,11 +74,11 @@ class PrivateCarTests(TestCase):
 
     def test_search_car(self):
         manufacturer = Manufacturer.objects.create(
-            name="tests", country="tests"
+            name="Audi", country="Germany"
         )
-        Car.objects.create(model="test", manufacturer=manufacturer)
+        Car.objects.create(model="Q6", manufacturer=manufacturer)
         res = self.client.get(CAR_URL)
-        search = Car.objects.filter(model="test")
+        search = Car.objects.filter(model="Q6")
         self.assertEquals(res.status_code, 200)
         self.assertEquals(list(res.context["car_list"]), list(search))
 
@@ -98,25 +98,25 @@ class PrivateDriverTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_driver(self):
-        Driver.objects.create(
+        get_user_model().objects.create(
             username="username",
             first_name="first_name",
             last_name="last_name",
-            license_number="license_number"
+            license_number="ASW86418"
         )
-        Driver.objects.create(
+        get_user_model().objects.create(
             username="black13",
             first_name="john",
             last_name="white",
-            license_number="QW789354"
+            license_number="QWE89354"
         )
         res = self.client.get(DRIVER_URL)
-        driver = Driver.objects.all()
+        driver = get_user_model().objects.all()
         self.assertEquals(res.status_code, 200)
         self.assertEquals(list(res.context["driver_list"]), list(driver))
 
     def test_search_driver(self):
         res = self.client.get(DRIVER_URL, {"username": "limon13"})
-        search = Driver.objects.filter(username="limon13")
+        search = get_user_model().objects.filter(username="limon13")
         self.assertEquals(res.status_code, 200)
         self.assertEquals(list(res.context["driver_list"]), list(search))
