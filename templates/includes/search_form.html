@@ -1,0 +1,5 @@
+{% load crispy_forms_filters %}
+<form autocomplete="off" action="" method="get" class="form-inline">
+  {{ search_form|crispy }}
+  <input autocomplete="false" name="hidden" type="submit" value="Search" class="btn btn-secondary">
+</form>
