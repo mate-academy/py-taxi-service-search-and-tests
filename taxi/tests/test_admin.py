@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
+
 class AdminSiteTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
@@ -46,4 +47,3 @@ class AdminSiteTests(TestCase):
         res = self.client.get(url)
 
         self.assertContains(res, '<input type="search"')
-
