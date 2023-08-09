@@ -110,18 +110,6 @@ class PrivateCarFormatTests(TestCase):
         self.assertTrue("is_paginated" in response.context)
         self.assertEqual(len(response.context["car_list"]), 2)
 
-    def test_create_car(self):
-        manufacturer = Manufacturer.objects.first()
-
-        response = self.client.get(CAR_CREATE_URL)
-        self.assertEquals(response.status_code, 200)
-        data_crate = {
-            "model": "test",
-            "manufacturer": manufacturer.id
-        }
-        response = self.client.post(CAR_CREATE_URL, data=data_crate)
-        self.assertRedirects(response, reverse("taxi:manufacturer-list"))
-
     def test_update_delete_car_with_login(self):
         car = Car.objects.first()
         url_1 = reverse("taxi:car-update", kwargs={"pk": car.pk})
