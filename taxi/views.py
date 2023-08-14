@@ -35,6 +35,28 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+    queryset = Manufacturer.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        name = self.request.GET.get("title", "")
+
+        context["search_form"] = SearchForm(
+            initial={"title": name},
+            search_placeholder="Search by name...",
+        )
+        return context
+
+    def get_queryset(self):
+        form = SearchForm(self.request.GET)
+
+        if form.is_valid():
+            return self.queryset.filter(
+                name__icontains=form.cleaned_data["title"]
+            )
+
+        return self.queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -66,6 +88,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
         context["search_form"] = SearchForm(
             initial={"title": model},
+            search_placeholder="Search by model...",
         )
         return context
 
@@ -112,7 +135,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         username = self.request.GET.get("title", "")
 
         context["search_form"] = SearchForm(
-            initial={"title": username}
+            initial={"title": username},
+            search_placeholder="Search by username...",
         )
         return context
 
