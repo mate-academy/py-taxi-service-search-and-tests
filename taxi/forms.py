@@ -63,4 +63,6 @@ class SearchForm(forms.Form):
     def __init__(self, *args, search_placeholder=None, **kwargs):
         super().__init__(*args, **kwargs)
         if search_placeholder is not None:
-            self.fields['title'].widget.attrs['placeholder'] = search_placeholder
+            self.fields["title"].widget.attrs[
+                "placeholder"
+            ] = search_placeholder
