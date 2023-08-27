@@ -37,34 +37,49 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+class GetContextGetQuerysetMixin(generic.ListView):
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(generic.ListView, self).get_context_data(**kwargs)
+
+        model = self.request.GET.get("name", "")
+
+        context["search_form"] = self.search_form(initial={
+            "name" if self.model is Manufacturer else "model": model
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+
+        if self.model is Car:
+            queryset = self.model.objects.select_related("manufacturer")
+
+        form = self.search_form(self.request.GET)
+
+        if form.is_valid():
+            if self.model is Car:
+                return queryset.filter(
+                    model__icontains=form.cleaned_data["model"]
+                )
+            else:
+                return queryset.filter(
+                    name__icontains=form.cleaned_data["name"]
+                )
+
+        return queryset
+
+
+class ManufacturerListView(
+    GetContextGetQuerysetMixin,
+    LoginRequiredMixin,
+    generic.ListView
+):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        contex = super(ManufacturerListView, self).get_context_data(**kwargs)
-
-        name = self.request.GET.get("name", "")
-
-        contex["search_form"] = ManufacturerSearchForm(initial={
-            "name": name
-        })
-
-        return contex
-
-    def get_queryset(self):
-        queryset = Manufacturer.objects.all()
-
-        form = ManufacturerSearchForm(self.request.GET)
-
-        if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
-
-        return queryset
+    search_form = ManufacturerSearchForm
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -84,33 +99,15 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class CarListView(
+    GetContextGetQuerysetMixin,
+    LoginRequiredMixin,
+    generic.ListView
+):
     model = Car
     paginate_by = 5
     context_object_name = "car_list"
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        contex = super(CarListView, self).get_context_data(**kwargs)
-
-        model = self.request.GET.get("model", "")
-
-        contex["search_form"] = CarSearchForm(initial={
-            "model": model
-        })
-
-        return contex
-
-    def get_queryset(self):
-        queryset = Car.objects.select_related("manufacturer")
-
-        form = CarSearchForm(self.request.GET)
-
-        if form.is_valid():
-            return queryset.filter(
-                model__icontains=form.cleaned_data["model"]
-            )
-
-        return queryset
+    search_form = CarSearchForm
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):

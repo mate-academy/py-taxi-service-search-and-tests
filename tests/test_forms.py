@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
 from taxi.models import Manufacturer, Car
 
 
@@ -56,9 +55,9 @@ class FormsTest(TestCase):
         Car.objects.create(model="M4", manufacturer=manufacturer)
         Car.objects.create(model="M5", manufacturer=manufacturer)
 
-        resp = self.client.get(reverse("taxi:car-list"), data=data)
+        response = self.client.get(reverse("taxi:car-list"), data=data)
 
-        cars_after_filter_on_page = resp.context_data["car_list"]
+        cars_after_filter_on_page = response.context_data["car_list"]
         cars_to_filter = Car.objects.filter(model=data["model"])
 
         self.assertEqual(
@@ -76,9 +75,11 @@ class FormsTest(TestCase):
         Manufacturer.objects.create(name="Audi", country="Germany")
         Manufacturer.objects.create(name="Ford", country="USA")
 
-        resp = self.client.get(reverse("taxi:manufacturer-list"), data=data)
+        response = self.client.get(reverse(
+            "taxi:manufacturer-list"
+        ), data=data)
 
-        manufacturers_list_on_page = resp.context_data["manufacturer_list"]
+        manufacturers_list_on_page = response.context_data["manufacturer_list"]
         manufacturers_to_filter = Manufacturer.objects.filter(
             name=data["name"]
         )
@@ -107,9 +108,9 @@ class FormsTest(TestCase):
 
         )
 
-        resp = self.client.get(reverse("taxi:driver-list"), data=data)
+        response = self.client.get(reverse("taxi:driver-list"), data=data)
 
-        drivers_after_filter_on_page = resp.context_data["driver_list"]
+        drivers_after_filter_on_page = response.context_data["driver_list"]
         drivers_to_filter = get_user_model().objects.filter(
             username__contains=data["username"]
         )
