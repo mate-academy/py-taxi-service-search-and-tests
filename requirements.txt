@@ -1,7 +1,6 @@
 asgiref==3.6.0
 atomicwrites==1.4.1
 attrs==22.1.0
-black==23.7.0
 bootstrap4==0.1.0
 bottle==0.12.25
 cffi==1.15.1
