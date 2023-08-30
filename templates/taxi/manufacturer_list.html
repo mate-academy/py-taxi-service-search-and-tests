@@ -19,6 +19,7 @@
         <th>Update</th>
         <th>Delete</th>
       </tr>
+
       {% for manufacturer in manufacturer_list %}
         <tr>
           <td>
@@ -44,6 +45,7 @@
         </tr>
       {% endfor %}
     </table>
+
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
