@@ -9,10 +9,7 @@
     </a>
   </h1>
 
-  <form action="" method="get" class="form-inline" style="margin-bottom: 2px" >
-    {{ search_form|crispy }}
-    <input style="margin-left: 2px" class="btn btn-secondary" type="submit" value="Search">
-  </form>
+  {% include "includes/search_bar.html" %}
 
   {% if car_list %}
     <ul>
