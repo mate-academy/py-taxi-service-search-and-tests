@@ -55,14 +55,16 @@ class PrivateCarTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             "test",
-            "testpassword1234"
+            "password123",
+            "IUO45658"
         )
         self.client.force_login(self.user)
 
     def test_retrieve_car(self):
         manufacturer = Manufacturer.objects.create(name="test")
         Car.objects.create(
-            name="test", manufacturer=manufacturer
+            model="test",
+            manufacturer=manufacturer
         )
 
         response = self.client.get(CAR_URL)
@@ -74,6 +76,7 @@ class PrivateCarTest(TestCase):
             list(cars)
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
 
 
 class PublicDriverTest(TestCase):
@@ -89,16 +92,14 @@ class PublicDriverTest(TestCase):
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            "test",
-            "testpassword1234"
+            username="test",
+            password="testpassword1234",
+            license_number="HUG12345"
         )
         self.client.force_login(self.user)
 
     def test_retrieve_driver(self):
-        Driver.objects.create(
-            username="test",
-        )
-
+        Driver.objects.create(username="Test")
         response = self.client.get(DRIVERS_URL)
         drivers = Driver.objects.all()
 
