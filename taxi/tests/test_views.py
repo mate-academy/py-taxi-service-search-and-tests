@@ -78,7 +78,6 @@ class PrivateCarTest(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
 
-
 class PublicDriverTest(TestCase):
     def setUp(self) -> None:
         self.client = Client()
