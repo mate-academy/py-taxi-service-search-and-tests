@@ -172,7 +172,7 @@ class PublicCarTests(TestCase):
     def test_car_login_required(self):
         response = self.client.get(CAR_URL)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertNotEquals(response.status_code, 200)
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(CAR_URL)
