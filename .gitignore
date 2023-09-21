@@ -7,3 +7,6 @@ venv/
 .pytest_cache/
 **__pycache__/
 db.sqlite3
+.sqlite
+.db3
+taxi_service_db_data.json
