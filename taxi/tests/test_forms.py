@@ -48,7 +48,16 @@ class CarSearchFormTest(TestCase):
             country="Test"
         )
         self.car = Car.objects.create(
-            model="Sedan",
+            model="BMW i8",
+            manufacturer=self.manufacturer
+        )
+
+        self.manufacturer = Manufacturer.objects.create(
+            name="Mazda",
+            country="Test"
+        )
+        self.car = Car.objects.create(
+            model="Mazda RX8",
             manufacturer=self.manufacturer
         )
 
