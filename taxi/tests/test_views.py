@@ -107,8 +107,9 @@ class PublicDriverTest(TestCase):
         self.assertEqual(search_form.initial["username"], "")
 
     def test_login_required(self):
-        res = self.client.get(driver_url)
-        self.assertNotEqual(res.status_code, 200)
+        self.client.logout()
+        response = self.client.get(driver_url)
+        self.assertEqual(response.status_code, 302)
 
 
 class PrivateDriverTest(TestCase):
