@@ -19,6 +19,29 @@ def assert_login_required(test_case_obj, url: str):
     test_case_obj.assertNotEquals(response.status_code, 200)
 
 
+def assert_search_future_work(
+        test_case_obj: TestCase,
+        url: str,
+        search_text: str,
+        model,
+        search_field: str,
+        context_object_name: str
+):
+    response = test_case_obj.client.get(
+        url,
+        data={"search": search_text}
+    )
+    expected_car_list = model.objects.filter(
+        **{f"{search_field}__icontains": search_text}
+    ).order_by("id")
+    expected_car_list = Paginator(expected_car_list, 5).get_page(0)
+    test_case_obj.assertContains(response, search_text)
+    test_case_obj.assertEquals(
+        list(response.context[context_object_name]),
+        list(expected_car_list)
+    )
+
+
 class PublicIndexTests(TestCase):
     def test_index_login_required(self):
         assert_login_required(self, INDEX_URL)
@@ -135,6 +158,19 @@ class PrivateManufacturerTests(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
+    def test_manufacturer_search_feature(self):
+        Manufacturer.objects.create(name="test_manufacturer_abcd")
+        Manufacturer.objects.create(name="test_manufacturer_ajka")
+        Manufacturer.objects.create(name="test_manufacturer_cabs")
+        assert_search_future_work(
+            self,
+            MANUFACTURER_LIST_URL,
+            "ab",
+            Manufacturer,
+            "name",
+            "manufacturer_list"
+        )
+
     def test_retrieve_manufacturer_create_page(self):
         response = self.client.get(MANUFACTURER_CREATE_URL)
         self.assertEquals(response.status_code, 200)
@@ -176,6 +212,27 @@ class PrivateCarTests(TestCase):
             list(response.context["car_list"]),
             list(cars)
         )
+
+    def test_car_search_feature(self):
+        Car.objects.create(
+            model="test_car_abcd",
+            manufacturer=self.manufacturer,
+        )
+        Car.objects.create(
+            model="test_car_ajka",
+            manufacturer=self.manufacturer,
+        )
+        Car.objects.create(
+            model="test_car_cabs",
+            manufacturer=self.manufacturer,
+        )
+        assert_search_future_work(
+            self,
+            CAR_LIST_URL,
+            "ab",
+            Car,
+            "model",
+            "car_list")
 
     def test_retrieve_car_create_page(self):
         response = self.client.get(CAR_CREATE_URL)
@@ -228,6 +285,28 @@ class PrivateDriverTests(TestCase):
         self.assertEquals(
             list(response.context["driver_list"]),
             list(drivers)
+        )
+
+    def test_driver_search_feature(self):
+        Driver.objects.create(
+            username="test_driver_abcd",
+            license_number="AAA00000"
+        )
+        Driver.objects.create(
+            username="test_driver_ajka",
+            license_number="AAA00001"
+        )
+        Driver.objects.create(
+            username="test_driver_cabs",
+            license_number="AAA00002"
+        )
+        assert_search_future_work(
+            self,
+            DRIVER_LIST_URL,
+            "ab",
+            Driver,
+            "username",
+            "driver_list"
         )
 
     def test_retrieve_driver_create_page(self):
