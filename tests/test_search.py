@@ -36,7 +36,7 @@ class SearchTest(TestCase):
             f"{url}?{urlencode(query_kwargs)}",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['car_list']), 1)
+        self.assertEqual(len(response.context["car_list"]), 1)
 
     def test_check_search_no_car(self):
         self.client.post(
@@ -54,7 +54,7 @@ class SearchTest(TestCase):
             f"{url}?{urlencode(query_kwargs)}",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['car_list']), 0)
+        self.assertEqual(len(response.context["car_list"]), 0)
 
     def test_check_search_driver(self):
         test_driver_username = "admin.user"
@@ -64,7 +64,7 @@ class SearchTest(TestCase):
             f"{url}?{urlencode(query_kwargs)}",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['driver_list']), 1)
+        self.assertEqual(len(response.context["driver_list"]), 1)
 
     def test_check_search_no_driver(self):
         test_driver_username = "dexter"
@@ -74,7 +74,7 @@ class SearchTest(TestCase):
             f"{url}?{urlencode(query_kwargs)}",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['driver_list']), 0)
+        self.assertEqual(len(response.context["driver_list"]), 0)
 
     def test_check_search_manufacturer(self):
         test_manufacturer_name = "lincoln"
@@ -84,7 +84,7 @@ class SearchTest(TestCase):
             f"{url}?{urlencode(query_kwargs)}",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['manufacturer_list']), 1)
+        self.assertEqual(len(response.context["manufacturer_list"]), 1)
 
     def test_check_search_no_manufacturer(self):
         test_manufacturer_name = "renault"
@@ -94,4 +94,4 @@ class SearchTest(TestCase):
             f"{url}?{urlencode(query_kwargs)}",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['manufacturer_list']), 0)
+        self.assertEqual(len(response.context["manufacturer_list"]), 0)

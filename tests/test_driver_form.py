@@ -23,4 +23,3 @@ class ValidLicenseNumberFormTests(TestCase):
 
     def test_last_5_characters_should_be_be_digits(self):
         self.assertFalse(self.create_form("TEST2345").is_valid())
-
