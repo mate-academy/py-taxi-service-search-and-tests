@@ -11,5 +11,4 @@ def query_transform(request, **kwargs):
             updated[key] = value
         else:
             updated.pop(key, 0)
-
     return updated. urlencode()
