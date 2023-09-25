@@ -47,7 +47,7 @@ class SearchTest(TestCase):
                 "drivers": [self.user.id],
             },
         )
-        test_car_model = "Bentley"
+        test_car_model = "Cadillac"
         url = reverse("taxi:car-list")
         query_kwargs = {"model": test_car_model}
         response = self.client.get(
