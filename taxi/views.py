@@ -56,7 +56,6 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         return Manufacturer.objects.all()
 
 
-
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
