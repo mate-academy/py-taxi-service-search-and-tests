@@ -50,7 +50,7 @@ class AuthorisedAccessTest(TestCase):
 
         response = self.client.get(MANUFACTURER_URL, {"name": "o"})
 
-        expected = Manufacturer.objects.filter(name__icontains='o')
+        expected = Manufacturer.objects.filter(name__icontains="o")
 
         self.assertQuerysetEqual(
             response.context["manufacturer_list"],
@@ -65,11 +65,14 @@ class AuthorisedAccessTest(TestCase):
         ]
 
         for model in car_list:
-            Car.objects.create(model=model, manufacturer=self.test_manufacturer)
+            Car.objects.create(
+                model=model,
+                manufacturer=self.test_manufacturer
+            )
 
         response = self.client.get(CAR_URL, {"model": "Mitsubishi"})
 
-        expected = Car.objects.filter(model__icontains='Mitsubishi')
+        expected = Car.objects.filter(model__icontains="Mitsubishi")
 
         self.assertQuerysetEqual(
             response.context["car_list"],
@@ -97,7 +100,7 @@ class AuthorisedAccessTest(TestCase):
 
         response = self.client.get(DRIVER_URL, {"username": "j"})
 
-        expected = Driver.objects.filter(username__icontains='j')
+        expected = Driver.objects.filter(username__icontains="j")
 
         self.assertQuerysetEqual(
             response.context["driver_list"],

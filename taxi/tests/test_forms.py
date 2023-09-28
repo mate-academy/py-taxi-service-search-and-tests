@@ -1,7 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, validate_license_number
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    validate_license_number
+)
 
 
 class DriverFormTest(TestCase):
