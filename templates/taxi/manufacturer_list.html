@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
   <h1>
     Manufacturer List
@@ -7,7 +6,7 @@
       Create
     </a>
   </h1>
-
+  {% include "includes/search_line.html" %}
   {% if manufacturer_list %}
     <table class="table">
       <tr>
