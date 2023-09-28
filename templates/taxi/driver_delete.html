@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Are you sure you want to delete {{ driver.first_name }} {{ driver.last_name }}?</h1>
+  <p class="warning">This action cannot be undone!</p>
+  <form action="" method="post">
+    {% csrf_token %}
+    <input class="button button-warning" type="submit" value="Delete">
+    <input class="button"
+           type="button"
+           value="Cancel"
+           onclick="history.go(-1)" />
+  </form>
+{% endblock content %}
+
