@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..forms import DriverLicenseUpdateForm, DriverCreationForm
+from taxi.forms import DriverLicenseUpdateForm, DriverCreationForm
 
 
 class DriverLicenseUpdateFormTest(TestCase):
