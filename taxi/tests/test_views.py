@@ -206,7 +206,6 @@ class SearchFunctionalityTests(TestCase):
         self.client.force_login(self.user)
 
     def test_driver_search(self):
-        # Test driver search functionality
         response = self.client.get(
             reverse("taxi:driver-list"), {"username": "piccolo"}
         )
@@ -215,7 +214,6 @@ class SearchFunctionalityTests(TestCase):
         self.assertNotContains(response, "ragingbull")
 
     def test_car_search(self):
-        # Test car search functionality
         response = self.client.get(
             reverse("taxi:car-list"), {"model": "Wrangler"}
         )
@@ -224,9 +222,9 @@ class SearchFunctionalityTests(TestCase):
         self.assertNotContains(response, "Cherokee")
 
     def test_manufacturer_search(self):
-        # Test manufacturer search functionality
         response = self.client.get(
             reverse("taxi:manufacturer-list"), {"name": "Jeep"}
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Jeep")
+        self.assertNotContains(response, "Toyota")
