@@ -11,16 +11,15 @@ class ModelsTests(TestCase):
         )
 
     def test_manufacturer_ordering(self):
-        Manufacturer.objects.create(name='Manufacturer C', country='Country C')
-        Manufacturer.objects.create(name='Manufacturer B', country='Country B')
-        Manufacturer.objects.create(name='Manufacturer A', country='Country A')
+        Manufacturer.objects.create(name="Manufacturer C", country="Country C")
+        Manufacturer.objects.create(name="Manufacturer B", country="Country B")
+        Manufacturer.objects.create(name="Manufacturer A", country="Country A")
         manufacturers = Manufacturer.objects.all()
 
         self.assertEqual(manufacturers[0].name, "BMW")
         self.assertEqual(manufacturers[1].name, "Manufacturer A")
         self.assertEqual(manufacturers[2].name, "Manufacturer B")
         self.assertEqual(manufacturers[3].name, "Manufacturer C")
-
 
     def test_manufacturer_str(self):
         self.assertEqual(str(self.manufacturer), "BMW Germany")
