@@ -29,4 +29,4 @@ jobs:
 
       - name: Run tests
         timeout-minutes: 5
-        run: python manage.py test2
+        run: python manage.py test
