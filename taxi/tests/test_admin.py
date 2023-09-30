@@ -7,16 +7,16 @@ class AdminSiteTest(TestCase):
     def setUp(self) -> None:
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-          username="admin",
-          password="test123admin"
+            username="admin",
+            password="test123admin"
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
-          username="user",
-          first_name="Mary",
-          last_name="Smith",
-          password="test123user",
-          license_number="MAR12345"
+            username="user",
+            first_name="Mary",
+            last_name="Smith",
+            password="test123user",
+            license_number="MAR12345"
         )
 
     def test_driver_attributes_listed(self):

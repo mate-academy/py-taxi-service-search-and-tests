@@ -24,7 +24,10 @@ class PrivateCarTest(TestCase):
         )
         self.client.force_login(self.user)
         self.manufacturer = Manufacturer.objects.create(name="Test")
-        self.car = Car.objects.create(model="Test 1", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(
+            model="Test 1",
+            manufacturer=self.manufacturer
+        )
         Car.objects.create(model="Test 2", manufacturer=self.manufacturer)
         self.CAR_DETAIL_URL = reverse("taxi:car-detail", args=[self.car.id])
 
@@ -40,4 +43,3 @@ class PrivateCarTest(TestCase):
         self.assertEqual(res_detail.status_code, 200)
         self.assertEqual(res_detail.context["car"], self.car)
         self.assertTemplateUsed(res_detail, "taxi/car_detail.html")
-

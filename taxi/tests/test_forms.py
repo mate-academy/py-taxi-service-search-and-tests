@@ -21,7 +21,6 @@ class TestManufacturerSearchForm(TestCase):
         )
         self.client.force_login(self.user)
 
-
     def test_manufacturer_search_form(self):
         form_data = {"name": "Test_1"}
         form = ManufacturerSearchForm(data=form_data)
