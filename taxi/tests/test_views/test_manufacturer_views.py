@@ -68,7 +68,9 @@ class PrivateManufacturerViewsTest(TestCase):
 
     def test_list_search_bar_works(self):
         url = MANUFACTURER_LIST_URL
-        res = self.client.get(url, data={"name": "m"})
+        form = ManufacturerSearchForm(data={"name": "m"})
+        self.assertTrue(form.is_valid())
+        res = self.client.get(url, form.data)
         self.assertEquals(
             list(res.context.get("manufacturer_list")),
             list(

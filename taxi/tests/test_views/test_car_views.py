@@ -75,7 +75,9 @@ class PrivateCarViewsTest(TestCase):
 
     def test_list_search_bar_works(self):
         url = CAR_LIST_URL
-        res = self.client.get(url, data={"model": "or"})
+        form = CarSearchForm(data={"model": "or"})
+        res = self.client.get(url, form.data)
+        self.assertTrue(form.is_valid())
         self.assertEquals(
             list(res.context.get("car_list")),
             list(Car.objects.filter(model__icontains="or")[:PAGINATION]),
@@ -113,7 +115,7 @@ class PrivateCarViewsTest(TestCase):
         self.assertContains(res, "/cars/2/delete/")
         self.assertContains(res, "/cars/2/update/")
 
-    """Test for the DeleteView"""
+    """Tests for the DeleteView"""
 
     def test_delete_correct_template_name(self):
         url = CAR_DELETE_URL

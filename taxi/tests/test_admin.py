@@ -36,7 +36,3 @@ class AdminPanelTest(TestCase):
         url = reverse("admin:taxi_car_changelist")
         res = self.client.get(url)
         self.assertContains(res, "searchbar")
-
-    """
-    How to check for list_filter?
-    """

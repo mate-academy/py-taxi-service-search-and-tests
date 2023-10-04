@@ -26,6 +26,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         new_number = "JLM43534"
         form_data = {"license_number": new_number}
         form = DriverLicenseUpdateForm(data=form_data)
+        self.assertTrue(form.is_valid())
         url = reverse("taxi:driver-update", args=[self.user.id])
         res = self.client.post(url, form.data)
         self.user.refresh_from_db()
@@ -79,6 +80,7 @@ class DriverCreationFormTest(TestCase):
 
     def test_form_must_work_with_correct_input(self):
         form = DriverLicenseUpdateForm(data=self.get_form_data("UVK48923"))
+        self.assertTrue(form.is_valid())
         url = reverse("taxi:driver-create")
         self.client.post(url, form.data)
         self.assertTrue(
@@ -174,6 +176,7 @@ class SearchFormsTest(TestCase):
 
     def test_car_searchform_config(self):
         form = CarSearchForm(data={"model": "0"})
+        self.assertTrue(form.is_valid())
         self.assertEquals(form.fields.get("model").label, "")
         self.assertIn(
             "forms.widgets.TextInput object",
@@ -183,6 +186,7 @@ class SearchFormsTest(TestCase):
 
     def test_driver_searchform_config(self):
         form = DriverSearchForm(data={"username": "0"})
+        self.assertTrue(form.is_valid())
         self.assertEquals(form.fields.get("username").label, "")
         self.assertIn(
             "forms.widgets.TextInput object",
@@ -192,6 +196,8 @@ class SearchFormsTest(TestCase):
 
     def test_manufacturer_searchform_config(self):
         form = ManufacturerSearchForm(data={"name": "0"})
+        self.assertTrue(form.is_valid())
+
         self.assertEquals(form.fields.get("name").label, "")
         self.assertIn(
             "forms.widgets.TextInput object",

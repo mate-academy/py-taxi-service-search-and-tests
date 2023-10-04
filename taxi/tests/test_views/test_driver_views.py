@@ -77,7 +77,9 @@ class PrivateDriverViewsTest(TestCase):
 
     def test_list_search_bar_works(self):
         url = DRIVER_LIST_URL
-        res = self.client.get(url, data={"username": "an"})
+        form = DriverSearchForm(data={"username": "an"})
+        self.assertTrue(form.is_valid())
+        res = self.client.get(url, form.data)
         self.assertEquals(
             list(res.context.get("driver_list")),
             list(
