@@ -96,19 +96,19 @@ class TestDriverUsernameSearchForm(TestCase):
         response = self.get_response(form_data)
         self.assertContains(response, form_data["username"])
 
-    def test_driver_search_form_with_partial_match(self):
+    def test_driver_search_form_with_partial_match(self) -> None:
         form_data = {"username": "ma"}
         response = self.get_response(form_data)
         self.assertContains(response, form_data["username"])
 
-    def test_driver_search_form_with_empty_field(self):
+    def test_driver_search_form_with_empty_field(self) -> None:
         form_data = {"username": ""}
         response = self.get_response(form_data)
         self.assertContains(response, "mary")
         self.assertContains(response, "andrew")
         self.assertContains(response, "john")
 
-    def test_driver_search_form_with_no_matches(self):
+    def test_driver_search_form_with_no_matches(self) -> None:
         form_data = {"username": "angelina"}
         response = self.get_response(form_data)
         self.assertNotContains(response, "andrew")
