@@ -27,31 +27,31 @@ class PublicTaxiServiceListsTest(TestCase):
 class PrivateTaxiServiceListsTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username="test",
-            password="test123"
+            username="test", password="test123"
         )
         self.client.force_login(self.user)
 
     def test_retrieve_manufacturers(self) -> None:
         Manufacturer.objects.create(name="Audi", country="Germany")
-        Manufacturer.objects.create(name="Renault",country="France")
+        Manufacturer.objects.create(name="Renault", country="France")
         response = self.client.get(MANUFACTURER_URL)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list(response.context["manufacturer_list"]),
-            list(Manufacturer.objects.all())
+            list(Manufacturer.objects.all()),
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_retrieve_cars(self) -> None:
-        manufacturer = Manufacturer.objects.create(name="Renault", country="France")
+        manufacturer = Manufacturer.objects.create(
+            name="Renault", country="France"
+        )
         car = Car.objects.create(model="Logan", manufacturer=manufacturer)
         car.drivers.add(self.user)
         response = self.client.get(CAR_URL)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            list(response.context["car_list"]),
-            list(Car.objects.all())
+            list(response.context["car_list"]), list(Car.objects.all())
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
@@ -60,8 +60,7 @@ class PrivateTaxiServiceListsTest(TestCase):
         response = self.client.get(DRIVER_URL)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            list(response.context["driver_list"]),
-            list(Driver.objects.all())
+            list(response.context["driver_list"]), list(Driver.objects.all())
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
@@ -69,8 +68,7 @@ class PrivateTaxiServiceListsTest(TestCase):
 class TaxiServiceCrudOperationsTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username="test",
-            password="test123"
+            username="test", password="test123"
         )
         self.client.force_login(self.user)
 
@@ -83,21 +81,16 @@ class TaxiServiceCrudOperationsTest(TestCase):
     def test_delete_car(self) -> None:
         pre_delete = Car.objects.count()
         manufacturer = Manufacturer.objects.create(
-            name="Audi",
-            country="Germany"
+            name="Audi", country="Germany"
         )
-        car = Car.objects.create(
-            model="A5",
-            manufacturer=manufacturer
-        )
+        car = Car.objects.create(model="A5", manufacturer=manufacturer)
         self.client.post(reverse("taxi:car-delete", kwargs={"pk": car.pk}))
         after_delete = Car.objects.count()
         self.assertEqual(pre_delete, after_delete)
 
     def test_update_driver_license(self) -> None:
         driver = Driver.objects.create(
-            username="driver",
-            license_number="ABC12345"
+            username="driver", license_number="ABC12345"
         )
         new_license_number = "XYZ78910"
         url = reverse("taxi:driver-update", kwargs={"pk": driver.pk})

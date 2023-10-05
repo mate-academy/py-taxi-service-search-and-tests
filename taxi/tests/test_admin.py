@@ -6,19 +6,17 @@ from django.urls import reverse
 class AdminPanelTests(TestCase):
     def setUp(self) -> None:
         self.admin_user = get_user_model().objects.create_superuser(
-            username="admin",
-            password="test123"
+            username="admin", password="test123"
         )
         self.client.force_login(self.admin_user)
         self.driver = get_user_model().objects.create_user(
-            username="driver",
-            password="driver123",
-            license_number="ABC12345"
+            username="driver", password="driver123", license_number="ABC12345"
         )
 
     def test_driver_license_number_listed(self) -> None:
         """
-        Test that driver's licence field is present in display_list for admin panel
+        Test that driver's licence field is present in display_list
+        for admin panel.
         return: None
         """
         url = reverse("admin:taxi_driver_changelist")
@@ -43,9 +41,12 @@ class AdminPanelTests(TestCase):
         response = self.client.get(url)
         self.assertContains(response, "License number")
 
-    def test_add_driver_page_contains_first_name_and_last_name_fields(self) -> None:
+    def test_add_driver_page_contains_first_name_and_last_name_fields(
+        self,
+    ) -> None:
         """
-        Test that the first name and last name fields are present on the add driver page in the admin panel.
+        Test that the first name and last name fields are present
+        on the add driver page in the admin panel.
         return: None
         """
         url = reverse("admin:taxi_driver_add")

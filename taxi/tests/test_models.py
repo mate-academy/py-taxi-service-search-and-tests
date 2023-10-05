@@ -9,9 +9,7 @@ class ModelTests(TestCase):
             name="Kia", country="South Korea"
         )
         self.driver = Driver.objects.create_user(
-            license_number="AMD56849",
-            username="test",
-            password="12345"
+            license_number="AMD56849", username="test", password="12345"
         )
 
     def test_manufacturer_str(self) -> None:

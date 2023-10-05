@@ -7,14 +7,16 @@ from taxi.models import Driver
 
 
 class CreationFormTest(TestCase):
-    def test_driver_creation_with_license_number_first_name_last_name(self) -> None:
+    def test_driver_creation_with_license_number_first_name_last_name(
+        self,
+    ) -> None:
         form_data = {
             "username": "user_test_form",
             "password1": "abc123def",
             "password2": "abc123def",
             "first_name": "Test name",
             "last_name": "Test surname",
-            "license_number": "ABC12345"
+            "license_number": "ABC12345",
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -26,13 +28,11 @@ class DriverLicenceUpdateFormTest(TestCase):
 
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
-            username="test",
-            password="test123"
+            username="test", password="test123"
         )
         self.client.force_login(self.user)
         self.driver = Driver.objects.create(
-            username="driver",
-            license_number= self.LICENCE_NUMBER
+            username="driver", license_number=self.LICENCE_NUMBER
         )
 
     def post_test_and_refresh_from_db(self, new_license_number) -> None:
@@ -44,23 +44,37 @@ class DriverLicenceUpdateFormTest(TestCase):
 
     def test_driver_license_form_without_letters(self) -> None:
         new_license_number = "1234678"
-        self.post_test_and_refresh_from_db(new_license_number=new_license_number)
+        self.post_test_and_refresh_from_db(
+            new_license_number=new_license_number
+        )
 
     def test_driver_licence_with_length_less_than_eight(self) -> None:
         new_license_number = "AMV1234"
-        self.post_test_and_refresh_from_db(new_license_number=new_license_number)
+        self.post_test_and_refresh_from_db(
+            new_license_number=new_license_number
+        )
 
     def test_driver_licence_without_numberss(self) -> None:
         new_license_number = "ABCDEFGH"
-        self.post_test_and_refresh_from_db(new_license_number=new_license_number)
+        self.post_test_and_refresh_from_db(
+            new_license_number=new_license_number
+        )
 
-    def test_driver_licence_with_incorrect_proportion_of_chars_and_nums(self) -> None:
+    def test_driver_licence_with_incorrect_proportion_of_chars_and_nums(
+        self,
+    ) -> None:
         new_license_number = "ABCDEF12"
-        self.post_test_and_refresh_from_db(new_license_number=new_license_number)
+        self.post_test_and_refresh_from_db(
+            new_license_number=new_license_number
+        )
         new_license_number = "AB015612"
-        self.post_test_and_refresh_from_db(new_license_number=new_license_number)
+        self.post_test_and_refresh_from_db(
+            new_license_number=new_license_number
+        )
         new_license_number = "76915ABC"
-        self.post_test_and_refresh_from_db(new_license_number=new_license_number)
+        self.post_test_and_refresh_from_db(
+            new_license_number=new_license_number
+        )
 
 
 class TestDriverUsernameSearchForm(TestCase):
@@ -87,7 +101,7 @@ class TestDriverUsernameSearchForm(TestCase):
             license_number="ABED5932",
         )
 
-    def get_response(self,form_data) -> None:
+    def get_response(self, form_data) -> None:
         url = reverse("taxi:driver-list")
         return self.client.get(url, data=form_data)
 
