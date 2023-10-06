@@ -58,7 +58,9 @@ class TestToggleAssignToCar(TestCase):
         self.manufacturer = Manufacturer.objects.create(
             name="Audi", country="Germany"
         )
-        self.car = Car.objects.create(model="A6", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(
+            model="A6", manufacturer=self.manufacturer
+        )
 
     def test_toggle_assign_to_car_when_not_assigned(self):
         response = self.client.post(
