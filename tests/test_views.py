@@ -35,6 +35,15 @@ class PrivateTests(TestCase):
             password="test_password"
         )
         self.client.force_login(self.user)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test Manufacturer",
+            country="Test Country",
+        )
+
+        self.car = Car.objects.create(
+            model="Test Car",
+            manufacturer=self.manufacturer,
+        )
 
     def test_manufacturer_list_view(self) -> None:
         Manufacturer.objects.create(
@@ -80,6 +89,16 @@ class PrivateTests(TestCase):
             list(res.context["object_list"]),
             list(get_user_model().objects.all())
         )
+
+    def test_toggle_assign_to_car(self) -> None:
+        self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": 1})
+        )
+        self.assertIn(self.user, self.car.drivers.all())
+        self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": 1})
+        )
+        self.assertNotIn(self.user, self.car.drivers.all())
 
 
 class SearchTests(TestCase):
