@@ -7,7 +7,9 @@ from taxi.models import Car, Manufacturer, Driver
 
 class ModelTests(TestCase):
     def test_manufacturer_str(self) -> None:
-        manufacturer = Manufacturer.objects.create(name="test ", country="test ")
+        manufacturer = Manufacturer.objects.create(
+            name="test ", country="test "
+        )
         self.assertEqual(
             str(manufacturer), f"{manufacturer.name} {manufacturer.country}"
         )

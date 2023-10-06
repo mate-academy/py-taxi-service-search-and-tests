@@ -39,7 +39,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         query = self.request.GET.get("q")
         if query is not None:
-            return Manufacturer.objects.filter(name__icontains=query).order_by("name")
+            return Manufacturer.objects.filter(
+                name__icontains=query
+            ).order_by("name")
         return Manufacturer.objects.order_by("name")
 
 
@@ -100,7 +102,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         query = self.request.GET.get("q")
         if query is not None:
-            return Driver.objects.filter(username__icontains=query).order_by("username")
+            return Driver.objects.filter(
+                username__icontains=query
+            ).order_by("username")
         return Driver.objects.order_by("username")
 
 
