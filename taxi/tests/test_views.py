@@ -73,13 +73,23 @@ class UpdateViewsTest(TestCase):
         self.client.force_login(self.user)
 
     def test_toggle_car_assign(self):
-        response = self.client.get(reverse('taxi:toggle-car-assign', args=[self.car.pk]))
-        self.assertRedirects(response, reverse('taxi:car-detail', args=[self.car.pk]))
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", args=[self.car.pk])
+        )
+        self.assertRedirects(
+            response, reverse("taxi:car-detail", args=[self.car.pk])
+        )
         self.assertFalse(self.car in self.user.cars.all())
         another_user = get_user_model().objects.create_user(
-            username="another_test", password="P@ssword23", license_number="ABC12312"
+            username="another_test",
+            password="P@ssword23",
+            license_number="ABC12312",
         )
         self.client.force_login(another_user)
-        response = self.client.get(reverse('taxi:toggle-car-assign', args=[self.car.pk]))
-        self.assertRedirects(response, reverse('taxi:car-detail', args=[self.car.pk]))
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", args=[self.car.pk])
+        )
+        self.assertRedirects(
+            response, reverse("taxi:car-detail", args=[self.car.pk])
+        )
         self.assertTrue(self.car in another_user.cars.all())
