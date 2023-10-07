@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Car, Manufacturer, Driver
+from taxi.models import Car, Manufacturer
 
 CAR_LIST_URL = reverse("taxi:car-list")
 MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
@@ -43,3 +43,17 @@ class PrivateCarTest(TestCase):
         self.assertEqual(res_detail.status_code, 200)
         self.assertEqual(res_detail.context["car"], self.car)
         self.assertTemplateUsed(res_detail, "taxi/car_detail.html")
+
+    def test_toggle_assign_to_car(self):
+        self.client.get(
+            reverse(
+                "taxi:toggle-car-assign", args=[self.car.id]
+            )
+        )
+        self.assertIn(self.user, self.car.drivers.all())
+        self.client.get(
+            reverse(
+                "taxi:toggle-car-assign", args=[self.car.id]
+            )
+        )
+        self.assertNotIn(self.user, self.car.drivers.all())
