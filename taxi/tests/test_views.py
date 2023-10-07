@@ -107,3 +107,16 @@ class AuthorisedAccessTest(TestCase):
             expected,
             ordered=False
         )
+
+    def test_toggle_car_assign(self) -> None:
+        car = Car.objects.create(
+            model="Toyota Yaris",
+            manufacturer=self.test_manufacturer
+        )
+
+        response = self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.id}))
+        self.assertEquals(response.status_code, 302)
+        self.assertTrue(car in self.user.cars.all())
+
+        self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.id}))
+        self.assertFalse(car in self.user.cars.all())
