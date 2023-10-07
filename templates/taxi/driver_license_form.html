@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
   <div class="content-header">
-    <h1>{{ car|yesno:"Update,Create" }} Car</h1>
+    <h1>Update {{ driver.first_name }} {{ driver.last_name }} license number</h1>
   </div>
   <form action="" method="post" novalidate>
     {% csrf_token %}
