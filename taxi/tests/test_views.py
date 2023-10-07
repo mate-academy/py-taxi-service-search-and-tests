@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 INDEX_URL = reverse("taxi:index")
 MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
@@ -16,6 +16,7 @@ DRIVER_LIST_URL = reverse("taxi:driver-list")
 DRIVER_DETAIL_URL = "taxi:driver-detail"
 DRIVER_CREATE_URL = reverse("taxi:driver-create")
 DRIVER_DELETE_URL = "taxi:driver-delete"
+TOGGLE_ASSIGN_TO_CAR_URL = "taxi:toggle-car-assign"
 
 
 class UserWithoutLoginTest(TestCase):
@@ -153,3 +154,25 @@ class LoggedInUserTest(TestCase):
         manufacturer_after = Manufacturer.objects.count()
         self.assertEqual(res.status_code, 302)
         self.assertEqual(manufacturer_before, manufacturer_after)
+
+    def test_view_toggle_assign_to_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="test_manufacturer"
+        )
+        car = Car.objects.create(
+            model="test_car",
+            manufacturer=manufacturer
+        )
+        car_count_before = self.user.cars.count()
+        res = self.client.post(
+            reverse(TOGGLE_ASSIGN_TO_CAR_URL,
+                    kwargs={"pk": car.id})
+        )
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(self.user.cars.count(), car_count_before + 1)
+        res = self.client.post(
+            reverse(TOGGLE_ASSIGN_TO_CAR_URL,
+                    kwargs={"pk": car.id})
+        )
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(car_count_before, self.user.cars.count())
