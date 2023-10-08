@@ -122,8 +122,10 @@ class CarViewTest(TestCase):
             reverse("taxi:toggle-car-assign", kwargs={"pk": self.car1.pk})
         )
         self.assertEqual(response.status_code, 302)
-        driver_of_car1 = self.car1.drivers.get(username=self.user_for_login.username)
-        self.assertEqual(driver_of_car1, self.user_for_login)
+        driver_of_car1 = self.car1.drivers.get(
+            username=self.user_for_login.username)
+        self.assertEqual(driver_of_car1, self.user_for_login
+                         )
 
     def test_delete_from_car(self):
         self.car1.drivers.add(self.user_for_login)
@@ -131,5 +133,7 @@ class CarViewTest(TestCase):
             reverse("taxi:toggle-car-assign", kwargs={"pk": self.car1.pk})
         )
         self.assertEqual(response.status_code, 302)
-        driver_of_car1 = self.car1.drivers.filter(username=self.user_for_login.username).first()
+        driver_of_car1 = self.car1.drivers.get(
+            username=self.user_for_login.username
+        )
         self.assertIsNone(driver_of_car1)
