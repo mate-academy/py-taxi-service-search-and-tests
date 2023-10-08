@@ -6,14 +6,26 @@ class DriverLicenseUpdateFormTest(TestCase):
     def test_invalid_length_license_number(self) -> None:
         form = DriverLicenseUpdateForm(data={"license_number": "ABC123456"})
         self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["license_number"],
+            ["License number should consist of 8 characters"]
+        )
 
     def test_invalid_upper_letters_quantity(self) -> None:
-        form = DriverLicenseUpdateForm(data={"license_number": "ABCD1234"})
+        form = DriverLicenseUpdateForm(data={"license_number": "0BC12345"})
         self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["license_number"],
+            ["First 3 characters should be uppercase letters"]
+        )
 
     def test_invalid_digits_quantity(self) -> None:
-        form = DriverLicenseUpdateForm(data={"license_number": "ABCD123"})
+        form = DriverLicenseUpdateForm(data={"license_number": "ABCD1234"})
         self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["license_number"],
+            ["Last 5 characters should be digits"]
+        )
 
     def test_valid_form(self) -> None:
         form_data = {"license_number": "ABC12345"}
