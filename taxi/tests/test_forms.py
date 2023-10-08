@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from taxi.forms import (
@@ -6,7 +7,7 @@ from taxi.forms import (
     DriverSearchForm,
     ManufacturerSearchForm,
     DriverCreationForm,
-    DriverLicenseUpdateForm,
+    DriverLicenseUpdateForm, validate_license_number,
 )
 from taxi.models import Manufacturer
 
@@ -101,3 +102,31 @@ class TaxiFormsTest(TestCase):
         form_data = {"license_number": "invalid"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
+
+
+class TestValidateLicenseNumber(TestCase):
+
+    def test_valid_license_number(self):
+        valid_license_number = "ABC12345"
+        result = validate_license_number(valid_license_number)
+        self.assertEqual(result, valid_license_number)
+
+    def test_invalid_length(self):
+        invalid_license_number = "ABCDE"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_first_three_characters(self):
+        invalid_license_number = "12313265"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_last_five_characters(self):
+        invalid_license_number = "ABC1234X"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_case(self):
+        invalid_license_number = "abc12345"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
