@@ -114,9 +114,13 @@ class AuthorisedAccessTest(TestCase):
             manufacturer=self.test_manufacturer
         )
 
-        response = self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.id}))
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.id})
+        )
         self.assertEquals(response.status_code, 302)
         self.assertTrue(car in self.user.cars.all())
 
-        self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.id}))
+        self.client.get(
+            reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.id})
+        )
         self.assertFalse(car in self.user.cars.all())
