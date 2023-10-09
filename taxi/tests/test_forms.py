@@ -32,8 +32,8 @@ class DriverCreationFormTests(TestCase):
     def setUp(self) -> None:
         self.form_data = {
             "username": "test",
-            "password1": "testpass",
-            "password2": "testpass",
+            "password1": "testpass123@",
+            "password2": "testpass123@",
             "license_number": "ABC12345",
             "first_name": "Test",
             "last_name": "User",
