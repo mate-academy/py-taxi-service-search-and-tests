@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse_lazy, reverse
 
-from taxi.models import Driver, Manufacturer
+from taxi.models import Driver, Manufacturer, Car
 
 INDEX_URL = reverse_lazy("taxi:index")
 MANUFACTURERS_URL = reverse_lazy("taxi:manufacturer-list")
@@ -97,3 +97,41 @@ class PrivateManufacturerTests(TestCase):
         manufacturer = Manufacturer.objects.get(name=form_data["name"])
 
         self.assertEqual(manufacturer.country, form_data["country"])
+
+
+class ToggleViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test", password="testpass", license_number="ABC12345"
+        )
+        self.manufacturer = Manufacturer.objects.create(
+            name="test", country="Japan"
+        )
+        self.car = Car.objects.create(
+            model="test", manufacturer=self.manufacturer
+        )
+        self.car.drivers.add(self.user)
+        self.client.force_login(self.user)
+
+    def test_toggle_car_assign(self):
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", args=[self.car.pk])
+        )
+        self.assertRedirects(
+            response, reverse("taxi:car-detail", args=[self.car.pk])
+        )
+        self.assertFalse(self.car in self.user.cars.all())
+        another_user = get_user_model().objects.create_user(
+            username="testuser",
+            password="testpass",
+            license_number="ABC12312",
+        )
+        self.client.force_login(another_user)
+        response = self.client.get(
+            reverse("taxi:toggle-car-assign", args=[self.car.pk])
+        )
+        self.assertRedirects(
+            response, reverse("taxi:car-detail", args=[self.car.pk])
+        )
+        self.assertTrue(self.car in another_user.cars.all())
+
