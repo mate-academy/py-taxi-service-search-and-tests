@@ -1,6 +1,11 @@
 from django.test import TestCase
 
-from taxi.forms import DriverSearchForm, CarSearchForm, ManufacturerSearchForm, DriverCreationForm
+from taxi.forms import (
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+    DriverCreationForm,
+)
 
 
 class FormsTests(TestCase):
@@ -52,12 +57,16 @@ class DriverCreationFormTests(TestCase):
         form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
 
-    def test_driver_creation_form_with_license_number_first_3_chars_not_uppercase(self):
+    def test_driver_creation_form_with_license_first_3_chars_not_uppercase(
+        self,
+    ):
         self.form_data["license_number"] = "abc12345"
         form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
 
-    def test_driver_creation_form_with_license_number_last_5_chars_not_digits(self):
+    def test_driver_creation_form_with_license_number_last_5_chars_not_digits(
+        self,
+    ):
         self.form_data["license_number"] = "ABC1234A"
         form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())

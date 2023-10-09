@@ -134,4 +134,3 @@ class ToggleViewTest(TestCase):
             response, reverse("taxi:car-detail", args=[self.car.pk])
         )
         self.assertTrue(self.car in another_user.cars.all())
-
