@@ -8,6 +8,7 @@ MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 MANUFACTURER_CREATE_URL = reverse("taxi:manufacturer-create")
 DRIVER_URL = reverse("taxi:driver-list")
 CAR_URL = reverse("taxi:car-list")
+TOGGLE_ASSIGN_URL = "taxi:toggle-car-assign"
 
 
 class PublicTaxiServiceListsTest(TestCase):
@@ -97,3 +98,25 @@ class TaxiServiceCrudOperationsTest(TestCase):
         self.client.post(url, {"license_number": new_license_number})
         updated_driver = Driver.objects.get(pk=driver.pk)
         self.assertEqual(updated_driver.license_number, new_license_number)
+
+
+class ToggleAssignToCarViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test", password="test123"
+        )
+        self.client.force_login(self.user)
+        manufacturer = Manufacturer.objects.create(
+            name="Audi", country="Germany"
+        )
+        self.car = Car.objects.create(model="A5", manufacturer=manufacturer)
+
+    def test_toggle_assign_to_car_add(self):
+        self.assertNotIn(self.car, self.user.cars.all())
+        self.client.post(reverse(TOGGLE_ASSIGN_URL, args=[self.car.id]))
+        self.assertIn(self.car, self.user.cars.all())
+
+    def test_toggle_assign_to_car_remove(self):
+        self.user.cars.add(self.car)
+        self.client.post(reverse(TOGGLE_ASSIGN_URL, args=[self.car.id]))
+        self.assertNotIn(self.car, self.user.cars.all())
