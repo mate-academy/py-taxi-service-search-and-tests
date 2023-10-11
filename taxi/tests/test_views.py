@@ -9,7 +9,6 @@ URLS = [
     reverse("taxi:car-list"),
     reverse("taxi:manufacturer-list"),
     reverse("taxi:driver-list"),
-    reverse("taxi:toggle-car-assign", kwargs={"pk": 1}),
 ]
 
 
@@ -37,10 +36,15 @@ class PrivateViewsTest(TestCase):
         car = Car.objects.create(
             model="Test Model",
             manufacturer=manufacturer,
-            drivers=user,
         )
+        car.drivers.set([user])
 
     def test_access_gained_if_login(self):
         for url in URLS:
             response = self.client.get(url)
             self.assertEqual(response.status_code, 200)
+
+    def test_toggle_assign_success(self):
+        url = reverse("taxi:toggle-car-assign", kwargs={"pk": 1})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
