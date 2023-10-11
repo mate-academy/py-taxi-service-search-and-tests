@@ -32,10 +32,7 @@ class PrivateDriverTest(TestCase):
             "password2": "test1234",
             "license_number": "TEST_LICENSE"
         }
-        response = self.client.post(
-            reverse("taxi:driver-create"),
-            data=form_data
-        )
+
         new_driver = get_user_model().objects.get(
             username=form_data["username"]
         )
