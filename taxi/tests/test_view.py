@@ -32,12 +32,26 @@ class PrivateDriverTest(TestCase):
             "password2": "test1234",
             "license_number": "TEST_LICENSE"
         }
-        response = self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = get_user_model().objects.get(username=form_data["username"])
+        response = self.client.post(
+            reverse("taxi:driver-create"),
+            data=form_data
+        )
+        new_driver = get_user_model().objects.get(
+            username=form_data["username"]
+        )
 
-        self.assertEquals(new_driver.username, form_data["username"])
-        self.assertEquals(new_driver.last_name, form_data["last_name"])
-        self.assertEquals(new_driver.license_number, form_data["license_number"])
+        self.assertEquals(
+            new_driver.username,
+            form_data["username"]
+        )
+        self.assertEquals(
+            new_driver.last_name,
+            form_data["last_name"]
+        )
+        self.assertEquals(
+            new_driver.license_number,
+            form_data["license_number"]
+        )
 
 
 class PrivateCarTest(TestCase):
@@ -50,7 +64,10 @@ class PrivateCarTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_cars(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="country1")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="country1"
+        )
         Car.objects.create(model="Opel", manufacturer=manufacturer)
         Car.objects.create(model="Nissan", manufacturer=manufacturer)
         response = self.client.get(CAR_URL)

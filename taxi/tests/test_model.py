@@ -9,7 +9,10 @@ class ModelTests(TestCase):
         manufacturer = Manufacturer.objects.create(
             name="Opel", country="Germany"
         )
-        self.assertEquals(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEquals(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self):
         driver = get_user_model().objects.create(
@@ -19,7 +22,10 @@ class ModelTests(TestCase):
             password="test1234",
         )
 
-        self.assertEquals(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEquals(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_driver_with_license_number(self):
         username = "michael"
@@ -48,14 +54,29 @@ class ModelTests(TestCase):
         self.assertEquals(str(car), car.model)
 
     def test_manufacturer_ordering(self):
-        manufacturer1 = Manufacturer.objects.create(name="opel", country="country1")
-        manufacturer2 = Manufacturer.objects.create(name="alfa romeo", country="country2")
-        manufacturer3 = Manufacturer.objects.create(name="nissan", country="country3")
-        manufacturer4 = Manufacturer.objects.create(name="citroen", country="country4")
+        manufacturer1 = Manufacturer.objects.create(
+            name="opel",
+            country="country1"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="alfa romeo",
+            country="country2"
+        )
+        manufacturer3 = Manufacturer.objects.create(
+            name="nissan",
+            country="country3"
+        )
+        manufacturer4 = Manufacturer.objects.create(
+            name="citroen",
+            country="country4"
+        )
 
         all_manufacturers = list(Manufacturer.objects.all())
 
-        self.assertEquals(all_manufacturers, [manufacturer2, manufacturer4, manufacturer3, manufacturer1])
+        self.assertEquals(
+            all_manufacturers,
+            [manufacturer2, manufacturer4, manufacturer3, manufacturer1]
+        )
 
     def test_driver_absolute_url(self):
         driver = get_user_model().objects.create(
@@ -73,8 +94,16 @@ class ModelTests(TestCase):
             last_name="Schumacher",
             password="test1234",
         )
-        self.assertEquals(driver._meta.get_field("license_number").max_length, 255)
+        self.assertEquals(
+            driver._meta.get_field("license_number").max_length, 255
+        )
 
     def test_car_blank_false(self):
-        car = Car.objects.create(model="Opel", manufacturer=Manufacturer.objects.create(name="test", country="country1"))
+        car = Car.objects.create(
+            model="Opel",
+            manufacturer=Manufacturer.objects.create(
+                name="test",
+                country="country1"
+            )
+        )
         self.assertFalse(car._meta.get_field("model").blank)
