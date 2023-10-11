@@ -2,11 +2,14 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from taxi.models import Car, Manufacturer
+
 URLS = [
     reverse("taxi:index"),
     reverse("taxi:car-list"),
     reverse("taxi:manufacturer-list"),
     reverse("taxi:driver-list"),
+    reverse("taxi:toggle-car-assign", kwargs={"pk": 1}),
 ]
 
 
@@ -27,6 +30,15 @@ class PrivateViewsTest(TestCase):
             password="1q2Aafdojpass",
         )
         self.client.force_login(user)
+        manufacturer = Manufacturer.objects.create(
+            name="Test name",
+            country="Test country"
+        )
+        car = Car.objects.create(
+            model="Test Model",
+            manufacturer=manufacturer,
+            drivers=user,
+        )
 
     def test_access_gained_if_login(self):
         for url in URLS:

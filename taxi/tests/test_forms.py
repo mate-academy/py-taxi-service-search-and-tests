@@ -6,7 +6,6 @@ from taxi.models import Manufacturer
 
 
 class TestFormsValidation(TestCase):
-
     def setUp(self) -> None:
         self.manufacturer = Manufacturer.objects.create(
             name="test name", country="test country"
@@ -26,6 +25,36 @@ class TestFormsValidation(TestCase):
     def test_form_update_license_is_valid(self) -> None:
         form = DriverLicenseUpdateForm(data={"license_number": "ABC12346"})
         self.assertTrue(form.is_valid())
+
+    def test_form_update_license_is_invalid_when_length_more_than_9(
+        self,
+    ) -> None:
+        form = DriverLicenseUpdateForm(data={"license_number": "ABC123467"})
+        self.assertFalse(form.is_valid())
+
+    def test_form_update_license_is_invalid_when_length_lower_than_8(
+        self,
+    ) -> None:
+        form = DriverLicenseUpdateForm(data={"license_number": "ABC1234"})
+        self.assertFalse(form.is_valid())
+
+    def test_form_update_license_is_invalid_when_first_3_are_not_letters(
+        self,
+    ) -> None:
+        form = DriverLicenseUpdateForm(data={"license_number": "12312346"})
+        self.assertFalse(form.is_valid())
+
+    def test_form_update_license_is_invalid_when_first_3_are_lowercase_letters(
+        self,
+    ) -> None:
+        form = DriverLicenseUpdateForm(data={"license_number": "abc12346"})
+        self.assertFalse(form.is_valid())
+
+    def test_form_update_license_is_invalid_when_last_5_are_not_numbers(
+        self,
+    ) -> None:
+        form = DriverLicenseUpdateForm(data={"license_number": "ABCABCDE"})
+        self.assertFalse(form.is_valid())
 
     def test_form_car_is_valid(self):
         form_data = {
