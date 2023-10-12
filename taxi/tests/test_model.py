@@ -7,11 +7,11 @@ from taxi.models import Manufacturer, Driver, Car
 class ModelTests(TestCase):
     def test_manufacturer_str(self):
         manufacturer = Manufacturer.objects.create(
-            name="Opel", country="Germany"
+            name="Opel",
+            country="Germany"
         )
         self.assertEquals(
-            str(manufacturer),
-            f"{manufacturer.name} {manufacturer.country}"
+            str(manufacturer), f"{manufacturer.name} {manufacturer.country}"
         )
 
     def test_driver_str(self):
@@ -38,7 +38,7 @@ class ModelTests(TestCase):
             first_name=first_name,
             last_name=last_name,
             password=password,
-            license_number=license_number
+            license_number=license_number,
         )
 
         self.assertEquals(driver.username, username)
@@ -47,7 +47,8 @@ class ModelTests(TestCase):
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(
-            name="Opel", country="Germany"
+            name="Opel",
+            country="Germany"
         )
         car = Car.objects.create(model="audi", manufacturer=manufacturer)
 
@@ -59,8 +60,7 @@ class ModelTests(TestCase):
             country="country1"
         )
         manufacturer2 = Manufacturer.objects.create(
-            name="alfa romeo",
-            country="country2"
+            name="alfa romeo", country="country2"
         )
         manufacturer3 = Manufacturer.objects.create(
             name="nissan",
@@ -75,7 +75,7 @@ class ModelTests(TestCase):
 
         self.assertEquals(
             all_manufacturers,
-            [manufacturer2, manufacturer4, manufacturer3, manufacturer1]
+            [manufacturer2, manufacturer4, manufacturer3, manufacturer1],
         )
 
     def test_driver_absolute_url(self):
@@ -104,6 +104,6 @@ class ModelTests(TestCase):
             manufacturer=Manufacturer.objects.create(
                 name="test",
                 country="country1"
-            )
+            ),
         )
         self.assertFalse(car._meta.get_field("model").blank)

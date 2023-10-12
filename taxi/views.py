@@ -12,7 +12,7 @@ from .forms import (
     CarForm,
     DriverSearchForm,
     CarSearchForm,
-    ManufacturerSearchForm
+    ManufacturerSearchForm,
 )
 
 
