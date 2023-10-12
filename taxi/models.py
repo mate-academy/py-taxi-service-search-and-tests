@@ -29,7 +29,7 @@ class Driver(AbstractUser):
 
 
 class Car(models.Model):
-    model = models.CharField(max_length=255)
+    model = models.CharField(max_length=255, blank=False)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
     drivers = models.ManyToManyField(Driver, related_name="cars")
 
