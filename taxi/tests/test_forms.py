@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from taxi.forms import (
     CarForm,
@@ -5,7 +6,8 @@ from taxi.forms import (
     DriverLicenseUpdateForm,
     CarSearchForm,
     DriverSearchForm,
-    ManufacturerSearchForm
+    ManufacturerSearchForm,
+    validate_license_number
 )
 
 from taxi.models import Car, Driver, Manufacturer
@@ -32,7 +34,7 @@ class FormsTest(TestCase):
 
     def test_car_form_valid(self) -> None:
         form_data = {
-            "model": "test_model",
+            "model": "test_model3434",
             "manufacturer": self.manufacturer,
             "drivers": [self.driver]
         }
@@ -104,3 +106,23 @@ class FormsTest(TestCase):
         }
         form = ManufacturerSearchForm(data=data)
         self.assertTrue(form.is_valid())
+
+    def test_short_license_number(self):
+        with self.assertRaisesMessage(ValidationError, "License number should consist of 8 characters"):
+            validate_license_number("ABC123")
+
+    def test_long_license_number(self):
+        with self.assertRaisesMessage(ValidationError, "License number should consist of 8 characters"):
+            validate_license_number("ABC1234567")
+
+    def test_lowercase_initial_characters(self):
+        with self.assertRaisesMessage(ValidationError, "First 3 characters should be uppercase letters"):
+            validate_license_number("abc12345")
+
+    def test_non_letter_initial_characters(self):
+        with self.assertRaisesMessage(ValidationError, "First 3 characters should be uppercase letters"):
+            validate_license_number("12312345")
+
+    def test_non_digit_trailing_characters(self):
+        with self.assertRaisesMessage(ValidationError, "Last 5 characters should be digits"):
+            validate_license_number("ABC12XYZ")
