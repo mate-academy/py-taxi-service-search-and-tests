@@ -20,9 +20,9 @@ class Driver(AbstractUser):
     class Meta:
         verbose_name = "driver"
         verbose_name_plural = "drivers"
-        ordering = ['username']
+        ordering = ["username"]
 
-    def __str__(self):
+    def __str__(self):git commit -am 'Solution'
         return f"{self.username} ({self.first_name} {self.last_name})"
 
     def get_absolute_url(self):
