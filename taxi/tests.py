@@ -90,16 +90,16 @@ class TestDriverUsernameSearchForm(TestCase):
         url = reverse("taxi:driver-list")
         response = self.client.get(url, data=form_data)
         self.assertContains(response, form_data["username"])
-        self.assertNotContains(response, "johnson")
+        self.assertNotContains(response, "mike")
 
 
 class TestDriverCreationForm(TestCase):
     def test_driver_creation_form_with_valid_license_number(self):
         form_data = {
-            "username": "admin",
-            "password1": "123456",
-            "password2": "123456",
-            "license_number": "JON26231",
+            "username": "admin1",
+            "password1": "bohatov1",
+            "password2": "bohatov1",
+            "license_number": "JON26234",
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
