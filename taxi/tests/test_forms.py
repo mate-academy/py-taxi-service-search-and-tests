@@ -108,21 +108,36 @@ class FormsTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_short_license_number(self):
-        with self.assertRaisesMessage(ValidationError, "License number should consist of 8 characters"):
+        with self.assertRaisesMessage(
+                ValidationError,
+                "License number should consist of 8 characters"
+        ):
             validate_license_number("ABC123")
 
     def test_long_license_number(self):
-        with self.assertRaisesMessage(ValidationError, "License number should consist of 8 characters"):
+        with self.assertRaisesMessage(
+                ValidationError,
+                "License number should consist of 8 characters"
+        ):
             validate_license_number("ABC1234567")
 
     def test_lowercase_initial_characters(self):
-        with self.assertRaisesMessage(ValidationError, "First 3 characters should be uppercase letters"):
+        with self.assertRaisesMessage(
+                ValidationError,
+                "First 3 characters should be uppercase letters"
+        ):
             validate_license_number("abc12345")
 
     def test_non_letter_initial_characters(self):
-        with self.assertRaisesMessage(ValidationError, "First 3 characters should be uppercase letters"):
+        with self.assertRaisesMessage(
+                ValidationError,
+                "First 3 characters should be uppercase letters"
+        ):
             validate_license_number("12312345")
 
     def test_non_digit_trailing_characters(self):
-        with self.assertRaisesMessage(ValidationError, "Last 5 characters should be digits"):
+        with self.assertRaisesMessage(
+                ValidationError,
+                "Last 5 characters should be digits"
+        ):
             validate_license_number("ABC12XYZ")

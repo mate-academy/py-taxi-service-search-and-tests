@@ -29,10 +29,19 @@ class TaxiViewsTest(TestCase):
 class ToggleAssignToCarViewTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create_user(username="testuser", password="testpass")
+        self.user = get_user_model().objects.create_user(
+            username="testuser",
+            password="testpass"
+        )
 
-        self.manufacturer = Manufacturer.objects.create(name="TestManufacturer", country="TestCountry")
-        self.car = Car.objects.create(model="TestCar", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="TestManufacturer",
+            country="TestCountry"
+        )
+        self.car = Car.objects.create(
+            model="TestCar",
+            manufacturer=self.manufacturer
+        )
         self.client.login(username="testuser", password="testpass")
 
     def test_add_car_to_driver(self):
@@ -47,5 +56,16 @@ class ToggleAssignToCarViewTest(TestCase):
         self.assertNotIn(self.car, self.user.cars.all())
 
     def test_redirect_after_toggle(self):
-        response = self.client.get(reverse("taxi:toggle-car-assign", args=[self.car.id]))
-        self.assertRedirects(response, reverse("taxi:car-detail", args=[self.car.id]))
+        response = self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                args=[self.car.id]
+            )
+        )
+        self.assertRedirects(
+            response,
+            reverse(
+                "taxi:car-detail",
+                args=[self.car.id]
+            )
+        )
