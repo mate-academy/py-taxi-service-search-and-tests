@@ -18,15 +18,6 @@ class AdminSiteTest(TestCase):
             password="testdriver",
             license_number="LAM12345",
         )
-        # self.manufacturer = Manufacturer.objects.create(
-        #     name="BMW",
-        #     country="Germany"
-        # )
-        # self.car = Car.objects.create(
-        #     model="M3",
-        #     manufacturer=self.manufacturer
-        # )
-        # self.car.drivers.add(self.driver)
 
     def test_driver_license_listed(self):
         """Test that license listed in drivers list page"""
