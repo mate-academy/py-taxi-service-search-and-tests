@@ -94,3 +94,46 @@ class PrivateManufacturerTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, username)
         self.assertNotContains(response, "test2")
+
+
+class ToggleAssignToCarViewTest(TestCase):
+    def setUp(self):
+        self.manufacturer = Manufacturer.objects.create(
+            name="TestManufacturer",
+            country="TestCountry"
+        )
+        self.user = get_user_model().objects.create_user(
+            username="test_username",
+            password="testpassword",
+            license_number="QWE123456",
+        )
+        self.car = Car.objects.create(
+            model="TestCar",
+            manufacturer=self.manufacturer
+        )
+
+    def test_toggle_assign_to_car(self):
+        self.assertFalse(self.car.drivers.filter(id=self.user.id).exists())
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.pk]
+        )
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_toggle_assign_to_car_when_logged_out(self):
+        self.assertFalse(self.car.drivers.exists())
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.pk]
+        )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            reverse("login") + "?next=" + reverse(
+                "taxi:toggle-car-assign",
+                args=[self.car.pk]
+            )
+        )
+        self.assertFalse(self.car.drivers.exists())
