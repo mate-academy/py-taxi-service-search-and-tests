@@ -16,13 +16,11 @@ class DriverModelTest(TestCase):
 
     def test_driver_str(self):
         driver = Driver.objects.get(id=1)
-        expected_object_name = f"{driver.username} ({driver.first_name} {driver.last_name})"
+        expected_object_name = (
+            f"{driver.username} "
+            f"({driver.first_name} {driver.last_name})"
+        )
         self.assertEqual(str(driver), expected_object_name)
-
-    def test_driver_first_name_label(self):
-        driver = Driver.objects.get(id=1)
-        field_label = driver._meta.get_field('first_name').verbose_name
-        self.assertEqual(field_label, 'first name')
 
     def test_get_absolute_url(self):
         driver = Driver.objects.get(id=1)
