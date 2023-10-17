@@ -74,3 +74,52 @@ class PrivateTaxiViewsTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "admin")
+
+
+class ToggleAssignToCarViewTest(TestCase):
+    def setUp(self) -> None:
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="Test"
+        )
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="testpass123",
+            license_number="QWE123455",
+        )
+        self.car = Car.objects.create(
+            model="TestCar",
+            manufacturer=self.manufacturer
+        )
+
+    def test_toggle_assign_to_car(self) -> None:
+        self.assertFalse(self.car.drivers.filter(id=self.user.id).exists())
+        self.car.drivers.add(self.user)
+        self.car.save()
+        self.assertTrue(self.car.drivers.filter(id=self.user.id).exists())
+        self.car.drivers.remove(self.user)
+        self.car.save()
+        self.assertFalse(self.car.drivers.filter(id=self.user.id).exists())
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.pk]
+        )
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_toggle_assign_to_car_when_not_logged_in(self) -> None:
+        self.assertFalse(self.car.drivers.exists())
+        response = self.client.get(reverse(
+            "taxi:toggle-car-assign",
+            args=[self.car.pk]
+        )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            reverse("login") + "?next=" + reverse(
+                "taxi:toggle-car-assign",
+                args=[self.car.pk]
+            )
+        )
+        self.assertFalse(self.car.drivers.exists())
