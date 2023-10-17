@@ -215,10 +215,28 @@ class TestViewsStatusCode(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
 
-class TestDriversListView(TestCase):
+class TestToggleAssignToCarView(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             username="admin",
             password="admin",
         )
         self.client.force_login(self.user)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Audi", country="Germany"
+        )
+        self.car = Car.objects.create(
+            model="A6",
+            manufacturer=self.manufacturer,
+        )
+
+    def test_toggle_assign_to_car(self):
+        url = reverse("taxi:toggle-car-assign", args=[self.car.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.user.refresh_from_db()
+        self.assertIn(self.car, self.user.cars.all())
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.user.refresh_from_db()
+        self.assertNotIn(self.car, self.user.cars.all())
