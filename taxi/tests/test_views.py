@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer
+from taxi.models import Car, Driver, Manufacturer
 
 HOME_URL = reverse("taxi:index")
 MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
@@ -50,3 +50,74 @@ class TestViewsPagesForRegisteredUser(TestCase):
         )
 
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+
+class ToggleAssignToCarTest(TestCase):
+    def setUp(self):
+        self.manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
+        self.car1 = Car.objects.create(
+            model="M3",
+            manufacturer=self.manufacturer
+        )
+        self.car2 = Car.objects.create(
+            model="M5",
+            manufacturer=self.manufacturer
+        )
+        self.driver = Driver.objects.create(
+            username="testuser",
+            license_number="BMW35678"
+        )
+        self.client.login(
+            username="testuser",
+            password="password"
+        )
+        self.client.force_login(self.driver)
+
+    def test_remove_assign_car(self):
+        url = reverse(
+            "taxi:toggle-car-assign",
+            kwargs={"pk": self.car1.pk}
+        )
+        self.driver.cars.add(self.car1)
+        initial_driver_cars_count = self.driver.cars.count()
+        response = self.client.post(url)
+        self.driver.refresh_from_db()
+        updated_driver_cars_count = self.driver.cars.count()
+        self.assertEqual(
+            updated_driver_cars_count,
+            initial_driver_cars_count - 1
+        )
+        self.assertRedirects(
+            response,
+            reverse(
+                "taxi:car-detail",
+                args=[self.car1.pk]
+            )
+        )
+
+    def test_add_assign_car(self):
+        url = reverse(
+            "taxi:toggle-car-assign",
+            kwargs={"pk": self.car2.pk}
+        )
+        self.driver.cars.add(self.car1)
+        initial_driver_cars_count = self.driver.cars.count()
+        response = self.client.post(url)
+
+        self.driver.refresh_from_db()
+        updated_driver_cars_count = self.driver.cars.count()
+
+        self.assertEqual(
+            updated_driver_cars_count,
+            initial_driver_cars_count + 1
+        )
+        self.assertRedirects(
+            response,
+            reverse(
+                "taxi:car-detail",
+                args=[self.car2.pk]
+            )
+        )
