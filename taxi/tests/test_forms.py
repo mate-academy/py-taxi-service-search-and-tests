@@ -74,3 +74,31 @@ class FormsTest(TestCase):
         form_data = {"name": ""}
         form = ManufacturerSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
+
+
+class TestValidateLicenseNumber(TestCase):
+
+    def test_valid_license_number(self):
+        valid_license_number = "TST12345"
+        result = validate_license_number(valid_license_number)
+        self.assertEqual(result, valid_license_number)
+
+    def test_invalid_length(self):
+        invalid_license_number = "TEST"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_first_three_characters(self):
+        invalid_license_number = "12345678"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_last_five_characters(self):
+        invalid_license_number = "TES1234T"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_case(self):
+        invalid_license_number = "tst12345"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
