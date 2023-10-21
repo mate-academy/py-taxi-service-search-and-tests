@@ -2,12 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 CAR_URL = reverse("taxi:car-list")
 DRIVER_URL = reverse("taxi:driver-list")
 INDEX_URL = reverse("taxi:index")
+TOGGLE_ASSIGN_URL = "taxi:toggle-car-assign"
 
 
 class PublicAccessTest(TestCase):
@@ -33,6 +34,7 @@ class PrivateAccessTest(TestCase):
         self.user = get_user_model().objects.create_user(
             username="testuser",
             password="test1234",
+            license_number="AAA66666"
         )
         self.client.force_login(self.user)
 
@@ -88,6 +90,13 @@ class PrivateAccessTest(TestCase):
 
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
+    def test_update_driver_license(self) -> None:
+        new_license_number = "XYZ78910"
+        url = reverse("taxi:driver-update", kwargs={"pk": self.user.pk})
+        self.client.post(url, {"license_number": new_license_number})
+        updated_driver = Driver.objects.get(pk=self.user.pk)
+        self.assertEqual(updated_driver.license_number, new_license_number)
+
 
 class SearchingTest(TestCase):
     def setUp(self) -> None:
@@ -140,3 +149,25 @@ class SearchingTest(TestCase):
             list(response.context["car_list"]),
             list(cars)
         )
+
+
+class ToggleAssignToCarViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test", password="test123"
+        )
+        self.client.force_login(self.user)
+        manufacturer = Manufacturer.objects.create(
+            name="Audi", country="Germany"
+        )
+        self.car = Car.objects.create(model="A5", manufacturer=manufacturer)
+
+    def test_toggle_assign_to_car_add(self):
+        self.assertNotIn(self.car, self.user.cars.all())
+        self.client.post(reverse(TOGGLE_ASSIGN_URL, args=[self.car.id]))
+        self.assertIn(self.car, self.user.cars.all())
+
+    def test_toggle_assign_to_car_remove(self):
+        self.user.cars.add(self.car)
+        self.client.post(reverse(TOGGLE_ASSIGN_URL, args=[self.car.id]))
+        self.assertNotIn(self.car, self.user.cars.all())
