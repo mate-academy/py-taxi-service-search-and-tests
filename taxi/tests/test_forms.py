@@ -9,7 +9,7 @@ from taxi.forms import (
     DriverSearchForm,
     ManufacturerSearchForm,
     DriverCreationForm,
-    DriverLicenseUpdateForm, 
+    DriverLicenseUpdateForm,
     validate_license_number,
 )
 
