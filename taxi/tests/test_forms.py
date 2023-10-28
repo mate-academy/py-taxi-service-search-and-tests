@@ -1,15 +1,17 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+
+from taxi.models import Manufacturer
 from taxi.forms import (
     CarForm,
     CarSearchForm,
     DriverSearchForm,
     ManufacturerSearchForm,
     DriverCreationForm,
-    DriverLicenseUpdateForm, validate_license_number,
+    DriverLicenseUpdateForm, 
+    validate_license_number,
 )
-from taxi.models import Manufacturer
 
 
 class TaxiFormsTest(TestCase):
@@ -128,5 +130,20 @@ class TestValidateLicenseNumber(TestCase):
 
     def test_invalid_case(self):
         invalid_license_number = "abc12345"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_all_letters(self):
+        invalid_license_number = "ABCabcde"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_overlenght(self):
+        invalid_license_number = "ABC123456"
+        with self.assertRaises(ValidationError):
+            validate_license_number(invalid_license_number)
+
+    def test_invalid_characters(self):
+        invalid_license_number = "!@#$%^&*"
         with self.assertRaises(ValidationError):
             validate_license_number(invalid_license_number)
