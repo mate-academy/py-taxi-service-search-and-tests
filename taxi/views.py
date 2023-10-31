@@ -123,7 +123,6 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["username"] = username
         context["search_from"] = DriverSearchForm(
             initial={"username": username}
         )
