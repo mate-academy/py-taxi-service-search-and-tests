@@ -7,6 +7,13 @@
       Create
     </a>
   </h1>
+  {% load crispy_forms_filters %}
+          <form action="" method="get">
+            {% csrf_token %}
+            {{ search_form|crispy }}
+            <input type="text" name="q" placeholder="Search manufacturer">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
 
   {% if manufacturer_list %}
     <table class="table">
