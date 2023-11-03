@@ -16,6 +16,7 @@ from .forms import (
     DriverUsernameSearchForm,
 )
 
+
 @login_required
 def index(request):
     """View function for the home page of the site."""
