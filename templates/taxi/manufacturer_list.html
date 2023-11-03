@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
   <h1>
     Manufacturer List
@@ -9,6 +8,7 @@
   </h1>
 
   {% if manufacturer_list %}
+    {% include "includes/search.html" %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -17,7 +17,6 @@
         <th>Update</th>
         <th>Delete</th>
       </tr>
-
       {% for manufacturer in manufacturer_list %}
         <tr>
           <td>
@@ -43,7 +42,6 @@
         </tr>
       {% endfor %}
     </table>
-
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
