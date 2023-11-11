@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from taxi.models import Manufacturer
@@ -6,7 +7,7 @@ from taxi.models import Manufacturer
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
 
-class PublicManufacturerTest(TestCase):
+class PublicManufacturerLoginTest(TestCase):
     def test_login(self):
         get_result = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(get_result.status_code, 200)
