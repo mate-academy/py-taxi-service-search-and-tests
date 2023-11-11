@@ -1,13 +1,12 @@
 {% extends "base.html" %}
-
 {% block content %}
   <h1>
     Manufacturer List
-    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
+    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page float-right">
       Create
     </a>
   </h1>
-
+  {% include "includes/search_form.html" %}
   {% if manufacturer_list %}
     <table class="table">
       <tr>
