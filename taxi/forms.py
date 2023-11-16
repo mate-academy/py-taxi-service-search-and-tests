@@ -20,7 +20,9 @@ class CarForm(forms.ModelForm):
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
-        fields = UserCreationForm.Meta.fields + ("first_name", "last_name", "license_number", )
+        fields = UserCreationForm.Meta.fields + (
+            "first_name", "last_name", "license_number",
+        )
 
     def clean_license_number(self):  # this logic is optional, but possible
         return validate_license_number(self.cleaned_data["license_number"])
@@ -89,14 +91,3 @@ class ManufacturerSearchForm(forms.Form):
             }
         )
     )
-
-
-
-
-
-
-
-
-
-
-

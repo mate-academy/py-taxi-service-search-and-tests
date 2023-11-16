@@ -45,8 +45,16 @@ class PublicDriverTest(TestCase):
 class PrivateDriverTest(TestCase):
 
     def test_retrieve_driver(self):
-        Driver.objects.create(username="luca_deluca", password="Test123456", license_number="ERU45678")
-        Driver.objects.create(username="saverio_deluca", password="Test567890", license_number="ERD45668")
+        Driver.objects.create(
+            username="luca_deluca",
+            password="Test123456",
+            license_number="ERU45678",
+        )
+        Driver.objects.create(
+            username="saverio_deluca",
+            password="Test567890",
+            license_number="ERD45668",
+        )
         self.user = get_user_model().objects.create_user(
             username="admin_test",
             password="Test234534534",
@@ -55,7 +63,10 @@ class PrivateDriverTest(TestCase):
         response = self.client.get(DRIVER_URL)
         self.assertEqual(response.status_code, 200)
         drivers = Driver.objects.all()
-        self.assertEqual(list(response.context["driver_list"]), list(drivers), )
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers),
+        )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
 
@@ -81,4 +92,3 @@ class PrivateCarTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context["car_list"]), list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
-

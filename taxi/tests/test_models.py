@@ -7,7 +7,10 @@ from taxi.models import Manufacturer
 class ModelsTests(TestCase):
     def test_manufacturer_str(self):
         manufacturer = Manufacturer.objects.create(name="BYD", country="China")
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self):
         password = "Test123"

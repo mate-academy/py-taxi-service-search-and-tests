@@ -54,7 +54,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = ManufacturerSearchForm(self.request.GET)
         if form.is_valid():
-            return Manufacturer.objects.filter(name__icontains=form.cleaned_data["name"])
+            return Manufacturer.objects.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
         return Manufacturer
 
 
@@ -136,7 +138,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = DriverSearchForm(self.request.GET)
         if form.is_valid():
-            return Driver.objects.filter(username__icontains=form.cleaned_data["username"])
+            return Driver.objects.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return Driver
 
 

@@ -39,10 +39,10 @@ class AdminSiteTests(TestCase):
 
     def test_driver_additional_detail_license_number_listed(self):
         """
-        Test thant driver's license_number is in on admin additional detail page
+        Test thant driver's license_number
+        is in on admin additional detail page
         :return:
         """
         url = reverse("admin:taxi_driver_add")
         res = self.client.get(url)
         self.assertTrue(res, self.driver.license_number)
-
