@@ -6,14 +6,6 @@ from taxi.forms import DriverCreationForm, LicenseForm
 from taxi.models import Driver, Manufacturer, Car
 
 
-def isnumeric(value):
-    try:
-        float(value)
-        return True
-    except ValueError:
-        return False
-
-
 class FormsTests(TestCase):
     def setUp(self):
         self.admin_user = get_user_model().objects.create_superuser(

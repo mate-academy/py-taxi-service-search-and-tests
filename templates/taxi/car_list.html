@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{% load crispy_forms_filters %}
-
+{% extends "base.html"  %}
 {% block content %}
   <h1>
     Car list
@@ -8,10 +6,9 @@
       Create
     </a>
   </h1>
-  <form method="get" action="" class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="🔎" class="btn btn-secondary">
-  </form>
+
+  {% include "includes/search_form.html" %}
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
