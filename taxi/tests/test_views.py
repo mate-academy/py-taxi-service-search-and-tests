@@ -55,4 +55,3 @@ class PrivatManufacturerTest(TestCase):
             list(response.context["manufacturer_list"]),
             list(manufacturer),
         )
-
