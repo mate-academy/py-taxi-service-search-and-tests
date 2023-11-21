@@ -9,6 +9,10 @@
   </h1>
 
   {% if manufacturer_list %}
+    <form method="GET" class="m-3" action="{% url 'taxi:manufacturer-list' %}">
+        {{ search_form }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
     <table class="table">
       <tr>
         <th>ID</th>
