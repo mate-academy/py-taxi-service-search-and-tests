@@ -116,7 +116,10 @@ class DriverFormTests(TestCase):
         )
 
         searching_data = {"username": "driver"}
-        resp = self.client.get(reverse("taxi:driver-list"), data=searching_data)
+        resp = self.client.get(
+            reverse("taxi:driver-list"),
+            data=searching_data
+        )
 
         drivers = get_user_model().objects.filter(username__icontains="driver")
 
@@ -147,7 +150,10 @@ class ManufacturerSearchFormTests(TestCase):
         Manufacturer.objects.create(name="Third", country="Japan")
 
         searching_data = {"name": "manufacturer"}
-        resp = self.client.get(reverse("taxi:manufacturer-list"), data=searching_data)
+        resp = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            data=searching_data
+        )
 
         manufacturers = Manufacturer.objects.filter(
             name__icontains="manufacturer"

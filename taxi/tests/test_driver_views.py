@@ -59,7 +59,10 @@ class PrivateDriverViewTests(TestCase):
 
     def test_get_driver_detail_page(self):
 
-        resp = self.client.get(reverse("taxi:driver-detail", args=[self.user.id]))
+        resp = self.client.get(reverse(
+            "taxi:driver-detail",
+            args=[self.user.id])
+        )
         license_number = resp.context["user"].license_number
 
         self.assertEqual(resp.status_code, 200)
