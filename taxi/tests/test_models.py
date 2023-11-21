@@ -22,8 +22,8 @@ class ManufacturerModelTest(TestCase):
             last_name="test_last",
             license_number="123456",
         )
-        expected_str = f"{driver.username} ({driver.first_name} {driver.last_name})"
-        self.assertEqual(str(driver), expected_str)
+        expect = f"{driver.username} ({driver.first_name} {driver.last_name})"
+        self.assertEqual(str(driver), expect)
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(
@@ -56,6 +56,9 @@ class ManufacturerModelTest(TestCase):
             last_name="test_last",
             license_number="123456",
         )
-        expected_url = reverse("taxi:driver-detail", kwargs={"pk": self.driver.id})
+        expected_url = reverse(
+            "taxi:driver-detail",
+            kwargs={"pk": self.driver.id}
+        )
         actual_url = self.driver.get_absolute_url()
         self.assertEqual(actual_url, expected_url)
