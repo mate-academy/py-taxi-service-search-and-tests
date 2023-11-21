@@ -112,4 +112,3 @@ class PrivateCarTest(TestCase):
             list(manufacturers)
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
-
