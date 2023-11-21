@@ -14,10 +14,14 @@ class FormsTests(TestCase):
 
     def test_driver_search_by_username(self):
         Driver.objects.create(
-            username="driver1test", password="driver1pass", license_number="ABC12346"
+            username="driver1test",
+            password="driver1pass",
+            license_number="ABC12346"
         )
         Driver.objects.create(
-            username="driver2", password="driver2pass", license_number="ABC12345"
+            username="driver2",
+            password="driver2pass",
+            license_number="ABC12345"
         )
         url = reverse("taxi:driver-list")
         response = self.client.get(url, {"username": "test"})

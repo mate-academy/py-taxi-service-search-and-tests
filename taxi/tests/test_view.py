@@ -26,7 +26,9 @@ class PrivateTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()
         self.user = get_user_model().objects.create_user(
-            username="testuser1", password="testpass1", license_number="1234567"
+            username="testuser1",
+            password="testpass1",
+            license_number="1234567"
         )
         self.client.force_login(self.user)
 
