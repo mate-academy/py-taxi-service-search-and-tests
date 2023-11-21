@@ -38,3 +38,9 @@ class PrivateTests(TestCase):
         url = reverse("taxi:manufacturer-list")
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
+        manufacturers = Manufacturer.objects.all()
+        self.assertEqual(
+            list(res.context["manufacturer_list"]),
+            list(manufacturers)
+        )
+        self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
