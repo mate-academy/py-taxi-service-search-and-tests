@@ -21,17 +21,17 @@ class FormsCreationTests(TestCase):
         self.assertEqual(form.cleaned_data, form_data)
 
     def test_driver_license_update_form_valid(self):
-        user = get_user_model().objects.create(username='test_user')
+        user = get_user_model().objects.create(username="test_user")
         form_data = {
-            'license_number': 'ABC12345',
+            "license_number": "ABC12345",
         }
         form = DriverLicenseUpdateForm(instance=user, data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_driver_license_update_form_invalid(self):
-        user = get_user_model().objects.create(username='test_user')
+        user = get_user_model().objects.create(username="test_user")
         form_data = {
-            'license_number': 'invalid_license',
+            "license_number": "invalid_license",
         }
         form = DriverLicenseUpdateForm(instance=user, data=form_data)
         self.assertFalse(form.is_valid())
