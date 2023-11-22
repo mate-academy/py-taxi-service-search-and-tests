@@ -46,7 +46,10 @@ class FormTests(TestCase):
         )
 
     def test_car_search(self):
-        manufacturer = Manufacturer.objects.create(name="bmw", country="Germany")
+        manufacturer = Manufacturer.objects.create(
+            name="bmw",
+            country="Germany"
+        )
         Car.objects.create(model="x-5", manufacturer=manufacturer)
         Car.objects.create(model="x-7", manufacturer=manufacturer)
         url = reverse("taxi:car-list")
