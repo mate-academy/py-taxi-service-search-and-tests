@@ -1,8 +1,19 @@
 body {
-    margin-top: 20px;
+    background-image: url('/static/background.jpg'), url('/static/background.jpg');
+    background-position: right bottom, left top;
+    background-repeat: no-repeat, no-repeat;
+    background-size: contain, contain;
+
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+}
+
+.content {
+    padding-top: 30px;
+    width: 70%;
+    min-height: 100vh;
+    background-color: #BABCBE;
 }
