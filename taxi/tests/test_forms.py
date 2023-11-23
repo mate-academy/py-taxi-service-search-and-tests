@@ -109,10 +109,12 @@ class FormsTests(TestCase):
         Manufacturer.objects.create(name="Audi", country="Germany")
         response = self.client.get(MANUFACTURER_URL, {"name": "audi"})
         manufacturers = Manufacturer.objects.filter(name__icontains="audi")
+
         self.assertEqual(
             list(response.context["manufacturer_list"]),
             list(manufacturers)
         )
+        self.assertEqual(list(response.context["manufacturer_list"]), list(manufacturers))
 
     def test_car_search_by_model(self):
         manufacturer = Manufacturer.objects.create(name="Toyota")
