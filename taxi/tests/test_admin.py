@@ -19,19 +19,19 @@ class AdminSiteTest(TestCase):
 
     def test_user_list_display(self) -> None:
         url = reverse("admin:taxi_driver_changelist")
-        res = self.client.get(url)
-        self.assertContains(res, self.driver.license_number)
+        response = self.client.get(url)
+        self.assertContains(response, self.driver.license_number)
 
     def test_driver_detail_license_number_fieldset(self) -> None:
         url = reverse("admin:taxi_driver_change", args=[self.driver.id])
-        res = self.client.get(url)
-        self.assertContains(res, self.driver.license_number)
-        self.assertContains(res, self.driver.first_name)
-        self.assertContains(res, self.driver.last_name)
+        response = self.client.get(url)
+        self.assertContains(response, self.driver.license_number)
+        self.assertContains(response, self.driver.first_name)
+        self.assertContains(response, self.driver.last_name)
 
     def test_driver_creation_page_fieldset(self) -> None:
         url = reverse("admin:taxi_driver_add")
-        res = self.client.get(url)
-        self.assertContains(res, "license_number")
-        self.assertContains(res, "first_name")
-        self.assertContains(res, "last_name")
+        response = self.client.get(url)
+        self.assertContains(response, "license_number")
+        self.assertContains(response, "first_name")
+        self.assertContains(response, "last_name")
