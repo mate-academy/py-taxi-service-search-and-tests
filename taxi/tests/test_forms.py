@@ -21,21 +21,19 @@ class FormTests(TestCase):
         self.assertEqual(form.cleaned_data, form_data)
 
     def test_license_number_format(self) -> None:
-        valid_license_numbers = ["ABD54345",
-                                 "ABC43345",
-                                 "FTP40441"]
-        invalid_license_numbers = ["BA1111AB",
-                                   "12fEFA11",
-                                   "ASDFJ43",
-                                   "AB111111",
-                                   "111111AB",
-                                   "A9999999",
-                                   "11AA11AA",
-                                   "234",
-                                   "111A",
-                                   "OAOAOK",
-                                   "NEOK",
-                                   "O"]
+        invalid_license_numbers = ["ZYX1234A",
+                                   "1ABCD234",
+                                   "INVALID",
+                                   "11111XYZ",
+                                   "X9876543",
+                                   "AA11BB22",
+                                   "987",
+                                   "AAA111",
+                                   "XYZZYX",
+                                   "X"]
+        valid_license_numbers = ["XYZ98765",
+                                 "LMN12345",
+                                 "PQR67890"]
 
         for license_number in valid_license_numbers:
             form_data = {"username": "test_user",
