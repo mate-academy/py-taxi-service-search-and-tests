@@ -10,19 +10,19 @@ CAR_URL = reverse("taxi:car-list")
 
 class PublicTests(TestCase):
     def test_manufacturer_login_required(self):
-        res = self.client.get(MANUFACTURER_URL)
+        response = self.client.get(MANUFACTURER_URL)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertNotEqual(response.status_code, 200)
 
     def test_driver_login_required(self):
-        res = self.client.get(DRIVER_URL)
+        response = self.client.get(DRIVER_URL)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertNotEqual(response.status_code, 200)
 
     def test_car_login_required(self):
-        res = self.client.get(CAR_URL)
+        response = self.client.get(CAR_URL)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertNotEqual(response.status_code, 200)
 
 
 class PrivateManufacturerTests(TestCase):
