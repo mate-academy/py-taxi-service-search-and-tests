@@ -13,7 +13,9 @@ from taxi.forms import (
 class TestCarForm(TestCase):
     def test_drivers_field(self):
         form = CarForm()
-        self.assertIsInstance(form.fields["drivers"], forms.ModelMultipleChoiceField)
+        self.assertIsInstance(
+            form.fields["drivers"], forms.ModelMultipleChoiceField
+        )
 
         queryset = form.fields["drivers"].queryset
         self.assertEqual(queryset.model, get_user_model())
