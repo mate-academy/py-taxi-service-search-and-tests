@@ -5,7 +5,7 @@ from django.urls import reverse
 from taxi.models import Manufacturer, Car, Driver
 
 
-# Create your tests here.
+# Create your test here.
 class DriverModelTest(TestCase):
 
     def setUp(self):
