@@ -1,6 +1,10 @@
 from django.test import TestCase
 from taxi.forms import (
-    DriverCreationForm, DriverLicenseUpdateForm, DriverSearchForm, ManufacturerSearchForm, CarSearchForm
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    DriverSearchForm,
+    ManufacturerSearchForm,
+    CarSearchForm
 )
 from taxi.models import Manufacturer, Driver, Car
 
@@ -70,38 +74,50 @@ class FormTests(TestCase):
 
 class SearchFunctionalityTests(TestCase):
     def setUp(self):
-        self.driver1 = Driver.objects.create(username='John Doe')
-        self.driver2 = Driver.objects.create(username='Jane Doe')
+        self.driver1 = Driver.objects.create(username="John Doe")
+        self.driver2 = Driver.objects.create(username="Jane Doe")
 
-        self.manufacturer1 = Manufacturer.objects.create(name='Toyota')
-        self.manufacturer2 = Manufacturer.objects.create(name='Honda')
+        self.manufacturer1 = Manufacturer.objects.create(name="Toyota")
+        self.manufacturer2 = Manufacturer.objects.create(name="Honda")
 
-        self.car1 = Car.objects.create(model='Camry', manufacturer=self.manufacturer1)
-        self.car2 = Car.objects.create(model='Accord', manufacturer=self.manufacturer2)
+        self.car1 = Car.objects.create(
+            model="Camry",
+            manufacturer=self.manufacturer1
+        )
+        self.car2 = Car.objects.create(
+            model="Accord",
+            manufacturer=self.manufacturer2
+        )
 
     def test_driver_search_functionality(self):
-        form_data = {'username': 'John Doe'}
+        form_data = {"username": "John Doe"}
         form = DriverSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-        search_result = Driver.objects.filter(username__icontains=form.cleaned_data['username'])
+        search_result = Driver.objects.filter(
+            username__icontains=form.cleaned_data["username"]
+        )
         self.assertEqual(len(search_result), 1)
         self.assertEqual(search_result[0], self.driver1)
 
     def test_manufacturer_search_functionality(self):
-        form_data = {'name': 'Toyota'}
+        form_data = {"name': 'Toyota"}
         form = ManufacturerSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-        search_result = Manufacturer.objects.filter(name__icontains=form.cleaned_data['name'])
+        search_result = Manufacturer.objects.filter(
+            name__icontains=form.cleaned_data["name"]
+        )
         self.assertEqual(len(search_result), 1)
         self.assertEqual(search_result[0], self.manufacturer1)
 
     def test_car_search_functionality(self):
-        form_data = {'model': 'Camry'}
+        form_data = {"model": "Camry"}
         form = CarSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-        search_result = Car.objects.filter(model__icontains=form.cleaned_data['model'])
+        search_result = Car.objects.filter(
+            model__icontains=form.cleaned_data["model"]
+        )
         self.assertEqual(len(search_result), 1)
         self.assertEqual(search_result[0], self.car2)
