@@ -74,8 +74,14 @@ class FormTests(TestCase):
 
 class SearchFunctionalityTests(TestCase):
     def setUp(self):
-        self.driver1 = Driver.objects.create(username="John Doe", license_number="ABC123")
-        self.driver2 = Driver.objects.create(username="Jane Doe", license_number="XYZ789")
+        self.driver1 = Driver.objects.create(
+            username="John Doe",
+            license_number="ABC123"
+        )
+        self.driver2 = Driver.objects.create(
+            username="Jane Doe",
+            license_number="XYZ789"
+        )
 
         self.manufacturer1 = Manufacturer.objects.create(name="Toyota")
         self.manufacturer2 = Manufacturer.objects.create(name="Honda")
@@ -101,11 +107,13 @@ class SearchFunctionalityTests(TestCase):
         self.assertEqual(search_result[0], self.driver1)
 
     def test_manufacturer_search_functionality(self):
-        form_data = {'name': 'Toyota'}
+        form_data = {"name": "Toyota"}
         form = ManufacturerSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-        search_result = Manufacturer.objects.filter(name__icontains=form.cleaned_data['name'])
+        search_result = Manufacturer.objects.filter(
+            name__icontains=form.cleaned_data["name"]
+        )
         self.assertEqual(len(search_result), 1)
         self.assertEqual(search_result[0], self.manufacturer1)
 
