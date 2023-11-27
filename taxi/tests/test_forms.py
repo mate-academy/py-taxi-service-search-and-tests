@@ -5,14 +5,14 @@ from taxi.forms import DriverCreationForm
 
 
 class FormTests(TestCase):
-    @pytest.mark.parametrize("license_number, expected_result", [
+    @pytest.mark.parametrize("license_number, result", [
         ("111", False),
         ("aaa", False),
         ("aaa11111", False),
         ("aaaaaaaa", False),
         ("AAA11111", True),
     ])
-    def test_license_number_is_valid(self, license_number, expected_result):
+    def test_license_number_is_valid(self, license_number, result):
         form_data = {
             "username": "driver",
             "password1": "NotCommonPassword123",
@@ -23,4 +23,4 @@ class FormTests(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         print(form.is_valid())
-        assert form.is_valid() == expected_result
+        assert form.is_valid() == result
