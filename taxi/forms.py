@@ -65,7 +65,7 @@ class DriverUsernameSearchForm(forms.Form):
     )
 
 
-class CarModelSearchForm(forms.Form):
+class CarSearchForm(forms.Form):
     model = forms.CharField(
         max_length=255,
         required=False,

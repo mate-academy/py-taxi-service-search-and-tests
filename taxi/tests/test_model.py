@@ -5,6 +5,13 @@ from taxi.models import Manufacturer, Car
 
 
 class ModelsTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test_user",
+            password="test_password",
+            license_number="12345678"
+        )
+
     def test_manufacturer_str(self):
         manufacturer = Manufacturer.objects.create(
             name="TestMan",
@@ -48,3 +55,7 @@ class ModelsTests(TestCase):
             driver.get_absolute_url(),
             f"/drivers/{driver.id}/"
         )
+
+    def test_driver_creation(self):
+        driver = get_user_model().objects.get(username="test_user")
+        self.assertEqual(driver.license_number, "12345678")
