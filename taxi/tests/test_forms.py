@@ -4,12 +4,14 @@ from taxi.forms import DriverCreationForm
 
 
 class FormTests(TestCase):
+    @pytest.mark.parametrize("license_number, expected_result", [
+        ("111", False),
+        ("aaa", False),
+        ("aaa11111", False),
+        ("aaaaaaaa", False),
+        ("AAA11111", True),
+    ])
     def test_license_number_is_valid(self):
-        license_numbers = [
-            "111", "aaa", "aaa11111", "aaaaaaaa", "AAA11111",
-        ]
-        result = [False, False, False, False, True]
-
         for index, license_number in enumerate(license_numbers):
             form = DriverCreationForm(
                 data={
