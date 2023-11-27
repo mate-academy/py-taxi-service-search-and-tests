@@ -1,3 +1,4 @@
+import pytest
 from django.test import TestCase
 
 from taxi.forms import DriverCreationForm
@@ -20,8 +21,6 @@ class FormTests(TestCase):
             "last_name": "Last_name",
             "license_number": license_number,
         }
-
         form = DriverCreationForm(data=form_data)
         print(form.is_valid())
         assert form.is_valid() == expected_result
-        
