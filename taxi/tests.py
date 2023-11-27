@@ -64,7 +64,7 @@ class SearchFormTests(TestCase):
     def test_car_search_form_empty(self):
         response = self.client.get(
             reverse(
-            "taxi:car-list"), {"model_": ""}
+                "taxi:car-list"), {"model_": ""}
         )
         self.assertEqual(
             response.context["car_list"].count(), Car.objects.count()
@@ -85,7 +85,7 @@ class SearchFormTests(TestCase):
     def test_view_car_detail(self):
         response = self.client.get(
             reverse(
-            "taxi:car-detail", kwargs={"pk": self.car.pk}
+                "taxi:car-detail", kwargs={"pk": self.car.pk}
             )
         )
         self.assertEqual(response.context["car"], self.car)
@@ -93,7 +93,7 @@ class SearchFormTests(TestCase):
     def test_view_car_detail_no_results(self):
         response = self.client.get(
             reverse(
-            "taxi:car-detail", kwargs={"pk": 100}
+                "taxi:car-detail", kwargs={"pk": 100}
             )
         )
         self.assertEqual(response.status_code, 404)
