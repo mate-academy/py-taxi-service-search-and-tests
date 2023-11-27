@@ -13,23 +13,21 @@ class ModelTest(TestCase):
                          f" {manufacturer.country}")
 
     def test_driver_str(self):
-        username = "test"
-        first_name = "test_first"
-        last_name = "last_name"
-        license_number = "AAA12345"
-        password = "password"
-        driver = get_user_model().objects.create_user(
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-            license_number=license_number,
-            password=password,
-        )
-        self.assertEqual(driver.username, username)
-        self.assertEqual(driver.first_name, first_name)
-        self.assertEqual(driver.last_name, last_name)
-        self.assertEqual(driver.license_number, license_number)
-        self.assertTrue(driver.check_password(password))
+        driver_data = {
+            "username": "test",
+            "first_name": "test_first",
+            "last_name": "last_name",
+            "license_number": "AAA12345",
+            "password": "password",
+        }
+
+        driver = get_user_model().objects.create_user(**driver_data)
+
+        self.assertEqual(driver.username, driver_data["username"])
+        self.assertEqual(driver.first_name, driver_data["first_name"])
+        self.assertEqual(driver.last_name, driver_data["last_name"])
+        self.assertEqual(driver.license_number, driver_data["license_number"])
+        self.assertTrue(driver.check_password(driver_data["password"]))
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(name="test_name",
@@ -38,4 +36,5 @@ class ModelTest(TestCase):
                                  manufacturer=manufacturer)
         self.assertEqual(
             str(car),
-            f"{car.model} {car.manufacturer.name}")
+            f"{car.model} {car.manufacturer.name}"
+        )

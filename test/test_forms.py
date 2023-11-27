@@ -1,4 +1,6 @@
+import pytest
 from django.test import TestCase
+from parameterized import parameterized
 
 from taxi.forms import DriverCreationForm
 
@@ -18,28 +20,28 @@ class FormsTest(TestCase):
         form = DriverCreationForm(data=form_data)
         return form
 
+    @pytest.mark.parametrize(
+        "invalid_license_number",
+        [
+            "NNN1234",
+            "aQN12342",
+            "QW12342",
+        ],
+    )
+
     def test_create_driver_form_with_valid_data(self):
         form = self.create_form_with_data(self.valid_form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, self.valid_form_data)
 
-    def test_create_driver_form_invalid_len_numbers_license_number(self):
-        invalid_data = self.valid_form_data.copy()
-        invalid_data["license_number"] = "NNN1234"
-        form = self.create_form_with_data(invalid_data)
-        self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, invalid_data)
+    @parameterized.expand([
+        ("NNN1234",),
+        ("aQN12342",),
+        ("QW12342",),
+    ])
 
-    def test_create_driver_form_invalid_letter_license_number(self):
-        invalid_data = self.valid_form_data.copy()
-        invalid_data["license_number"] = "aQN12342"
-        form = self.create_form_with_data(invalid_data)
+    def test_create_driver_form_invalid_license_numbers(self, invalid_license_number):
+        self.valid_form_data["license_number"] = invalid_license_number
+        form = self.create_form_with_data(self.valid_form_data)
         self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, invalid_data)
-
-    def test_create_driver_form_invalid_len_letters_license_number(self):
-        invalid_data = self.valid_form_data.copy()
-        invalid_data["license_number"] = "QW12342"
-        form = self.create_form_with_data(invalid_data)
-        self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, invalid_data)
+        self.assertNotEqual(form.cleaned_data, self.valid_form_data)
