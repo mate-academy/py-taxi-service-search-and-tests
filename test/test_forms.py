@@ -28,7 +28,6 @@ class FormsTest(TestCase):
             "QW12342",
         ],
     )
-
     def test_create_driver_form_with_valid_data(self):
         form = self.create_form_with_data(self.valid_form_data)
         self.assertTrue(form.is_valid())
@@ -39,8 +38,7 @@ class FormsTest(TestCase):
         ("aQN12342",),
         ("QW12342",),
     ])
-
-    def test_create_driver_form_invalid_license_numbers(self, invalid_license_number):
+    def test_create_driver_invalid_license_num(self, invalid_license_number):
         self.valid_form_data["license_number"] = invalid_license_number
         form = self.create_form_with_data(self.valid_form_data)
         self.assertFalse(form.is_valid())
