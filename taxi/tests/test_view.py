@@ -123,7 +123,10 @@ class CarListViewTest(TestCase):
         self.client.force_login(self.user)
         manufacturer = Manufacturer.objects.create(name="Subaru test")
         Car.objects.bulk_create([
-            Car(model=f"Model {i}", manufacturer=manufacturer) for i in range(10)
+            Car(
+                model=f"Model {i}",
+                manufacturer=manufacturer
+            ) for i in range(10)
         ])
 
     def test_pagination(self):

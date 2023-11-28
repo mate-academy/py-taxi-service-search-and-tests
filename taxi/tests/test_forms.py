@@ -64,27 +64,27 @@ class FormTests(TestCase):
 
     def test_car_form_invalid(self):
         form_data = {
-            'model': 'TestModel',
-            'manufacturers': [],
+            "model": "TestModel",
+            "manufacturers": [],
         }
         form = CarForm(data=form_data)
         self.assertFalse(form.is_valid())
 
     def test_driver_creation_form_invalid(self):
         form_data = {
-            'username': 'test_user',
-            'password1': 'test_password',
-            'password2': 'test_password',
-            'license_number': 'invalid_license_number',
-            'first_name': 'John',
-            'last_name': 'Doe',
+            "username": "test_user",
+            "password1": "test_password",
+            "password2": "test_password",
+            "license_number": "invalid_license_number",
+            "first_name": "John",
+            "last_name": "Doe",
         }
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
 
     def test_driver_license_update_form_invalid(self):
         form_data = {
-            'license_number': 'invalid_license_number',
+            "license_number": "invalid_license_number",
         }
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
