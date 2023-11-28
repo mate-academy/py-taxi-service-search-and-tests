@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
+from django.urls import reverse
 
 
 class AdminSiteTests(TestCase):
@@ -17,7 +18,7 @@ class AdminSiteTests(TestCase):
         )
 
     def test_driver_license_number(self):
-        url = "http://127.0.0.1:8000/admin/taxi/driver/"
-        res = self.client.get(url)
+        url = reverse("admin:taxi_driver_changelist")
+        response = self.client.get(url)
 
-        self.assertContains(res, self.driver.license_number)
+        self.assertContains(response, self.driver.license_number)

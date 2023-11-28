@@ -14,9 +14,9 @@ class PublicManufacturerTest(TestCase):
         self.client = Client()
 
     def test_login_required(self):
-        res = self.client.get(MANUFACTURER_URL)
+        response = self.client.get(MANUFACTURER_URL)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertNotEqual(response.status_code, 200)
 
 
 class PrivateManufacturerTest(TestCase):
@@ -31,8 +31,8 @@ class PrivateManufacturerTest(TestCase):
         Manufacturer.objects.create(name="test")
         Manufacturer.objects.create(name="test1")
 
-        res = self.client.get(MANUFACTURER_URL)
-        self.assertEquals(res.status_code, 200)
+        response = self.client.get(MANUFACTURER_URL)
+        self.assertEquals(response.status_code, 200)
 
     def test_search_manufacturer_by_name(self):
         Manufacturer.objects.create(name="test")
