@@ -24,14 +24,14 @@ class CarModelSearchForm(forms.Form):
         "T, Yaris, toy",
         "Ford, Focus, ford",
         "Mi, lancer, mits",
-        "Lincoln, MKZ, lincoln"
+        "Lincoln, MKZ, lincoln",
     ]
 
     def __init__(self, *args, **kwargs):
         super(CarModelSearchForm, self).__init__(*args, **kwargs)
-        self.fields[
-            "model_"].widget.attrs[
-            "placeholder"] = f"ex: {random.choice(self.example_list)}"
+        self.fields["model_"].widget.attrs[
+            "placeholder"
+        ] = f"ex: {random.choice(self.example_list)}"
 
     model_ = forms.CharField(
         max_length=255,
@@ -60,14 +60,14 @@ class DriversUsernameSearchForm(forms.Form):
         "mike, MIKE, MI",
         "alex, ALEX, a",
         "bob, BOB, bo",
-        "alice, ALICE, ALI"
+        "alice, ALICE, ALI",
     ]
 
     def __init__(self, *args, **kwargs):
         super(DriversUsernameSearchForm, self).__init__(*args, **kwargs)
-        self.fields[
-            "username"].widget.attrs[
-            "placeholder"] = f"ex: {random.choice(self.example_list)}"
+        self.fields["username"].widget.attrs[
+            "placeholder"
+        ] = f"ex: {random.choice(self.example_list)}"
 
     username = forms.CharField(
         max_length=255,
@@ -83,14 +83,14 @@ class ManufacturersNameSearchForm(forms.Form):
         "FCA, fCA",
         "Ford, ford",
         "Mitsubishi, mits",
-        "Lin, LINCOLN"
+        "Lin, LINCOLN",
     ]
 
     def __init__(self, *args, **kwargs):
         super(ManufacturersNameSearchForm, self).__init__(*args, **kwargs)
-        self.fields[
-            "name"].widget.attrs[
-            "placeholder"] = f"ex: {random.choice(self.example_list)}"
+        self.fields["name"].widget.attrs[
+            "placeholder"
+        ] = f"ex: {random.choice(self.example_list)}"
 
     name = forms.CharField(
         max_length=255,
