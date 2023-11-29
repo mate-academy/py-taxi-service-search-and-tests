@@ -1,8 +1,3 @@
-import os
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taxi_service.settings")
-django.setup()
-
 from django.test import TestCase
 from taxi.forms import (
     DriverCreationForm,
