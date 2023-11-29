@@ -1,11 +1,12 @@
 import pytest
+from parameterized import parameterized
 from django.test import TestCase
 
 from taxi.forms import DriverCreationForm
 
 
 class FormTests(TestCase):
-    @pytest.mark.parametrize("license_number, expected_result", [
+    @parameterized.expand([
         ("111", False),
         ("aaa", False),
         ("aaa11111", False),
@@ -22,5 +23,5 @@ class FormTests(TestCase):
             "license_number": license_number,
         }
         form = DriverCreationForm(data=form_data)
-        print(form.is_valid())
-        assert form.is_valid() == expected_result
+        form.is_valid()
+        self.assertEqual(form.is_valid(), expected_result)
