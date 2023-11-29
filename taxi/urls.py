@@ -19,6 +19,7 @@ from .views import (
     toggle_assign_to_car,
 )
 
+
 urlpatterns = [
     path("", index, name="index"),
     path(
