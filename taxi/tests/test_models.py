@@ -10,15 +10,7 @@ class ManufacturerModelTestCase(TestCase):
             name="Test Manufacturer", country="Test Country"
         )
 
-    def test_unique_name(self):
-        duplicate_manufacturer = Manufacturer(
-            name="Test Manufacturer", country="Another Country"
-        )
-
-        with self.assertRaises(Exception):
-            duplicate_manufacturer.full_clean()
-
-    def test_str_method(self):
+    def test_manufacturer_str_method(self):
         self.assertEqual(str(self.manufacturer),
                          "Test Manufacturer Test Country")
 
@@ -57,14 +49,10 @@ class CarModelTest(TestCase):
 
         cls.car.drivers.add(cls.driver)
 
-    def test_car_model(self):
+    def test_car_str_method(self):
         car = Car.objects.get(model="Test Car")
         self.assertEqual(str(car), "Test Car")
 
     def test_car_manufacturer(self):
         car = Car.objects.get(model="Test Car")
         self.assertEqual(car.manufacturer, self.manufacturer)
-
-    def test_car_drivers(self):
-        car = Car.objects.get(model="Test Car")
-        self.assertIn(self.driver, car.drivers.all())

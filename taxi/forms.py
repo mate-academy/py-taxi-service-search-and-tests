@@ -54,7 +54,7 @@ def validate_license_number(
 
 class CarSearchForm(forms.Form):
     model = forms.CharField(
-        max_length=255,
+        max_length=64,
         required=False,
         label="",
         widget=forms.TextInput(
@@ -67,7 +67,7 @@ class CarSearchForm(forms.Form):
 
 class ManufacturerSearchForm(forms.Form):
     name = forms.CharField(
-        max_length=255,
+        max_length=63,
         required=False,
         label="",
         widget=forms.TextInput(
@@ -80,7 +80,7 @@ class ManufacturerSearchForm(forms.Form):
 
 class DriversSearchForm(forms.Form):
     username = forms.CharField(
-        max_length=255,
+        max_length=63,
         required=False,
         label="",
         widget=forms.TextInput(

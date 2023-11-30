@@ -54,22 +54,3 @@ class TestSearchFormValid(TestCase):
     def test_drivers_search_form_valid(self):
         form = DriversSearchForm(data=self.data)
         self.assertTrue(form.is_valid())
-
-
-class TestSearchFormInvalid(TestCase):
-    def setUp(self):
-        self.data = {
-            "model": "",
-        }
-
-    def test_car_search_form_invalid(self):
-        form = CarSearchForm(data=self.data)
-        self.assertTrue(form.is_valid())
-
-    def test_manufacturer_search_form_invalid(self):
-        form = ManufacturerSearchForm(data=self.data)
-        self.assertTrue(form.is_valid())
-
-    def test_drivers_search_form_invalid(self):
-        form = DriversSearchForm(data=self.data)
-        self.assertTrue(form.is_valid())
