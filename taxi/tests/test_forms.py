@@ -117,7 +117,7 @@ class DriverSearchFormTest(TestCase):
     def test_driver_search_form_render(self):
         rendered_form = DriverSearchForm().as_p()
         self.assertIn(
-            "placeholder='Search by username'", rendered_form
+            'placeholder="Search by username"', rendered_form
         )
 
 
@@ -134,7 +134,7 @@ class CarSearchFormTest(TestCase):
 
     def test_car_search_form_render(self):
         rendered_form = CarSearchForm().as_p()
-        self.assertIn("placeholder='Search by model'", rendered_form)
+        self.assertIn('placeholder="Search by model"', rendered_form)
 
 
 class ManufacturerSearchFormTest(TestCase):
@@ -150,4 +150,4 @@ class ManufacturerSearchFormTest(TestCase):
 
     def test_manufacturer_search_form_render(self):
         rendered_form = ManufacturerSearchForm().as_p()
-        self.assertIn("placeholder='Search by name'", rendered_form)
+        self.assertIn('placeholder="Search by name"', rendered_form)
