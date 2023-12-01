@@ -11,22 +11,15 @@ CAR_URL = reverse("taxi:car-list")
 
 
 class FormsTests(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.user = get_user_model().objects.create_user(
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
             username="john11",
             first_name="John",
             last_name="Doe",
             password="111222John",
             license_number="ADM56984",
         )
-
-    def setUp(self):
-        self.client.force_login(self.user)
-
-    def test_driver_form_with_valid_license(self):
-        form_data = {
+        self.form_data = {
             "username": "user",
             "password1": "1122User",
             "password2": "1122User",
@@ -34,48 +27,35 @@ class FormsTests(TestCase):
             "first_name": "User_name",
             "last_name": "User_last",
         }
-        form = DriverCreationForm(data=form_data)
+
+        self.client.force_login(self.user)
+
+    def test_driver_form_with_valid_license(self):
+        self.form_data["license_number"] = "HDM56984"
+
+        form = DriverCreationForm(data=self.form_data)
         self.assertTrue(form.is_valid(), form.errors)
-        self.assertEqual(form.cleaned_data, form_data)
+        self.assertEqual(form.cleaned_data, self.form_data)
 
     def test_driver_form_invalid_uppercase_license(self):
-        form_data = {
-            "username": "user",
-            "password1": "1122User",
-            "password2": "1122User",
-            "license_number": "bdm56984",
-            "first_name": "User_name",
-            "last_name": "User_last",
-        }
-        form = DriverCreationForm(data=form_data)
+        self.form_data["license_number"] = "bdm56984"
+
+        form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form_data)
+        self.assertNotEqual(form.cleaned_data, self.form_data)
 
     def test_driver_form_invalid_length_license(self):
-        form_data = {
-            "username": "user",
-            "password1": "1122User",
-            "password2": "1122User",
-            "license_number": "BDM56",
-            "first_name": "User_name",
-            "last_name": "User_last",
-        }
-        form = DriverCreationForm(data=form_data)
+        self.form_data["license_number"] = "BDM56"
+
+        form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form_data)
+        self.assertNotEqual(form.cleaned_data, self.form_data)
 
     def test_driver_last_5_characters_license(self):
-        form_data = {
-            "username": "user",
-            "password1": "1122User",
-            "password2": "1122User",
-            "license_number": "BDM125AS",
-            "first_name": "User_name",
-            "last_name": "User_last",
-        }
-        form = DriverCreationForm(data=form_data)
+        self.form_data["license_number"] = "BDM125AS"
+        form = DriverCreationForm(data=self.form_data)
         self.assertFalse(form.is_valid())
-        self.assertNotEqual(form.cleaned_data, form_data)
+        self.assertNotEqual(form.cleaned_data, self.form_data)
 
     def test_driver_search_by_username(self):
         get_user_model().objects.create(

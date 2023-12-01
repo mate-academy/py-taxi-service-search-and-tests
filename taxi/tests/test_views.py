@@ -1,3 +1,4 @@
+import pytest
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -8,46 +9,40 @@ from taxi.forms import (
 )
 from taxi.models import Car, Manufacturer
 
+
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 DRIVER_URL = reverse("taxi:driver-list")
 CAR_URL = reverse("taxi:car-list")
 HOME_PAGE = reverse("taxi:index")
 
 
-class PublicPageTest(TestCase):
-    def test_login_required(self):
-        res1 = self.client.get(MANUFACTURER_URL)
-        res2 = self.client.get(DRIVER_URL)
-        res3 = self.client.get(CAR_URL)
-        res4 = self.client.get(HOME_PAGE)
-
-        self.assertNotEqual(res1.status_code, 200)
-        self.assertNotEqual(res2.status_code, 200)
-        self.assertNotEqual(res3.status_code, 200)
-        self.assertNotEqual(res4.status_code, 200)
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "url",
+    [MANUFACTURER_URL, DRIVER_URL, CAR_URL, HOME_PAGE]
+)
+def test_public_page(client, url):
+    response = client.get(url)
+    assert response.status_code != 200
 
 
-class PrivatePageTest(TestCase):
-    def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username="john11",
-            first_name="John",
-            last_name="Doe",
-            password="111222John",
-            license_number="ADM56984",
-        )
-        self.client.force_login(self.user)
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "url",
+    [MANUFACTURER_URL, DRIVER_URL, CAR_URL, HOME_PAGE]
+)
+def test_private_page(client, url):
+    user = get_user_model().objects.create(
+        username="john11",
+        first_name="John",
+        last_name="Doe",
+        password="111222John",
+        license_number="ADM56984"
+    )
+    client.force_login(user)
 
-    def test_retrieve_car_manufacture_driver_list(self):
-        res1 = self.client.get(MANUFACTURER_URL)
-        res2 = self.client.get(DRIVER_URL)
-        res3 = self.client.get(CAR_URL)
-        res4 = self.client.get(HOME_PAGE)
-
-        self.assertEqual(res1.status_code, 200)
-        self.assertEqual(res2.status_code, 200)
-        self.assertEqual(res3.status_code, 200)
-        self.assertEqual(res4.status_code, 200)
+    response = client.get(url)
+    assert response.status_code == 200
 
 
 class CarListTest(TestCase):
@@ -57,7 +52,7 @@ class CarListTest(TestCase):
             first_name="John",
             last_name="Doe",
             password="111222John",
-            license_number="ADM56984",
+            license_number="ADM56984"
         )
         self.client.force_login(self.user)
 
@@ -107,7 +102,7 @@ class DriverListTest(TestCase):
             first_name="John",
             last_name="Doe",
             password="111222John",
-            license_number="ADM56984",
+            license_number="ADM56984"
         )
         self.client.force_login(self.user)
 
@@ -148,7 +143,7 @@ class ManufacturerListTest(TestCase):
             first_name="John",
             last_name="Doe",
             password="111222John",
-            license_number="ADM56984",
+            license_number="ADM56984"
         )
         self.client.force_login(self.user)
 
