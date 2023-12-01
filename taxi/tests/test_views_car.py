@@ -1,14 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
-from taxi.forms import CarForm
 from taxi.models import Car, Manufacturer
 
 CAR_LIST_URL = reverse("taxi:car-list")
-
-
-# CAR_CREATE_URL = reverse("taxi:cars-create")
+CAR_CREATE_URL = reverse("taxi:car-create")
 
 
 class PublicCarListViewTest(TestCase):
@@ -83,13 +80,113 @@ class PrivateCarCreateViewTest(TestCase):
             name="BMW",
             country="Germany"
         )
+
         self.form_data = {
             "model": "X5",
             "manufacturer": manufacturer.id,
-            "drivers": [],
+            "drivers": [self.user.id, ],
         }
 
     def test_create_car(self):
-        self.client.post(reverse("taxi:car-create"), data=self.form_data)
-        # new_car = Car.objects.get(model=self.form_data["model"])
-        # self.assertEqual(new_car.model, self.form_data["model"])
+        self.client.post(CAR_CREATE_URL, data=self.form_data)
+        new_car = Car.objects.get(model=self.form_data["model"])
+        self.assertEqual(new_car.model, self.form_data["model"])
+
+    def test_view_car_create_success_url(self):
+        response = self.client.post(
+            CAR_CREATE_URL,
+            data=self.form_data
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, "/cars/")
+        self.assertRedirects(response, reverse_lazy("taxi:car-list"))
+
+
+class PrivateCarUpdateViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test_user",
+            password="test123",
+            license_number="TST12345",
+        )
+        self.client.force_login(self.user)
+
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany",
+        )
+
+        self.car = Car.objects.create(
+            model="X5",
+            manufacturer=manufacturer,
+        )
+
+        user_objects_for_car = get_user_model().objects.all()
+        self.car.drivers.set(user_objects_for_car)
+        self.car.save()
+
+        self.form_data = {
+            "model": "X3",
+            "manufacturer": manufacturer.id,
+            "drivers": [self.user.id, ],
+        }
+
+    def test_update_car(self):
+        response = self.client.post(reverse(
+            "taxi:car-update",
+            kwargs={"pk": self.car.id}),
+            self.form_data
+        )
+        self.assertEqual(response.status_code, 302)
+        self.car.refresh_from_db()
+        self.assertEqual(self.car.model, "X3")
+        self.assertEqual(str(self.car.drivers.get(id=1)), "test_user ( )")
+
+    def test_car_update_success_url(self):
+        response = self.client.post(reverse(
+            "taxi:car-update",
+            kwargs={"pk": self.car.id}),
+            self.form_data
+        )
+        self.assertEqual(response.status_code, 302)
+        self.car.refresh_from_db()
+        self.assertRedirects(response, "/cars/")
+        self.assertRedirects(response, reverse_lazy("taxi:car-list"))
+
+
+class PrivateCarDeleteViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="test123",
+            license_number="TST12345",
+        )
+        self.client.force_login(self.user)
+
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany",
+        )
+
+        self.car = Car.objects.create(
+            model="X5",
+            manufacturer=manufacturer,
+        )
+
+    def test_car_delete_get_request(self):
+        response = self.client.get(reverse(
+            "taxi:car-delete",
+            kwargs={"pk": self.car.id})
+        )
+        self.assertContains(response, "Delete car?")
+
+    def test_car_delete_post_request(self):
+        post_response = self.client.post(reverse(
+            "taxi:car-delete",
+            kwargs={"pk": self.car.id})
+        )
+        self.assertRedirects(
+            post_response,
+            reverse("taxi:car-list"),
+            status_code=302
+        )
