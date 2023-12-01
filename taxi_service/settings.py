@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "uni_form"
 
 WSGI_APPLICATION = "taxi_service.wsgi.application"
 
