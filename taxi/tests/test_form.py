@@ -12,6 +12,13 @@ class FormsTests(TestCase):
             username="test1", password="test1pass"
         )
         self.client.force_login(self.user)
+        self.form_data = {
+            "username": "test1user",
+            "password1": "test1pass",
+            "password2": "test1pass",
+            "first_name": "first1",
+            "last_name": "last1",
+        }
 
     def test_driver_search(self):
         Driver.objects.create(
@@ -49,59 +56,31 @@ class FormsTests(TestCase):
         self.assertEqual(list(response.context["car_list"]), list(cars))
 
     def test_driver_correct_license(self):
-        form_data = {
-            "username": "test1user",
-            "password1": "testpass1",
-            "password2": "testpass1",
-            "license_number": "ABC12345",
-            "first_name": "first1",
-            "last_name": "last1",
-        }
-        form1 = DriverCreationForm(data=form_data)
-        form2 = DriverLicenseUpdateForm(data=form_data)
+        self.form_data["license_number"] = "ABC12345"
+        form1 = DriverCreationForm(data=self.form_data)
+        form2 = DriverLicenseUpdateForm(data=self.form_data)
         self.assertTrue(form1.is_valid())
-        self.assertEqual(form1.cleaned_data, form_data)
+        self.assertEqual(form1.cleaned_data, self.form_data)
         self.assertTrue(form2.is_valid())
 
     def test_driver_noletters_license(self):
-        form_data = {
-            "username": "test1user",
-            "password1": "test1pass",
-            "password2": "test1pass",
-            "license_number": "12345678",
-            "first_name": "first1",
-            "last_name": "last1",
-        }
-        form1 = DriverCreationForm(data=form_data)
+        self.form_data["license_number"] = "12345678"
+        form1 = DriverCreationForm(data=self.form_data)
         self.assertFalse(form1.is_valid())
-        form2 = DriverLicenseUpdateForm(data=form_data)
+        form2 = DriverLicenseUpdateForm(data=self.form_data)
         self.assertFalse(form2.is_valid())
 
     def test_driver_wrong_len_license(self):
-        form_data = {
-            "username": "test1user",
-            "password1": "test1pass",
-            "password2": "test1pass",
-            "license_number": "ABC12345678",
-            "first_name": "first1",
-            "last_name": "last1",
-        }
-        form1 = DriverCreationForm(data=form_data)
+        self.form_data["license_number"] = "ABCABCA12356B"
+        form1 = DriverCreationForm(data=self.form_data)
         self.assertFalse(form1.is_valid())
-        form2 = DriverLicenseUpdateForm(data=form_data)
+        form2 = DriverLicenseUpdateForm(data=self.form_data)
         self.assertFalse(form2.is_valid())
 
     def test_driver_nodijits_license(self):
-        form_data = {
-            "username": "test1user",
-            "password1": "test1pass",
-            "password2": "test1pass",
-            "license_number": "ABCABCAB",
-            "first_name": "first1",
-            "last_name": "last1",
-        }
-        form1 = DriverCreationForm(data=form_data)
+        self.form_data["license_number"] = "ABCABCAB"
+        form1 = DriverCreationForm(data=self.form_data)
         self.assertFalse(form1.is_valid())
-        self.assertNotEqual(form1.cleaned_data, form_data)
-        form2 = DriverLicenseUpdateForm(data=form_data)
+        self.assertNotEqual(form1.cleaned_data, self.form_data)
+        form2 = DriverLicenseUpdateForm(data=self.form_data)
         self.assertFalse(form2.is_valid())
