@@ -120,15 +120,12 @@ class PrivateCarUpdateViewTest(TestCase):
             model="X5",
             manufacturer=manufacturer,
         )
-
-        user_objects_for_car = get_user_model().objects.all()
-        self.car.drivers.set(user_objects_for_car)
-        self.car.save()
+        self.car.drivers.set([self.user.pk, ])
 
         self.form_data = {
             "model": "X3",
             "manufacturer": manufacturer.id,
-            "drivers": [self.user.id, ],
+            "drivers": [self.user.pk, ],
         }
 
     def test_update_car(self):
@@ -140,7 +137,7 @@ class PrivateCarUpdateViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.car.refresh_from_db()
         self.assertEqual(self.car.model, "X3")
-        self.assertEqual(str(self.car.drivers.get(id=1)), "test_user ( )")
+        self.assertEqual(self.car.drivers.count(), 1)
 
     def test_car_update_success_url(self):
         response = self.client.post(reverse(

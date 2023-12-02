@@ -74,6 +74,30 @@ class DriverModelTests(TestCase):
         self.assertEqual(str(driver.license_number), self.license_number)
         self.assertTrue(driver.check_password(self.password))
 
+    def test_driver_has_a_car(self):
+        manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country="TestCountry"
+        )
+        car = Car.objects.create(
+            model="TestModel",
+            manufacturer=manufacturer,
+        )
+
+        driver1 = get_user_model().objects.create_user(
+            username="test_user1",
+            password="test123",
+            license_number="TST55555",
+        )
+        driver2 = get_user_model().objects.create_user(
+            username="test_user2",
+            password="test123",
+            license_number="TST11111",
+        )
+        driver1.cars.add(car)
+        driver2.cars.add(car)
+        self.assertEqual(car.drivers.count(), 2)
+
     def test_driver_str(self):
         driver = get_user_model().objects.get(id=1)
         self.assertEqual(
@@ -92,7 +116,7 @@ class CarModelTests(TestCase):
             name="TestName",
             country="TestCountry"
         )
-        Car.objects.create(
+        self.car = Car.objects.create(
             model="TestModel",
             manufacturer=manufacturer,
         )
@@ -111,6 +135,20 @@ class CarModelTests(TestCase):
         car = Car.objects.get(id=1)
         field_label = car.manufacturer._meta.get_field("name").verbose_name
         self.assertEqual(field_label, "name")
+
+    def test_car_has_a_driver(self):
+        driver1 = get_user_model().objects.create_user(
+            username="test_user1",
+            password="test123",
+            license_number="TST55555",
+        )
+        driver2 = get_user_model().objects.create_user(
+            username="test_user2",
+            password="test123",
+            license_number="TST11111",
+        )
+        self.car.drivers.set([driver1.pk, driver2.pk])
+        self.assertEqual(self.car.drivers.count(), 2)
 
     def test_car_str(self):
         car = Car.objects.get(id=1)
