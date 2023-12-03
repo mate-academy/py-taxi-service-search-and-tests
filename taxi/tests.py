@@ -76,7 +76,7 @@ class ViewTest(TestCase):
     ]
 
     @parameterized.expand(list_and_create_urls)
-    def test_authenticated_user(self, view_name):
+    def test_can_user_be_authenticated(self, view_name):
         self.client.login(
             username="test_user",
             password="test_pass"
