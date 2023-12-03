@@ -78,3 +78,30 @@ class DriverListViewTests(TestCase):
 
         self.assertContains(response, self.driver1.username)
         self.assertContains(response, self.driver2.username)
+
+        def test_license_display(self):
+            response = self.client.get(reverse('taxi:driver-list'))
+
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, self.driver1.license_number)
+            self.assertContains(response, self.driver2.license_number)
+
+    def test_no_license_display(self):
+        response = self.client.get(reverse('taxi:driver-list'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'InvalidLicense123')
+
+    def test_authenticated_user_access(self):
+        response = self.client.get(reverse('taxi:driver-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.driver1, response.context['driver_list'])
+        self.assertIn(self.driver2, response.context['driver_list'])
+        self.assertContains(response, self.driver1.username)
+        self.assertContains(response, self.driver2.username)
+
+    def test_non_authenticated_user_access(self):
+        self.client.logout()
+        response = self.client.get(reverse('taxi:driver-list'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, f'/accounts/login/?next={reverse("taxi:driver-list")}')
