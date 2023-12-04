@@ -38,7 +38,7 @@ class ModelsTestsSetUp(TestCase):
             str(self.manufacturer),
             f"{self.manufacturer.name} "
             f"{self.manufacturer.country}"
-    )
+        )
 
     def test_driver_str(self) -> None:
         self.assertEqual(
