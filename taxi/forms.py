@@ -6,6 +6,19 @@ from django.core.exceptions import ValidationError
 from taxi.models import Car, Driver
 
 
+class ManufacturerNameSearchForm(forms.Form):
+    manufacturer_name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by manufacturer name"
+            }
+        )
+    )
+
+
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
@@ -15,6 +28,19 @@ class CarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = "__all__"
+
+
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by model"
+            }
+        )
+    )
 
 
 class DriverCreationForm(UserCreationForm):
@@ -39,8 +65,21 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
+class DriverUserNameSearchForm(forms.Form):
+    user_name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by Username"
+            }
+        )
+    )
+
+
 def validate_license_number(
-    license_number,
+        license_number,
 ):  # regex validation is also possible here
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
