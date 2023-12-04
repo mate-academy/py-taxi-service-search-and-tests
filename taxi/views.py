@@ -6,8 +6,13 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, CarsSearchForm, ManufacturesSearchForm, \
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm, CarsSearchForm,
+    ManufacturesSearchForm,
     DriversSearchForm
+)
 from .models import Driver, Car, Manufacturer
 
 

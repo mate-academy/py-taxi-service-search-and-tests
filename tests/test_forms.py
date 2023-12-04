@@ -29,7 +29,7 @@ class FormsTests(TestCase):
             data={"license_number": number}
         )
 
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self) -> None:
+    def test_driver_creation_form_is_valid(self) -> None:
         self.assertTrue(self.form.is_valid())
         self.assertEqual(self.form.cleaned_data, self.driver_form_data)
 
@@ -65,7 +65,9 @@ class TestSearchForms(TestCase):
         self.assertTrue(self.get_search_form_by_name("driver").is_valid())
 
     def test_manufacturer_search_form(self) -> None:
-        self.assertTrue(self.get_search_form_by_name("manufacturer").is_valid())
+        self.assertTrue(
+            self.get_search_form_by_name("manufacturer").is_valid()
+        )
 
     def test_car_search_form(self) -> None:
         self.assertTrue(self.get_search_form_by_name("car"))

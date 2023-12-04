@@ -69,7 +69,10 @@ class PrivateManufacturerTest(TestViewsSetUp):
             "taxi/manufacturer_list.html")
 
     def test_search_manufacturer_by_name(self) -> None:
-        response = self.client.get(MANUFACTURER_URL, {"name": self.search_name})
+        response = self.client.get(
+            MANUFACTURER_URL,
+            {"name": self.search_name}
+        )
         context_manufacturer = Manufacturer.objects.filter(
             name__icontains=self.search_name
         )
