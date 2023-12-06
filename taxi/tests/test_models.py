@@ -20,7 +20,10 @@ class ModelTests(TestCase):
             name="Test_manufacturer",
             country="Test_country"
         )
-        car = Car.objects.create(model="testa_model_test", manufacturer=manufacturer)
+        car = Car.objects.create(
+            model="testa_model_test",
+            manufacturer=manufacturer
+        )
         self.assertEqual(str(car), car.model)
 
     def test_create_driver_with_license_number(self):
