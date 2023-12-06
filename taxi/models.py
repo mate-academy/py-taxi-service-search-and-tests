@@ -14,7 +14,10 @@ class Manufacturer(models.Model):
         return f"{self.name} {self.country}"
 
     def get_absolute_url(self):
-        return reverse("taxi:manufacturer-detail", kwargs={"pk": self.pk})
+        return reverse(
+            "taxi:manufacturer-detail",
+            kwargs={"pk": self.pk}
+        )
 
 
 class Driver(AbstractUser):

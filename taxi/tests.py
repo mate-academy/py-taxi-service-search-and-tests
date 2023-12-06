@@ -45,8 +45,8 @@ class SearchFormTests(TestCase):
         )
         self.assertTrue(
             any(car.model == "x5"
-                for car in response.context["car_list"]
-                ))
+                for car in response.context["car_list"])
+        )
 
     def test_car_search_form_no_results(self):
         response = self.client.get(
