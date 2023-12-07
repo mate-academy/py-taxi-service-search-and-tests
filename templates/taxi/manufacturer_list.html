@@ -30,7 +30,7 @@
             <td><a style="color: red" href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">Delete</a></td>
         </tr>
       {% endfor %}
-      </table>
+    </table>
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
