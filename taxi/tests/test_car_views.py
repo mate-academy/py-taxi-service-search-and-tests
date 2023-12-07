@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car, Driver
+from taxi.models import Manufacturer, Car
 
 
 CARS_URL = reverse("taxi:car-list")
@@ -56,7 +56,7 @@ class PrivateCarTest(TestCase):
         self.assertEqual(list(response.context["car_list"]), list(cars)[:5])
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
-    def test_retrieve_cars_second_page(self):
+    def test_retrieve_cars_last_page(self):
         response = self.client.get(CARS_URL + "?page=5")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)

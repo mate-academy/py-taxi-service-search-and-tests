@@ -18,7 +18,7 @@ class PrivateDriverTest(TestCase):
         number_of_drivers = 22
 
         for driver_id in range(number_of_drivers):
-            Driver.objects.create(
+            get_user_model().objects.create(
                 username=f"User {driver_id}",
                 password="safety123",
                 license_number=f"ABC1234{driver_id}",
@@ -34,7 +34,7 @@ class PrivateDriverTest(TestCase):
     def test_retrieve_drivers(self):
         response = self.client.get(DRIVERS_URL)
         self.assertEqual(response.status_code, 200)
-        drivers = Driver.objects.all()
+        drivers = get_user_model().objects.all()
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"])
         self.assertEqual(len(response.context["driver_list"]), 5)
@@ -54,12 +54,12 @@ class PrivateDriverTest(TestCase):
     def test_retrieve_drivers_search(self):
         response = self.client.get(DRIVERS_URL + "?username=2")
         self.assertEqual(response.status_code, 200)
-        drivers = Driver.objects.filter(username__icontains=2)
+        drivers = get_user_model().objects.filter(username__icontains=2)
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
         response = self.client.get(DRIVERS_URL + "?page=2&username=1")
         self.assertEqual(response.status_code, 200)
-        drivers = Driver.objects.filter(username__icontains=1)
+        drivers = get_user_model().objects.filter(username__icontains=1)
         self.assertEqual(
             list(response.context["driver_list"]),
             list(drivers)[5:10],
@@ -68,7 +68,7 @@ class PrivateDriverTest(TestCase):
     def test_retrieve_driver_detail(self):
         response = self.client.get(driver_detail_url(1))
         self.assertEqual(response.status_code, 200)
-        driver = Driver.objects.get(pk=1)
+        driver = get_user_model().objects.get(pk=1)
         self.assertEqual(response.context["driver"], driver)
         self.assertTemplateUsed(response, "taxi/driver_detail.html")
 
@@ -82,7 +82,9 @@ class PrivateDriverTest(TestCase):
             "password2": "user123test",
         }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = Driver.objects.get(username=form_data["username"])
+        new_driver = get_user_model().objects.get(
+            username=form_data["username"]
+        )
 
         self.assertEqual(new_driver.first_name, form_data["first_name"])
         self.assertEqual(new_driver.last_name, form_data["last_name"])
@@ -100,7 +102,7 @@ class PrivateDriverTest(TestCase):
             reverse("taxi:driver-update", args=[1]),
             data=form_data,
         )
-        driver = Driver.objects.get(pk=1)
+        driver = get_user_model().objects.get(pk=1)
 
         self.assertEqual(driver.license_number, form_data["license_number"])
 

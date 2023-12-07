@@ -62,13 +62,17 @@ class FormsTest(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
-    def test_driver_license_update_form(self):
+    def test_driver_license_update_form_invalid_data(self):
         form_data = {
             "license_number": "li32",
         }
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
-        form_data["license_number"] = "BCD32114"
+
+    def test_driver_license_update_form_valid_data(self):
+        form_data = {
+            "license_number": "BCD32114",
+        }
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
