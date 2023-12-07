@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
-from taxi.models import Manufacturer, Car, Driver
+from taxi.models import Manufacturer, Driver
 
 car_url = reverse("taxi:car-list")
 driver_url = reverse("taxi:driver-list")
@@ -70,3 +71,43 @@ class FormSearchTests(TestCase):
         self.assertEqual(
             list(response.context["manufacturer_list"]), list(context)
         )
+
+
+class DriverLicenseValidationTests(TestCase):
+    def test_license_number_should_consist_8_characters(self):
+        form_data = {
+            "license_number": "LIO1234",
+        }
+        DriverLicenseUpdateForm(data=form_data)
+        self.assertRaisesMessage(
+            ValidationError,
+            "License number should consist of 8 characters"
+        )
+
+    def test_license_number_first_3_character_should_be_uppercase_letter(self):
+        form_data_base = {
+            "license_number1": "lio12345",
+            "license_number2": "Lio12345",
+            "license_number3": "LIo12345",
+        }
+        for form_data in form_data_base:
+            DriverLicenseUpdateForm(data=form_data)
+            self.assertRaisesMessage(
+                ValidationError,
+                "First 3 characters should be uppercase letters"
+            )
+
+    def test_license_number_last_5_characters_should_be_digits(self):
+        form_data_base = {
+            "license_number1": "LIO_2345",
+            "license_number2": "LIO1_345",
+            "license_number3": "LIO12_45",
+            "license_number4": "LIO123_5",
+            "license_number5": "LIO1234_",
+        }
+        for form_data in form_data_base:
+            DriverLicenseUpdateForm(data=form_data)
+            self.assertRaisesMessage(
+                ValidationError,
+                "Last 5 characters should be digits"
+            )
