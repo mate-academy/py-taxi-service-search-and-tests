@@ -38,7 +38,7 @@ class ModelsTests(TestCase):
         driver = get_user_model().objects.get(id=user.id)
         self.assertEqual(
             driver.get_absolute_url(),
-            "/drivers/1/"
+            f"/drivers/{driver.id}/"
         )
 
     def test_create_driver_with_license_number(self):

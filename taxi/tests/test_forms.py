@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from taxi.forms import (
     DriverCreationForm,
@@ -24,12 +25,8 @@ class DriverFormsTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
-        self.assertEqual(
-            form.cleaned_data["license_number"],
-            valid_license_number
-        )
 
-    def test_clean_license_number_validation(self):
+    def test_driver_creationg_form_with_invalid_data(self):
         invalid_license_number = "TC0101012"
         form_data_invalid = {
             "username": "user",
@@ -44,7 +41,7 @@ class DriverFormsTests(TestCase):
         self.assertFalse(form_invalid.is_valid())
 
 
-class SearchFormsTesta(TestCase):
+class SearchFormsTests(TestCase):
     def setUp(self):
         self.manufacturer1 = Manufacturer.objects.create(
             name="FCA",

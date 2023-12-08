@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from taxi.models import Manufacturer, Car
@@ -137,3 +137,40 @@ class PrivateCarTest(TestCase):
             list(cars)
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
+
+
+class PaginationTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_superuser(username="admin", password="adminpass")
+        self.client = Client()
+        self.client.login(username="admin", password="adminpass")
+
+        for i in range(15):
+            manufacturer = Manufacturer.objects.create(name=f"Manufacturer {i}", country="Country {i}")
+            driver = get_user_model().objects.create_user(
+                username=f"driver{i}",
+                password="testpassword",
+                license_number=f"TC01010{i}")
+            car = Car.objects.create(model=f'Car {i}', manufacturer=manufacturer)
+            car.drivers.add(driver)
+
+    def test_manufacturer_pagination(self):
+        response = self.client.get(MANUFACTURER_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'])
+        self.assertEqual(len(response.context['manufacturer_list']), 5)
+
+    def test_car_pagination(self):
+        response = self.client.get(CAR_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'])
+        self.assertEqual(len(response.context['car_list']), 5)
+
+    def test_driver_pagination(self):
+        response = self.client.get(DRIVER_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'])
+        self.assertEqual(len(response.context['driver_list']), 5)
