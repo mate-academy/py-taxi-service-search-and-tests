@@ -12,7 +12,7 @@ from .forms import (
     CarForm,
     ManufacturerSearchForm,
     CarSearchForm,
-    DriverSearchForm
+    DriverSearchForm,
 )
 
 
@@ -47,9 +47,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = ManufacturerSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
@@ -85,13 +83,15 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
-        context["search_form"] = CarSearchForm(
-            initial={"model": model}
-        )
+        context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self):
-        queryset = super(CarListView, self).get_queryset().order_by("model", "id")
+        queryset = (
+            super(CarListView, self)
+            .get_queryset()
+            .order_by("model", "id")
+        )
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(model__icontains=form.cleaned_data["model"])

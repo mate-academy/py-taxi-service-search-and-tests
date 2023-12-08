@@ -6,7 +6,7 @@ from taxi.forms import (
     DriverCreationForm,
     ManufacturerSearchForm,
     CarSearchForm,
-    DriverSearchForm
+    DriverSearchForm,
 )
 from taxi.models import Manufacturer, Car
 
@@ -20,7 +20,7 @@ class DriverFormsTests(TestCase):
             "password2": "userpassword",
             "first_name": "user_first",
             "last_name": "user_last",
-            "license_number": valid_license_number
+            "license_number": valid_license_number,
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -34,7 +34,7 @@ class DriverFormsTests(TestCase):
             "password2": "userpassword",
             "first_name": "user_first",
             "last_name": "user_last",
-            "license_number": invalid_license_number
+            "license_number": invalid_license_number,
         }
 
         form_invalid = DriverCreationForm(data=form_data_invalid)
@@ -44,19 +44,16 @@ class DriverFormsTests(TestCase):
 class SearchFormsTests(TestCase):
     def setUp(self):
         self.manufacturer1 = Manufacturer.objects.create(
-            name="FCA",
-            country="Italy"
+            name="FCA", country="Italy"
         )
         self.manufacturer2 = Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan"
+            name="Toyota", country="Japan"
         )
 
         self.driver1 = get_user_model().objects.create_user(
             username="driver1",
             password="driverpassword1",
             license_number="TCA00001"
-
         )
         self.driver2 = get_user_model().objects.create_user(
             username="driver2",
