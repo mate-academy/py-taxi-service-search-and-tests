@@ -9,16 +9,17 @@ DRIVER_LIST_URL = reverse("taxi:driver-list")
 CAR_LIST_URL = reverse("taxi:car-list")
 
 
-
 class PublicManufacturerTest(TestCase):
     def test_login_requirement(self):
         resp = self.client.get(MANUFACTURER_LIST_URL)
         self.assertNotEqual(resp.status_code, 200)
 
+
 class PublicDriverTest(TestCase):
     def test_login_requirement(self):
         resp = self.client.get(DRIVER_LIST_URL)
         self.assertNotEqual(resp.status_code, 200)
+
 
 class PublicCarTest(TestCase):
     def test_login_requirement(self):
@@ -38,6 +39,7 @@ class PrivateManufacturerTest(TestCase):
         resp = self.client.get(MANUFACTURER_LIST_URL)
         self.assertEqual(resp.status_code, 200)
 
+
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
@@ -50,6 +52,7 @@ class PrivateDriverTest(TestCase):
         resp = self.client.get(DRIVER_LIST_URL)
         self.assertEqual(resp.status_code, 200)
 
+
 class PrivateCarTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
@@ -61,6 +64,3 @@ class PrivateCarTest(TestCase):
     def test_login_requirement(self):
         resp = self.client.get(CAR_LIST_URL)
         self.assertEqual(resp.status_code, 200)
-
-
-

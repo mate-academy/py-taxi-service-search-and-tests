@@ -54,7 +54,6 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet[Any]:
-        username = self.request.GET.get("name")
         queryset = super().get_queryset()
         form = ManufacturerSearchForm(self.request.GET)
 
@@ -88,7 +87,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         car_model = self.request.GET.get("car_model", "")
-        context["search_form"] = CarSearchForm(initial={"car_model": car_model})
+        context["search_form"] = CarSearchForm(
+            initial={"car_model": car_model}
+        )
         return context
 
     def get_queryset(self):
@@ -97,7 +98,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         form = CarSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(model__icontains=form.cleaned_data["car_model"])
+            return queryset.filter(
+                model__icontains=form.cleaned_data["car_model"]
+            )
 
         return queryset
 
@@ -128,7 +131,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = DriverSearchForm(initial={"username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self) -> QuerySet[Any]:
@@ -136,7 +141,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         form = DriverSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return queryset
 
     model = Driver

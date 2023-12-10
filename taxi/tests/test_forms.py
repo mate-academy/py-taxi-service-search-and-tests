@@ -27,7 +27,7 @@ class DriverSearchFormTest(TestCase):
     def test_search(self):
         form_data = {"username": "bmw"}
         form = DriverSearchForm(data=form_data)
-        
+
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
@@ -48,4 +48,3 @@ class ManufacturerSearchFormTest(TestCase):
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
-
