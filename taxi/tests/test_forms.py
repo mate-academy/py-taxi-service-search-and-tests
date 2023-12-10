@@ -31,8 +31,8 @@ class CarFormTest(TestCase):
     def test_renew_form_date_field_label(self):
         form = CarForm()
         self.assertTrue(
-            form.fields['drivers'].label is None or form.fields[
-                'drivers'].label == 'drivers'
+            form.fields["drivers"].label is None or form.fields[
+                "drivers"].label == "drivers"
         )
 
     def test_valid_form(self):
@@ -70,7 +70,7 @@ class CarFormTest(TestCase):
         }
         form = CarForm(data=data)
         self.assertFalse(form.is_valid())
-        self.assertIn('drivers', form.errors)
+        self.assertIn("drivers", form.errors)
 
 
 class DriverCreationFormTest(TestCase):
@@ -194,13 +194,13 @@ class SearchListFormTest(TestCase):
     def test_search_lable(self):
         form = self.create_form("")
         self.assertTrue(
-            form.fields['search'].label is None
-            or form.fields['search'].label == ""
+            form.fields["search"].label is None
+            or form.fields["search"].label == ""
         )
 
     def test_search_widget_placeholder(self):
         form = self.create_form("")
         self.assertEqual(
-            form.fields['search'].widget.attrs["placeholder"],
+            form.fields["search"].widget.attrs["placeholder"],
             "Search..."
         )

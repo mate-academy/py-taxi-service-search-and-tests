@@ -7,11 +7,11 @@ from taxi.models import Manufacturer, Driver, Car
 
 class ManufacturerTest(TestCase):
     def setUp(self) -> None:
-        objs = (
+        manufacturer_objs = (
             Manufacturer(name="btest", country="btest country"),
             Manufacturer(name="atest", country="atest country")
         )
-        Manufacturer.objects.bulk_create(objs)
+        Manufacturer.objects.bulk_create(manufacturer_objs)
 
     def test_model_str(self) -> None:
         manufacturer = Manufacturer.objects.filter(name="atest").first()
@@ -34,7 +34,7 @@ class ManufacturerTest(TestCase):
 
 class DriverTest(TestCase):
     def setUp(self) -> None:
-        objs = (
+        driver_objs = (
             Driver(
                 first_name="btest_name",
                 last_name="btest_last_name",
@@ -50,14 +50,14 @@ class DriverTest(TestCase):
                 license_number="FHG12939"
             )
         )
-        Driver.objects.bulk_create(objs)
+        Driver.objects.bulk_create(driver_objs)
 
     def test_model_str(self) -> None:
         driver = Driver.objects.filter(username="busername").first()
         self.assertEqual(
             str(driver),
             f"{driver.username} ({driver.first_name} {driver.last_name})"
-            )
+        )
 
     def test_verbose_name(self) -> None:
         self.assertEqual(Driver._meta.verbose_name, "driver")
@@ -78,12 +78,12 @@ class DriverTest(TestCase):
 
 class CarTest(TestCase):
     def setUp(self) -> None:
-        manufacturers = self.createManufactures()
-        drivers = self.createDrivers()
-        self.createCars(drivers, manufacturers)
+        manufacturers = self.create_manufactures()
+        drivers = self.create_drivers()
+        self.create_cars(drivers, manufacturers)
 
     @staticmethod
-    def createManufactures() -> List[Manufacturer]:
+    def create_manufactures() -> List[Manufacturer]:
         manufacturers = (
             Manufacturer(name="btest", country="btest country"),
             Manufacturer(name="atest", country="atest country")
@@ -92,7 +92,7 @@ class CarTest(TestCase):
         return Manufacturer.objects.all()
 
     @staticmethod
-    def createDrivers() -> List[Driver]:
+    def create_drivers() -> List[Driver]:
         drivers = (
             Driver(
                 first_name="btest_name",
@@ -114,7 +114,7 @@ class CarTest(TestCase):
         return Driver.objects.all()
 
     @staticmethod
-    def createCars(
+    def create_cars(
         drivers: List[Driver],
         manufacturers: List[Manufacturer]
     ) -> List[Car]:
@@ -135,4 +135,4 @@ class CarTest(TestCase):
         self.assertEqual(Car._meta.verbose_name, "car")
 
     def test_verbose_name_plural(self):
-        self.assertEqual(Car._meta.verbose_name_plural,"cars")
+        self.assertEqual(Car._meta.verbose_name_plural, "cars")

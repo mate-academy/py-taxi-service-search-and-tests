@@ -147,8 +147,8 @@ class ManufacturerUpdateViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Manufacturer.objects.create(
-            name=f"manufacturer_1",
-            country=f"country_1"
+            name="manufacturer_1",
+            country="country_1"
         )
 
     def setUp(self):
@@ -222,8 +222,8 @@ class ManufacturerDeleteViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Manufacturer.objects.create(
-            name=f"manufacturer_1",
-            country=f"country_1"
+            name="manufacturer_1",
+            country="country_1"
         )
 
     def setUp(self):
@@ -283,12 +283,12 @@ class CarListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        manufacturers = cls.createManufactures()
-        drivers = cls.createDrivers()
-        cls.createCars(drivers, manufacturers)
+        manufacturers = cls.create_manufactures()
+        drivers = cls.create_drivers()
+        cls.create_cars(drivers, manufacturers)
 
     @staticmethod
-    def createManufactures() -> List[Manufacturer]:
+    def create_manufactures() -> List[Manufacturer]:
         manufacturers = (
             Manufacturer(name="btest", country="btest country"),
             Manufacturer(name="atest", country="atest country")
@@ -297,7 +297,7 @@ class CarListViewTest(TestCase):
         return Manufacturer.objects.all()
 
     @staticmethod
-    def createDrivers() -> List[Driver]:
+    def create_drivers() -> List[Driver]:
         drivers = (
             Driver(
                 first_name="btest_name",
@@ -319,7 +319,7 @@ class CarListViewTest(TestCase):
         return Driver.objects.all()
 
     @staticmethod
-    def createCars(
+    def create_cars(
         drivers: List[Driver],
         manufacturers: List[Manufacturer],
         number_of_cars: int = 13
@@ -394,14 +394,14 @@ class CarListViewTest(TestCase):
 
 class CarCreateViewTest(TestCase):
     @staticmethod
-    def createManufacturer() -> Manufacturer:
+    def create_manufacturer() -> Manufacturer:
         return Manufacturer.objects.create(
             name="btest",
             country="btest country"
         )
 
     @staticmethod
-    def createDrivers() -> List[Driver]:
+    def create_drivers() -> List[Driver]:
         drivers = (
             Driver(
                 first_name="btest_name",
@@ -453,8 +453,8 @@ class CarCreateViewTest(TestCase):
     def test_create_valid_new_car(self):
         data = {
             "model": "Model_new",
-            "manufacturer": self.createManufacturer().pk,
-            "drivers": [driver.pk for driver in self.createDrivers()]
+            "manufacturer": self.create_manufacturer().pk,
+            "drivers": [driver.pk for driver in self.create_drivers()]
         }
         response = self.client.post(reverse("taxi:car-create"), data)
         self.assertRedirects(response, reverse("taxi:car-list"))
@@ -500,12 +500,12 @@ class CarUpdateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.drivers = cls.createDrivers()
-        cls.manufacturers = cls.createManufacturers()
-        cls.createCar([cls.drivers[0]], cls.manufacturers[0])
+        cls.drivers = cls.create_drivers()
+        cls.manufacturers = cls.create_manufacturers()
+        cls.create_car([cls.drivers[0]], cls.manufacturers[0])
 
     @staticmethod
-    def createManufacturers() -> List[Manufacturer]:
+    def create_manufacturers() -> List[Manufacturer]:
         manufacturers = (
             Manufacturer(name="btest", country="btest country"),
             Manufacturer(name="atest", country="atest country")
@@ -514,7 +514,7 @@ class CarUpdateViewTest(TestCase):
         return Manufacturer.objects.all()
 
     @staticmethod
-    def createDrivers() -> List[Driver]:
+    def create_drivers() -> List[Driver]:
         drivers = (
             Driver(
                 first_name="btest_name",
@@ -536,12 +536,12 @@ class CarUpdateViewTest(TestCase):
         return Driver.objects.all()
 
     @staticmethod
-    def createCar(
+    def create_car(
         drivers: List[Driver],
         manufacturer: Manufacturer,
     ) -> Car:
         car = Car.objects.create(
-            model=f"model_0",
+            model="model_0",
             manufacturer=manufacturer
         )
         car.drivers.set(drivers)
@@ -627,7 +627,7 @@ class CarDeleteViewTest(TestCase):
             license_number="FHG17564"
         )
         car = Car.objects.create(
-            model=f"model_0",
+            model="model_0",
             manufacturer=manufacturer
         )
         car.drivers.set([driver])
@@ -809,7 +809,10 @@ class DriverCreateViewTest(TestCase):
             "password2": "testpass1"
         }
         response = self.client.post(reverse("taxi:driver-create"), data)
-        self.assertRedirects(response, reverse("taxi:driver-detail", kwargs={"pk": 2}))
+        self.assertRedirects(
+            response,
+            reverse("taxi:driver-detail", kwargs={"pk": 2})
+        )
 
     def test_create_invalid_new_driver(self):
         data = {
@@ -856,11 +859,11 @@ class DriverLicenseUpdateViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Driver.objects.create(
-            first_name=f"test_name_1",
-            last_name=f"test_last_name_1",
-            username=f"username_1",
-            email=f"test@gmail.com_1",
-            license_number=f"FHG17561"
+            first_name="test_name_1",
+            last_name="test_last_name_1",
+            username="username_1",
+            email="test@gmail.com_1",
+            license_number="FHG17561"
         )
 
     def test_view_url_exists_at_desired_location(self):
@@ -917,11 +920,11 @@ class DriverDeleteViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Driver.objects.create(
-            first_name=f"test_name_1",
-            last_name=f"test_last_name_1",
-            username=f"username_1",
-            email=f"test@gmail.com_1",
-            license_number=f"FHG17561"
+            first_name="test_name_1",
+            last_name="test_last_name_1",
+            username="username_1",
+            email="test@gmail.com_1",
+            license_number="FHG17561"
         )
 
     def setUp(self):
