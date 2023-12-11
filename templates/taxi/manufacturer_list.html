@@ -7,11 +7,7 @@
       Create
     </a>
   </h1>
-  <form action="" novalidate>
-    {{form_search.as_p}}
-    <button type="submit" class="btn btn-primary">Search</button>
-  </form>
-
+  {% include "includes/search_form.html" %}
   {% if manufacturer_list %}
     <table class="table">
       <tr>
