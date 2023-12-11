@@ -4,9 +4,13 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import (
+    DriverCreationForm, DriverLicenseUpdateForm, CarForm,
+    SearchListForm
+)
 
 
 @login_required
@@ -36,6 +40,22 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        search = self.request.GET.get("search", "")
+        context["form_search"] = SearchListForm(initial={"search": search})
+        return context
+
+    def get_queryset(self):
+        search_form = SearchListForm(data=self.request.GET)
+        queryset = super().get_queryset()
+        if search_form.is_valid():
+            queryset = queryset.filter(
+                Q(name__icontains=search_form.cleaned_data.get("search"))
+                | Q(country__icontains=search_form.cleaned_data.get("search"))
+            )
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -57,7 +77,26 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        search = self.request.GET.get("search", "")
+        context["form_search"] = SearchListForm(initial={"search": search})
+        return context
+
+    def get_queryset(self):
+        search_form = SearchListForm(data=self.request.GET)
+        queryset = Car.objects.all().select_related("manufacturer")
+        if search_form.is_valid():
+            queryset = queryset.filter(
+                Q(model__icontains=search_form.cleaned_data.get("search"))
+                | Q(
+                    manufacturer__name__icontains=search_form.cleaned_data.get(
+                        "search"
+                    )
+                )
+            )
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -85,6 +124,24 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        search = self.request.GET.get("search", "")
+        context["form_search"] = SearchListForm(initial={"search": search})
+        return context
+
+    def get_queryset(self):
+        search_form = SearchListForm(data=self.request.GET)
+        queryset = super().get_queryset()
+        if search_form.is_valid():
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_form.cleaned_data.get("search"))
+                | Q(
+                    last_name__icontains=search_form.cleaned_data.get("search")
+                ) | Q(license_number=search_form.cleaned_data.get("search"))
+            )
+        return queryset
+
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
@@ -104,14 +161,14 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
-        Car.objects.get(id=pk) in driver.cars.all()
+            Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:

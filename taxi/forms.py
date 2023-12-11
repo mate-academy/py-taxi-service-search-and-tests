@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django.forms import TextInput
 
 from taxi.models import Car, Driver
 
@@ -37,6 +38,17 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
     def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
+
+
+class SearchListForm(forms.Form):
+    search = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=TextInput(attrs={
+            "placeholder": "Search..."
+        })
+    )
 
 
 def validate_license_number(
