@@ -8,6 +8,8 @@
     </a>
   </h1>
   {% if car_list %}
+    {% include "includes/search_form.html" %}
+    <br>
     <ul>
       {% for car in car_list %}
         <li>
@@ -17,6 +19,7 @@
       {% endfor %}
     </ul>
   {% else %}
+    {% include "includes/search_form.html" %}
     <p>There are no cars in taxi</p>
   {% endif %}
 {% endblock %}
