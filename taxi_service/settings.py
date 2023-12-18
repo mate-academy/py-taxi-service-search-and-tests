@@ -27,7 +27,7 @@ SECRET_KEY = (
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["testserver"]
+ALLOWED_HOSTS = ["testserver", "localhost"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "taxi",
     "crispy_bootstrap4",
+    "django.test",
 ]
 
 MIDDLEWARE = [

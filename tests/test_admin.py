@@ -1,9 +1,9 @@
-import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taxi_service.settings")
-
-import django
-django.setup()
-
+# import os
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taxi_service.settings")
+#
+# import django
+# django.setup()
+#
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
