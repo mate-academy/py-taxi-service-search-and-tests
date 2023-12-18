@@ -6,7 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, CarSearchForm, ManufacturerSearchForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+    DriverSearchForm
+)
 
 
 @login_required
@@ -44,12 +51,12 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
-    # def get_queryset(self):
-    #     queryset = Manufacturer.objects.select_related("name")
-    #     form = ManufacturerSearchForm(self.request.GET)
-    #     if form.is_valid():
-    #         return queryset.filter(name__icontains=form.cleaned_data["model"])
-    #     return queryset
+    def get_queryset(self):
+        queryset = Manufacturer.objects.all()
+        form = ManufacturerSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["model"])
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -114,6 +121,21 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+        search_username = self.request.GET.get("username", "")
+        context["search_form"] = DriverSearchForm(
+            initial={"username": search_username}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Driver.objects.all()
+        form = DriverSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(username__icontains=form.cleaned_data["username"])
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
