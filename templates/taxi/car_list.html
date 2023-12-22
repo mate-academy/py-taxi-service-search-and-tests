@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+   <form class='form-inline' action='' method='get'>
+    {{ search_form }}
+    <input class='btn btn-secondary' type='submit' value='Search'>
+  </form>
   <h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
