@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -7,6 +8,10 @@
       Create
     </a>
   </h1>
+  <form action="" method="get">
+    {{ form_search|crispy }}
+    <input type="submit" value="submit">
+  </form>
 
   {% if manufacturer_list %}
     <table class="table">
@@ -35,7 +40,7 @@
               </a>
             </td>
             <td>
-              <a style="color: red"
+              <a style="color: Green"
                 href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
                 Delete
               </a>
@@ -45,6 +50,6 @@
     </table>
 
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+      <p>There are no manufacturers .</p>
   {% endif %}
 {% endblock %}
