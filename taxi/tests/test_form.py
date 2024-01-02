@@ -7,15 +7,15 @@ from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
 class TestDriverCreationForm(TestCase):
     def setUp(self):
         self.form_date = {
-            "username": "test_user_name",
-            "password1": "test1234567",
-            "password2": "test12345998",
+            "username": "test_user",
+            "password1": "test123455",
+            "password2": "test123455",
             "first_name": "test_first_name",
             "last_name": "test_last_name",
         }
 
     def test_drivers_creation_form_with_additional_fields(self):
-        self.form_date["license_number"] = "AGC12345"
+        self.form_date["license_number"] = "CBC12345"
         form = DriverCreationForm(data=self.form_date)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, self.form_date)
