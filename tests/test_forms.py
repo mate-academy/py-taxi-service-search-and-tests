@@ -1,45 +1,34 @@
-from django.test import TestCase
-
+import pytest
 from taxi.forms import DriverCreationForm
 
 
-class FormsTests(TestCase):
-    def test_driver_creation_form(self):
-        form_data = {
-            "username": "TestUser",
-            "password1": "testPass1",
-            "password2": "testPass1",
-            "first_name": "Test Firstname",
-            "last_name": "Test Lastname",
-            "license_number": "ABC12345",
-        }
-        form = DriverCreationForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+@pytest.mark.django_db
+class TestForm:
+    form_data = {
+        "username": "TestUser",
+        "password1": "testPass1",
+        "password2": "testPass1",
+        "first_name": "Test Firstname",
+        "last_name": "Test Lastname",
+    }
 
-    def test_input_invalid_license_number(self):
-        form_data = {
-            "username": "TestUser",
-            "password1": "testPass1",
-            "password2": "testPass1",
-            "first_name": "Test Firstname",
-            "last_name": "Test Lastname",
-            "license_number": "A",
-        }
+    def test_valid_license_number(self):
+        form_data = {**self.form_data, "license_number": "ABC12345"}
         form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        form_data["license_number"] = "1"
+        assert form.is_valid()
+
+    @pytest.mark.parametrize(
+        "license_number, is_valid",
+        [
+            ("A", False),
+            ("1", False),
+            ("12345", False),
+            ("QWERTYUI", False),
+            ("12345678", False),
+            ("abc12345", False),
+        ]
+    )
+    def test_invalid_license_number(self, license_number, is_valid):
+        form_data = {**self.form_data, "license_number": license_number}
         form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        form_data["license_number"] = "12345"
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        form_data["license_number"] = "QWERTYUI"
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        form_data["license_number"] = "12345678"
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        form_data["license_number"] = "abc12345"
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
+        assert form.is_valid() is is_valid

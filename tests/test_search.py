@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from taxi.models import Manufacturer, Car, Driver
 
@@ -11,6 +12,11 @@ class TestSearch(TestCase):
             password="Test12345"
         )
         self.client.force_login(self.user)
+        self.urls = {
+            "manufacturer": reverse("taxi:manufacturer-list"),
+            "car": reverse("taxi:car-list"),
+            "driver": reverse("taxi:driver-list"),
+        }
 
     def test_search_manufacturer(self):
         Manufacturer.objects.create(
@@ -26,7 +32,7 @@ class TestSearch(TestCase):
             country="QWERTY Country"
         )
 
-        url = "http://127.0.0.1:8000/manufacturers/?name=Test"
+        url = f"{self.urls['manufacturer']}?name=Test"
         response = self.client.get(url)
         queryset_from_response = response.context["manufacturer_list"]
         valid_queryset = Manufacturer.objects.filter(name__icontains="Test")
@@ -50,7 +56,7 @@ class TestSearch(TestCase):
             manufacturer=manufacturer
         )
 
-        url = "http://127.0.0.1:8000/cars/?car_model=Test"
+        url = f"{self.urls['car']}?car_model=Test"
         response = self.client.get(url)
         queryset_from_response = response.context["car_list"]
         valid_queryset = Car.objects.filter(model__icontains="Test")
@@ -72,7 +78,7 @@ class TestSearch(TestCase):
             license_number="ABC54321"
         )
 
-        url = "http://127.0.0.1:8000/drivers/?username=Test"
+        url = f"{self.urls['driver']}?username=Test"
         response = self.client.get(url)
         queryset_from_response = response.context["driver_list"]
         valid_queryset = Driver.objects.filter(username__icontains="Test")
