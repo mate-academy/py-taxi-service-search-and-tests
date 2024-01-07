@@ -10,7 +10,6 @@ from .forms import (DriverCreationForm,
                     DriverLicenseUpdateForm,
                     CarForm, CarSearchForm,
                     DriverSearchForm,
-                    \
                     ManufacturerSearchForm)
 
 
