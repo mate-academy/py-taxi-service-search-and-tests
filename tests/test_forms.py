@@ -25,9 +25,9 @@ class CarFormTest(TestCase):
 
     def test_car_form_valid(self):
         form_data = {
-            'model': 'TestCar',
-            'manufacturer': self.manufacturer.id,
-            'drivers': [self.driver.id],
+            "model": "TestCar",
+            "manufacturer": self.manufacturer.id,
+            "drivers": [self.driver.id],
         }
 
         form = CarForm(data=form_data)
@@ -36,9 +36,9 @@ class CarFormTest(TestCase):
 
     def test_car_form_invalid(self):
         form_data = {
-            'model': '',
-            'manufacturer': self.manufacturer.id,
-            'drivers': [self.driver.id],
+            "model": "",
+            "manufacturer": self.manufacturer.id,
+            "drivers": [self.driver.id],
         }
 
         form = CarForm(data=form_data)
@@ -52,12 +52,12 @@ class DriverCreationFormTest(TestCase):
         Test that DriverCreationForm is valid with correct data.
         """
         form_data = {
-            'username': 'testdriver',
-            'password1': 'testpassword',
-            'password2': 'testpassword',
-            'license_number': 'ABC12345',
-            'first_name': 'John',
-            'last_name': 'Doe',
+            "username": "testdriver",
+            "password1": "testpassword",
+            "password2": "testpassword",
+            "license_number": "ABC12345",
+            "first_name": "John",
+            "last_name": "Doe",
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -67,12 +67,12 @@ class DriverCreationFormTest(TestCase):
         Test that DriverCreationForm is invalid with incorrect data.
         """
         form_data = {
-            'username': '',
-            'password1': 'testpassword',
-            'password2': 'testpassword',
-            'license_number': 'InvalidLicense',
-            'first_name': 'John',
-            'last_name': 'Doe',
+            "username": "",
+            "password1": "testpassword",
+            "password2": "testpassword",
+            "license_number": "InvalidLicense",
+            "first_name": "John",
+            "last_name": "Doe",
         }
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -84,7 +84,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         Test that DriverLicenseUpdateForm is valid with correct data.
         """
         form_data = {
-            'license_number': 'ABC12345',
+            "license_number": "ABC12345",
         }
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -94,7 +94,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         Test that DriverLicenseUpdateForm is invalid with incorrect data.
         """
         form_data = {
-            'license_number': 'InvalidLicense',
+            "license_number": "InvalidLicense",
         }
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -106,7 +106,7 @@ class DriverSearchFormTest(TestCase):
         Test that DriverSearchForm is valid with correct data.
         """
         form_data = {
-            'username': 'testuser',
+            "username": "testuser",
         }
         form = DriverSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -118,7 +118,7 @@ class CarSearchFormTest(TestCase):
         Test that CarSearchForm is valid with correct data.
         """
         form_data = {
-            'model': 'TestModel',
+            "model": "TestModel",
         }
         form = CarSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -130,8 +130,8 @@ class ManufacturerSearchFormTest(TestCase):
         Test that ManufacturerSearchForm is valid with correct data.
         """
         form_data = {
-            'name': 'TestManufacturer',
-            'country': 'TestCountry',
+            "name": "TestManufacturer",
+            "country": "TestCountry",
         }
         form = ManufacturerSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
