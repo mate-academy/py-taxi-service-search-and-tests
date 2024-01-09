@@ -92,7 +92,9 @@ class ManufacturerCreateViewTest(TestCase):
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 302)
 
-        self.assertTrue(Manufacturer.objects.filter(name="Mercedes-Benz").exists())
+        self.assertTrue(
+            Manufacturer.objects.filter(name="Mercedes-Benz").exists()
+        )
         self.assertRedirects(
             response,
             reverse("taxi:manufacturer-list")
