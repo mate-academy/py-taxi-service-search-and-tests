@@ -4,7 +4,6 @@ from django.test import TestCase
 from taxi.models import Manufacturer, Car
 
 
-# Create your tests here.
 class ModelTests(TestCase):
     def test_manufacturer_str(self):
         manufacturer = Manufacturer.objects.create(name="test", country="test")

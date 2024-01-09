@@ -46,9 +46,6 @@ class PrivateManufacturerTest(TestCase):
         response = self.client.post(reverse("taxi:driver-create"),
                                     data=form_data
                                     )
-        form = response.context["form"]
-        if not form.is_valid():
-            print(form.errors)
         self.assertEqual(response.status_code, 200)
 
         new_user = get_user_model().objects.get(username=form_data["username"])
