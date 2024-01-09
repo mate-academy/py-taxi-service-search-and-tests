@@ -85,15 +85,15 @@ class ManufacturerCreateViewTest(TestCase):
 
     def test_manufacturer_create_view(self):
         data = {
-           "name": "Mercedes-Benz",
-           "country": "Germany"
+            "name": "test_name",
+            "country": "test_country"
         }
         url = reverse("taxi:manufacturer-create")
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 302)
 
         self.assertTrue(
-            Manufacturer.objects.filter(name="Mercedes-Benz").exists()
+            Manufacturer.objects.filter(name="test_name").exists()
         )
         self.assertRedirects(
             response,
@@ -120,7 +120,10 @@ class ManufacturerUpdateViewTest(TestCase):
             "name": "Mercedes-Benz",
             "country": "Germany",
         }
-        url = reverse("taxi:manufacturer-update", kwargs={"pk": self.manufacturer_test_update.id})
+        url = reverse(
+            "taxi:manufacturer-update",
+            kwargs={"pk": self.manufacturer_test_update.id}
+        )
         response = self.client.post(url, data=update_manufacturer)
 
         self.assertEqual(response.status_code, 302)
@@ -151,15 +154,24 @@ class ManufacturerDeleteViewTest(TestCase):
         )
 
     def test_manufacturer_delete_view(self):
-        url = reverse("taxi:manufacturer-delete", kwargs={"pk": self.manufacturer_test_delete.id})
+        url = reverse(
+            "taxi:manufacturer-delete",
+            kwargs={"pk": self.manufacturer_test_delete.id}
+        )
         count_manufacturer_before_delete = Manufacturer.objects.count()
         response = self.client.post(url)
 
         self.assertEqual(response.status_code, 302)
 
-        self.assertEqual(Manufacturer.objects.count(), count_manufacturer_before_delete - 1)
+        self.assertEqual(
+            Manufacturer.objects.count(),
+            count_manufacturer_before_delete - 1
+        )
 
-        self.assertFalse(Manufacturer.objects.filter(pk=self.manufacturer_test_delete.id).exists())
+        self.assertFalse(
+            Manufacturer.objects.filter(
+                pk=self.manufacturer_test_delete.id
+            ).exists())
         self.assertRedirects(
             response,
             reverse("taxi:manufacturer-list")
