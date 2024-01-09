@@ -46,7 +46,7 @@ class CarCreationFormTest(TestCase):
 class ManufacturerCreationFormTest(TestCase):
     def test_invalid_search_form(self):
         form_data = {
-            "name": "testtest",
+            "name": "testtest123",
         }
 
         form = ManufacturerSearchForm(data=form_data)
