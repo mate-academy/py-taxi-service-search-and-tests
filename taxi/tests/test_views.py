@@ -117,7 +117,7 @@ class ManufacturerUpdateViewTest(TestCase):
 
     def test_manufacturer_update_view(self):
         update_manufacturer = {
-            "name": "Mercedes-Benz",
+            "name": "BMW",
             "country": "Germany",
         }
         url = reverse(
