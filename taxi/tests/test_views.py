@@ -50,10 +50,8 @@ class PrivateManufacturerTest(TestCase):
 
         new_user = get_user_model().objects.get(username=form_data["username"])
         self.assertIsNotNone(new_user)
-        print(new_user)
 
         self.assertEqual(new_user.first_name, form_data["first_name"])
-        print(new_user.first_name)
         self.assertEqual(new_user.last_name, form_data["last_name"])
         self.assertEqual(new_user.license_number, form_data["license_number"])
 
