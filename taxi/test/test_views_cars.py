@@ -29,7 +29,6 @@ class PrivateCarTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         car = Car.objects.all()
-        self.assertEqual(list(response.context["car_list"]),
-                         list(car))
+        self.assertEqual(list(response.context["car_list"]), list(car))
 
         self.assertTemplateUsed(response, "taxi/car_list.html")

@@ -41,8 +41,7 @@ class PrivateDriverTest(TestCase):
         valid_license_number = "ABC12345"
         invalid_license_number = "invalid_license"
         self.assertEqual(
-            validate_license_number(valid_license_number),
-            valid_license_number
+            validate_license_number(valid_license_number), valid_license_number
         )
         with self.assertRaises(ValidationError):
             validate_license_number(invalid_license_number)

@@ -6,11 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import (DriverCreationForm,
-                    DriverLicenseUpdateForm,
-                    CarForm, CarSearchForm,
-                    DriverSearchForm,
-                    ManufacturerSearchForm)
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    CarSearchForm,
+    DriverSearchForm,
+    ManufacturerSearchForm,
+)
 
 
 @login_required
@@ -45,8 +48,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("name", "")
         context["search_form"] = ManufacturerSearchForm(
-            initial={"name": username}
-        )
+            initial={"name": username})
         return context
 
     def get_queryset(self):
@@ -81,17 +83,14 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
-        context["search_form"] = CarSearchForm(
-            initial={"name": model}
-        )
+        context["search_form"] = CarSearchForm(initial={"model": model})
         return context
 
     def get_queryset(self):
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
             return self.queryset.filter(
-                model__icontains=form.cleaned_data["name"]
-            )
+                model__icontains=form.cleaned_data["model"])
         return self.queryset
 
 
@@ -125,12 +124,11 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["search_form"] = DriverSearchForm(
-            initial={"name": username}
-        )
+            initial={"username": username})
         return context
 
     def get_queryset(self):
-        username = self.request.GET.get("name")
+        username = self.request.GET.get("username")
         if username:
             return self.queryset.filter(username__icontains=username)
         return self.queryset

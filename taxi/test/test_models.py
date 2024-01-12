@@ -8,8 +8,9 @@ from taxi.models import Manufacturer, Car
 class Modelstests(TestCase):
     def test_manufacturer_str(self) -> None:
         manufacturer = Manufacturer.objects.create(name="test")
-        self.assertEqual(str(manufacturer),
-                         f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer), f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self) -> None:
         driver = get_user_model().objects.create(
@@ -18,10 +19,12 @@ class Modelstests(TestCase):
             first_name="test_first",
             last_name="test_last",
         )
-        self.assertEqual(str(driver),
-                         f"{driver.username}"
-                         f" ({driver.first_name}"
-                         f" {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username}"
+            f" ({driver.first_name}"
+            f" {driver.last_name})",
+        )
 
     def test_car_str(self) -> None:
         manufacturer = Manufacturer.objects.create(name="test")
@@ -37,7 +40,7 @@ class Modelstests(TestCase):
             password=password,
             first_name="test_first",
             last_name="test_last",
-            license_number=license_number
+            license_number=license_number,
         )
         self.assertEqual(driver.license_number, license_number)
         self.assertEqual(driver.username, username)

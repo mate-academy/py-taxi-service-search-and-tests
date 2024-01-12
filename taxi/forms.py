@@ -53,30 +53,28 @@ def validate_license_number(
 
 
 class CarSearchForm(forms.Form):
-    name = forms.CharField(max_length=255,
-                           required=False,
-                           label="",
-                           widget=forms.TextInput(attrs={
-                               "placeholder": "Search by manufacturer"
-                           })
-                           )
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by manufacturer"}
+                               ),
+    )
 
 
 class DriverSearchForm(forms.Form):
-    name = forms.CharField(max_length=255,
-                           required=False,
-                           label="",
-                           widget=forms.TextInput(attrs={
-                               "placeholder": "Search by username"
-                           })
-                           )
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by username"}),
+    )
 
 
 class ManufacturerSearchForm(forms.Form):
-    name = forms.CharField(max_length=255,
-                           required=False,
-                           label="",
-                           widget=forms.TextInput(attrs={
-                               "placeholder": "Search by name"
-                           })
-                           )
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name"}),
+    )
