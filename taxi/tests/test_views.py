@@ -20,10 +20,10 @@ class PrivateManufacturerTest(TestCase):
             password="test123",
         )
         self.client.force_login(self.user)
-
-    def test_retrive_manufacturer(self):
         Manufacturer.objects.create(name="test_name1")
         Manufacturer.objects.create(name="test_name2")
+
+    def test_retrive_manufacturer(self):
         response = self.client.get(MANUFACTURER_URL)
         self.assertEqual(response.status_code, 200)
         manufacturer = Manufacturer.objects.all()
@@ -35,3 +35,15 @@ class PrivateManufacturerTest(TestCase):
             response,
             "taxi/manufacturer_list.html"
         )
+
+    def test_manufacturer_search_queryset(self):
+        manufacturer_in_res_queryset = Manufacturer.objects.create(
+            name="Test-in queryset"
+        )
+        manufacturer_not_in_res_queryset = Manufacturer.objects.create(
+            name="Test-not-in queryset"
+        )
+        url = MANUFACTURER_URL + "?name=Test-in"
+        response = self.client.get(url)
+        self.assertContains(response, manufacturer_in_res_queryset.name)
+        self.assertNotContains(response, manufacturer_not_in_res_queryset.name)
