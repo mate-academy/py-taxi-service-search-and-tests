@@ -4,9 +4,16 @@
   <h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
-      Create
+      ➕
     </a>
   </h1>
+  <div>
+      <form method="get" action="" class="form-inline">
+        {% csrf_token %}
+        {{ search_form }}
+        <input class="btn-btn-secondary" type="submit" value="🔎">
+      </form>
+  </div>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
