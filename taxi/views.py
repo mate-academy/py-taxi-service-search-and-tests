@@ -52,8 +52,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
             return queryset.filter(
                 name__icontains=form.cleaned_data["name"]
             )
-        else:
-            return queryset
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
