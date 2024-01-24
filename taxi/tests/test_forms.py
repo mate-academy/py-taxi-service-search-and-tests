@@ -1,6 +1,11 @@
 from unittest import TestCase
 
-from taxi.forms import DriverCreationForm, DriverSearchForm, CarSearchForm, ManufacturerSearchForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm
+)
 
 
 class DriverCreationFormTest(TestCase):
