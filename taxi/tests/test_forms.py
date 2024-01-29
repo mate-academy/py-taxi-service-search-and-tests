@@ -16,16 +16,12 @@ class SearchTests(TestCase):
 
     def test_search_driver_by_username(self):
         Driver.objects.create(username="user1", license_number="ABC12345")
-        Driver.objects.create(username="user2", license_number="CBA54321")
+        Driver.objects.create(username="user2", license_number="ABC54321")
 
-        response = self.client.get(
-            reverse("taxi:driver-list"), {"username": "user2"}
-        )
+        response = self.client.get(reverse("taxi:driver-list"), {"username": "user2"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(
-            response.context["search_form"], DriverSearchForm
-        )
+        self.assertIsInstance(response.context["search_form"], DriverSearchForm)
         self.assertQuerysetEqual(
             response.context["object_list"],
             Driver.objects.filter(username__icontains="user2"),
@@ -45,9 +41,7 @@ class SearchTests(TestCase):
         car1.drivers.set([driver])
         car2.drivers.set([driver])
 
-        response = self.client.get(
-            reverse("taxi:car-list"), {"model": "car1"}
-        )
+        response = self.client.get(reverse("taxi:car-list"), {"model": "car1"})
 
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.context["search_form"], CarSearchForm)
@@ -55,4 +49,6 @@ class SearchTests(TestCase):
             response.context["object_list"],
             Car.objects.filter(model__icontains="car1"),
         )
+
+
 #

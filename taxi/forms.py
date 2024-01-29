@@ -18,13 +18,12 @@ class CarForm(forms.ModelForm):
 
 
 class CarSearchForm(forms.Form):
-    model = forms.CharField(max_length=255,
-                            required=False,
-                            label="",
-                            widget=forms.TextInput(
-                                attrs={"placeholder": "Search  cars  by  model"}
-                            )
-                            )
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search  cars  by  model"}),
+    )
 
 
 class DriverCreationForm(UserCreationForm):
@@ -41,13 +40,12 @@ class DriverCreationForm(UserCreationForm):
 
 
 class DriverSearchForm(forms.Form):
-    username = forms.CharField(max_length=255,
-                               required=False,
-                               label="",
-                               widget=forms.TextInput(
-                                   attrs={"placeholder": "Search  drivers  by  username"}
-                               )
-                               )
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search  drivers  by  username"}),
+    )
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
@@ -60,7 +58,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
 
 def validate_license_number(
-        license_number,
+    license_number,
 ):  # regex validation is also possible here
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
@@ -73,10 +71,11 @@ def validate_license_number(
 
 
 class ManufacturerSearchForm(forms.Form):
-    name = forms.CharField(max_length=255,
-                           required=False,
-                           label="",
-                           widget=forms.TextInput(
-                               attrs={"placeholder": "Search  manufacturers  by  name"}
-                           )
-                           )
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search  manufacturers  by  name"}
+        ),
+    )
