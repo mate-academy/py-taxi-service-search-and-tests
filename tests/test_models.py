@@ -18,7 +18,7 @@ class ModelsTests(TestCase):
         car = Car.objects.create(model="test_model", manufacturer=manufacturer)
         self.assertEqual(str(car), f"{car.model}")
 
-    def test_create_driver_with_license_number(self):  #change name func
+    def test_create_driver_with_license_number(self):
         username = "test_user"
         password = "test123"
         license_number = "test_license_number"
@@ -30,9 +30,6 @@ class ModelsTests(TestCase):
         self.assertEqual(driver.username, username)
         self.assertEqual(driver.license_number, license_number)
         self.assertTrue(driver.check_password(password))
-        # self.assertEqual(
-        #     driver.get_absolute_url(), "/drivers/1/"
-        # )
 
     def test_driver_get_absolute_url(self):
         driver = get_user_model().objects.create(
