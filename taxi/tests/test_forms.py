@@ -1,62 +1,58 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Driver
+from taxi.forms import DriverSearchForm, CarSearchForm
+from taxi.models import Driver, Car, Manufacturer
 
-DRIVER_LIST_URL = reverse('taxi:driver-list')
 
-
-class DriverListViewTest(TestCase):
+class SearchTests(TestCase):
     def setUp(self):
-        # Create a test user
-        user = get_user_model()
-        self.user = user.objects.create(username='test_user', password='test_password')
+        self.user = get_user_model().objects.create(
+            username="test", password="test_test"
+        )
+        self.client = Client()
+        self.client.force_login(self.user)
 
-        # Create some test drivers with unique license numbers
-        self.driver1 = Driver.objects.create(username='driver1', license_number='license1')
-        self.driver2 = Driver.objects.create(username='driver2', license_number='license2')
-        self.driver3 = Driver.objects.create(username='driver3', license_number='license3')
+    def test_search_driver_by_username(self):
+        Driver.objects.create(username="user1", license_number="ABC12345")
+        Driver.objects.create(username="user2", license_number="CBA54321")
 
-    def test_search_view_with_results(self):
-        # Login the test user
-        self.client.login(username='test_user', password='test_password')
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "user2"}
+        )
 
-        # Make a GET request with a search query
-        response = self.client.get(DRIVER_LIST_URL, {'username': 'driver2'})
-
-        # Check that the response is successful
         self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(
+            response.context["search_form"], DriverSearchForm
+        )
+        self.assertQuerysetEqual(
+            response.context["object_list"],
+            Driver.objects.filter(username__icontains="user2"),
+        )
 
-        # Check that the search form is in the context
-        self.assertIn('search_form', response.context)
+    def test_search_car_by_model(self):
+        manufacturer = Manufacturer.objects.create(name="testmanufacturer")
+        driver = get_user_model().objects.create(
+            username="driver1",
+            password="test_test",
+            first_name="test_firstname",
+            last_name="test_lastname",
+            license_number="ABC12345",
+        )
+        car1 = Car.objects.create(model="car1", manufacturer=manufacturer)
+        car2 = Car.objects.create(model="car2", manufacturer=manufacturer)
+        car1.drivers.set([driver])
+        car2.drivers.set([driver])
 
-        # Check that the search form has the correct initial value
-        self.assertEqual(response.context['search_form'].initial['username'], 'driver2')
+        response = self.client.get(
+            reverse("taxi:car-list"), {"model": "car1"}
+        )
 
-        # Check that only the matching driver is in the object list
-        self.assertContains(response, 'driver2')
-        self.assertNotContains(response, 'driver1')
-        self.assertNotContains(response, 'driver3')
-
-    def test_search_view_with_no_results(self):
-        # Login the test user
-        self.client.login(username='test_user', password='test_password')
-
-        # Make a GET request with a search query
-        response = self.client.get(DRIVER_LIST_URL, {'username': 'non_existent_driver'})
-
-        # Check that the response is successful
         self.assertEqual(response.status_code, 200)
-
-        # Check that the search form is in the context
-        self.assertIn('search_form', response.context)
-
-        # Check that the search form has the correct initial value
-        self.assertEqual(response.context['search_form'].initial['username'], 'non_existent_driver')
-
-        # Check that there are no matching drivers in the object list
-        self.assertNotContains(response, 'driver1')
-        self.assertNotContains(response, 'driver2')
-        self.assertNotContains(response, 'driver3')
+        self.assertIsInstance(response.context["search_form"], CarSearchForm)
+        self.assertQuerysetEqual(
+            response.context["object_list"],
+            Car.objects.filter(model__icontains="car1"),
+        )
 #
