@@ -26,6 +26,7 @@ class AdminSiteTests(TestCase):
     def test_driver_detail_license_number_listed(self):
         """Driver license number Listed on driver detail admin page"""
         self.assertContains(
-            self.client.get(reverse("admin:taxi_driver_change", args=[self.driver.id])),
+            self.client.get(reverse("admin:taxi_driver_change",
+                                    args=[self.driver.id])),
             self.driver.license_number,
         )

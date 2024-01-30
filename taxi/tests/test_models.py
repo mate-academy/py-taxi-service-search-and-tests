@@ -10,7 +10,8 @@ class ModelsTests(TestCase):
     license_number = "ABC123"
 
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="test", country="TEST")
+        self.manufacturer = Manufacturer.objects.create(name="test",
+                                                        country="TEST")
         self.driver = get_user_model().objects.create_user(
             username=self.username,
             password=self.password,
@@ -18,7 +19,8 @@ class ModelsTests(TestCase):
             last_name="Doe",
             license_number=self.license_number,
         )
-        self.car = Car.objects.create(model="test", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(model="test",
+                                      manufacturer=self.manufacturer)
         self.car.drivers.set([self.driver])
 
     def test_manufacturer_str(self):

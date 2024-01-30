@@ -19,7 +19,7 @@ class FormsTest(TestCase):
         }
         self.form = DriverCreationForm(data=self.form_data)
 
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self):
+    def test_driver_creation_form_with_license_number_all_names_is_valid(self):
         self.assertTrue(self.form.is_valid())
         self.assertEqual(self.form.cleaned_data, self.form_data)
 
@@ -35,11 +35,14 @@ class SearchTests(TestCase):
 
         Driver.objects.create(username="user1", license_number="ABC12346")
         Driver.objects.create(username="user2", license_number="CBA54321")
-        self.driver_response = self.client.get(reverse("taxi:driver-list"), {"username": "user2"})
+        self.driver_response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "user2"}
+        )
 
         manufacturer = Manufacturer.objects.create(name="test_manufacturer")
-        self.manufacturer_response = self.client.get(reverse("taxi:manufacturer-list"),
-                                                     {"name": "test_manufacturer"})
+        self.manufacturer_response = self.client.get(
+            reverse("taxi:manufacturer-list"), {"name": "test_manufacturer"}
+        )
         driver = get_user_model().objects.create(
             username="driver1",
             password=self.test_password,
@@ -52,14 +55,16 @@ class SearchTests(TestCase):
         car1.drivers.set([driver])
         car2.drivers.set([driver])
 
-        self.car_response = self.client.get(reverse("taxi:car-list"), {"model": "car1"})
+        self.car_response = self.client.get(reverse("taxi:car-list"),
+                                            {"model": "car1"})
 
     def test_search_driver_by_username_status_code_is_200(self):
         self.assertEqual(self.driver_response.status_code, 200)
 
     def test_search_driver_by_username_form_instance_is_created(self):
-        self.assertIsInstance(self.driver_response.context["search_form"],
-                              DriverSearchForm)
+        self.assertIsInstance(
+            self.driver_response.context["search_form"], DriverSearchForm
+        )
 
     def test_search_driver_by_username_returns_expected_queryset(self):
         self.assertQuerysetEqual(
@@ -84,8 +89,10 @@ class SearchTests(TestCase):
         self.assertEqual(self.manufacturer_response.status_code, 200)
 
     def test_search_manufacturer_by_name_form_instance_is_created(self):
-        self.assertIsInstance(self.manufacturer_response.context["search_form"],
-                              ManufacturerSearchForm)
+        self.assertIsInstance(
+            self.manufacturer_response.context["search_form"],
+            ManufacturerSearchForm,
+        )
 
     def test_search_manufacturer_by_name_returns_expected_queryset(self):
         self.assertQuerysetEqual(

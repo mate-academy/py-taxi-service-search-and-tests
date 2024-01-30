@@ -130,7 +130,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         queryset = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"])
         return queryset
 
 
@@ -159,7 +160,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
-        Car.objects.get(id=pk) in driver.cars.all()
+            Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
