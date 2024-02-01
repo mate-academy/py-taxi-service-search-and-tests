@@ -2,18 +2,17 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Driver List
-    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
-  </h1>
+  <h1>Driver List </h1>
 
+  <button class="btn btn-primary"><a href="{% url 'taxi:driver-create' %}" style="text-decoration: none; color: white;">Add
+    new driver</a></button>
+  <br>
+  <br>
   <form method="get" action="" class="form-inline">
     {{ search_form|crispy }}
     <input type="submit" value="🔎" class="btn-secondary">
   </form>
-
+  <br>
   {% if driver_list %}
     <table class="table">
       <tr>
@@ -31,6 +30,14 @@
           <td>{{ driver.first_name }}</td>
           <td>{{ driver.last_name }}</td>
           <td>{{ driver.license_number }}</td>
+          <td>
+            <button class="btn btn-primary"><a href="{% url 'taxi:driver-update' pk=driver.id %}"
+                                               style="text-decoration: none; color: white;">Update</a></button>
+          </td>
+          <td>
+            <button class="btn btn-danger"><a href="{% url 'taxi:driver-delete' pk=driver.id %}"
+                                              style="text-decoration: none; color: white;">Delete</a></button>
+          </td>
         </tr>
       {% endfor %}
 
