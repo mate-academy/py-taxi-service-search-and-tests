@@ -7,12 +7,7 @@
   <button class="btn btn-primary"><a href="{% url 'taxi:driver-create' %}" style="text-decoration: none; color: white;">Add
     new driver</a></button>
   <br>
-  <br>
-  <form method="get" action="" class="form-inline">
-    {{ search_form|crispy }}
-    <input type="submit" value="🔎" class="btn-secondary">
-  </form>
-  <br>
+  {% include "includes/search_form.html" %}
   {% if driver_list %}
     <table class="table">
       <tr>
