@@ -63,11 +63,11 @@ class PrivateCarTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"] is True)
-        self.assertEqual(len(response.context["car_list"]), 5)
+        self.assertEqual(len(response.context["cars_list"]), 5)
 
     def test_pagination_paged(self):
         response = self.client.get(CAR_URL + "?page=3")
-        self.assertEqual(len(response.context["car_list"]), 2)
+        self.assertEqual(len(response.context["cars_list"]), 2)
 
     def test_correct_query_set(self):
         response = self.client.get(CAR_URL, {"model": "Car 3"})
