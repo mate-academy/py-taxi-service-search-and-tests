@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.forms import CheckboxSelectMultiple
 from django.test import TestCase
 from django.urls import reverse
@@ -6,12 +7,8 @@ from taxi.forms import (
     DriverCreationForm,
     DriverLicenseUpdateForm,
     CarForm,
-    DriverSearchForm,
-    CarSearchForm,
-    ManufacturerSearchForm,
 )
-from taxi.models import Driver
-from taxi.views import DriverListView
+from taxi.models import Driver, Car, Manufacturer
 
 
 class DriverFormsTest(TestCase):
@@ -64,32 +61,52 @@ class CarTestsTest(TestCase):
 
 
 class SearchFormsTest(TestCase):
-    def test_driver_search_form(self):
-        form = DriverSearchForm(data={"username": "user1"})
-        self.assertTrue(form.is_valid())
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="user_login",
+            password="123123password",
+            license_number="12345"
 
-        form = DriverSearchForm(data={"username": ""})
-        self.assertTrue(form.is_valid())
+        )
+        self.manufacturer1 = Manufacturer.objects.create(
+            name="Manufacturer1",
+            country="Germany"
+        )
+        self.manufacturer2 = Manufacturer.objects.create(
+            name="Manufacturer2",
+            country="Germany"
+        )
+        Car.objects.create(
+            model="test_model1",
+            manufacturer=self.manufacturer1
+        )
+        Car.objects.create(
+            model="test_model2",
+            manufacturer=self.manufacturer2
+        )
 
-        form = DriverSearchForm(data={"username": "a" * 101})
-        self.assertFalse(form.is_valid())
+        self.client.force_login(self.user)
 
-    def test_car_search_form(self):
-        form = CarSearchForm(data={"model": "Car 1"})
-        self.assertTrue(form.is_valid())
+    def test_driver_query_set_changed_after_form(self):
+        filtered_queryset = Driver.objects.filter(username="user_login")
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "user_login"}
+        )
+        query_set_after_search = response.context["driver_list"]
+        self.assertEqual(list(query_set_after_search), list(filtered_queryset))
 
-        form = CarSearchForm(data={"model": ""})
-        self.assertTrue(form.is_valid())
+    def test_car_query_set_changed_after_form(self):
+        filtered_queryset = Car.objects.filter(model="test_model1")
+        response = self.client.get(
+            reverse("taxi:car-list"), {"model": "test_model1"}
+        )
+        query_set_after_search = response.context["cars_list"]
+        self.assertEqual(list(query_set_after_search), list(filtered_queryset))
 
-        form = CarSearchForm(data={"model": "a" * 256})
-        self.assertFalse(form.is_valid())
-
-    def test_manufacturer_search_form(self):
-        form = ManufacturerSearchForm(data={"name": "Manufacturer 1"})
-        self.assertTrue(form.is_valid())
-
-        form = ManufacturerSearchForm(data={"name": ""})
-        self.assertTrue(form.is_valid())
-
-        form = ManufacturerSearchForm(data={"name": "a" * 256})
-        self.assertFalse(form.is_valid())
+    def test_manufacturer_query_set_changed_after_form(self):
+        filtered_queryset = Manufacturer.objects.filter(name="Manufacturer1")
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"), {"name": "Manufacturer1"}
+        )
+        query_set_after_search = response.context["manufacturer_list"]
+        self.assertEqual(list(query_set_after_search), list(filtered_queryset))
