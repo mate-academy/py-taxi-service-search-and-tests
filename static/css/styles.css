@@ -1,5 +1,14 @@
 body {
     margin-top: 20px;
+    background-color: antiquewhite;
+}
+
+.nav-content {
+    background-color: antiquewhite;
+}
+
+.list-group-item {
+    background-color: beige;
 }
 
 .link-to-page {
