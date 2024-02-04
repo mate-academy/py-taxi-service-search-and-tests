@@ -16,7 +16,14 @@ class Manufacturer(models.Model):
 
 
 class Driver(AbstractUser):
-    license_number = models.CharField(max_length=255, unique=True)
+    license_number = models.CharField(
+        max_length=255,
+        unique=True,
+        validators=[RegexValidator(
+            regex=r"\b[A-Z]{3}\d{5}\b",
+            message="license number consists of 3 uppercase letters "
+                    "and 5 digits(ABC12345)")]
+    )
 
     class Meta:
         verbose_name = "driver"
