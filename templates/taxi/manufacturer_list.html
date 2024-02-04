@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% load custom_tags %}
+
+{% block sidebar %}
+  {{block.super}}
+  {% search search_by="name" search_object="manufacturer" %}
+{% endblock %}
 
 {% block content %}
   <h1>
