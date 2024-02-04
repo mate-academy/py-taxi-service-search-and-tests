@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% load custom_tags %}
+
+{% block sidebar %}
+  {{block.super}}
+  {% search search_by="model" search_object="car" %}
+{% endblock %}
 
 {% block content %}
   <h1>
@@ -11,7 +17,7 @@
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %} ">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}

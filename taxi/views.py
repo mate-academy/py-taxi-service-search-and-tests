@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -35,6 +36,19 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+    search_attr = "manufacturer_name"
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            name__icontains=self.request.GET.get(self.search_attr, "")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[
+            "search_for"
+        ] = f"{self.search_attr}={self.request.GET.get(self.search_attr,'')}&"
+        return context
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -57,7 +71,19 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer")
+    search_attr = "car_model"
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            model__icontains=self.request.GET.get(self.search_attr, "")
+        ).select_related("manufacturer")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[
+            "search_for"
+        ] = f"{self.search_attr}={self.request.GET.get(self.search_attr, '')}&"
+        return context
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -82,8 +108,21 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = Driver
+    model = get_user_model()
     paginate_by = 5
+    search_attr = "driver_username"
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            username__icontains=self.request.GET.get(self.search_attr, "")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[
+            "search_for"
+        ] = f"{self.search_attr}={self.request.GET.get(self.search_attr,'')}&"
+        return context
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):

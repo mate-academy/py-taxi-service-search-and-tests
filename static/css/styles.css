@@ -6,3 +6,13 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.search-form{
+    margin-top: 15px;
+    text-align: end;
+}
+
+.search-form input{
+    width: 100%;
+    margin-bottom: 0.2em;
+}
