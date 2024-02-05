@@ -20,8 +20,7 @@ class TestForms(TestCase):
         Set up necessary data for the tests.
         """
         self.user = get_user_model().objects.create_user(
-            username="testuser",
-            password="testpassword"
+            username="testuser", password="testpassword"
         )
 
     def test_driver_license_update_form_valid_data(self):
@@ -44,7 +43,7 @@ class TestForms(TestCase):
             "password2": "different_password",
             "license_number": "ABC12345",
             "first_name": "New",
-            "last_name": "Driver"
+            "last_name": "Driver",
         }
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -54,9 +53,7 @@ class TestForms(TestCase):
         """
         Tests the DriverLicenseUpdateForm with invalid data.
         """
-        form_data = {
-            "license_number": "InvalidLicenseNumber"
-        }
+        form_data = {"license_number": "InvalidLicenseNumber"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
@@ -65,9 +62,7 @@ class TestForms(TestCase):
         """
         Tests the DriverSearchForm with valid data.
         """
-        form_data = {
-            "username": "search_user"
-        }
+        form_data = {"username": "search_user"}
         form = DriverSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
@@ -75,9 +70,7 @@ class TestForms(TestCase):
         """
         Tests the CarSearchForm with valid data.
         """
-        form_data = {
-            "model": "search_model"
-        }
+        form_data = {"model": "search_model"}
         form = CarSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
@@ -85,8 +78,6 @@ class TestForms(TestCase):
         """
         Tests the ManufacturerSearchForm with valid data.
         """
-        form_data = {
-            "name": "search_manufacturer"
-        }
+        form_data = {"name": "search_manufacturer"}
         form = ManufacturerSearchForm(data=form_data)
         self.assertTrue(form.is_valid())

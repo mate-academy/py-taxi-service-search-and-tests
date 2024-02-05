@@ -13,8 +13,7 @@ class AdminPanelTest(TestCase):
         Set up necessary data for the tests.
         """
         self.admin_user = get_user_model().objects.create_superuser(
-            username="admin_FSDLJK_6354",
-            password="Some9Complex0Password7"
+            username="admin_FSDLJK_6354", password="Some9Complex0Password7"
         )
 
         self.driver = get_user_model().objects.create_user(
@@ -22,7 +21,7 @@ class AdminPanelTest(TestCase):
             password="Dri#$^ver_22#$34_pas^#%s_54@#22",
             first_name="Mykola",
             last_name="Meatball",
-            license_number="FTL12345"
+            license_number="FTL12345",
         )
 
         self.client.force_login(self.admin_user)

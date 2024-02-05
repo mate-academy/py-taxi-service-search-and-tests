@@ -19,11 +19,10 @@ class ModelTest(TestCase):
             password="Dri#$^ver_22#$34_pas^#%s_54@#22",
             first_name="Mykola",
             last_name="Meatball",
-            license_number=self.license_number
+            license_number=self.license_number,
         )
         self.manufacturer = Manufacturer.objects.create(
-            name="Test Manufacturer",
-            country="Ukraine"
+            name="Test Manufacturer", country="Ukraine"
         )
 
     def test_manufacturer_str(self):
