@@ -1,0 +1,35 @@
+{% extends 'layouts/base-presentation1.html' %}
+
+{% block content %}
+  <h1>
+    {{ newspaper.title }}
+    <a href="{% url 'taxi:newspaper-delete' pk=newspaper.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
+
+    <a href="{% url 'taxi:newspaper-update' pk=newspaper.id %}" class="btn btn-secondary link-to-page">
+      Update
+    </a>
+  </h1>
+  <p>Topic: ({{ newspaper.topic.name }})</p>
+  <h1>
+    redactors
+
+    {% if newspaper in user.newspapers.all %}
+      <a href="{% url 'taxi:toggle-newspaper-assign' pk=newspaper.id %}" class="btn btn-danger link-to-page">
+        Delete me from this newspaper
+      </a>
+    {% else %}
+      <a href="{% url 'taxi:toggle-newspaper-assign' pk=newspaper.id %}" class="btn btn-success link-to-page">
+        Assign me from this newspaper
+      </a>
+    {% endif %}
+
+  </h1>
+  <hr>
+  <ul>
+    {% for redactor in newspaper.redactors.all %}
+      <li>{{ redactor.username }} ({{ redactor.first_name }} {{ redactor.last_name }})</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

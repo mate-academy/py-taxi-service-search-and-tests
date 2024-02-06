@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Driver, Car, Manufacturer
+from .models import Redactor, Newspaper, Topic
 
 
-@admin.register(Driver)
+@admin.register(Redactor)
 class DriverAdmin(UserAdmin):
-    list_display = UserAdmin.list_display + ("license_number",)
+    list_display = UserAdmin.list_display + ("years_of_experience",)
     fieldsets = UserAdmin.fieldsets + (
-        (("Additional info", {"fields": ("license_number",)}),)
+        (("Additional info", {"fields": ("years_of_experience",)}),)
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
@@ -17,7 +17,7 @@ class DriverAdmin(UserAdmin):
                     "fields": (
                         "first_name",
                         "last_name",
-                        "license_number",
+                        "years_of_experience",
                     )
                 },
             ),
@@ -25,10 +25,10 @@ class DriverAdmin(UserAdmin):
     )
 
 
-@admin.register(Car)
+@admin.register(Newspaper)
 class CarAdmin(admin.ModelAdmin):
-    search_fields = ("model",)
-    list_filter = ("manufacturer",)
+    search_fields = ("title",)
+    list_filter = ("topic",)
 
 
-admin.site.register(Manufacturer)
+admin.site.register(Topic)

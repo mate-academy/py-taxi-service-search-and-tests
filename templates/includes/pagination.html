@@ -1,18 +1,69 @@
-{% load  query_transform %}
+{#{% if is_paginated %}#}
+{#  <ul class="pagination">#}
+{#    {% if page_obj.has_previous %}#}
+{#      <li class="page-item">#}
+{#        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a>#}
+{#      </li>#}
+{#    {% endif %}#}
+{#    <li class="page-item active">#}
+{#      <span class="page-link">{{ page_obj.number }} of {{ paginator.num_pages }}</span>#}
+{#    </li>#}
+{#    {% if page_obj.has_next %}#}
+{#      <li class="page-item">#}
+{#        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>#}
+{#      </li>#}
+{#    {% endif %}#}
+{#  </ul>#}
+{#{% endif %}#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <style>
+    .page-link {
+      display: inline-block;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      background-color: #50c878;
+      color: #333;
+      text-decoration: none;
+      border-radius: 7px;
+    }
+    .page-num {
+      display: inline-block;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      background-color: #e0ffff;
+      color: #333;
+      text-decoration: none;
+      border-radius: 7px;
+    }
+
+    .page-link:hover {
+      background-color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
 {% if is_paginated %}
   <ul class="pagination">
     {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a href="?{% query_transform request page=page_obj.previous_page_number %}">Prev</a>
+      <li class="">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a>
       </li>
     {% endif %}
-    <li class="page-item active">
-      <span class="page-link">{{ page_obj.number }} of {{ paginator.num_pages }}</span>
+    <li class="">
+      <span class="page-num">{{ page_obj.number }} of {{ paginator.num_pages }}</span>
     </li>
     {% if page_obj.has_next %}
-      <li class="page-item">
-        <a href="?{% query_transform request page=page_obj.next_page_number %}">next</a>
+      <li class="">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
       </li>
     {% endif %}
   </ul>
 {% endif %}
+</body>
+</html>

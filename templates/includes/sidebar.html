@@ -1,3 +1,4 @@
+
 <ul class="sidebar-nav list-group">
   {% if user.is_authenticated %}
     <li class="list-group-item">
@@ -18,12 +19,68 @@
     <a href="{% url 'taxi:index' %}">Home</a>
   </li>
   <li class="list-group-item">
-    <a href="{% url 'taxi:driver-list' %}">All drivers</a>
+    <a href="{% url 'taxi:redactor-list' %}">All redactors</a>
   </li>
   <li class="list-group-item">
-    <a href="{% url 'taxi:car-list' %}">All cars</a>
+    <a href="{% url 'taxi:newspaper-list' %}">All newspapers</a>
   </li>
   <li class="list-group-item">
-    <a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a>
+    <a href="{% url 'taxi:topic-list' %}">All topic</a>
   </li>
 </ul>
+
+{#<div class="container position-sticky z-index-sticky top-0">#}
+{#  <div class="row">#}
+{#    <div class="col-6">#}
+{#      <nav class="navbar navbar-expand-lg  blur blur-rounded top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4">#}
+{#        <div class="container-fluid font-weight-bolder ms-sm-3">#}
+{#          <li><h4><a href="{% url 'taxi:index' %}">Home</a></h4></li>#}
+{#          {% if user.is_authenticated %}#}
+{#            <li><h4>User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></h4></li>#}
+{#            <li><h4><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></h4></li>#}
+{#          {% else %}#}
+{#            <li><h4><a href="{% url 'login'%}?next={{request.path}}">Login</a></h4></li>#}
+{#          {% endif %}#}
+{#          <li><h4><a href="{% url 'taxi:redactor-list' %}">All redactors</a></h4></li>#}
+{#          <li><h4><a href="{% url 'taxi:newspaper-list' %}">All newspapers</a></h4></li>#}
+{#          <li><h4><a href="{% url 'taxi:topic-list' %}">All topic</a></h4></li>#}
+{#        </div>#}
+{#      </nav>#}
+{#      <!-- End Navbar -->#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+
+{##}
+{#<ul class="sidebar-nav list-group">#}
+{#  {% if user.is_authenticated %}#}
+{#    <li class="list-group-item">#}
+{#      User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a>#}
+{#    </li>#}
+{#    <li class="list-group-item">#}
+{#      <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>#}
+{#    </li>#}
+{#  {% else %}#}
+{#    <li class="list-group-item">#}
+{#      <a href="{% url 'login'%}?next={{request.path}}">Login</a>#}
+{#    </li>#}
+{#  {% endif %}#}
+{##}
+{#  <br>#}
+{##}
+{#  <li class="list-group-item">#}
+{#    <a href="{% url 'taxi:index' %}">Home</a>#}
+{#  </li>#}
+{#  <li class="list-group-item">#}
+{#    <a href="{% url 'taxi:redactor-list' %}">All redactors</a>#}
+{#  </li>#}
+{#  <li class="list-group-item">#}
+{#    <a href="{% url 'taxi:newspaper-list' %}">All newspapers</a>#}
+{#  </li>#}
+{#  <li class="list-group-item">#}
+{#    <a href="{% url 'taxi:topic-list' %}">All topic</a>#}
+{#  </li>#}
+{#</ul>#}
+
+
