@@ -71,10 +71,13 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "taxi.tests.context_processors.cfg_assets_root",
             ],
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
@@ -114,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "taxi.Driver"
+AUTH_USER_MODEL = "taxi.Redactor"
 
 LOGIN_REDIRECT_URL = "/"
 
@@ -136,6 +139,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = (BASE_DIR / "static",)
+
+ASSETS_ROOT = "/static/assets"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 

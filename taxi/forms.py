@@ -3,50 +3,87 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from taxi.models import Car, Driver
+from taxi.models import Newspaper, Redactor
 
 
-class CarForm(forms.ModelForm):
-    drivers = forms.ModelMultipleChoiceField(
+class NewspaperForm(forms.ModelForm):
+    redactors = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
 
     class Meta:
-        model = Car
+        model = Newspaper
         fields = "__all__"
 
 
-class DriverCreationForm(UserCreationForm):
+class RedactorCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        model = Driver
+        model = Redactor
         fields = UserCreationForm.Meta.fields + (
-            "license_number",
+            "years_of_experience",
             "first_name",
             "last_name",
+            "years_of_experience",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
+    def clean_years_of_experience(self):  # this logic is optional, but possible
+        return validate_years_of_experience(self.cleaned_data["years_of_experience"])
 
 
-class DriverLicenseUpdateForm(forms.ModelForm):
+class RedactorLicenseUpdateForm(forms.ModelForm):
     class Meta:
-        model = Driver
-        fields = ["license_number"]
+        model = Redactor
+        fields = ["years_of_experience"]
 
-    def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
+    def clean_years_of_experience(self):
+        return validate_years_of_experience(self.cleaned_data["years_of_experience"])
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+def validate_years_of_experience(
+    years_of_experience,
+):
+    if years_of_experience > 50:
+        raise ValidationError("Years of experience should < 50")
+    elif years_of_experience < 0:
+        raise ValidationError("Years of experience should > 0")
+    return years_of_experience
 
-    return license_number
+
+class RedactorSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by username"
+            }
+        )
+    )
+
+
+class NewspaperSearchForm(forms.Form):
+    title = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by title"
+            }
+        )
+    )
+
+
+class TopicSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by name"
+            }
+        )
+    )

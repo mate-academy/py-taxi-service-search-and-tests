@@ -1,0 +1,36 @@
+{% extends 'layouts/base-presentation.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Newspaper list
+    <a href="{% url 'taxi:newspaper-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+  {% if newspaper_list %}
+   <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Topic</th>
+        <th>Content</th>
+        <th>Published Data</th>
+      </tr>
+    <ul>
+     {% for newspaper in newspaper_list %}
+       <tr>
+        <td><a href="{% url "taxi:newspaper-detail" pk=newspaper.id %} ">{{ newspaper.id }}</a></td>
+        <td>{{ newspaper.title }} </td>
+        <td>{{ newspaper.topic.name }}</td>
+        <td>{{ newspaper.content }}</td>
+        <td>{{ newspaper.published_date }}</td>
+      </tr>
+     {% endfor %}
+     </ul>
+   </table>
+  {% else %}
+    <p>There are no newspapers in taxi</p>
+  {% endif %}
+
+{% endblock %}

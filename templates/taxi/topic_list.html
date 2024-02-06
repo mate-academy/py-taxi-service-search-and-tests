@@ -1,0 +1,58 @@
+{% extends 'layouts/base-presentation.html' %}
+
+{#{% block title %} Presentation {% endblock title %}#}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
+
+{% load crispy_forms_filters %}
+
+{% block content %}
+{#<div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved-11.jpg')">#}
+<div>
+  <h1>
+    Topic List
+    <a href="{% url 'taxi:topic-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  <h2>{{ Topic.objects.all }}</h2>
+  </h1>
+  {% if topic_list %}
+    <table class="table page-link1" >
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+
+      {% for topic in topic_list %}
+        <tr>
+          <td>
+              {{ topic.id }}
+          </td>
+          <td>
+              {{ topic.name }}
+          </td>
+          <td>
+              <a href="{% url 'taxi:topic-update' pk=topic.id %}">
+                Update
+              </a>
+            </td>
+            <td>
+              <a style="color: red"
+                href="{% url 'taxi:topic-delete' pk=topic.id %}">
+                Delete
+              </a>
+            </td>
+        </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+      <p>There are no topic in the service.</p>
+  {% endif %}
+</div>
+{% endblock %}

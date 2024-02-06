@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load crispy_forms_filters %}
+<head>
+  <style>
+  table, th, td {
+    {#border:4px solid white;#}
+    border-collapse: collapse;
+}
+</style>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <table>
+    <tr>
+      <th>
+        {{ search_form|crispy }}
+      </th>
+      <th>
+        <input class="btn btn-secondary page-link" type="submit" value="🎉">
+      </th>
+    </tr>
+  </table>
+</body>
+</html>

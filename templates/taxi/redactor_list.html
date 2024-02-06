@@ -1,0 +1,77 @@
+{% extends 'layouts/base-presentation.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <h1>Redactor List
+      <a href="{% url 'taxi:redactor-create' %}" class="btn btn-primary link-to-page">
+        Create
+      </a>
+
+    </h1>
+    {% if redactor_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Years of experience</th>
+      </tr>
+    {% for redactor in redactor_list %}
+      <tr>
+        <td>{{ redactor.id }}</td>
+        <td><a href="{{ redactor.get_absolute_url }}">{{ redactor.username }} {% if user == redactor %} (Me){% endif %}</a></td>
+        <td>{{ redactor.first_name }}</td>
+        <td>{{ redactor.last_name }}</td>
+        <td>{{ redactor.years_of_experience }}</td>
+      </tr>
+    {% endfor %}
+
+    </table>
+    {% else %}
+      <p>There are no redactor in the service.</p>
+    {% endif %}
+{% endblock %}
+{##}
+{#{% extends 'layouts/base-presentation.html' %}#}
+{#{% load crispy_forms_filters %}#}
+{##}
+{#{% block content %}#}
+{#<div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved-11.jpg')">#}
+{#  <h1>#}
+{#    Redactor List#}
+{#    <a href="{% url 'taxi:topic-create' %}" class="btn btn-primary link-to-page">#}
+{#      Create#}
+{#    </a>#}
+{#  <h2>{{ Redactor.objects.all }}</h2>#}
+{#  </h1>#}
+{#  {% if redactor_list %}#}
+{#    <table class="table" >#}
+{#      <tr>#}
+{#        <th>ID</th>#}
+{#        <th>Name</th>#}
+{#        <th>Update</th>#}
+{#        <th>Delete</th>#}
+{#      </tr>#}
+{##}
+{#          {% for redactor in redactor_list %}#}
+{#            <tr>#}
+{#              <td>{{ redactor.id }}</td>#}
+{#              <td><a href="{{ redactor.get_absolute_url }}">{{ redactor.username }} {% if user == redactor %} (Me){% endif %}</a></td>#}
+{#              <td>{{ redactor.first_name }}</td>#}
+{#              <td>{{ redactor.last_name }}</td>#}
+{#              <td>{{ redactor.years_of_experience }}</td>#}
+{#            </tr>#}
+{#          {% endfor %}#}
+{##}
+{#    </table>#}
+{#  {% else %}#}
+{#    <p>There are no redactor in the service.</p>#}
+{#    {% endif %}#}
+{#    </table>#}
+{##}
+{#  {% else %}#}
+{#      <p>There are no topic in the service.</p>#}
+{#  {% endif %}#}
+{#</div>#}
+{#{% endblock %}#}
