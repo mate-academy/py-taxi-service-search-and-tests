@@ -8,10 +8,12 @@ MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 CAR_URL = reverse("taxi:car-list")
 DRIVER_URL = reverse("taxi:driver-list")
 
+
 class PublicManufacturerTest(TestCase):
     def test_login_required(self):
         res = self.client.get(MANUFACTURER_URL)
         self.assertNotEquals(res.status_code, 200)
+
 
 class PrivateManufacturerTest(TestCase):
     def setUp(self) -> None:
@@ -27,8 +29,7 @@ class PrivateManufacturerTest(TestCase):
         self.assertEqual(response.status_code, 200)
         manufacturer = Manufacturer.objects.all()
         self.assertEqual(
-            list(response.context["manufacturer_list"]),
-            list(manufacturer)
+            list(response.context["manufacturer_list"]), list(manufacturer)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
@@ -47,10 +48,11 @@ class PrivateCarTest(TestCase):
         )
         self.client.force_login(self.user)
 
-
     def test_retrieve_car(self):
         driver = Driver.objects.create(license_number="AAA12345")
-        manufacturer = Manufacturer.objects.create(name="testname", country="testcountry")
+        manufacturer = Manufacturer.objects.create(
+            name="testname", country="testcountry"
+        )
         car = Car.objects.create(model="testmodel", manufacturer=manufacturer)
 
         car.drivers.add(driver)
@@ -73,13 +75,9 @@ class PrivateDriverTest(TestCase):
         )
         self.client.force_login(self.user)
 
-
     def test_retrieve_driver(self):
         response = self.client.get(DRIVER_URL)
         self.assertEqual(response.status_code, 200)
         driver = Driver.objects.all()
-        self.assertEqual(
-            list(response.context["driver_list"]),
-            list(driver)
-        )
+        self.assertEqual(list(response.context["driver_list"]), list(driver))
         self.assertTemplateUsed(response, "taxi/driver_list.html")
