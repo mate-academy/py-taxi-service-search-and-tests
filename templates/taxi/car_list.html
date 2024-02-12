@@ -3,22 +3,19 @@
 {% block content %}
   <h1>
     Car List
-    <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
+    <a href="{% url "taxi:car-create" %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
 
-  <!-- Search Form -->
-  <form action="{% url 'taxi:car-search' %}" method="GET">
-    <input type="text" name="q" placeholder="Search by model">
-    <button type="submit">Search</button>
-  </form>
+  <!-- Include Search Form -->
+  {% include 'taxi/car_search_form.html' %}
 
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.id }}</a>
+          <a href="{% url "taxi:car-detail" pk=car.id %}">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
