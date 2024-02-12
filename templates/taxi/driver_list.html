@@ -1,34 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+  <h1>
+    Driver List
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
 
-    {% if driver_list %}
+  <!-- Search Form -->
+  <form action="{% url 'taxi:driver-search' %}" method="GET">
+    <input type="text" name="q" placeholder="Search by username">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if driver_list %}
     <table class="table">
+      <!-- Table Headers -->
       <tr>
         <th>ID</th>
         <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>License Number</th>
       </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
 
+      <!-- Table Data -->
+      {% for driver in driver_list %}
+        <tr>
+          <td>{{ driver.id }}</td>
+          <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }}</a></td>
+          <td>{{ driver.first_name }}</td>
+          <td>{{ driver.last_name }}</td>
+          <td>{{ driver.license_number }}</td>
+        </tr>
+      {% endfor %}
     </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  {% else %}
+    <p>There are no drivers in the service.</p>
+  {% endif %}
 {% endblock %}
