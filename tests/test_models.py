@@ -24,11 +24,13 @@ class ModelTests(TestCase):
 
     def test_manufacturer_str(self):
         self.assertEquals(str(self.manufacturer),
-                          f"{self.manufacturer.name} {self.manufacturer.country}")
+                          f"{self.manufacturer.name} "
+                          f"{self.manufacturer.country}")
 
     def test_car_str(self):
         self.assertEquals(str(self.car), self.car.model)
 
     def test_driver_str(self):
         self.assertEquals(str(self.driver),
-                          f"{self.driver.username} ({self.driver.first_name} {self.driver.last_name})")
+                          f"{self.driver.username} ({self.driver.first_name}"
+                          f" {self.driver.last_name})")

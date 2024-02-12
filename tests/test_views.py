@@ -47,8 +47,14 @@ class CarListViewTest(LoginMixin):
         self.url = reverse("taxi:car-list")
         self.template = "taxi/car_list.html"
 
-        manufacturer1 = Manufacturer.objects.create(name="test1", country="TestCountry1")
-        manufacturer2 = Manufacturer.objects.create(name="test2", country="TestCountry2")
+        manufacturer1 = Manufacturer.objects.create(
+            name="test1",
+            country="TestCountry1"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="test2",
+            country="TestCountry2"
+        )
         car1 = Car.objects.create(
             model="test1",
             manufacturer=manufacturer1,
@@ -99,9 +105,18 @@ class ManufacturerListViewTest(LoginMixin):
         self.url = reverse("taxi:manufacturer-list")
         self.template = "taxi/manufacturer_list.html"
 
-        Manufacturer.objects.create(name="test1", country="TestCountry1")
-        Manufacturer.objects.create(name="test2", country="TestCountry2")
-        Manufacturer.objects.create(name="exclude_value_1", country="TestCountry3")
+        Manufacturer.objects.create(
+            name="test1",
+            country="TestCountry1"
+        )
+        Manufacturer.objects.create(
+            name="test2",
+            country="TestCountry2"
+        )
+        Manufacturer.objects.create(
+            name="exclude_value_1",
+            country="TestCountry3"
+        )
 
     def test_get_queryset_without_filtering(self):
         response = self.client.get(self.url)
@@ -135,7 +150,10 @@ class ToggleAssignTest(LoginMixin):
     def setUp(self) -> None:
         super().setUp()
         self.template = "taxi/car-detail"
-        self.url = reverse("taxi:toggle-car-assign", kwargs={"pk": self.user.pk})
+        self.url = reverse(
+            "taxi:toggle-car-assign",
+            kwargs={"pk": self.user.pk}
+        )
 
         manufacturer = Manufacturer.objects.create(
             name="test",
@@ -154,5 +172,3 @@ class ToggleAssignTest(LoginMixin):
         self.client.post(self.url)
 
         self.assertIn(self.car1, self.user.cars.all())
-
-
