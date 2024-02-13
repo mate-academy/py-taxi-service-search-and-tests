@@ -11,9 +11,6 @@ class TestForms(TestCase):
         )
 
     def test_driver_creation_form_valid_data(self):
-        """
-        Tests the DriverCreationForm with valid data.
-        """
         form_data = {
             "username": "New_driver",
             "password1": "new_drivers_password",
@@ -26,9 +23,6 @@ class TestForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_driver_creation_form_invalid_data(self):
-        """
-        Tests the DriverCreationForm with invalid data.
-        """
         form_data = {
             "username": "New_driver",
             "password1": "new_drivers_password",
@@ -42,17 +36,11 @@ class TestForms(TestCase):
         self.assertIn("password2", form.errors)
 
     def test_driver_license_update_form_valid_data(self):
-        """
-        Tests the DriverLicenseUpdateForm with valid data.
-        """
         form_data = {"license_number": "ABC12345"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_driver_license_update_form_invalid_data(self):
-        """
-        Tests the DriverLicenseUpdateForm with invalid data.
-        """
         form_data = {"license_number": "InvalidLicenseNumber"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())

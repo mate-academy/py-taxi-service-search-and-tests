@@ -3,20 +3,17 @@
 {% block content %}
   <h1>
     Driver List
-    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+    <a href="{% url "taxi:driver-create" %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
-
-  <!-- Search Form -->
-  <form action="{% url 'taxi:driver-search' %}" method="GET">
+  <form action="{% url "taxi:driver-search" %}" method="GET">
     <input type="text" name="q" placeholder="Search by username">
     <button type="submit">Search</button>
   </form>
 
   {% if driver_list %}
     <table class="table">
-      <!-- Table Headers -->
       <tr>
         <th>ID</th>
         <th>Username</th>
@@ -24,8 +21,6 @@
         <th>Last Name</th>
         <th>License Number</th>
       </tr>
-
-      <!-- Table Data -->
       {% for driver in driver_list %}
         <tr>
           <td>{{ driver.id }}</td>

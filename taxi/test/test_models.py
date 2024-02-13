@@ -5,14 +5,7 @@ from taxi.models import Manufacturer, Car
 
 
 class ModelTest(TestCase):
-    """
-    TestCase class for testing the models in the taxi app.
-    """
-
     def setUp(self) -> None:
-        """
-        Set up necessary data for the tests.
-        """
         self.license_number = "FTL12345"
         self.driver = get_user_model().objects.create_user(
             username="driver_KLFPW_345",
@@ -26,9 +19,6 @@ class ModelTest(TestCase):
         )
 
     def test_manufacturer_str(self):
-        """
-        Test the string representation of the Manufacturer model.
-        """
         str_representation = str(self.manufacturer)
         expected_result = (
             f"{self.manufacturer.name} "
@@ -37,15 +27,9 @@ class ModelTest(TestCase):
         self.assertEquals(str_representation, expected_result)
 
     def test_driver_has_a_license_number(self):
-        """
-        Test if a driver has the correct license number.
-        """
         self.assertEqual(self.driver.license_number, self.license_number)
 
     def test_driver_str(self):
-        """
-        Test the string representation of the Driver model.
-        """
         expected_result = (
             f"{self.driver.username} ({self.driver.first_name} "
             f"{self.driver.last_name})"
@@ -53,9 +37,6 @@ class ModelTest(TestCase):
         self.assertEqual(str(self.driver), expected_result)
 
     def test_car_str(self):
-        """
-        Test the string representation of the Car model.
-        """
         car = Car.objects.create(
             model="Some_test_model",
             manufacturer=self.manufacturer,
