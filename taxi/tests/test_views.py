@@ -148,7 +148,9 @@ class PrivateSearchTest(TestCase):
         )
         response = self.client.get(MANUFACTURER_URL + f"?name={search_name}")
         self.assertEqual(response.status_code, 200)
-        search_result = Manufacturer.objects.filter(name__icontains=search_name)
+        search_result = Manufacturer.objects.filter(
+            name__icontains=search_name
+        )
         self.assertEqual(
             list(response.context["manufacturer_list"]),
             list(search_result),
