@@ -1,0 +1,9 @@
+{% load bootstrap_icons %}
+{% load crispy_forms_filters %}
+
+<form method="get" action="" class="d-flex mb-3">
+  {{ search_form|crispy }}
+  <button type="submit" class="searchBtn">
+    {% bs_icon "search" size='1.1em' %}
+  </button>
+</form>

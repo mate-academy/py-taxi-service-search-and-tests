@@ -1,8 +1,40 @@
-body {
-    margin-top: 20px;
+body, h1, h2 {
+    margin: 0;
+    padding: 0;
 }
 
-.link-to-page {
-    float: right;
-    margin: 0 2px 0 2px;
+hr {
+    margin: 6px 0 18px;
+}
+
+.title {
+    padding: 16px 0;
+    margin: 0;
+}
+
+.subtitle {
+    padding-bottom: 16px;
+    margin: 0;
+}
+
+.page {
+    padding-left: 30px;
+    margin-bottom: 20px;
+}
+
+.addBtn {
+    height: 32px;
+}
+
+#div_id_name,
+#div_id_model,
+#div_id_username {
+    margin: 0;
+    width: 250px;
+}
+
+.searchBtn {
+    padding: 0 12px 2px;
+    background: none;
+    border: 0;
 }
