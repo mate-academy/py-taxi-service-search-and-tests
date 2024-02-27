@@ -1,6 +1,4 @@
-from django.db import IntegrityError
 from django.test import TestCase
-from django.urls import reverse
 
 from taxi.models import Manufacturer, Driver, Car
 
