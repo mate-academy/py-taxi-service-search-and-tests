@@ -1,6 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import (
+    DriverCreationForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+    DriverSearchForm
+)
 
 
 class DriverCreationFormTest(TestCase):
@@ -31,3 +37,34 @@ class DriverCreationFormTest(TestCase):
             form_data["license_number"] = incorrect_license
             form = DriverCreationForm(data=form_data)
             self.assertFalse(form.is_valid())
+
+
+class SearchFormTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="papajoe",
+            password="$ecreT_550",
+            license_number="MAN99901"
+        )
+        self.client.force_login(self.user)
+
+    def test_empty_car_search_form_is_valid(self):
+        form_data = {
+            "model": "",
+        }
+        form = CarSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_empty_manufacturer_search_form_is_valid(self):
+        form_data = {
+            "name": "",
+        }
+        form = ManufacturerSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_empty_driver_search_form_is_valid(self):
+        form_data = {
+            "username": "",
+        }
+        form = DriverSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
