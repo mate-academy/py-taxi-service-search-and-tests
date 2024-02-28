@@ -4,7 +4,7 @@ from taxi.models import Manufacturer, Car, Driver
 
 
 class ManufacturerModelTest(TestCase):
-    def test_manufacturer(self):
+    def test_manufacturer_str(self):
         bmw = Manufacturer.objects.create(
             name="BMW",
             country="Germany"
@@ -36,7 +36,7 @@ class DriverModelTest(TestCase):
 
 
 class CarModelTest(TestCase):
-    def test_car(self):
+    def test_car_str(self):
         bmw = Manufacturer.objects.create(
             name="BMW",
             country="Germany"

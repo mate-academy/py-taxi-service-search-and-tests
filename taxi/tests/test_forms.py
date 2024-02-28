@@ -23,16 +23,6 @@ class TestCarForms(TestCase):
             name="BMW", country="Germany"
         )
 
-    # def test_car_form_is_valid(self):
-    #     form_data = {
-    #         "model": "M5",
-    #         "manufacturer": self.manufacturer.id,
-    #         "drivers": self.user.id
-    #     }
-    #     form = CarForm(data=form_data)
-    #     print(form)
-    #     self.assertTrue(form.is_valid())
-
     def test_car_search_form_with_arg(self):
         form_data = {
             "model": "M5",

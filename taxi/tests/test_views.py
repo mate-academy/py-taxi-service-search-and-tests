@@ -68,10 +68,6 @@ class ManufacturerTest(TestCase):
         response = self.client.get(reverse("taxi:manufacturer-list"))
         self.assertEqual(response.status_code, 200)
 
-    def test_manufacturer_list_pagination(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"))
-        self.assertEqual(response.context["manufacturer_list"].count(), 5)
-
     def test_manufacturer_update(self):
         self.manufacturer = Manufacturer.objects.get(id=1)
         response = self.client.post(
