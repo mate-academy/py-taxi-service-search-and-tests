@@ -39,7 +39,7 @@ class DriverCreationFormTest(TestCase):
             self.assertFalse(form.is_valid())
 
 
-class SearchFormTest(TestCase):
+class SearchFormsTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="papajoe",
