@@ -48,23 +48,15 @@ class SearchFormsTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_empty_car_search_form_is_valid(self):
-        form_data = {
-            "model": "",
+    def test_empty_search_form_is_valid(self):
+        field_form = {
+            CarSearchForm: "model",
+            ManufacturerSearchForm: "name",
+            DriverSearchForm: "username"
         }
-        form = CarSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_empty_manufacturer_search_form_is_valid(self):
-        form_data = {
-            "name": "",
-        }
-        form = ManufacturerSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_empty_driver_search_form_is_valid(self):
-        form_data = {
-            "username": "",
-        }
-        form = DriverSearchForm(data=form_data)
-        self.assertTrue(form.is_valid())
+        for search_form, field in field_form.items():
+            form_data = {
+                field: "",
+            }
+            form = search_form(data=form_data)
+            self.assertTrue(form.is_valid())
