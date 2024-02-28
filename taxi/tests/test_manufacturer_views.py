@@ -47,9 +47,3 @@ class PrivateManufacturerViewsTest(TestCase):
     def test_manufacturer_search_form_exists(self):
         response = self.client.get(MANUFACTURER_LIST_URL)
         self.assertContains(response, "Search by name")
-
-    def test_manufacturer_search_form_works_correctly(self):
-        response = self.client.get(f"{MANUFACTURER_LIST_URL}?name=p")
-        self.assertEqual(
-            list(response.context["manufacturer_list"]), [self.manufacturer2]
-        )

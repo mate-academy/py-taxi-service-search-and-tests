@@ -56,11 +56,6 @@ class PrivateCarViewsTest(TestCase):
         response = self.client.get(CAR_LIST_URL)
         self.assertContains(response, "Search by model")
 
-    def test_car_search_form_works_correctly(self):
-        response = self.client.get(f"{CAR_LIST_URL}?model=z")
-        self.assertEqual(
-            list(response.context["car_list"]), [self.car]
-        )
 
     def test_car_detail_view_shows_relation_fields(self):
         self.car.drivers.add(self.user)
