@@ -100,9 +100,9 @@ class CarTest(TestCase):
         self.client.post(
             reverse("taxi:car-create"),
             {
-                    "model": "M5",
-                    "drivers": self.user.id,
-                    "manufacturer": self.manufacturer.id
+                "model": "M5",
+                "drivers": self.user.id,
+                "manufacturer": self.manufacturer.id
             }
         )
         self.assertEqual(Car.objects.last().model, "M5")
@@ -113,7 +113,9 @@ class CarTest(TestCase):
             manufacturer=self.manufacturer
         )
 
-        response = self.client.get(reverse("taxi:car-detail", args=[self.car.id]))
+        response = self.client.get(
+            reverse("taxi:car-detail", args=[self.car.id])
+        )
         self.assertContains(response, "M5")
 
     def test_car_delete(self):
@@ -122,6 +124,8 @@ class CarTest(TestCase):
             manufacturer=self.manufacturer
         )
 
-        response = self.client.delete(reverse("taxi:car-delete", args=[self.car.id]))
+        response = self.client.delete(
+            reverse("taxi:car-delete", args=[self.car.id])
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Car.objects.last(), None)

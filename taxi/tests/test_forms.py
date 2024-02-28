@@ -1,8 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import CarForm, CarModelSearchForm, ManufacturerNameSearchForm, DriverLicenseUpdateForm, \
-    DriverUsernameSearchForm, DriverCreationForm
+from taxi.forms import (
+    CarModelSearchForm,
+    ManufacturerNameSearchForm,
+    DriverLicenseUpdateForm,
+    DriverUsernameSearchForm,
+    DriverCreationForm
+)
 from taxi.models import Manufacturer
 
 

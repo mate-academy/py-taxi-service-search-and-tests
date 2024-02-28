@@ -25,7 +25,10 @@ class DriverModelTest(TestCase):
 
     def test_driver_str(self):
         driver = Driver.objects.get(id=1)
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_get_absolute_url(self):
         driver = Driver.objects.get(id=1)
