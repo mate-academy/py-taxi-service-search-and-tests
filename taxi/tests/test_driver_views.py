@@ -56,7 +56,6 @@ class PrivateDriverViewsTest(TestCase):
         response = self.client.get(DRIVER_LIST_URL)
         self.assertContains(response, "Search by username")
 
-
     def test_driver_detail_view_shows_all_info(self):
         self.car.drivers.add(self.driver)
         response = self.client.get(DRIVER_DETAIL_URL)
