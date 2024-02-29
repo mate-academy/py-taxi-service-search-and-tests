@@ -37,7 +37,9 @@ class PrivateIndexViewTest(TestCase):
         self.assertTemplateUsed(response, "taxi/index.html")
 
     def test_correct_index_stats(self):
-        response = self.client.get(INDEX_URL)
+        for _ in range(7):
+            response = self.client.get(INDEX_URL)
+
         all_manufacturers = Manufacturer.objects.all()
         all_drivers = get_user_model().objects.all()
         all_cars = Car.objects.all()
@@ -53,4 +55,8 @@ class PrivateIndexViewTest(TestCase):
         self.assertEqual(
             response.context["num_cars"],
             all_cars.count()
+        )
+        self.assertEqual(
+            response.context["num_visits"],
+            7
         )
