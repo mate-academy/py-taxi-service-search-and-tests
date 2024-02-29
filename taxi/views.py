@@ -37,9 +37,6 @@ def index(request):
 
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
-    model = Manufacturer
-    context_object_name = "manufacturer_list"
-    template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
     def get_queryset(self):
@@ -79,13 +76,11 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer")
 
     def get_queryset(self):
         model = self.request.GET.get("model")
-        queryset = Car.objects.all()
+        queryset = Car.objects.select_related("manufacturer")
 
         if model:
             return queryset.filter(model__icontains=model)
@@ -122,7 +117,6 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = Driver
     paginate_by = 5
 
     def get_queryset(self):
