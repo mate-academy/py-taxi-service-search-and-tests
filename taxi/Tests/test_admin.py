@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -6,14 +7,13 @@ from django.urls import reverse
 class AdminTest(TestCase):
     def setUp(self):
         self.client = Client()
-        User = get_user_model()
-        admin_user = User.objects.create_superuser(
+        self.admin_user = get_user_model().objects.create_superuser(
             username="admin",
             email="admin@example.com",
             password="test_admin"
         )
-        self.client.force_login(admin_user)
-        self.driver = User.objects.create_user(
+        self.client.force_login(self.admin_user)
+        self.driver = get_user_model().objects.create_user(
             username="driver",
             password="test_driver",
             license_number="test_license_number",

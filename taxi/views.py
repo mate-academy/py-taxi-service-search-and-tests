@@ -6,8 +6,13 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, ManufacturerSearchForm, CarSearchForm, \
-    DriverSearchForm
+from .forms import (DriverCreationForm,
+                    DriverLicenseUpdateForm,
+                    CarForm,
+                    ManufacturerSearchForm,
+                    CarSearchForm,
+                    DriverSearchForm
+                    )
 
 
 @login_required
@@ -49,7 +54,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         form = ManufacturerSearchForm(self.request.GET)
         queryset = Manufacturer.objects.all()
         if form.is_valid():
-            queryset = queryset.filter(name__icontains=form.cleaned_data["manufacturer_name"])
+            queryset = queryset.filter(
+                name__icontains=form.cleaned_data["manufacturer_name"]
+            )
         return queryset
 
 
@@ -87,7 +94,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         form = CarSearchForm(self.request.GET)
         queryset = Car.objects.all()
         if form.is_valid():
-            queryset = queryset.filter(model__icontains=form.cleaned_data["car_model"])
+            queryset = queryset.filter(
+                model__icontains=form.cleaned_data["car_model"]
+            )
         return queryset
 
 
@@ -128,7 +137,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         form = DriverSearchForm(self.request.GET)
         queryset = Driver.objects.all()
         if form.is_valid():
-            queryset = queryset.filter(username__icontains=form.cleaned_data["username"])
+            queryset = queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return queryset
 
 

@@ -1,8 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, CarSearchForm, ManufacturerSearchForm, \
-    DriverSearchForm, CarForm
+from taxi.forms import (DriverCreationForm,
+                        DriverLicenseUpdateForm,
+                        CarSearchForm,
+                        ManufacturerSearchForm,
+                        DriverSearchForm,
+                        CarForm
+                        )
 from taxi.models import Manufacturer, Driver
 
 
@@ -83,8 +88,14 @@ class DriverSearchFormTest(TestCase):
 class CarFormTest(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(name="Toyota")
-        self.driver1 = Driver.objects.create(username="John", license_number="NKG65214")
-        self.driver2 = Driver.objects.create(username="Alice", license_number="NKL65204")
+        self.driver1 = Driver.objects.create(
+            username="John",
+            license_number="NKG65214"
+        )
+        self.driver2 = Driver.objects.create(
+            username="Alice",
+            license_number="NKL65204"
+        )
 
     def test_car_form_valid(self):
         form_data = {

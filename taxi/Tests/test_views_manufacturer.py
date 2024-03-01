@@ -52,11 +52,13 @@ class ManufacturerCreateTest(TestCase):
         ),
             data={
                 "name": "Ford",
-                "country": "USA"
-            }
+                "country": "USA"}
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(Manufacturer.objects.count(), manufacturer_count_before + 1)
+        self.assertEqual(
+            Manufacturer.objects.count(),
+            manufacturer_count_before + 1
+        )
 
 
 class ManufacturerUpdateTest(TestCase):

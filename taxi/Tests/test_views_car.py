@@ -23,8 +23,8 @@ class PrivateCarTest(TestCase):
 
     def test_retrieve_user_cars(self):
         manufacturer = Manufacturer.objects.create(name="Toyota")
-        car1 = Car.objects.create(model="Corolla", manufacturer=manufacturer)
-        car2 = Car.objects.create(model="Camry", manufacturer=manufacturer)
+        Car.objects.create(model="Corolla", manufacturer=manufacturer)
+        Car.objects.create(model="Camry", manufacturer=manufacturer)
         response = self.client.get(CAR_FORMAT_URL)
         self.assertEqual(response.status_code, 200)
         cars = Car.objects.all()
