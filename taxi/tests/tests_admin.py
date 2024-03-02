@@ -11,7 +11,9 @@ class AdminTests(TestCase):
         )
         self.client.force_login(self.admin)
         self.driver = get_user_model().objects.create_user(
-            username="test_username", password="testpassword1991", license_number="ABC12345"
+            username="test_username",
+            password="testpassword1991",
+            license_number="ABC12345"
         )
 
     def test_driver_license_listed(self):

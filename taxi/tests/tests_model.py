@@ -12,7 +12,8 @@ class ModelTests(TestCase):
 
     def test_manufacturer_format_str(self):
         self.assertEqual(
-            str(self.manufacturer), f"{self.manufacturer.name} {self.manufacturer.country}"
+            str(self.manufacturer),
+            f"{self.manufacturer.name} {self.manufacturer.country}"
         )
 
     def test_driver_str(self):
@@ -30,7 +31,9 @@ class ModelTests(TestCase):
         )
 
     def test_car_str(self):
-        car = Car.objects.create(model="Test Model", manufacturer=self.manufacturer)
+        car = Car.objects.create(
+            model="Test Model", manufacturer=self.manufacturer
+        )
         self.assertEqual(
             str(car),
             car.model,
