@@ -4,9 +4,9 @@ from django.contrib.auth import get_user_model
 
 from taxi.models import Manufacturer, Car, Driver
 
-CARS_URL = reverse('taxi:car-list')
-MANUFACTURERS_URL = reverse('taxi:manufacturer-list')
-DRIVERS_URL = reverse('taxi:driver-list')
+CARS_URL = reverse("taxi:car-list")
+MANUFACTURERS_URL = reverse("taxi:manufacturer-list")
+DRIVERS_URL = reverse("taxi:driver-list")
 
 
 class PublicModelTests(TestCase):
@@ -40,7 +40,9 @@ class PrivateModelTest(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
     def test_retrieve_cars(self):
-        manufacturer = Manufacturer.objects.create(name="AUDI", country="Germany")
+        manufacturer = Manufacturer.objects.create(
+            name="AUDI", country="Germany"
+        )
         Car.objects.create(model="AUDI100", manufacturer=manufacturer)
         Car.objects.create(model="AUDI200", manufacturer=manufacturer)
 
@@ -54,8 +56,12 @@ class PrivateModelTest(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_retrieve_driver(self):
-        Driver.objects.create(username="driver1_test", license_number="MMM99999")
-        Driver.objects.create(username="driver2_test", license_number="KKK98765")
+        Driver.objects.create(
+            username="driver1_test", license_number="MMM99999"
+        )
+        Driver.objects.create(
+            username="driver2_test", license_number="KKK98765"
+        )
         response = self.client.get(DRIVERS_URL)
         self.assertEqual(response.status_code, 200)
         driver = Driver.objects.all()
