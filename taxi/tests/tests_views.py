@@ -40,7 +40,7 @@ class PrivateManufacturerTest(TestCase):
     def test_filter_manufacturer_list(self):
         filter_value = "test1"
         response = self.client.get(
-            f"{MANUFACTURER_URL}?{urlencode({"name": filter_value})}"
+            f'{MANUFACTURER_URL}?{urlencode({"name": filter_value})}'
         )
         manufacturers = Manufacturer.objects.filter(
             name__icontains=filter_value
@@ -86,7 +86,7 @@ class PrivateCarTest(TestCase):
     def test_filter_car_list(self):
         filter_value = "test1"
         response = self.client.get(
-            f"{CAR_URL}?{urlencode({"model": filter_value})}"
+            f'{CAR_URL}?{urlencode({"model": filter_value})}'
         )
         cars = Car.objects.filter(
             model__icontains=filter_value
@@ -141,7 +141,7 @@ class PublicDriverTest(TestCase):
     def test_filter_car_list(self):
         filter_value = "test2"
         response = self.client.get(
-            f"{DRIVER_URL}?{urlencode({"username": filter_value})}"
+            f'{DRIVER_URL}?{urlencode({"username": filter_value})}'
         )
         drivers = get_user_model().objects.filter(
             username__icontains=filter_value
