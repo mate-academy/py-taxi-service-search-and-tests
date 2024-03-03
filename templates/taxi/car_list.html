@@ -7,15 +7,37 @@
       Create
     </a>
   </h1>
+  {% include 'includes/search_form.html' %}
+
   {% if car_list %}
-    <ul>
+    <table class="table mt-5 table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Model</th>
+        <th>Brand</th>
+        <th>Country</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      </thead>
+      <tbody>
       {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
+
+        <tr>
+          <td>{{ car.id }}</td>
+          <td><a href="{% url 'taxi:car-detail' car.id %}">{{ car.model }}</a></td>
+          <td>{{ car.manufacturer.name }}</td>
+          <td>{{ car.manufacturer.country }}</td>
+          <td><a href="{% url 'taxi:car-update' car.id %}" style="color:blue">UPDATE</a></td>
+          <td><a href="{% url 'taxi:car-delete' car.id %}" style="color:red">DELETE</a></td>
+
+        </tr>
       {% endfor %}
-    </ul>
+
+      </tbody>
+    </table>
+
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
