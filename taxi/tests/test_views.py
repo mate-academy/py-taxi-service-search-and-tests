@@ -1,0 +1,73 @@
+from django.contrib.auth import get_user_model
+from django.test import TestCase, Client
+from django.urls import reverse
+
+from taxi.models import Car, Manufacturer
+
+
+class PublicTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_manufacturer_login_required(self):
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_cars_login_required(self):
+        response = self.client.get(reverse("taxi:car-list"))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_driver_login_required(self):
+        response = self.client.get(reverse("taxi:driver-list"))
+        self.assertNotEqual(response.status_code, 200)
+
+
+class PrivateTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="test123456"
+        )
+        self.client.force_login(self.user)
+
+    def test_drivers_listed(self):
+        response = self.client.get(reverse("taxi:driver-list"))
+        drivers = get_user_model().objects.all()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(drivers)
+        )
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_cars_listed(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        Car.objects.create(
+            model="Cybertruck",
+            manufacturer=manufacturer
+        )
+        response = self.client.get(reverse("taxi:car-list"))
+        cars = Car.objects.all()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(cars)
+        )
+        self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_manufacturers_listed(self):
+        Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertEqual(response.status_code, 200)
+        manufacturers = Manufacturer.objects.all()
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers)
+        )
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
