@@ -42,6 +42,7 @@ class PrivateViewsTest(TestCase):
             list(drivers),
             list(response.context["driver_list"])
         )
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_retrieve_car(self):
         manufacturer = Manufacturer.objects.create(
@@ -63,6 +64,7 @@ class PrivateViewsTest(TestCase):
             list(response.context["car_list"]),
             list(all_car)
         )
+        self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_retrieve_manufacture(self):
         Manufacturer.objects.create(
@@ -80,3 +82,4 @@ class PrivateViewsTest(TestCase):
             list(response.context["manufacturer_list"]),
             list(manufacturers)
         )
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
