@@ -60,16 +60,21 @@ class PrivateManufacturerTest(TestCase):
         )
 
     def test_search_field_manufacturer_by_name(self):
-        manufacturer = Manufacturer.objects.create(
+        Manufacturer.objects.create(
             name="TestName",
             country="TestCountry"
         )
-        form_data = {
-            "name": manufacturer.name
-        }
+        expected_query_set = Manufacturer.objects.filter(
+            name__icontains="TestName"
+        )
 
-        response = self.client.get(MANUFACTURER_LIST_URL, data=form_data)
-        self.assertContains(response, "TestName")
+        response = self.client.get(MANUFACTURER_LIST_URL + "?name=TestName")
+        result_query_set = response.context_data["manufacturer_list"]
+
+        self.assertEqual(
+            list(expected_query_set),
+            list(result_query_set)
+        )
 
 
 class PrivateCarTest(TestCase):
@@ -106,16 +111,23 @@ class PrivateCarTest(TestCase):
             name="TestName",
             country="TestCountry"
         )
-        car = Car.objects.create(
-            model="TestModel",
-            manufacturer=manufacturer
-        )
-        form_data = {
-            "model": car.model
-        }
+        models = ["TestModel_1", "TestModel_2", "TestModel_3"]
+        for i in range(3):
+            Car.objects.create(
+                model=models,
+                manufacturer=manufacturer
+            )
 
-        response = self.client.get(CAR_LIST_URL, data=form_data)
-        self.assertContains(response, "TestModel")
+        response = self.client.get(CAR_LIST_URL + "?model=TestModel")
+
+        expected_query_set = Car.objects.filter(model__icontains="TestModel")
+
+        result_query_set = response.context_data["car_list"]
+
+        self.assertEqual(
+            list(expected_query_set),
+            list(result_query_set)
+        )
 
 
 class PrivateDriverTest(TestCase):
@@ -141,9 +153,28 @@ class PrivateDriverTest(TestCase):
         )
 
     def test_search_driver_by_username(self):
-        form_data = {
-            "username": self.user.username
-        }
 
-        response = self.client.get(DRIVER_LIST_URL, data=form_data)
-        self.assertContains(response, self.user.username)
+        usernames = ["example_user_1", "user_2", "example_user_3"]
+        passwords = ["Password_1", "Password_2", "Password_3"]
+        license_numbers = ["EXA11111", "EXA22222", "EXA33333"]
+
+        for i in range(3):
+            get_user_model().objects.create(
+                username=[usernames[i]],
+                password=[passwords[i]],
+                license_number=[license_numbers[i]]
+            )
+
+        expected_query_set = get_user_model().objects.filter(
+            username__icontains="example"
+        )
+
+        response = self.client.get(DRIVER_LIST_URL + "?username=example")
+        self.assertEqual(response.status_code, 200)
+
+        response_query_set = response.context_data["driver_list"]
+
+        self.assertEqual(
+            list(response_query_set),
+            list(expected_query_set)
+        )
