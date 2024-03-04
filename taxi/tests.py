@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import DriverCreationForm, DriverSearchForm, CarSearchForm, ManufacturerSearchForm
 from taxi.models import Manufacturer, Car, Driver
 
 
@@ -116,3 +116,20 @@ class PrivateViewTest(TestCase):
         Manufacturer.objects.create(name="TestM", country="USA")
         response = self.client.get(reverse("taxi:manufacturer-list"))
         self.assertEqual(response.status_code, 200)
+
+
+class SearchFormTest(TestCase):
+    def test_driver_search_form(self):
+        form = DriverSearchForm(data={'username': 'test_user'})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['username'], 'test_user')
+
+    def test_car_search_form(self):
+        form = CarSearchForm(data={'model': 'test_model'})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['model'], 'test_model')
+
+    def test_manufacturer_search_form(self):
+        form = ManufacturerSearchForm(data={'name': 'test_name'})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['name'], 'test_name')
