@@ -11,7 +11,10 @@ class ManufacturerModelTests(TestCase):
             name="Tesla",
             country="USA"
         )
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
 
 class DriverModelTests(TestCase):
@@ -23,7 +26,10 @@ class DriverModelTests(TestCase):
             password="test1234",
             license_number="QWE12345",
         )
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
 
 class CarModelTests(TestCase):
