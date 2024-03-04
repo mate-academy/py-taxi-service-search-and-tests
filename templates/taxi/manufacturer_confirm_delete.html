@@ -4,7 +4,8 @@
   <h1>Delete manufacturer?</h1>
   <form action="" method="post">
     {% csrf_token %}
-
+    
     <input type="submit" value="Yes" class="btn btn-danger">
+    <a class="btn btn-secondary" href="{% url 'taxi:manufacturer-list' %}">Cancel</a>
   </form>
 {% endblock %}
