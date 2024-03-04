@@ -2,15 +2,19 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm, DriverSearchForm, CarSearchForm, ManufacturerSearchForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+)
 from taxi.models import Manufacturer, Car, Driver
 
 
 class ModelTest(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(
-            name="Test",
-            country="TestCountry"
+            name="Test", country="TestCountry"
         )
         self.driver = get_user_model().objects.create(
             username="Username",
@@ -29,14 +33,14 @@ class ModelTest(TestCase):
     def test_manufacturer_str(self):
         self.assertEqual(
             str(self.manufacturer),
-            f"{self.manufacturer.name} {self.manufacturer.country}"
+            f"{self.manufacturer.name} {self.manufacturer.country}",
         )
 
     def test_driver_str(self):
         self.assertEqual(
             str(self.driver),
             f"{self.driver.username} "
-            f"({self.driver.first_name} {self.driver.last_name})"
+            f"({self.driver.first_name} {self.driver.last_name})",
         )
 
     def test_car_str(self):
@@ -47,8 +51,7 @@ class AdminTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
-            username="admin",
-            password="admin123"
+            username="admin", password="admin123"
         )
         self.client.force_login(self.admin_user)
         self.driver = Driver.objects.create_user(
@@ -63,10 +66,7 @@ class AdminTest(TestCase):
         self.assertContains(res, self.driver.license_number)
 
     def test_driver_detail_license_number_listed(self):
-        url = reverse(
-            "admin:taxi_driver_change",
-            args=[self.driver.id]
-        )
+        url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         res = self.client.get(url)
         self.assertContains(res, self.driver.license_number)
 
@@ -120,16 +120,16 @@ class PrivateViewTest(TestCase):
 
 class SearchFormTest(TestCase):
     def test_driver_search_form(self):
-        form = DriverSearchForm(data={'username': 'test_user'})
+        form = DriverSearchForm(data={"username": "test_user"})
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data['username'], 'test_user')
+        self.assertEqual(form.cleaned_data["username"], "test_user")
 
     def test_car_search_form(self):
-        form = CarSearchForm(data={'model': 'test_model'})
+        form = CarSearchForm(data={"model": "test_model"})
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data['model'], 'test_model')
+        self.assertEqual(form.cleaned_data["model"], "test_model")
 
     def test_manufacturer_search_form(self):
-        form = ManufacturerSearchForm(data={'name': 'test_name'})
+        form = ManufacturerSearchForm(data={"name": "test_name"})
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data['name'], 'test_name')
+        self.assertEqual(form.cleaned_data["name"], "test_name")
