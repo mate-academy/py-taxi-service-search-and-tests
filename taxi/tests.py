@@ -8,7 +8,10 @@ from taxi.models import Manufacturer, Car, Driver
 
 class ModelTest(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Test", country="TestCountry")
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="TestCountry"
+        )
         self.driver = get_user_model().objects.create(
             username="Username",
             first_name="FirstName",
@@ -32,7 +35,8 @@ class ModelTest(TestCase):
     def test_driver_str(self):
         self.assertEqual(
             str(self.driver),
-            f"{self.driver.username} ({self.driver.first_name} {self.driver.last_name})"
+            f"{self.driver.username} "
+            f"({self.driver.first_name} {self.driver.last_name})"
         )
 
     def test_car_str(self):
@@ -59,7 +63,10 @@ class AdminTest(TestCase):
         self.assertContains(res, self.driver.license_number)
 
     def test_driver_detail_license_number_listed(self):
-        url = reverse("admin:taxi_driver_change", args=[self.driver.id])
+        url = reverse(
+            "admin:taxi_driver_change",
+            args=[self.driver.id]
+        )
         res = self.client.get(url)
         self.assertContains(res, self.driver.license_number)
 
