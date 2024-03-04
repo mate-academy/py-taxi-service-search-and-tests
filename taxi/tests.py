@@ -95,3 +95,17 @@ class PublicViewTest(TestCase):
     def test_driver_list(self):
         res = self.client.get(reverse("taxi:driver-list"))
         self.assertNotEqual(res.status_code, 200)
+
+
+class PrivateViewTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Username",
+            password="test123",
+        )
+        self.client.force_login(self.user)
+
+    def test_retrieve_manufacturer_list(self):
+        Manufacturer.objects.create(name="TestM", country="USA")
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertEqual(response.status_code, 200)
