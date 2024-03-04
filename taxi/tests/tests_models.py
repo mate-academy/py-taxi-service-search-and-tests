@@ -1,15 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.models import Manufacturer, Car, Driver
+from taxi.models import Manufacturer, Car
 
 
 class ModelTests(TestCase):
     def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.create(name="test",
-                                                   country="Test Country")
-        self.assertEqual(str(manufacturer),
-                         f"{manufacturer.name} {manufacturer.country}")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="Test Country"
+        )
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self):
         driver = get_user_model().objects.create(
@@ -24,8 +28,10 @@ class ModelTests(TestCase):
         )
 
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="test",
-                                                   country="Test Country")
+        manufacturer = Manufacturer.objects.create(
+            name="test",
+            country="Test Country"
+        )
         car = Car.objects.create(
             model="test",
             manufacturer=manufacturer,

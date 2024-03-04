@@ -66,10 +66,14 @@ class PrivateCarTest(TestCase):
             password="test123"
         )
         self.client.force_login(self.user)
-        manufacturer1 = Manufacturer.objects.create(name="test1",
-                                                    country="test1")
-        manufacturer2 = Manufacturer.objects.create(name="test2",
-                                                    country="test2")
+        manufacturer1 = Manufacturer.objects.create(
+            name="test1",
+            country="test1"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="test2",
+            country="test2"
+        )
         Car.objects.create(model="test1", manufacturer=manufacturer1)
         Car.objects.create(model="test2", manufacturer=manufacturer2)
 
