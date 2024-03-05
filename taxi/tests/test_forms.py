@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm
+)
 
 
 class FormsTests(TestCase):
@@ -23,3 +26,25 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=self.form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, self.form_data)
+
+    def test_user_creation_with_invalid_license_number(self):
+        invalid_license_numbers = [
+            "RIP1234",
+            "tTT12345",
+            "TT123456",
+            " "
+        ]
+        for invalid_license in invalid_license_numbers:
+            self.form_data["license_number"] = invalid_license
+            form = DriverCreationForm(data=self.form_data)
+            self.assertFalse(form.is_valid())
+
+    def test_update_license_number(self):
+        new_license_form = {
+            "license_number": "UAE12345",
+        }
+        form = DriverLicenseUpdateForm(data=new_license_form)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data, new_license_form)
+
+    
