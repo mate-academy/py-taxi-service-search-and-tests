@@ -92,7 +92,7 @@ class CarListView(
         return context
 
     def get_queryset(self):
-        queryset = Car.objects.all().select_related("manufacturer")
+        queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(model__icontains=form.cleaned_data["model"])
