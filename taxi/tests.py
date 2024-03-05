@@ -11,6 +11,12 @@ from taxi.forms import (
 from taxi.models import Manufacturer, Car, Driver
 
 
+INDEX_URL = reverse("taxi:index")
+MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
+CAR_LIST_URL = reverse("taxi:car-list")
+DRIVER_LIST_URL = reverse("taxi:driver-list")
+
+
 class ModelTest(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(
@@ -72,6 +78,16 @@ class AdminTest(TestCase):
 
 
 class FormTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="new_user",
+            password= "user123user",
+            first_name= "Test first",
+            last_name= "Test last",
+            license_number= "AAA12345",
+        )
+        self.client.force_login(self.user)
+
     def test_driver_creation_form_is_valid(self):
         form_data = {
             "username": "new_user",
@@ -85,22 +101,38 @@ class FormTest(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
+    def test_update_license_number_with_valid_data(self):
+        new_license_number = "BBB11111"
+        response = self.client.post(
+            reverse("taxi:driver-update", kwargs={"pk": self.user.id}),
+            data={"license_number": new_license_number}
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_update_license_number_with_invalid_data(self):
+        new_license_number = "00000QWE"
+        response = self.client.post(
+            reverse("taxi:driver-update", kwargs={"pk": self.user.id}),
+            data={"license_number": new_license_number}
+        )
+        self.assertEqual(response.status_code, 200)
+
 
 class PublicViewTest(TestCase):
     def test_index(self):
-        res = self.client.get(reverse("taxi:index"))
+        res = self.client.get(INDEX_URL)
         self.assertNotEqual(res.status_code, 200)
 
     def test_manufacturer_list(self):
-        res = self.client.get(reverse("taxi:manufacturer-list"))
+        res = self.client.get(MANUFACTURER_LIST_URL)
         self.assertNotEqual(res.status_code, 200)
 
     def test_car_list(self):
-        res = self.client.get(reverse("taxi:car-list"))
+        res = self.client.get(CAR_LIST_URL)
         self.assertNotEqual(res.status_code, 200)
 
     def test_driver_list(self):
-        res = self.client.get(reverse("taxi:driver-list"))
+        res = self.client.get(DRIVER_LIST_URL)
         self.assertNotEqual(res.status_code, 200)
 
 
@@ -123,6 +155,12 @@ class SearchFormTest(TestCase):
         form = DriverSearchForm(data={"username": "test_user"})
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data["username"], "test_user")
+
+    def test_driver_search_form_get_searched_value(self):
+        client = Client()
+        response = client.get(reverse('taxi:driver-list'), {'username': 'test_user'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'test_user')
 
     def test_car_search_form(self):
         form = CarSearchForm(data={"model": "test_model"})
