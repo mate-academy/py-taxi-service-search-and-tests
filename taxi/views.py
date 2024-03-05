@@ -56,7 +56,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("name", "")
 
-        context["search_form"] = ManufacturersSearchForm(initial={"name": name})
+        context["search_form"] = ManufacturersSearchForm(
+            initial={"name": name}
+        )
         return context
 
 
@@ -138,7 +140,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = DriverSearchForm(initial={"username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
 

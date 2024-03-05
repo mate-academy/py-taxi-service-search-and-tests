@@ -65,7 +65,9 @@ class PrivateManufacturerViewTest(TestCase):
             country="Ukraine",
         )
 
-        response = self.client.get(reverse(URL_MANUFACTURER_LIST) + "?name=Tavria")
+        response = self.client.get(
+            reverse(URL_MANUFACTURER_LIST) + "?name=Tavria"
+        )
         tavria = Manufacturer.objects.filter(name="Tavria")
 
         self.assertEqual(

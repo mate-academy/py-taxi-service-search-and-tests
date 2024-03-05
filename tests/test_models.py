@@ -68,4 +68,3 @@ class CarTest(TestCase):
         )
 
         self.assertEqual(str(car), "test_model")
-

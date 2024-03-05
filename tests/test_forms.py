@@ -60,4 +60,3 @@ class DriverLicenseUpdateFormTest(TestCase):
             form.cleaned_data,
             {"license_number": "AAA12345"}
         )
-

@@ -16,7 +16,7 @@ class ValidateLicenseNumberTest(TestCase):
             "AAA1234",
         )
 
-    def test_validate_license_number_length_first_three_character_is_not_upper(self) -> None:
+    def test_validate_license_number_first_three_is_not_upper(self) -> None:
         self.assertRaisesRegex(
             ValidationError,
             "First 3 characters should be uppercase letters",
@@ -24,7 +24,7 @@ class ValidateLicenseNumberTest(TestCase):
             "abc12345",
         )
 
-    def test_validate_license_number_length_last_five_character_must_be_digits(self) -> None:
+    def test_validate_license_number_last_five_must_be_digits(self) -> None:
         self.assertRaisesRegex(
             ValidationError,
             "Last 5 characters should be digits",
