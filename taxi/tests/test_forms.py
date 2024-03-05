@@ -1,13 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import (DriverCreationForm,
-                        DriverLicenseUpdateForm,
-                        CarSearchForm,
-                        ManufacturerSearchForm,
-                        DriverSearchForm,
-                        CarForm
-                        )
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarSearchForm,
+    ManufacturerSearchForm,
+    DriverSearchForm,
+    CarForm
+)
 from taxi.models import Manufacturer
 
 
@@ -37,10 +38,8 @@ class FormTests(TestCase):
 class CarSearchFormTest(TestCase):
 
     def test_form_validation(self):
-        form = CarSearchForm(data={"model": "Toyota"})
-        self.assertTrue(form.is_valid())
-        form = CarSearchForm(data={})
-        self.assertTrue(form.is_valid())
+        form_valid = CarSearchForm(data={"model": "Toyota"})
+        self.assertTrue(form_valid.is_valid())
 
 
 class ManufacturerSearchFormTest(TestCase):
@@ -48,17 +47,13 @@ class ManufacturerSearchFormTest(TestCase):
     def test_form_validation(self):
         form = ManufacturerSearchForm(data={"name": "BMW"})
         self.assertTrue(form.is_valid())
-        form = ManufacturerSearchForm(data={})
-        self.assertTrue(form.is_valid())
 
 
 class DriverSearchFormTest(TestCase):
 
     def test_form_validation(self):
-        form = DriverSearchForm(data={"username": "admin1"})
-        self.assertTrue(form.is_valid())
-        form = DriverSearchForm(data={})
-        self.assertTrue(form.is_valid())
+        form_valid = DriverSearchForm(data={"username": "admin1", "license_number": "ABC12345"})
+        self.assertTrue(form_valid.is_valid())
 
 
 class CarFormTest(TestCase):

@@ -35,13 +35,11 @@ class ModelTest(TestCase):
         )
 
     def test_create_driver_with_license(self):
-        password = "Test-password"
-        hashed_password = make_password(password)
-        driver = get_user_model().objects.create(
+        driver = get_user_model().objects.create_user(
             username="Test",
-            password=hashed_password,
+            password="Test-password",
             license_number="ABC12345",
         )
         self.assertEqual(driver.username, "Test")
         self.assertEqual(driver.license_number, "ABC12345")
-        self.assertTrue(driver.check_password(password))
+        self.assertTrue(driver.check_password("Test-password"))
