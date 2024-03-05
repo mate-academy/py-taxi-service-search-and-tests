@@ -83,6 +83,7 @@ class CarListView(
     model = Car
     paginate_by = 5
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
@@ -92,11 +93,14 @@ class CarListView(
         return context
 
     def get_queryset(self):
-        queryset = Car.objects.all().select_related("manufacturer")
+        queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(model__icontains=form.cleaned_data["model"])
         return queryset
+
+    
+
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
