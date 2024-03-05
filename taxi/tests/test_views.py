@@ -71,3 +71,18 @@ class PrivateTest(TestCase):
             list(manufacturers)
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+    def test_pagination_is_5(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        for _ in range(13):
+            Car.objects.create(
+                model="test",
+                manufacturer=manufacturer
+            )
+        response = self.client.get(reverse("taxi:car-list")+"?page=3")
+        self.assertTrue("is_paginated" in response.context)
+        self.assertTrue(response.context['is_paginated'] is True)
+        self.assertEqual(len(response.context['car_list']), 3)

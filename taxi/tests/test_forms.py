@@ -39,7 +39,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_update_when_license_number_is_invalid(self):
-        for license_number in ("QwE12345", "QWE123456", "QWERTYUI"):
+        for license_number in ("QwE12345", "QWE123456", "QWERTYUI", "QWE"):
             form = DriverLicenseUpdateForm(
                 data={"license_number": license_number}
             )
