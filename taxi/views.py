@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -6,14 +7,19 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import (DriverCreationForm,
+                    DriverLicenseUpdateForm,
+                    CarForm,
+                    ManufacturersSearchForm,
+                    DriverSearchForm,
+                    CarSearchForm)
 
 
 @login_required
 def index(request):
     """View function for the home page of the site."""
 
-    num_drivers = Driver.objects.count()
+    num_drivers = get_user_model().objects.count()
     num_cars = Car.objects.count()
     num_manufacturers = Manufacturer.objects.count()
 
@@ -32,9 +38,26 @@ def index(request):
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
-    context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+    context_object_name = "manufacturer_list"
+
+    def get_queryset(self, *args, **kwargs):
+        name = self.request.GET.get("name")
+        queryset = super().get_queryset()
+
+        if name:
+            return queryset.filter(name__icontains=name)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ManufacturerListView, self).get_context_data(**kwargs)
+
+        name = self.request.GET.get("name", "")
+
+        context["search_form"] = ManufacturersSearchForm(initial={"name": name})
+        return context
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -57,7 +80,23 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer")
+
+    def get_queryset(self, *args, **kwargs):
+        model = self.request.GET.get("model")
+        queryset = Car.objects.select_related("manufacturer")
+
+        if model:
+            return queryset.filter(model__icontains=model)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(CarListView, self).get_context_data(**kwargs)
+
+        model = self.request.GET.get("model", "")
+
+        context["search_form"] = CarSearchForm(initial={"model": model})
+        return context
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -85,10 +124,27 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
+    def get_queryset(self, *args, **kwargs):
+        username = self.request.GET.get("username", "")
+        queryset = super(DriverListView, self).get_queryset()
+
+        if username:
+            return queryset.filter(username__icontains=username)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+
+        username = self.request.GET.get("username", "")
+
+        context["search_form"] = DriverSearchForm(initial={"username": username})
+        return context
+
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
-    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+    queryset = get_user_model().objects.prefetch_related("cars__manufacturer")
 
 
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
@@ -109,9 +165,9 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 @login_required
 def toggle_assign_to_car(request, pk):
-    driver = Driver.objects.get(id=request.user.id)
+    driver = get_user_model().objects.get(id=request.user.id)
     if (
-        Car.objects.get(id=pk) in driver.cars.all()
+            Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
