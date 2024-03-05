@@ -76,17 +76,50 @@ class PrivateViewTest(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
-    def test_search_should_filter_manufacturer_list(self):
-        response = self.client.get(reverse(MANUFACTURER_URL))
-        self.assertEqual(
-            response.context_data["manufacturer_list"][0],
-            self.manufacturer
+    def test_search_should_include_manufacturer_when_found(self):
+        response = self.client.get(
+            reverse(MANUFACTURER_URL) + f"?name={self.manufacturer.name}"
+        )
+        self.assertIn(
+            self.manufacturer,
+            response.context["manufacturer_list"]
         )
 
-    def test_search_should_filter_driver_list(self):
-        response = self.client.get(reverse(DRIVER_URL))
-        self.assertEqual(response.context_data["driver_list"][0], self.driver)
+    def test_search_should_not_include_manufacturer_when_not_found(self):
+        response = self.client.get(reverse(MANUFACTURER_URL) + "?name=0000")
+        self.assertNotIn(
+            self.manufacturer,
+            response.context["manufacturer_list"]
+        )
 
-    def test_search_should_filter_car_list(self):
-        response = self.client.get(reverse(CAR_URL))
-        self.assertEqual(response.context_data["car_list"][0], self.car)
+    def test_search_should_include_driver_when_found(self):
+        response = self.client.get(
+            reverse(DRIVER_URL) + f"?username={self.driver.username}"
+        )
+        self.assertIn(
+            self.driver,
+            response.context["driver_list"]
+        )
+
+    def test_search_should_not_include_driver_when_not_found(self):
+        response = self.client.get(reverse(DRIVER_URL) + "?username=0000")
+        self.assertNotIn(
+            self.driver,
+            response.context["driver_list"]
+        )
+
+    def test_search_should_include_car_when_found(self):
+        response = self.client.get(
+            reverse(CAR_URL) + f"?model={self.car.model}"
+        )
+        self.assertIn(
+            self.car,
+            response.context["car_list"]
+        )
+
+    def test_search_should_not_include_car_when_not_found(self):
+        response = self.client.get(reverse(CAR_URL) + "?model=0000")
+        self.assertNotIn(
+            self.car,
+            response.context["car_list"]
+        )

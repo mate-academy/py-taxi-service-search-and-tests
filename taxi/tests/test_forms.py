@@ -34,7 +34,7 @@ class TestForms(TestCase):
             license_number="test_license_number"
         )
 
-    def test_car_form_valid_data(self):
+    def test_car_form_with_valid_data(self):
         form_data = {
             "manufacturer": self.manufacturer,
             "model": "test_model",
@@ -43,7 +43,7 @@ class TestForms(TestCase):
         form = CarForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_driver_creation_form_valid_data(self):
+    def test_driver_creation_form_with_valid_data(self):
         form_data = {
             "username": "new_user",
             "password1": "ds3fk2df1223",
@@ -55,39 +55,43 @@ class TestForms(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_driver_license_update_form_valid_data(self):
+    def test_driver_license_update_form_with_valid_data(self):
         form_data = {"license_number": "ABC12345"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_validate_license_number(self):
+    def test_license_number_with_incorrect_char_number_raises_error(self):
         self.assertRaises(
             ValidationError,
             validate_license_number,
             "ABC1234"
         )
+
+    def test_license_number_with_lowercase_raises_error(self):
         self.assertRaises(
             ValidationError,
             validate_license_number,
             "abc12345"
         )
+
+    def test_license_number_with_letters_in_the_middle_raises_error(self):
         self.assertRaises(
             ValidationError,
             validate_license_number,
             "ABC1XY45"
         )
 
-    def test_driver_username_search_form_valid_data(self):
+    def test_driver_username_search_form_with_valid_data(self):
         form_data = {"username": "test_user"}
         form = DriverUsernameSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_car_model_search_form_valid_data(self):
+    def test_car_model_search_form_with_valid_data(self):
         form_data = {"model": "test_model"}
         form = CarModelSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_manufacturer_name_search_form_valid_data(self):
+    def test_manufacturer_name_search_form_with_valid_data(self):
         form_data = {"name": "test_manufacturer"}
         form = ManufacturerNameSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
