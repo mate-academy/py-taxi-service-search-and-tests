@@ -53,7 +53,9 @@ class FormsTests(TestCase):
     def test_driver_search_form(self):
         form = DriverSearchForm(data=self.form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data["username"], self.form_data["username"])
+        self.assertEqual(
+            form.cleaned_data["username"], self.form_data["username"]
+        )
 
     def test_car_search_form(self):
         form = CarSearchForm(data={"model": "Benderomobil"})
