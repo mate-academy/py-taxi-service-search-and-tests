@@ -51,7 +51,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = get_user_model().objects.all()
+        queryset = Manufacturer.objects.all()
         name = self.request.GET.get("name")
         if name:
             return queryset.filter(name__icontains=name)
