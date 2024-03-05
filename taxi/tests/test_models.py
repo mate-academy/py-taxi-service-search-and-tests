@@ -24,7 +24,7 @@ class ModelTest(TestCase):
             f"{self.manufacturer.name} "
             f"{self.manufacturer.country}"
         )
-        self.assertEquals(str_representation, expected_result)
+        self.assertEqual(str_representation, expected_result)
 
     def test_driver_has_a_license_number(self):
         self.assertEqual(self.driver.license_number, self.license_number)
@@ -43,4 +43,4 @@ class ModelTest(TestCase):
         )
         car.drivers.add(self.driver)
         expected_result = str(car.model)
-        self.assertEquals(expected_result, car.model)
+        self.assertEqual(expected_result, car.model)
