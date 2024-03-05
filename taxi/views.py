@@ -84,7 +84,6 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
@@ -102,7 +101,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
             )
         return queryset
 
-      
+
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
