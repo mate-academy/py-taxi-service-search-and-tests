@@ -1,7 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm, ManufacturerSearchForm, CarSearchForm, DriverSearchForm
+from taxi.forms import (
+    DriverCreationForm,
+    ManufacturerSearchForm,
+    CarSearchForm,
+    DriverSearchForm,
+)
 
 
 class FormsTests(TestCase):
@@ -19,7 +24,7 @@ class FormsTests(TestCase):
             "license_number": "ABC12345",
         }
 
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self):
+    def test_driver_creation_form_with_valid_data(self):
         form = DriverCreationForm(data=self.form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, self.form_data)
