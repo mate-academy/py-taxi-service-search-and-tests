@@ -3,7 +3,10 @@ from django.test import TestCase
 
 from taxi.forms import (
     DriverCreationForm,
-    DriverLicenseUpdateForm
+    DriverLicenseUpdateForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm
 )
 
 
@@ -47,4 +50,17 @@ class FormsTests(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data, new_license_form)
 
-    
+    def test_driver_search_form(self):
+        form = DriverSearchForm(data=self.form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["username"], self.form_data["username"])
+
+    def test_car_search_form(self):
+        form = CarSearchForm(data={"model": "Benderomobil"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["model"], "Benderomobil")
+
+    def test_manufacturer_search_form(self):
+        form = ManufacturerSearchForm(data={"name": "test_concern"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["name"], "test_concern")
