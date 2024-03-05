@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Search Results for Cars</h2>
+<ul>
+  {% for car in car_list %}
+  <li>{{ car.model }}</li>
+  {% empty %}
+  <li>No cars found</li>
+  {% endfor %}
+</ul>
+{% endblock %}
