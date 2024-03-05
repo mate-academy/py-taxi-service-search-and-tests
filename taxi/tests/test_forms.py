@@ -52,7 +52,12 @@ class ManufacturerSearchFormTest(TestCase):
 class DriverSearchFormTest(TestCase):
 
     def test_form_validation(self):
-        form_valid = DriverSearchForm(data={"username": "admin1", "license_number": "ABC12345"})
+        form_valid = DriverSearchForm(
+            data={
+                "username": "admin1",
+                "license_number": "ABC12345"
+            }
+        )
         self.assertTrue(form_valid.is_valid())
 
 
