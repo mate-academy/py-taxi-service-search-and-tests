@@ -33,5 +33,5 @@ class PrivateCarTest(TestCase):
         response = self.client.get(CAR_URL)
         self.assertEqual(response.status_code, 200)
         cars = Car.objects.all()
-        self.assertEqual(list(cars), list(response.context["car_list"]))
+        self.assertEqual(list(response.context["car_list"]), list(cars))
         self.assertTemplateUsed(response, "taxi/car_list.html")
