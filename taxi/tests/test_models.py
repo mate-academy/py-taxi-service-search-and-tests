@@ -11,7 +11,6 @@ class ModelsTest(TestCase):
             first_name="test_first_name",
             last_name="test_last_name",
             password="strong_password",
-            email="secreat_test_email@ukrnet.ua",
             license_number="DIR12345"
         )
 
@@ -43,12 +42,10 @@ class ModelsTest(TestCase):
         first_name = "test_first_name"
         last_name = "test_last_name"
         password = "strong_password"
-        email = "secreat_test_email@ukrnet.ua"
         license_number = "DIR12345"
 
         self.assertEqual(self.driver.username, username)
         self.assertEqual(self.driver.first_name, first_name)
         self.assertEqual(self.driver.last_name, last_name)
-        self.assertEqual(self.driver.email, email)
         self.assertEqual(self.driver.license_number, license_number)
         self.assertTrue(self.driver.check_password(password))
