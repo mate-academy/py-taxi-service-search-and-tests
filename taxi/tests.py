@@ -216,4 +216,3 @@ class SearchFormTest(TestCase):
         response = self.client.get(reverse("taxi:car-list"))
         self.assertContains(response, "Test Model 1")
         self.assertContains(response, "Test Model 2")
-
