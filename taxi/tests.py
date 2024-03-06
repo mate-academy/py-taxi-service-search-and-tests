@@ -153,7 +153,10 @@ class PrivateViewTest(TestCase):
 class SearchFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = Driver.objects.create_user(username="testuser", password="12345")
+        cls.user = Driver.objects.create_user(
+            username="testuser",
+            password="12345"
+        )
         cls.create_test_data()
 
     @classmethod
