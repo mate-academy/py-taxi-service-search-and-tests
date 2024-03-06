@@ -81,10 +81,10 @@ class FormTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="new_user",
-            password= "user123user",
-            first_name= "Test first",
-            last_name= "Test last",
-            license_number= "AAA12345",
+            password="user123user",
+            first_name="Test first",
+            last_name="Test last",
+            license_number="AAA12345",
         )
         self.client.force_login(self.user)
 
@@ -105,7 +105,7 @@ class FormTest(TestCase):
         new_license_number = "BBB11111"
         response = self.client.post(
             reverse("taxi:driver-update", kwargs={"pk": self.user.id}),
-            data={"license_number": new_license_number}
+            data={"license_number": new_license_number},
         )
         self.assertEqual(response.status_code, 302)
 
@@ -113,7 +113,7 @@ class FormTest(TestCase):
         new_license_number = "00000QWE"
         response = self.client.post(
             reverse("taxi:driver-update", kwargs={"pk": self.user.id}),
-            data={"license_number": new_license_number}
+            data={"license_number": new_license_number},
         )
         self.assertEqual(response.status_code, 200)
 
@@ -153,46 +153,37 @@ class PrivateViewTest(TestCase):
 class SearchFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = Driver.objects.create_user(username='testuser', password='12345')
+        cls.user = Driver.objects.create_user(username="testuser", password="12345")
         cls.create_test_data()
 
     @classmethod
     def create_test_data(cls):
         Driver.objects.create(
-            username='testuser1',
-            first_name='John',
-            last_name='Doe',
-            license_number='ABC123'
+            username="testuser1",
+            first_name="John",
+            last_name="Doe",
+            license_number="ABC123",
         )
         Driver.objects.create(
-            username='testuser2',
-            first_name='Jane',
-            last_name='Smith',
-            license_number='DEF456'
+            username="testuser2",
+            first_name="Jane",
+            last_name="Smith",
+            license_number="DEF456",
         )
         Manufacturer.objects.create(
-            name='Test Manufacturer 1',
-            country='Test Country 1'
+            name="Test Manufacturer 1", country="Test Country 1"
         )
         Manufacturer.objects.create(
-            name='Test Manufacturer 2',
-            country='Test Country 2'
+            name="Test Manufacturer 2", country="Test Country 2"
         )
         manufacturer = Manufacturer.objects.create(
-            name='Test Manufacturer',
-            country='Test Country'
+            name="Test Manufacturer", country="Test Country"
         )
-        Car.objects.create(
-            model='Test Model 1',
-            manufacturer=manufacturer
-        )
-        Car.objects.create(
-            model='Test Model 2',
-            manufacturer=manufacturer
-        )
+        Car.objects.create(model="Test Model 1", manufacturer=manufacturer)
+        Car.objects.create(model="Test Model 2", manufacturer=manufacturer)
 
     def setUp(self):
-        self.client.login(username='testuser', password='12345')
+        self.client.login(username="testuser", password="12345")
 
     def test_driver_search_form(self):
         form = DriverSearchForm(data={"username": "test_user"})
@@ -200,9 +191,11 @@ class SearchFormTest(TestCase):
         self.assertEqual(form.cleaned_data["username"], "test_user")
 
     def test_search_driver_by_username(self):
-        response = self.client.get(reverse('taxi:driver-list'), {'username': 'testuser1'})
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "testuser1"}
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'testuser1')
+        self.assertContains(response, "testuser1")
 
     def test_car_search_form(self):
         form = CarSearchForm(data={"model": "test_model"})
@@ -215,11 +208,11 @@ class SearchFormTest(TestCase):
         self.assertEqual(form.cleaned_data["name"], "test_name")
 
     def test_manufacturer_list_display_correctly(self):
-        response = self.client.get(reverse('taxi:manufacturer-list'))
-        self.assertContains(response, 'Test Manufacturer 1')
-        self.assertContains(response, 'Test Manufacturer 2')
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertContains(response, "Test Manufacturer 1")
+        self.assertContains(response, "Test Manufacturer 2")
 
     def test_car_list_display_correctly(self):
-        response = self.client.get(reverse('taxi:car-list'))
-        self.assertContains(response, 'Test Model 1')
-        self.assertContains(response, 'Test Model 2')
+        response = self.client.get(reverse("taxi:car-list"))
+        self.assertContains(response, "Test Model 1")
+        self.assertContains(response, "Test Model 2")
