@@ -78,19 +78,9 @@ class AdminTest(TestCase):
 
 
 class FormTest(TestCase):
-    def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username="new_user",
-            password="user123user",
-            first_name="Test first",
-            last_name="Test last",
-            license_number="AAA12345",
-        )
-        self.client.force_login(self.user)
-
     def test_driver_creation_form_is_valid(self):
         form_data = {
-            "username": "new_user",
+            "username": "user",
             "password1": "user123user",
             "password2": "user123user",
             "first_name": "Test first",
@@ -98,21 +88,39 @@ class FormTest(TestCase):
             "license_number": "AAA12345",
         }
         form = DriverCreationForm(data=form_data)
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data, form_data)
 
     def test_update_license_number_with_valid_data(self):
+        user = get_user_model().objects.create_user(
+            username="new_user",
+            password="user123user",
+            first_name="Test first",
+            last_name="Test last",
+            license_number="AAA12345",
+        )
+        self.client.force_login(user)
+
         new_license_number = "BBB11111"
         response = self.client.post(
-            reverse("taxi:driver-update", kwargs={"pk": self.user.id}),
+            reverse("taxi:driver-update", kwargs={"pk": user.id}),
             data={"license_number": new_license_number},
         )
         self.assertEqual(response.status_code, 302)
 
     def test_update_license_number_with_invalid_data(self):
+        user = get_user_model().objects.create_user(
+            username="new_user",
+            password="user123user",
+            first_name="Test first",
+            last_name="Test last",
+            license_number="AAA12345",
+        )
+        self.client.force_login(user)
+
         new_license_number = "00000QWE"
         response = self.client.post(
-            reverse("taxi:driver-update", kwargs={"pk": self.user.id}),
+            reverse("taxi:driver-update", kwargs={"pk": user.id}),
             data={"license_number": new_license_number},
         )
         self.assertEqual(response.status_code, 200)
