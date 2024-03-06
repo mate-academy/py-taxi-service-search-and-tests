@@ -77,9 +77,7 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
 
     def get_queryset(self):
         queryset = Car.objects.select_related("manufacturer")
