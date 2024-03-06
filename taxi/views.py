@@ -78,12 +78,12 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
+    queryset = Car.objects.select_related("manufacturer")
 
     def get_queryset(self):
-        queryset = Car.objects.select_related("manufacturer")
         form = CarModelSearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(
+            return self.queryset.filter(
                 model__icontains=form.cleaned_data["model"]
             )
 
