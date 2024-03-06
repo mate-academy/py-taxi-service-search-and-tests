@@ -82,7 +82,7 @@ class PrivateTest(TestCase):
                 model="test",
                 manufacturer=manufacturer
             )
-        response = self.client.get(reverse("taxi:car-list")+"?page=3")
+        response = self.client.get(reverse("taxi:car-list") + "?page=3")
         self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context['is_paginated'] is True)
-        self.assertEqual(len(response.context['car_list']), 3)
+        self.assertTrue(response.context["is_paginated"] is True)
+        self.assertEqual(len(response.context["car_list"]), 3)
