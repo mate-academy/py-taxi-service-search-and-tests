@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from taxi.tests.test_config import DRIVER_LIST_URL, CAR_LIST_URL, MANUFACTURER_LIST_URL
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, SearchForm
 from taxi.models import Manufacturer, Car
 
@@ -71,11 +72,6 @@ class LicenseNumberValidationTests(TestCase):
 
     def test_5_last_characters_should_be_numbers(self):
         self.assertFalse(self.update_form("TST1245s").is_valid())
-
-
-DRIVER_LIST_URL = reverse("taxi:driver-list")
-CAR_LIST_URL = reverse("taxi:car-list")
-MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
 
 
 class SearchFormTest(TestCase):
