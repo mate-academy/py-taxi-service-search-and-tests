@@ -86,3 +86,42 @@ class PrivateTest(TestCase):
         self.assertTrue("is_paginated" in response.context)
         self.assertTrue(response.context["is_paginated"] is True)
         self.assertEqual(len(response.context["car_list"]), 3)
+
+
+class ToggleAssignToCarTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="test123456"
+        )
+        self.car = Car.objects.create(
+            model="TestModel",
+            manufacturer=Manufacturer.objects.create(
+                name="Tesla",
+                country="USA"
+            )
+        )
+        self.client.force_login(self.user)
+
+    def test_toggle_assign_to_car_add(self):
+
+        response = self.client.post(
+            reverse(
+                "taxi:toggle-car-assign",
+                kwargs={"pk": self.car.id}
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(self.user.cars.filter(pk=self.car.pk).exists())
+
+    def test_toggle_assign_to_car_remove(self):
+        self.user.cars.add(self.car)
+        response = self.client.post(
+            reverse(
+                "taxi:toggle-car-assign",
+                kwargs={"pk": self.car.id}
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(self.user.cars.filter(pk=self.car.pk).exists())

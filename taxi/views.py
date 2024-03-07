@@ -95,6 +95,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         )
         return context
 
+
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
