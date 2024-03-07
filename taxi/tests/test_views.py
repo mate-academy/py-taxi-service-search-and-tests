@@ -2,8 +2,12 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.tests.test_config import DRIVER_LIST_URL, CAR_LIST_URL, MANUFACTURER_LIST_URL
 from taxi.models import Car, Manufacturer
+from taxi.tests.test_config import (
+    DRIVER_LIST_URL,
+    CAR_LIST_URL,
+    MANUFACTURER_LIST_URL
+)
 
 
 class PublicAccessTest(TestCase):

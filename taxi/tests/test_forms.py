@@ -2,9 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.tests.test_config import DRIVER_LIST_URL, CAR_LIST_URL, MANUFACTURER_LIST_URL
 from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, SearchForm
 from taxi.models import Manufacturer, Car
+from taxi.tests.test_config import (
+    DRIVER_LIST_URL,
+    CAR_LIST_URL,
+    MANUFACTURER_LIST_URL
+)
 
 
 class DriverFormsTests(TestCase):
