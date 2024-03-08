@@ -98,6 +98,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
                     )
         return queryset
 
+ 
+
+
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
