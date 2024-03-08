@@ -3,7 +3,7 @@
   <ul class="pagination">
     {% if page_obj.has_previous %}
       <li class="page-item">
-        <a href="?{% query_transform request page=page_obj.previous_page_number %}" class="page-link">next page</a>
+        <a href="?{% query_transform request page=page_obj.previous_page_number %}" class="page-link">previous page</a>
       </li>
     {% endif %}
     <li class="page-item active">
