@@ -30,6 +30,10 @@ class DriverCreationForm(UserCreationForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
+class SearchForm(forms.Form):
+    search = forms.CharField(label="Search", required=False)
+
+
 class DriverLicenseUpdateForm(forms.ModelForm):
     class Meta:
         model = Driver
