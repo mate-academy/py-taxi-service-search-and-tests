@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
@@ -39,7 +40,6 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
-    model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
@@ -76,7 +76,6 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
@@ -115,7 +114,6 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = Driver
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
@@ -127,7 +125,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Driver.objects.all()
+        queryset = get_user_model().objects.all()
         form = DriverSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
@@ -138,7 +136,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
-    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+    queryset = get_user_model().objects.prefetch_related("cars__manufacturer")
 
 
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
@@ -159,7 +157,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 @login_required
 def toggle_assign_to_car(request: HttpRequest, pk: int) -> HttpResponse:
-    driver = Driver.objects.get(id=request.user.id)
+    driver = get_user_model().objects.get(id=request.user.id)
     if (
         Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
