@@ -9,7 +9,7 @@ URL_DRIVER_LIST = "taxi:driver-list"
 
 
 class PublicDriverViewTest(TestCase):
-    def test_manufacturer_login_required(self) -> None:
+    def test_driver_login_required(self) -> None:
         response = self.client.get(reverse(URL_DRIVER_LIST))
 
         self.assertRedirects(

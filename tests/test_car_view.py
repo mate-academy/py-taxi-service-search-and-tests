@@ -85,3 +85,22 @@ class PrivateCarViewTest(TestCase):
             list(response.context["car_list"]),
             list(car)
         )
+
+    def test_toggle_assign_to_car_add_driver(self) -> None:
+        driver = self.user
+        car = Car.objects.get(pk=1)
+
+        self.client.get(reverse("taxi:toggle-car-assign", args=[car.id]))
+        response = self.client.get(reverse("taxi:car-detail", args=[car.id]))
+
+        self.assertIn(driver, response.context["car"].drivers.all())
+
+    def test_toggle_assign_to_car_remove_driver(self) -> None:
+        driver = self.user
+        car = Car.objects.get(pk=1)
+        car.drivers.add(driver)
+
+        self.client.get(reverse("taxi:toggle-car-assign", args=[car.id]))
+        response = self.client.get(reverse("taxi:car-detail", args=[car.id]))
+
+        self.assertNotIn(driver, response.context["car"].drivers.all())
