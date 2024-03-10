@@ -92,3 +92,37 @@ class AssertionForDrivers(TestCase):
         response = self.client.get(reverse("taxi:car-detail", args=[car.id]))
 
         self.assertNotIn(driver, response.context["car"].drivers.all())
+
+
+class NumbersOfCreationsInIndex(TestCase):
+
+    def test_number_of_drivers(self):
+        Driver.objects.create(
+            username="Tom",
+            license_number="UUU11111"
+        )
+        Driver.objects.create(
+            username="Jerry",
+            license_number="UUU22222"
+        )
+        self.assertEqual(Driver.objects.count(), 2)
+
+    def test_number_of_cars_and_manufactures(self):
+        Manufacturer.objects.create(
+            name="test manufacturer 1",
+            country="test country 1"
+        )
+        Manufacturer.objects.create(
+            name="test manufacturer 2",
+            country="test country 2"
+        )
+
+        Car.objects.create(
+            model="test car 1",
+            manufacturer_id=1,
+        )
+        Car.objects.create(
+            model="test car 2",
+            manufacturer_id=2,
+        )
+        self.assertEqual(Car.objects.count(), 2)
