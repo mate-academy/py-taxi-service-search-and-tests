@@ -87,7 +87,8 @@ class PrivateViewTest(TestCase):
         )
 
     def test_search_should_not_include_manufacturer_when_not_found(self):
-        response = self.client.get(reverse(MANUFACTURER_URL) + f"?name={INCORRECT_DATA}")
+        response = self.client.get(reverse(MANUFACTURER_URL)
+                                   + f"?name={INCORRECT_DATA}")
         self.assertNotIn(
             self.manufacturer,
             response.context["manufacturer_list"]
@@ -103,7 +104,8 @@ class PrivateViewTest(TestCase):
         )
 
     def test_search_should_not_include_driver_when_not_found(self):
-        response = self.client.get(reverse(DRIVER_URL) + f"?username={INCORRECT_DATA}")
+        response = self.client.get(reverse(DRIVER_URL)
+                                   + f"?username={INCORRECT_DATA}")
         self.assertNotIn(
             self.driver,
             response.context["driver_list"]
@@ -119,7 +121,8 @@ class PrivateViewTest(TestCase):
         )
 
     def test_search_should_not_include_car_when_not_found(self):
-        response = self.client.get(reverse(CAR_URL) + f"?model={INCORRECT_DATA}")
+        response = self.client.get(reverse(CAR_URL)
+                                   + f"?model={INCORRECT_DATA}")
         self.assertNotIn(
             self.car,
             response.context["car_list"]
