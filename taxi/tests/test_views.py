@@ -34,7 +34,7 @@ class TestLoginRequired(TestCase):
         self.assertRedirects(response, "/accounts/login/?next=/drivers/")
 
 
-class AssertionForDrivers(TestCase):
+class TestToogleAssingToCarView(TestCase):
     def setUp(self) -> None:
         num_drivers = 4
         num_manufacturers = 2
@@ -94,7 +94,7 @@ class AssertionForDrivers(TestCase):
         self.assertNotIn(driver, response.context["car"].drivers.all())
 
 
-class NumbersOfCreationsInIndex(TestCase):
+class TestNumbersOfCreationsInIndex(TestCase):
 
     def test_number_of_drivers(self):
         Driver.objects.create(
