@@ -154,5 +154,3 @@ class PrivateDriverTests(TestCase):
             list(response.context["driver_list"]),
             list(drivers)
         )
-
-
