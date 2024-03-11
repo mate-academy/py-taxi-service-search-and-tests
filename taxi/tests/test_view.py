@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
+
 from taxi.models import Driver
 
 URLS = [
@@ -29,11 +30,11 @@ class PrivateAccessTest(TestCase):
         self.client.force_login(self.user)
 
     def test_login_possibilities(self):
-        for i in range(3):
+        for data in range(3):
             Driver.objects.create(
-                username=f"test{i}",
+                username=f"test{data}",
                 password="12345",
-                license_number=f"AAA0000{i}"
+                license_number=f"AAA0000{data}"
             )
         response = self.client.get(reverse("taxi:driver-list"))
         self.assertEqual(response.status_code, 200)

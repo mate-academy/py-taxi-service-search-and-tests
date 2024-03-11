@@ -25,6 +25,9 @@ class ModelTests(TestCase):
             "Check str method for car model"
         )
 
+
+class LicenseTest(TestCase):
+
     def test_invalid_license_lowercase(self):
         user = get_user_model().objects.create_user(
             username="test",
