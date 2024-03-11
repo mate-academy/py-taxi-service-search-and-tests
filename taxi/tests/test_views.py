@@ -178,3 +178,55 @@ class PrivateDriverTest(TestCase):
             list(response_query_set),
             list(expected_query_set)
         )
+
+
+class ToggleAssignToCar(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="test123",
+        )
+        self.client.force_login(self.user)
+
+    def test_assign_to_car(self):
+
+        bmw = Manufacturer.objects.create(
+            name="BMW",
+            country="German"
+        )
+
+        car = Car.objects.create(
+            model="X5",
+            manufacturer=bmw,
+        )
+
+        self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                args=[car.pk]
+            )
+        )
+
+        self.assertIn(self.user, car.drivers.all())
+
+    def test_exit_from_car(self):
+
+        bmw = Manufacturer.objects.create(
+            name="BMW",
+            country="German"
+        )
+
+        car = Car.objects.create(
+            model="X5",
+            manufacturer=bmw,
+        )
+        car.drivers.add(self.user.pk)
+
+        self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                args=[car.pk]
+            )
+        )
+
+        self.assertNotIn(self.user, car.drivers.all())
