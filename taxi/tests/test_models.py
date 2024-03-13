@@ -70,7 +70,7 @@ class CarTest(TestCase):
         )
         self.car.drivers.add(driver)
 
-    def test_car(self):
+    def test_car_str(self):
         self.assertEqual(str(self.car), self.car.model)
 
     def test_label_fields(self):
