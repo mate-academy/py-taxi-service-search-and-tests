@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+
 from taxi.models import Driver
 
 DRIVER_URL = reverse("taxi:driver-list")

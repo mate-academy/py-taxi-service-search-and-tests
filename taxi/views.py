@@ -12,7 +12,8 @@ from .forms import (
     CarForm,
     DriverSearchForm,
     CarSearchForm,
-    ManufacturerSearchForm)
+    ManufacturerSearchForm
+)
 
 
 @login_required
@@ -72,7 +73,6 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
-    queryset = Car.objects.all().select_related("manufacturer")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
@@ -150,7 +150,7 @@ def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
             Car.objects.get(id=pk) in driver.cars.all()
-    ):  # probably could check if car exists
+    ):
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
