@@ -29,19 +29,37 @@ class CarFormTest(TestCase):
 
 class CarSearchFormTest(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Test Manufacturer", country="Test Country")
-        self.driver = Driver.objects.create(username="test_driver_1", password="pass1234", license_number="TES12345")
-        self.car1 = Car.objects.create(model="Test Model 1", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test Manufacturer",
+            country="Test Country"
+        )
+        self.driver = Driver.objects.create(
+            username="test_driver_1",
+            password="pass1234",
+            license_number="TES12345"
+        )
+        self.car1 = Car.objects.create(
+            model="Test Model 1",
+            manufacturer=self.manufacturer
+        )
         self.car1.drivers.add(self.driver)
-        self.car2 = Car.objects.create(model="Test Model 2", manufacturer=self.manufacturer)
+        self.car2 = Car.objects.create(
+            model="Test Model 2",
+            manufacturer=self.manufacturer
+        )
         self.car2.drivers.add(self.driver)
-        self.car3 = Car.objects.create(model="Test Model 3", manufacturer=self.manufacturer)
+        self.car3 = Car.objects.create(
+            model="Test Model 3",
+            manufacturer=self.manufacturer
+        )
         self.car3.drivers.add(self.driver)
 
     def test_car_search_form_search_logic(self):
         form = CarSearchForm(data={"model": "Test Model 1"})
         self.assertTrue(form.is_valid())
-        search_results = Car.objects.filter(model__icontains=form.cleaned_data["model"])
+        search_results = Car.objects.filter(
+            model__icontains=form.cleaned_data["model"]
+        )
         self.assertEqual(len(search_results), 1)
         self.assertEqual(search_results[0].model, "Test Model 1")
 
@@ -70,17 +88,26 @@ class DriverLicenseUpdateFormTest(TestCase):
     def test_license_number_length(self):
         form = DriverLicenseUpdateForm(data={"license_number": "TES123456"})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["license_number"], ["License number should consist of 8 characters"])
+        self.assertEqual(
+            form.errors["license_number"],
+            ["License number should consist of 8 characters"]
+        )
 
     def test_license_number_uppercase_letters(self):
         form = DriverLicenseUpdateForm(data={"license_number": "tes12345"})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["license_number"], ["First 3 characters should be uppercase letters"])
+        self.assertEqual(
+            form.errors["license_number"],
+            ["First 3 characters should be uppercase letters"]
+        )
 
     def test_license_number_digits(self):
         form = DriverLicenseUpdateForm(data={"license_number": "TESABCDE"})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["license_number"], ["Last 5 characters should be digits"])
+        self.assertEqual(
+            form.errors["license_number"],
+            ["Last 5 characters should be digits"]
+        )
 
 
 class DriverSearchFormTest(TestCase):
@@ -105,7 +132,9 @@ class DriverSearchFormTest(TestCase):
         form = DriverSearchForm(data={"username": "test_driver_1"})
         self.assertTrue(form.is_valid())
 
-        search_results = Driver.objects.filter(username__icontains=form.cleaned_data["username"])
+        search_results = Driver.objects.filter(
+            username__icontains=form.cleaned_data["username"]
+        )
         self.assertEqual(len(search_results), 1)
         self.assertEqual(search_results[0].username, "test_driver_1")
 
@@ -129,6 +158,8 @@ class ManufacturerSearchFormTest(TestCase):
         form = ManufacturerSearchForm(data={"name": "Test Manufacturer 1"})
         self.assertTrue(form.is_valid())
 
-        search_results = Manufacturer.objects.filter(name__icontains=form.cleaned_data["name"])
+        search_results = Manufacturer.objects.filter(
+            name__icontains=form.cleaned_data["name"]
+        )
         self.assertEqual(len(search_results), 1)
         self.assertEqual(search_results[0].name, "Test Manufacturer 1")

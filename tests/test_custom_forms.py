@@ -13,8 +13,14 @@ class IndexViewTest(TestCase):
             license_number="TES12345"
         )
         self.client.login(username="test_driver_1", password="pass1234")
-        self.manufacturer = Manufacturer.objects.create(name="Test Manufacturer", country="Test Country")
-        self.car = Car.objects.create(model="Test Model 1", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test Manufacturer",
+            country="Test Country"
+        )
+        self.car = Car.objects.create(
+            model="Test Model 1",
+            manufacturer=self.manufacturer
+        )
         self.car.drivers.add(self.driver)
 
     def test_index_view(self):
@@ -35,11 +41,22 @@ class ToggleAssignToCarViewTest(TestCase):
             license_number="TES12345"
         )
         self.client.login(username="test_driver_1", password="pass1234")
-        self.manufacturer = Manufacturer.objects.create(name="Test Manufacturer", country="Test Country")
-        self.car = Car.objects.create(model="Test Model 1", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test Manufacturer",
+            country="Test Country"
+        )
+        self.car = Car.objects.create(
+            model="Test Model 1",
+            manufacturer=self.manufacturer
+        )
 
     def test_toggle_assign_to_car_view(self):
-        response = self.client.get(reverse("taxi:toggle-car-assign", args=[self.car.id]))
+        response = self.client.get(
+            reverse(
+                "taxi:toggle-car-assign",
+                args=[self.car.id]
+            )
+        )
         self.assertEqual(response.status_code, 302)
         self.car.refresh_from_db()
         self.assertIn(self.driver, self.car.drivers.all())
