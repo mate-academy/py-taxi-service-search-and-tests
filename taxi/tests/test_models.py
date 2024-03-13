@@ -11,7 +11,7 @@ class ManufacturerTest(TestCase):
             username="Anton", password="tiguti26", license_number="NO55555"
         )
 
-    def test_manufacturer(self):
+    def test_manufacturer_str(self):
         self.assertEqual(
             str(self.manufacturer),
             f"{self.manufacturer.name} {self.manufacturer.country}",
@@ -35,7 +35,7 @@ class DriverTest(TestCase):
             username="Anton", password="tiguti26", license_number="NO55555"
         )
 
-    def test_driver(self):
+    def test_driver_str(self):
         self.assertEqual(
             str(self.driver),
             f"{self.driver.username}"
