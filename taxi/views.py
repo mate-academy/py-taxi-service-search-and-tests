@@ -9,7 +9,8 @@ from .models import Driver, Car, Manufacturer
 from .forms import (
     DriverCreationForm,
     DriverLicenseUpdateForm,
-    CarForm, BookSearchForm,
+    CarForm,
+    BookSearchForm,
     CarSearchForm,
     ManufacturerSearchForm
 )
@@ -54,9 +55,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         queryset = Manufacturer.objects.all()
         form = ManufacturerSearchForm(self.request.GET)
         if form.is_valid():
-            return (queryset.filter
-                    (name__icontains=form.cleaned_data["name"])
-                    )
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
         return queryset
 
 
@@ -93,9 +92,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
         if form.is_valid():
-            return (queryset.filter
-                    (model__icontains=form.cleaned_data["model"])
-                    )
+            return queryset.filter(model__icontains=form.cleaned_data["model"])
         return queryset
 
 
