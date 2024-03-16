@@ -187,3 +187,51 @@ class PrivateViewsTest(TestCase):
     def test_retrieve_driver_detail_view(self):
         response = self.client.get(DRIVER_DETAIL_URL)
         self.assertEqual(response.status_code, 200)
+
+    # Tests for searching features
+    def test_searching_manufacturer_list_view(self):
+        queryset_filtered = Manufacturer.objects.filter(name__icontains="2")
+        response = self.client.get(MANUFACTURER_LIST_URL, {"name": "2"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(queryset_filtered)
+        )
+
+    def test_searching_car_list_view(self):
+        queryset_filtered = Car.objects.filter(model__icontains="2")
+        response = self.client.get(CAR_LIST_URL, {"model": "2"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(queryset_filtered)
+        )
+
+    def test_searching_driver_list_view(self):
+        self.driver_2 = Driver.objects.create_user(
+            username="2 Test username",
+            license_number="TES22222",
+            first_name="Test name 2",
+            last_name="Test surname 2",
+            password="Test parol 2"
+        )
+        self.driver_3 = Driver.objects.create_user(
+            username="3 Test user",
+            license_number="TES33333",
+            first_name="Test name 3",
+            last_name="Test surname 3",
+            password="Test parol 3"
+        )
+        queryset_filtered = Driver.objects.all().filter(
+            username__icontains="username"
+        )
+        response = self.client.get(DRIVER_LIST_URL, {"username": "username"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(queryset_filtered)
+        )
+
+

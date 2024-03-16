@@ -13,7 +13,7 @@ class DriverCreationFormTest(TestCase):
             "username": "test_user",
             "password1": "test123user",
             "password2": "test123user",
-            "license_number": "TES45678",
+            "license_number": "SET876543",
             "first_name": "test first name",
             "last_name": "test last name"
         }
