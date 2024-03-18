@@ -41,7 +41,6 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = SearchForm(self.request.GET)
         return context
 
-    #
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
         search = SearchForm(self.request.GET)
