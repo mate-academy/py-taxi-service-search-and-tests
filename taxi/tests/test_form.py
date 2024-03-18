@@ -68,7 +68,7 @@ class SearchFormTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertContains(response, "Mercedes")
         self.assertNotContains(response, "BMW")
-        self.assertNotContains(response, "Toyota")
+        self.assertNotContains(response, "Honda")
 
     def test_search_car(self):
         test1 = Manufacturer.objects.create(name="Mercedes")
