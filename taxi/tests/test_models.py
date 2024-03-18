@@ -32,8 +32,14 @@ class ModelsTest(TestCase):
         self.car.drivers.add(self.driver)
 
     def test_manufacturer_fields_correct(self):
-        self.assertEqual(self.manufacturer.name, "1 Test manufacturer name")
-        self.assertEqual(self.manufacturer.country, "Test manufacturer country")
+        self.assertEqual(
+            self.manufacturer.name,
+            "1 Test manufacturer name"
+        )
+        self.assertEqual(
+            self.manufacturer.country,
+            "Test manufacturer country"
+        )
 
     def test_manufacturer_str_correct(self):
         self.assertEqual(
@@ -68,7 +74,8 @@ class ModelsTest(TestCase):
     def test_driver_str(self):
         self.assertEqual(
             str(self.driver),
-            f"{self.driver.username} ({self.driver.first_name} {self.driver.last_name})"
+            f"{self.driver.username} "
+            f"({self.driver.first_name} {self.driver.last_name})"
         )
 
     def test_driver_get_absolute_url(self):

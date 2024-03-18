@@ -83,7 +83,7 @@ class DriverLicenseUpdateFormTest(TestCase):
 
 
 class DriverCreationFormTest(TestCase):
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self):
+    def test_driver_creation_form_is_valid(self):
         form_data = {
             "username": "test_user",
             "password1": "password123egege",

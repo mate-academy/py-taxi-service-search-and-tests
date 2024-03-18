@@ -233,5 +233,3 @@ class PrivateViewsTest(TestCase):
             list(response.context["driver_list"]),
             list(queryset_filtered)
         )
-
-
