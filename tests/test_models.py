@@ -54,7 +54,8 @@ class TestModels(TestCase):
     def test_str_driver(self):
         driver = get_user_model().objects.get(id=1)
         self.assertEqual(
-            str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})"
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
         )
 
     def test_str_car(self):
