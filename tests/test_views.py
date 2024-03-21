@@ -28,6 +28,10 @@ class PrivateViewsTest(TestCase):
             username="test",
             password="test_pass"
         )
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
         self.client.force_login(self.user)
 
     def test_retrieve_driver(self):
@@ -41,21 +45,14 @@ class PrivateViewsTest(TestCase):
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
     def test_retrieve_car(self):
-        manufacturer = Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan"
-        )
         Car.objects.create(
-            model="Model1",
-            manufacturer=manufacturer
+            model="Camry",
+            manufacturer=self.manufacturer
         )
-        Car.objects.create(
-            model="Model2",
-            manufacturer=manufacturer
-        )
+
         response = self.client.get(CAR_URL)
-        all_car = Car.objects.all()
         self.assertEqual(response.status_code, 200)
+        all_car = Car.objects.all()
         self.assertEqual(
             list(response.context["car_list"]),
             list(all_car)
@@ -63,10 +60,6 @@ class PrivateViewsTest(TestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_retrieve_manufacture(self):
-        Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan"
-        )
         Manufacturer.objects.create(
             name="Tesla",
             country="USA"
@@ -82,13 +75,8 @@ class PrivateViewsTest(TestCase):
 
     def test_toggle_assign_to_car(self):
         self.client.login(username="testadmin", password="test123123")
-
-        manufacturer = Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan",
-        )
         car = Car.objects.create(model="Camry",
-                                 manufacturer=manufacturer)
+                                 manufacturer=self.manufacturer)
         url = reverse("taxi:toggle-car-assign", args=[car.id])
 
         response = self.client.post(url)
