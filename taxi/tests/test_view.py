@@ -29,13 +29,14 @@ class PrivateAccessTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_login_possabilities(self):
+    def test_login_possibilities(self):
         for i in range(3):
             Driver.objects.create(
                 username=f"test{i}",
                 password="some123",
                 license_number=f"ABC1234{i}"
             )
+
         response = self.client.get(reverse("taxi:driver-list"))
         self.assertEquals(response.status_code, 200)
         drivers = Driver.objects.all()

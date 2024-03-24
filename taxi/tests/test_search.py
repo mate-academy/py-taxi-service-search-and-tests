@@ -13,45 +13,25 @@ class TestSearch(TestCase):
         )
         self.client.force_login(self.user)
 
-        Driver.objects.create(
-            username="Atest",
-            password="123qwery",
-            license_number="ADC12345"
-        )
-        Driver.objects.create(
-            username="atest",
-            password="123qwery",
-            license_number="ABC12534"
-        )
-        Driver.objects.create(
-            username="btest",
-            password="123qwery",
-            license_number="ABC51234"
-        )
-        Manufacturer.objects.create(
-            name="Atest",
-            country="Anywhere"
-        )
-        Manufacturer.objects.create(
-            name="atest",
-            country="Anywhere"
-        )
-        Manufacturer.objects.create(
-            name="btest",
-            country="Anywhere"
-        )
-        Car.objects.create(
-            model="Atest",
-            manufacturer=Manufacturer.objects.get(id=1)
-        )
-        Car.objects.create(
-            model="atest",
-            manufacturer=Manufacturer.objects.get(id=1)
-        )
-        Car.objects.create(
-            model="btest",
-            manufacturer=Manufacturer.objects.get(id=1)
-        )
+        driver_data = {
+            "Atest": "ADC12345",
+            "atest": "ABC12534",
+            "btest": "ABC51234"
+        }
+        for some_name, license_number in driver_data.items():
+            Driver.objects.create(
+                username=some_name,
+                password=license_number,
+                license_number=license_number
+            )
+            Manufacturer.objects.create(
+                name=some_name,
+                country="Anywhere"
+            )
+            Car.objects.create(
+                model=some_name,
+                manufacturer=Manufacturer.objects.get(id=1)
+            )
 
     def test_search_drivers_check_values(self):
         response = self.client.get(
