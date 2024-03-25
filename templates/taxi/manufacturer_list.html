@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_filters %}
+
 {% block content %}
   <h1>
     Manufacturer List
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
+  {% include "includes/field_of_search.html" %}
   </h1>
-
   {% if manufacturer_list %}
     <table class="table">
       <tr>
