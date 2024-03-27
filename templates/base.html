@@ -19,12 +19,16 @@
     <div class="row">
         <div class="col-sm-2">
 
+
             {% block sidebar %}
                 {% include "includes/sidebar.html" %}
             {% endblock %}
 
         </div>
         <div class="col-sm-10 ">
+            {% if search_form %}
+                {% include "includes/search.html" %}
+            {% endif %}
 
             {% block content %}{% endblock %}
 
