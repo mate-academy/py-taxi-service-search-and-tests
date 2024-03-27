@@ -4,10 +4,6 @@
 {% block content %}
   <h1>
     Manufacturer List
-    <form action="" method="get" class="form-inline">
-        {{ search_form|crispy }}
-        <input class="btn btn-secondary" type="submit" value="🔎">
-    </form>
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>

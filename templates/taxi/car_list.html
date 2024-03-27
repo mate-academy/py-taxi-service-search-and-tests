@@ -4,12 +4,6 @@
 {% block content %}
   <h1>
     Car list
-    <form action="" method="get" class="form-inline">
-        <div class="form-group">
-            {{ search_form|crispy }}
-            <button class="btn btn-secondary" type="submit">🔎</button>
-        </div>
-    </form>
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>

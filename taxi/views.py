@@ -11,9 +11,7 @@ from .forms import (
     DriverCreationForm,
     DriverLicenseUpdateForm,
     CarForm,
-    ManufacturerSearchForm,
-    CarSearchForm,
-    DriverSearchForm,
+    SearchForm,
 )
 
 
@@ -46,15 +44,15 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
-        name = self.request.GET.get("name", "")
-        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
+        param = self.request.GET.get("param", "")
+        context["search_form"] = SearchForm(initial={"param": param})
         return context
 
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
-        form = ManufacturerSearchForm(self.request.GET)
+        form = SearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(name__icontains=form.cleaned_data["name"])
+            return queryset.filter(name__icontains=form.cleaned_data["param"])
         return queryset
 
 
@@ -82,15 +80,15 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
-        model = self.request.GET.get("model", "")
-        context["search_form"] = CarSearchForm(initial={"model": model})
+        param = self.request.GET.get("param", "")
+        context["search_form"] = SearchForm(initial={"param": param})
         return context
 
     def get_queryset(self):
         queryset = Car.objects.select_related("manufacturer")
-        form = CarSearchForm(self.request.GET)
+        form = SearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(model__icontains=form.cleaned_data["model"])
+            return queryset.filter(model__icontains=form.cleaned_data["param"])
         return queryset
 
 
@@ -123,18 +121,18 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         context = super(
             DriverListView, self
         ).get_context_data(**kwargs)
-        username = self.request.GET.get("username", "")
-        context["search_form"] = DriverSearchForm(
-            initial={"username": username}
+        param = self.request.GET.get("param", "")
+        context["search_form"] = SearchForm(
+            initial={"param": param}
         )
         return context
 
     def get_queryset(self):
         queryset = get_user_model().objects.all()
-        form = DriverSearchForm(self.request.GET)
+        form = SearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
-                username__icontains=form.cleaned_data["username"])
+                username__icontains=form.cleaned_data["param"])
         return queryset
 
 
