@@ -6,7 +6,7 @@ register = template.Library()
 @register.simple_tag
 def query_transform(request, **kwargs):
     updated = request.GET.copy()
-    for k, v in kwargs.items():
+    for k, v in kwargs.items():  # noqa VNE001
         if v is not None:
             updated[k] = v
         else:
