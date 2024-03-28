@@ -58,7 +58,7 @@ class DriverViewTest(TestCase):
         self.assertEqual(list(response.context["driver_list"]), list(drivers))
 
     def test_filter_list_drivers(self):
-        response = self.client.get(f"{reverse('taxi:driver-list')}?username=1")
+        response = self.client.get(f"{reverse("taxi:driver-list")}?username=1")
         self.assertEqual(len(response.context["driver_list"]), 1)
 
     def test_pagination_list_drivers(self):
@@ -75,7 +75,7 @@ class DriverViewTest(TestCase):
         self.assertEqual(len(response.context["driver_list"]), 5)
 
         response = self.client.get(
-            f"{reverse("taxi:driver-list")}?username=2&page=2"
+            f"{reverse('taxi:driver-list')}?username=2&page=2"  # noqa Q000
         )
         self.assertEqual(response.context["paginator"].num_pages, 2)
 
