@@ -72,7 +72,7 @@ class CarViewTest(TestCase):
         self.assertEqual(list(response.context["car_list"]), list(cars))
 
     def test_filter_list_cars(self):
-        response = self.client.get(f"{reverse("taxi:car-list")}?model=1")
+        response = self.client.get(f"{reverse('taxi:car-list')}?model=1")
         self.assertEqual(len(response.context["car_list"]), 1)
 
     def test_pagination_list_drivers(self):

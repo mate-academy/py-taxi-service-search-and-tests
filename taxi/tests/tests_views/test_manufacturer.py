@@ -60,7 +60,7 @@ class ManufacturerViewTest(TestCase):
         )
 
     def test_filter_list_manufacturers(self):
-        response = self.client.get(f"{reverse("taxi:driver-list")}?name=1")
+        response = self.client.get(f"{reverse('taxi:driver-list')}?name=1")
         self.assertEqual(len(response.context["driver_list"]), 1)
 
     def test_pagination_list_manufacturers(self):
