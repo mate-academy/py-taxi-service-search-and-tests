@@ -12,91 +12,91 @@ class PublicViewsTests(TestCase):
         url = reverse("taxi:index")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_manufacturer_list_view_login_required(self) -> None:
         url = reverse("taxi:manufacturer-list")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_manufacturer_create_view_login_required(self) -> None:
         url = reverse("taxi:manufacturer-create")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_manufacturer_update_view_login_required(self) -> None:
         url = reverse("taxi:manufacturer-update", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_manufacturer_delete_view_login_required(self) -> None:
         url = reverse("taxi:manufacturer-delete", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_car_list_view_login_required(self) -> None:
         url = reverse("taxi:car-list")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_car_detail_view_login_required(self) -> None:
         url = reverse("taxi:car-detail", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_car_create_view_login_required(self) -> None:
         url = reverse("taxi:car-create")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_car_update_view_login_required(self) -> None:
         url = reverse("taxi:car-update", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_car_delete_view_login_required(self) -> None:
         url = reverse("taxi:car-delete", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_driver_list_view_login_required(self) -> None:
         url = reverse("taxi:driver-list")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_driver_detail_view_login_required(self) -> None:
         url = reverse("taxi:driver-detail", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_driver_create_view_login_required(self) -> None:
         url = reverse("taxi:driver-create")
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_driver_license_update_view_login_required(self) -> None:
         url = reverse("taxi:driver-update", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
     def test_driver_delete_view_login_required(self) -> None:
         url = reverse("taxi:driver-delete", kwargs={"pk": 1})
         res = self.client.get(url)
 
-        self.assertNotEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
 
 
 class PrivateViewsTests(TestCase):
