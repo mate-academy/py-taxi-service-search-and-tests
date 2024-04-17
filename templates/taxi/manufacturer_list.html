@@ -7,7 +7,12 @@
       Create
     </a>
   </h1>
+  {% load crispy_forms_tags %}
 
+        <form action="" method="get">
+  {{ search_name_form|crispy }}
+  <input type="submit">
+</form>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
