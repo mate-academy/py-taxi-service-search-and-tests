@@ -43,7 +43,6 @@ class TestSearchForm(TestCase):
         self.assertTrue(form_driver.is_valid())
         self.assertTrue(form_car.is_valid())
 
-
     def test_form_with_valid_data(self):
         form_data = {"title": "Test Manufacturer"}
         self.data_for_test(form_data)
