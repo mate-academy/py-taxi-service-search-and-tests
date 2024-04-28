@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Delete manufacturer?</h1>
-  <form action="" method="post">
-    {% csrf_token %}
+  <h1>Delete Manufacturer {{ manufacturer.name }} </h1>
+  <p>
+    Are you sure to delete {{ manufacturer }}.
+    Car will be deleted too.
+  <p/>
 
-    <input type="submit" value="Yes" class="btn btn-danger">
-  </form>
+  {% block Buttons %}
+        {% include "includes/confirm_buttons.html" %}
+  {% endblock %}
+
 {% endblock %}

@@ -1,0 +1,9 @@
+<form action="" method="post">
+  {% csrf_token %}
+
+  <input class="btn btn-danger" type="submit" value="Yes, delete">
+  <input class="btn btn-primary"
+           type="button"
+           onclick="history.back()"
+           value="No">
+</form>

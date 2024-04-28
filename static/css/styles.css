@@ -2,7 +2,20 @@ body {
     margin-top: 20px;
 }
 
-.link-to-page {
-    float: right;
-    margin: 0 2px 0 2px;
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
+    background: lightgoldenrodyellow;
+}
+
+.btn_stl {
+    margin-left: 2%;
+    margin-top: 4%;
+    color: #ff24d2;
+}
+
+.tools_stl {
+    width:3%;
+    height:5%;
+    margin-left: 2%
 }
