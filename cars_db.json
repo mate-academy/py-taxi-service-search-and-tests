@@ -1,0 +1,388 @@
+[
+    {
+        "model": "taxi.manufacturer",
+        "pk": 1,
+        "fields": {
+            "name": "Lincoln",
+            "country": "USA"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 2,
+        "fields": {
+            "name": "Toyota",
+            "country": "Japan"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 3,
+        "fields": {
+            "name": "BMW",
+            "country": "Germany"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 4,
+        "fields": {
+            "name": "Mercedes-Benz",
+            "country": "Germany"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 5,
+        "fields": {
+            "name": "Honda",
+            "country": "Japan"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 6,
+        "fields": {
+            "name": "Ford",
+            "country": "USA"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 7,
+        "fields": {
+            "name": "Chevrolet",
+            "country": "USA"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 8,
+        "fields": {
+            "name": "Audi",
+            "country": "Germany"
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 11,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "bob.newby",
+            "first_name": "Bob",
+            "last_name": "Newby",
+            "email": "bob.newby@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-08-09T14:19:09Z",
+            "license_number": "BOB09631",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 12,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "alice.jones",
+            "first_name": "Alice",
+            "last_name": "Jones",
+            "email": "alice.jones@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-09-10T15:20:10Z",
+            "license_number": "ALI36482",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 13,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "john.smith",
+            "first_name": "John",
+            "last_name": "Smith",
+            "email": "john.smith@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-10-11T16:21:11Z",
+            "license_number": "JON75429",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 14,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "emma.watson",
+            "first_name": "Emma",
+            "last_name": "Watson",
+            "email": "emma.watson@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-12T17:22:12Z",
+            "license_number": "EMM84071",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 15,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "michael.jackson",
+            "first_name": "Michael",
+            "last_name": "Jackson",
+            "email": "michael.jackson@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-12-13T18:23:13Z",
+            "license_number": "MIC62985",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 16,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "sarah.connor",
+            "first_name": "Sarah",
+            "last_name": "Connor",
+            "email": "sarah.connor@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-01-14T19:24:14Z",
+            "license_number": "SAR51732",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 17,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "will.smith",
+            "first_name": "Will",
+            "last_name": "Smith",
+            "email": "will.smith@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-02-15T20:25:15Z",
+            "license_number": "WIL97364",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 18,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "brad.pitt",
+            "first_name": "Brad",
+            "last_name": "Pitt",
+            "email": "brad.pitt@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-03-16T21:26:16Z",
+            "license_number": "BRA24098",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 19,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "lucy.liu",
+            "first_name": "Lucy",
+            "last_name": "Liu",
+            "email": "lucy.liu@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-04-17T22:27:17Z",
+            "license_number": "LUC08461",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 20,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "chris.hemsworth",
+            "first_name": "Chris",
+            "last_name": "Hemsworth",
+            "email": "chris.hemsworth@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-05-18T23:28:18Z",
+            "license_number": "CHR35270",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 21,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "natalie.portman",
+            "first_name": "Natalie",
+            "last_name": "Portman",
+            "email": "natalie.portman@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-06-19T00:29:19Z",
+            "license_number": "NAT49513",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 22,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "scarlett.johansson",
+            "first_name": "Scarlett",
+            "last_name": "Johansson",
+            "email": "scarlett.johansson@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-07-20T01:30:20Z",
+            "license_number": "SCA76890",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 23,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "ryan.gosling",
+            "first_name": "Ryan",
+            "last_name": "Gosling",
+            "email": "ryan.gosling@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-08-21T02:31:21Z",
+            "license_number": "RYA62384",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 24,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "leonardo.dicaprio",
+            "first_name": "Leonardo",
+            "last_name": "Dicaprio",
+            "email": "leonardo.dicaprio@taxi.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-09-22T03:32:22Z",
+            "license_number": "LEO79054",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 9,
+        "fields": {
+            "name": "Nissan",
+            "country": "Japan"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 10,
+        "fields": {
+            "name": "Volkswagen",
+            "country": "Germany"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 11,
+        "fields": {
+            "name": "Hyundai",
+            "country": "South Korea"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 12,
+        "fields": {
+            "name": "Kia",
+            "country": "South Korea"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 13,
+        "fields": {
+            "name": "Subaru",
+            "country": "Japan"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 14,
+        "fields": {
+            "name": "Mazda",
+            "country": "Japan"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 15,
+        "fields": {
+            "name": "Volvo",
+            "country": "Sweden"
+        }
+    }
+]
