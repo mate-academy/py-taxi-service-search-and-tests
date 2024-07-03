@@ -27,6 +27,6 @@ jobs:
       - name: Run flake8
         run: flake8
 
-      - name: Run tests
+      - name: Run test_cases
         timeout-minutes: 5
         run: python manage.py test
