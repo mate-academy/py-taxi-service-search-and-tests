@@ -42,21 +42,40 @@ class TestManufacturerViewList(TestCase):
 
 class TestDriverViewList(TestCase):
     def setUp(self):
-        number_of_drivers = 15
-
-        for i in range(number_of_drivers):
-            Driver.objects.create(
-                username=f"test{i}",
-                password=f"test{i}",
-                license_number=f"LLL1234{i}"
-            )
-
         self.user = get_user_model().objects.create(
             username='test',
-            password='test1234'
+            password='test1234',
+            license_number="QWE12345"
+        )
+
+        get_user_model().objects.create(
+            username='test2',
+            password='test2234',
+            license_number="QWE23456"
+        )
+
+        get_user_model().objects.create(
+            username='test3',
+            password='test3234',
+            license_number="QWE34567"
+        )
+
+        get_user_model().objects.create(
+            username='test4',
+            password='test3234',
+            license_number="QWE45678"
         )
 
     def test_view_url_accessible_by_name(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('taxi:driver-list'))
         self.assertEqual(response.status_code, 200)
+
+    def test_view_search_field(self):
+        self.client.force_login(self.user)
+        base_url = reverse('taxi:driver-list')
+        query_params = {'username': "noname"}
+        url = f"{base_url}?{urlencode(query_params)}"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["driver_list"]), 2)
