@@ -57,9 +57,7 @@ class DriverSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "search by username"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "search by username"}),
     )
 
 
@@ -68,9 +66,7 @@ class CarSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "search by model"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "search by model"}),
     )
 
 
@@ -79,7 +75,5 @@ class ManufacturerSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "search by name"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "search by name"}),
     )
