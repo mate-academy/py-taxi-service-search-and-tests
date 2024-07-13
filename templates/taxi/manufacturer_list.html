@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+  
+  {% block search %}
+      {% include "includes/search.html" %}
+  {% endblock %}
 
   {% if manufacturer_list %}
     <table class="table">
