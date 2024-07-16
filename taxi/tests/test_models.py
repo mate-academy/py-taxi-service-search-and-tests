@@ -19,7 +19,9 @@ class TestModels(TestCase):
             first_name="John",
             last_name="Doe",
         )
-        expected = f"{driver.username} ({driver.first_name} {driver.last_name})"
+        expected = (f"{driver.username}"
+                    f" ({driver.first_name}"
+                    f" {driver.last_name})")
         self.assertEqual(str(driver), expected)
 
     def test_car_str(self):
