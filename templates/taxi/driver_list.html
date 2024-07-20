@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <h1>
@@ -7,7 +8,10 @@
         Create
       </a>
     </h1>
-
+    <form class="search-form" action="" method="get">
+      {{ search_form|crispy }}
+      <input type="submit" value="Search" class="btn btn primary">
+    </form>
     {% if driver_list %}
     <table class="table">
       <tr>

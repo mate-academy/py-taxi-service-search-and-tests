@@ -6,3 +6,9 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.search-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
