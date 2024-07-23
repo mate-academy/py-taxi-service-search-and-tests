@@ -1,0 +1,16 @@
+from django.test import TestCase
+from taxi.forms import ManufacturerNameSearchForm
+
+
+class ManufacturerNameSearchFormTest(TestCase):
+    def test_form_has_placeholder(self):
+        form = ManufacturerNameSearchForm()
+        self.assertIn("placeholder='Search by name'", form.as_p())
+
+    def test_form_field_max_length(self):
+        form = ManufacturerNameSearchForm()
+        self.assertEqual(form.fields["name"].max_length, 255)
+
+    def test_form_field_not_required(self):
+        form = ManufacturerNameSearchForm()
+        self.assertFalse(form.fields["name"].required)
