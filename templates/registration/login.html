@@ -12,13 +12,15 @@
 {% if next %}
   <p>Please login to see this page.</p>
 {% endif %}
+  
+<div class="container mt-4" style="max-width: 300px; margin-left: 0;"> 
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
 
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-
-  <input type="submit" value="Login" class="btn btn-primary" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</form>
+    <input type="submit" value="Login" class="btn btn-primary btn-block" />
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+</div>
 
 {% endblock %}
