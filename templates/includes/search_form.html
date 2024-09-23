@@ -1,0 +1,11 @@
+{% load crispy_forms_filters %}
+<form action="" method="get">
+    {{ search_form|crispy }}
+    <input type="submit" value="🔍">
+
+    {% for key, value in request.GET.items %}
+        {% if key != "search" and key != "page" %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endif %}
+    {% endfor %}
+</form>

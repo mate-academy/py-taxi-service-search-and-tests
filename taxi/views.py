@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -5,8 +7,36 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from taxi.models import Driver, Car, Manufacturer
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    SearchForm,
+)
+
+
+class AbstractSearchBase(ABC):
+    @property
+    @abstractmethod
+    def search_field(self):
+        raise NotImplementedError("You must define a search field")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.GET.get("search", "").strip()
+
+        if search:
+            filter_kwargs = {f"{self.search_field}__icontains": search}
+            queryset = queryset.filter(**filter_kwargs)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search = self.request.GET.get("search", "").strip()
+        context["search_form"] = SearchForm(initial={"search": search})
+        return context
 
 
 @login_required
@@ -30,11 +60,17 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+class ManufacturerListView(
+    LoginRequiredMixin, AbstractSearchBase, generic.ListView
+):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+
+    @property
+    def search_field(self):
+        return "name"
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -54,10 +90,14 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class CarListView(LoginRequiredMixin, AbstractSearchBase, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+
+    @property
+    def search_field(self):
+        return "model"
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -81,9 +121,13 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:car-list")
 
 
-class DriverListView(LoginRequiredMixin, generic.ListView):
+class DriverListView(LoginRequiredMixin, AbstractSearchBase, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    @property
+    def search_field(self):
+        return "username"
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
@@ -104,7 +148,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
