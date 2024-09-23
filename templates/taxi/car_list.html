@@ -1,17 +1,22 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
+<h1 xmlns:taxi="http://www.w3.org/1999/xhtml" xmlns:taxi="http://www.w3.org/1999/xhtml">
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
+    {% block car_search_form %}
+      {% include "includes/car_search_form.html" %}
+    {% endblock %}
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %} ">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
