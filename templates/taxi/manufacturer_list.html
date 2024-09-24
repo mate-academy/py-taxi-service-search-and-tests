@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_filters %}
 {% block content %}
   <h1>
     Manufacturer List
@@ -7,7 +7,9 @@
       Create
     </a>
   </h1>
-
+  {% block search %}
+    {% include "includes/search_form.html" %}
+  {% endblock %}
   {% if manufacturer_list %}
     <table class="table">
       <tr>
