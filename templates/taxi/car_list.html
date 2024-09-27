@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
   <h1>
     Car list
@@ -8,6 +7,7 @@
     </a>
   </h1>
   {% if car_list %}
+    {% include "includes/search.html" %}
     <ul>
       {% for car in car_list %}
         <li>
