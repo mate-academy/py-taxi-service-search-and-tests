@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+
+  {% block search_form %}
+    {% include "includes/search_form.html" %}
+  {% endblock %}
   {% if car_list %}
     <ul>
       {% for car in car_list %}
