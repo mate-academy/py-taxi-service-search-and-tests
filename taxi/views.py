@@ -1,3 +1,5 @@
+
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -5,8 +7,16 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .mixins import SearchMixin
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    DriverSearchForm,
+    CarSearchForm,
+    ManufacturerSearchForm
+)
 
 
 @login_required
@@ -30,11 +40,14 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+class ManufacturerListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+    search_form_class = ManufacturerSearchForm
+    search_fields = ["name"]
+    queryset = Manufacturer.objects.prefetch_related("cars")
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -54,10 +67,12 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class CarListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+    search_form_class = CarSearchForm
+    search_fields = ["model"]
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -81,9 +96,12 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:car-list")
 
 
-class DriverListView(LoginRequiredMixin, generic.ListView):
+class DriverListView(LoginRequiredMixin, SearchMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+    search_form_class = DriverSearchForm
+    search_fields = ["username"]
+    queryset = Driver.objects.prefetch_related("cars")
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
