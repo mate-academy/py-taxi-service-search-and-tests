@@ -17,6 +17,9 @@ from .views import (
     ManufacturerUpdateView,
     ManufacturerDeleteView,
     toggle_assign_to_car,
+    driver_list,
+    car_list,
+    manufacturer_list,
 )
 
 urlpatterns = [
@@ -70,6 +73,12 @@ urlpatterns = [
         DriverDeleteView.as_view(),
         name="driver-delete",
     ),
+    path("search/drivers/",
+         driver_list, name="search-drivers"),
+    path("search/cars/",
+         car_list, name="search-cars"),
+    path("search/manufacturers/",
+         manufacturer_list, name="search-manufacturers"),
 ]
 
 app_name = "taxi"
