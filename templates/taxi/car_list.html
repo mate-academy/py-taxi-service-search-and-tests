@@ -8,6 +8,10 @@
     </a>
   </h1>
   {% if car_list %}
+    <form method="get", action="{% url 'taxi:search-cars' %}">
+      <input type="text", name="q", placeholder="Search cars (model)">
+      <button type="submit">Search</button>
+    </form>
     <ul>
       {% for car in car_list %}
         <li>
