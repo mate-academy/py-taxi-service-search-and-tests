@@ -1,50 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Manufacturer List
-    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
-  </h1>
+  <h2>Manufacturer List</h2>
+  
+  <form method="get" action="{% url 'taxi:manufacturer-list' %}">
+    <input type="text" name="search" value="{{ request.GET.search }}" placeholder="Search by name">
+    <button type="submit">Search</button>
+  </form>
 
-  {% if manufacturer_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Update</th>
-        <th>Delete</th>
-      </tr>
+  <ul>
+    {% for manufacturer in manufacturer_list %}
+      <li>{{ manufacturer.name }} ({{ manufacturer.country }})</li>
+    {% endfor %}
+  </ul>
 
-      {% for manufacturer in manufacturer_list %}
-        <tr>
-          <td>
-              {{ manufacturer.id }}
-          </td>
-          <td>
-              {{ manufacturer.name }}
-          </td>
-          <td>
-              {{ manufacturer.country }}
-          </td>
-          <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
-              </a>
-            </td>
-            <td>
-              <a style="color: red"
-                href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
-                Delete
-              </a>
-            </td>
-        </tr>
-      {% endfor %}
-    </table>
-
-  {% else %}
-      <p>There are no manufacturers in the service.</p>
+  {% if manufacturer_list.has_other_pages %}
+    <div class="pagination">
+      <span class="step-links">
+        {% if manufacturer_list.has_previous %}
+          <a href="?page=1&search={{ request.GET.search }}">First</a>
+          <a href="?page={{ manufacturer_list.previous_page_number }}&search={{ request.GET.search }}">Previous</a>
+        {% endif %}
+        <span class="current">
+          Page {{ manufacturer_list.number }} of {{ manufacturer_list.paginator.num_pages }}.
+        </span>
+        {% if manufacturer_list.has_next %}
+          <a href="?page={{ manufacturer_list.next_page_number }}&search={{ request.GET.search }}">Next</a>
+          <a href="?page={{ manufacturer_list.paginator.num_pages }}&search={{ request.GET.search }}">Last</a>
+        {% endif %}
+      </span>
+    </div>
   {% endif %}
 {% endblock %}

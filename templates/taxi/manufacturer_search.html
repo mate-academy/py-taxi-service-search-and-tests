@@ -1,0 +1,11 @@
+<form method="get">
+    <input type="text" name="q" placeholder="Search Manufacturers">
+    <button type="submit">Search</button>
+</form>
+<ul>
+    {% for manufacturer in object_list %}
+        <li>{{ manufacturer.name }}</li>
+    {% empty %}
+        <li>No results found</li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,11 @@
+<form method="get">
+    <input type="text" name="q" placeholder="Search Drivers">
+    <button type="submit">Search</button>
+</form>
+<ul>
+    {% for driver in object_list %}
+        <li>{{ driver.username }}</li>
+    {% empty %}
+        <li>No results found</li>
+    {% endfor %}
+</ul>
