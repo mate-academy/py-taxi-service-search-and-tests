@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "crispy_forms",
     "taxi",
+    "crispy_bootstrap4",
 ]
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
