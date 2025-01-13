@@ -40,7 +40,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
 
 def validate_license_number(
-    license_number,
+        license_number,
 ):  # regex validation is also possible here
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
@@ -50,3 +50,35 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class DriverSearchForm(forms.Form):
+    title = forms.CharField(max_length=150, required=False)
+
+
+class SearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=150,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by model"}),
+    )
+    driver = forms.CharField(
+        max_length=150,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by username"}),
+    )
+    manufacturer = forms.CharField(
+        max_length=150,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by manufacturer"}),  # NOQA E501
+    )
+
+    def __init__(self, *args, field=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if field is not None:
+            for key in list(self.fields.keys()):
+                if key not in field:
+                    del self.fields[key]
