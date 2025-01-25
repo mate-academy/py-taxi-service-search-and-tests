@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 from .models import Driver, Car, Manufacturer
 from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
@@ -32,9 +33,15 @@ def index(request):
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
-    context_object_name = "manufacturer_list"
-    template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+    template_name = "taxi/manufacturer_list.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        queryset = Manufacturer.objects.all()
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -57,7 +64,14 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
+    template_name = "taxi/car_list.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        queryset = Car.objects.all().select_related("manufacturer")
+        if query:
+            queryset = queryset.filter(model__icontains=query)
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +98,14 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+    template_name = "taxi/driver_list.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        queryset = Driver.objects.all()
+        if query:
+            queryset = queryset.filter(username__icontains=query)
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
