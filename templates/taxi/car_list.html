@@ -7,6 +7,18 @@
       Create
     </a>
   </h1>
+
+  <br>
+
+  <div>
+    <form method="get" action="">
+      {{ search }}
+      <input type="submit">
+    </form>
+  </div>
+
+  <br>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
