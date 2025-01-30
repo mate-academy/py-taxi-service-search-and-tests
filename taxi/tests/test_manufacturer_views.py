@@ -22,7 +22,7 @@ class ManufacturerTest(TestCase):
         )
 
     def test_search(self):
-        response = self.client.get(self.url, {"name": "ha"})
+        response = self.client.get(self.url, {"name": "nd"})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Honda")
         self.assertContains(response, "Mahindra")
