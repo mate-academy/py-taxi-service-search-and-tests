@@ -68,21 +68,18 @@ class PrivateManufacturerTest(TestCase):
 
     def test_manufacturer_created(self):
         data = {
-            "name": "Toyota",
-            "country": "Japan",
+            "name": "NewTestName",
+            "country": "NewTestCountry",
         }
+        url = reverse_lazy("taxi:manufacturer-create")
+        response = self.client.post(url, data=data)
 
-        response = self.client.post(
-            reverse("taxi:manufacturer-create"),
-            data=data
-        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse_lazy("taxi:manufacturer-list"))
 
-        self.assertEqual(response.status_code, 200)
-
-        manufacturer = Manufacturer.objects.get(name="Toyota")
-
-        self.assertEqual(manufacturer.name, "Toyota")
-        self.assertEqual(manufacturer.country, "Japan")
+        manufacturer = Manufacturer.objects.get(name="NewTestName")
+        self.assertEqual(manufacturer.name, "NewTestName")
+        self.assertEqual(manufacturer.country, "NewTestCountry")
 
     def test_manufacturer_update(self):
         data = {
@@ -213,8 +210,6 @@ class PrivateDriverTest(TestCase):
         )
 
     def test_driver_created(self):
-        self.client.login(username="testuser", password="testpassword")
-
         data = {
             "username": "driver1",
             "password1": "strongpassword",

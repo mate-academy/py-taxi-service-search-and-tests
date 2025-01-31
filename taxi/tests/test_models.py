@@ -16,7 +16,7 @@ class ModelTests(TestCase):
             password="pasword123",
             first_name="TestF",
             last_name="TestL",
-            license_number="123456",
+            license_number="ABC12345",
         )
         self.client.force_login(self.driver)
 

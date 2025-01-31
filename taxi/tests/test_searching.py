@@ -48,7 +48,7 @@ class SearchTests(TestCase):
 
     def test_driver_search(self):
         form_data = {
-            "username": "testuser",
+            "username": "testdriver",
         }
         form = DriverSearchNameForm(data=form_data)
         self.assertTrue(form.is_valid())
