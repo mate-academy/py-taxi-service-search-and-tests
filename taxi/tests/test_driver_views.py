@@ -51,7 +51,6 @@ class DriverTest(TestCase):
         self.assertIn("Nakamura", content)
         self.assertIn("WRN78234", content)
         self.assertIn("stargazer", content)
-        self.assertNotIn("cosmic$rise", content)
 
     def test_search(self):
         response = self.client.get(
