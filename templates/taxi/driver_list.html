@@ -8,27 +8,38 @@
       </a>
     </h1>
 
-    {% if driver_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
-      </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'taxi:driver-list' %}" class="mb-3">
+        <input type="text" name="q" placeholder="Search by username..." value="{{ request.GET.q }}" class="form-control w-25 d-inline">
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
 
+    {% if driver_list %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>License Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for driver in driver_list %}
+          <tr>
+            <td>{{ driver.id }}</td>
+            <td>
+              <a href="{{ driver.get_absolute_url }}">{{ driver.username }}{% if user == driver %} (Me){% endif %}</a>
+            </td>
+            <td>{{ driver.first_name }}</td>
+            <td>{{ driver.last_name }}</td>
+            <td>{{ driver.license_number }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
     {% else %}
-      <p>There are no drivers in the service.</p>
+      <p>No drivers found.</p>
     {% endif %}
 {% endblock %}
