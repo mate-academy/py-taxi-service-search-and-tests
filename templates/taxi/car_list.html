@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+  <form action="" method="get" novalidate>
+    {{ search_form }}
+    <input type="submit" value="Search" class="btn btn-secondary">
+  </form>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
