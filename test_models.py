@@ -51,6 +51,8 @@ class ModelsTests(TestCase):
             reverse("taxi:driver-detail",
                     kwargs={"pk": driver.pk})
         )
+
+
 class PrivateCarListTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
