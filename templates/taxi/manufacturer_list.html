@@ -8,6 +8,18 @@
     </a>
   </h1>
 
+  <form method="get" action="{% url 'taxi:manufacturer-list' %}">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
+
+  <ul>
+    {% for manufacturer in manufacturer_list %}
+      <li>{{ manufacturer.name }} - {{ manufacturer.country }}</li>
+    {% endfor %}
+  </ul>
+
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>

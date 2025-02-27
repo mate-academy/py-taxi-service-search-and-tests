@@ -7,6 +7,18 @@
       Create
     </a>
   </h1>
+
+  <form method="get" action="{% url 'taxi:car-list' %}">
+    <input type="text" name="q" placeholder="Search by model" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
+
+  <ul>
+    {% for car in car_list %}
+      <li>{{ car.model }} - {{ car.manufacturer.name }}</li>
+    {% endfor %}
+  </ul>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
