@@ -6,7 +6,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from taxi.models import Driver, Car, Manufacturer
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, SearchForm
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    SearchForm
+)
 
 
 class SearchFormMixin:
@@ -38,7 +43,11 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, SearchFormMixin, generic.ListView):
+class ManufacturerListView(
+    LoginRequiredMixin,
+    SearchFormMixin,
+    generic.ListView
+):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
@@ -113,7 +122,7 @@ class DriverListView(LoginRequiredMixin, SearchFormMixin, generic.ListView):
     def get_queryset(self):
         queryset = Driver.objects.all()
         form = SearchForm(self.request.GET)
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data["search"]:
             queryset = Driver.objects.filter(
                 username__icontains=form.cleaned_data["search"]
             )
