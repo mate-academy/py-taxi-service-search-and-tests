@@ -12,7 +12,8 @@ from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, Sea
 class SearchFormMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["search_form"] = SearchForm()
+        search = self.request.GET.get("search")
+        context["search_form"] = SearchForm(initial={"search": search})
         return context
 
 
@@ -43,6 +44,15 @@ class ManufacturerListView(LoginRequiredMixin, SearchFormMixin, generic.ListView
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        queryset = Manufacturer.objects.all()
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = Manufacturer.objects.filter(
+                name__icontains=form.cleaned_data["search"]
+            )
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -64,7 +74,15 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, SearchFormMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
+
+    def get_queryset(self):
+        queryset = Car.objects.select_related("manufacturer")
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = Car.objects.select_related("manufacturer").filter(
+                model__icontains=form.cleaned_data["search"]
+            )
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -91,6 +109,15 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, SearchFormMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Driver.objects.all()
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = Driver.objects.filter(
+                username__icontains=form.cleaned_data["search"]
+            )
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
