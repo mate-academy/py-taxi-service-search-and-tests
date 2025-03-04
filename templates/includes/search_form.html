@@ -1,0 +1,6 @@
+{% load crispy_forms_filters %}
+<form class="form-inline" action="" method="get">
+    {% csrf_token %}
+    {{ search_form|crispy }}
+    <input type="submit" value="🔍" class="btn btn-secondary">
+  </form>
