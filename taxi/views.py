@@ -173,7 +173,6 @@ def driver_search(request):
     drivers = Driver.objects.all()
 
     if form.is_valid():
-        username = form.cleaned_data.get("username")
         drivers = drivers.filter(
             username__icontains=form.cleaned_data["username"]
         )
@@ -190,7 +189,6 @@ def car_search(request):
     cars = Car.objects.all()
 
     if form.is_valid():
-        model = form.cleaned_data.get("model")
         cars = cars.filter(model__icontains=form.cleaned_data["model"])
 
     return render(
