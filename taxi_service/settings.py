@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "crispy_bootstrap4",
     "crispy_forms",
     "taxi",
 ]
@@ -123,7 +124,7 @@ LOGIN_REDIRECT_URL = "/"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Europe/Kiev"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
