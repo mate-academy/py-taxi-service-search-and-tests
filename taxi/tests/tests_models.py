@@ -15,13 +15,15 @@ class ModelTests(TestCase):
             username="Tester", first_name="Test", last_name="Tests"
         )
         self.assertEqual(
-            str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})"
+            str(driver), f"{driver.username} ({driver.first_name}"
+                         f" {driver.last_name})"
         )
 
     def test_car_str(self):
         car = Car.objects.create(
             model="Test",
-            manufacturer=Manufacturer.objects.create(name="test", country="uk"),
+            manufacturer=Manufacturer.objects.create(name="test",
+                                                     country="uk"),
         )
         self.assertEqual(str(car), car.model)
 

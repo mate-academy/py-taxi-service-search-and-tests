@@ -53,7 +53,8 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         form = ManufacturerNameSearchForm(self.request.GET)
 
         if form.is_valid():
-            return self.model.objects.filter(name__icontains=form.cleaned_data["name"])
+            return self.model.objects.\
+                filter(name__icontains=form.cleaned_data["name"])
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):

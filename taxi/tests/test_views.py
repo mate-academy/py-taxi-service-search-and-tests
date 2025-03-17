@@ -27,7 +27,8 @@ class PrivateManufacturerTest(TestCase):
         res = self.client.get(MANUFACTURER_URL)
         self.assertEqual(res.status_code, 200)
         manufacturer_all = Manufacturer.objects.all()
-        self.assertEqual(list(res.context["manufacturer_list"]), list(manufacturer_all))
+        self.assertEqual(list(res.context["manufacturer_list"]),
+                         list(manufacturer_all))
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
 
 
