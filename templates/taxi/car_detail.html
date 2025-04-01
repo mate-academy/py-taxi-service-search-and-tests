@@ -1,35 +1,55 @@
 {% extends "base.html" %}
+{% block title %} Car details | Taxi Service {% endblock %}
 
 {% block content %}
-  <h1>
-    {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+  <div class="car-details">
+  <section>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="car-title m-0">🚗 Car Details</h1>
+      {% if request.user in car.drivers.all %}
+        <form action="{% url 'taxi:car-assign' car.id %}" method="get" class="m-0">
+          <button type="submit" class="btn btn-danger">
+            Delete me from this car
+          </button>
+        </form>
+      {% else %}
+        <form action="{% url 'taxi:car-assign' car.id %}" method="post" class="m-0">
+          {% csrf_token %}
+          <button type="submit" name="assign" value="update" class="btn btn-success">
+            Assign me to this car
+          </button>
+        </form>
+      {% endif %}
+    </div>
 
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
-    Drivers
-
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
+    <div class="mb-3 d-flex gap-2 flex-wrap">
+      <a href="{% url 'taxi:car-update' car.id %}" class="btn btn-secondary">
+        Update Car <i class="bi bi-plus-circle"></i>
       </a>
-    {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
+      <a href="{% url 'taxi:car-delete' car.id %}" class="btn btn-danger">
+        Delete Car <i class="bi bi-plus-circle"></i>
       </a>
-    {% endif %}
+      <a href="{{ request.GET.back|default:'/cars/' }}" class="btn btn-secondary btn-sm">
+        Back <i class="bi bi-plus-circle"></i>
+      </a>
+    </div>
 
-  </h1>
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+  </section>
+  <section>
+    <p class="car-manufacturer"><strong>Model:</strong> {{ car.model }}</p>
+    <p class="car-manufacturer">
+      <strong>Manufacturer:</strong> {{ car.manufacturer.name }} ({{ car.manufacturer.country }}
+    </p>
+
+
+    <h2 class="car-drivers-title">👨‍✈️ Assigned Drivers</h2>
+    <ul class="car-drivers-list">
+      {% for driver in car.drivers.all %}
+        <li><strong>{{ driver.username }}</strong> ({{ driver.first_name }} {{ driver.last_name }})</li>
+      {% empty %}
+        <p class="empty-list">🚫 No assigned drivers.</p>
+      {% endfor %}
+    </ul>
+  </section>
+  </div>
 {% endblock %}

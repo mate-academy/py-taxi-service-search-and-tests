@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 
-{% block content %}
-  <h1>Delete driver?</h1>
-  <form action="" method="post">
-    {% csrf_token %}
+{% block title %}Driver Delete | Taxi Service{% endblock %}
 
-    <input type="submit" value="Yes" class="btn btn-danger">
-  </form>
+{% block content %}
+  <div class="container text-center">
+    <h1 class="text-danger">Driver {{ driver.username }}</h1>
+    <p>Are you sure you want to <strong>delete</strong> the Driver <strong>{{ driver.username }}</strong>
+      ({{ driver.first_name }} {{ driver.last_name }})?</p>
+    <p><strong>Warning:</strong> All assigned things will be removed as well.</p>
+
+    <form action="" method="post" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a href="{{ driver.get_absolute_url }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
 {% endblock %}

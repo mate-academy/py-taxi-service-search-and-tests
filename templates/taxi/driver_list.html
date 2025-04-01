@@ -1,34 +1,59 @@
 {% extends "base.html" %}
+{% block title %}Drivers | Taxi Service{% endblock %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
+  <div class="driver-container">
+    <h1 class="driver-title">🚖 Driver List
+      <a href="{% url "taxi:driver-create" %}" class="btn btn-primary">Create Driver
+        <i class="bi bi-plus-circle"></i>
       </a>
     </h1>
-
-    {% if driver_list %}
-    <table class="table">
+  </div>
+    {% block search %}
+      {% include "includes/search_field.html" %}
+    {% endblock %}
+  <br>
+  <div>
+  {% if driver_list %}
+    <table class="table-group">
+      <thead>
       <tr>
         <th>ID</th>
         <th>Username</th>
+        <th></th>
         <th>First name</th>
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
-
+      </thead>
+      <tbody>
+      {% for driver in driver_list %}
+        <tr class="{% if user == driver %}current-user{% endif %}">
+          <td>{{ driver.id }}</td>
+          <td>
+            <div class="d-flex align-items-center justify-content-between pe-3">
+              <a href="{{ driver.get_absolute_url }}">
+                {{ driver.username }}{% if user == driver %} (Me){% endif %}
+              </a>
+            </div>
+          </td>
+          <td>
+            <a href="{% url 'taxi:driver-update' driver.id %}"
+               class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 me-4">
+              <i class="bi bi-pencil-square"></i>
+              Update Driver
+            </a>
+          </td>
+          <td>{{ driver.first_name }}</td>
+          <td>{{ driver.last_name }}</td>
+          <td>{{ driver.license_number }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
     </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  {% else %}
+    <p class="empty-list">🚫 No drivers in the service.</p>
+  {% endif %}
+  </div>
 {% endblock %}

@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
+{% block title %} Create Driver | Taxi Service {% endblock %}
 
 {% block content %}
-  <h1>Create driver</h1>
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
-    {{ form|crispy }}
 
-    <input type="submit" value="Submit" class="btn btn-primary">
-  </form>
+  <div class="form-container" style="width: 60%">
+    <h1 class="form-title">{{ object|yesno:"Update, Create" }} Driver
+      <a href="{% url "taxi:driver-list" %}" class="btn btn-secondary btn-sm">Back</a>
+    </h1>
+    <form action="" method="post" novalidate>
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input type="hidden" name="back" value="{{ request.GET.back }}">
+      <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+  </div>
 {% endblock %}

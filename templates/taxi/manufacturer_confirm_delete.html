@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 
-{% block content %}
-  <h1>Delete manufacturer?</h1>
-  <form action="" method="post">
-    {% csrf_token %}
+{% block title %}Manufacturer Delete | Taxi Service{% endblock %}
 
-    <input type="submit" value="Yes" class="btn btn-danger">
-  </form>
+{% block content %}
+  <div class="container text-center">
+    <h1 class="text-danger">Manufacturer</h1>
+    <p>Are you sure you want to <strong>delete</strong> manufacturer <strong>{{ manufacturer.name }}</strong>
+      ({{ manufacturer.country }})?</p>
+    <p><strong>Warning:</strong> All assigned things will be removed as well.</p>
+
+    <form action="" method="post" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a href="{{ request.GET.back|default:"/manufacturers/" }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
 {% endblock %}

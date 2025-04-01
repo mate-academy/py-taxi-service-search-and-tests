@@ -1,33 +1,46 @@
 {% extends "base.html" %}
+{% block title %} Driver details | Taxi Service {% endblock %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+  <div class="driver-details-container">
+    <h1 class="driver-title">👨‍✈️ Driver Details
+      <a href="{% url "taxi:driver-delete" driver.id %}" class="btn btn-danger">Delete Driver
+        <i class="bi bi-plus-circle"></i>
+      </a>
+      <a href="{{ request.GET.back|default:"/drivers/" }}" class="btn btn-secondary btn-sm">Back
+        <i class="bi bi-plus-circle"></i>
+      </a>
+    </h1>
+  </div>
+  <div class="driver-info">
+    <p><strong>Username:</strong> {{ driver.username }}</p>
+    <p><strong>First name:</strong> {{ driver.first_name }}</p>
+    <p><strong>Last name:</strong> {{ driver.last_name }}</p>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <strong>License</strong> {{ driver.license_number }}
+      <form action="{% url 'taxi:driver-update' driver.id %}" method="get">
+        <button type="submit" name="form_license" value="upd_license"
+                class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 ms-2">
+          Update license
+          <i class="bi bi-plus-circle"></i>
+        </button>
+      </form>
 
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
-  </h1>
+    </div>
+    <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
+  </div>
 
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
-  <div class="ml-3">
-    <h4>Cars</h4>
-
+  <h2 class="driver-section-title">🚗 Cars</h2>
+  <div class="driver-cars">
     {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
+      <div class="car-item">
+        <p class="text-muted"><strong>ID:</strong> {{ car.id }}</p>
+        <p><strong>Model:</strong> <a href="{{ car.get_absolute_url }}">{{ car.model }}</a></p>
         <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
-
+      </div>
     {% empty %}
-      <p>No cars!</p>
+      <p class="empty-list">🚫 No cars!</p>
     {% endfor %}
   </div>
 {% endblock %}
