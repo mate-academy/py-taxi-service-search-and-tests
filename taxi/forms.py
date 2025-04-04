@@ -17,6 +17,13 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
+class SearchForm(forms.Form):
+    search_value = forms.CharField(
+        max_length=255,
+        required=False,
+    )
+
+
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
