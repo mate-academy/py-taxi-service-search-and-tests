@@ -8,6 +8,11 @@
     </a>
   </h1>
 
+  <form method="get" action="" class="form-inline mb-3">
+  {{ search_form.name }}
+  <input type="submit" value="🔍" class="btn btn-outline-secondary ml-2">
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
