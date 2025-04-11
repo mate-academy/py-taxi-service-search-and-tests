@@ -8,6 +8,17 @@
       </a>
     </h1>
 
+    <form action="" method="get" class="form-inline mb-4">
+      <div class="form-group mx-sm-3 mb-2">
+        <input name="search" type="text" class="form-control" placeholder="Search by username"
+               value="{{ request.GET.search }}">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Search</button>
+      {% if request.GET.search %}
+        <a href="{% url 'taxi:driver-list' %}" class="btn btn-secondary mb-2 ml-2">Clear</a>
+      {% endif %}
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>
