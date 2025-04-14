@@ -29,6 +29,5 @@ templates/taxi/index.html
 templates/taxi/manufacturer_confirm_delete.html
 templates/taxi/manufacturer_form.html
 templates/base.html
-requirements.txt
 manage.py
 README.md
