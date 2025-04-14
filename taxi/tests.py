@@ -4,9 +4,11 @@ from taxi.models import Manufacturer, Car
 from django.contrib.auth import get_user_model
 
 
+User = get_user_model()
+
 class SearchTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
+        self.user = User.objects.create_user(
             username="testuser",
             password="testpass123",
             license_number="ABC54321",
@@ -31,12 +33,12 @@ class SearchTests(TestCase):
             manufacturer=self.manufacturer2
         )
 
-        self.driver1 = get_user_model().objects.create_user(
+        self.driver1 = User.objects.create_user(
             username="driver1",
             password="testpass123",
             license_number="DFG12345"
         )
-        self.driver2 = get_user_model().objects.create_user(
+        self.driver2 = User.objects.create_user(
             username="john_doe",
             password="testpass123",
             license_number="XYZ54321"
