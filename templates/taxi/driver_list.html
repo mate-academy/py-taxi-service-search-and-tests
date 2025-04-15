@@ -1,34 +1,75 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+  <h1>
+    Driver List
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
 
-    {% if driver_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
-      </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
+  <!-- Search Form -->
+  <form method="get" action="" class="form-inline mb-4">
+    <div class="input-group">
+      <input
+        class="form-control"
+        type="search"
+        name="q"
+        placeholder="Search drivers by username, name, or license..."
+        value="{{ request.GET.q }}"
+        aria-label="Search"
+      >
+      <div class="input-group-append">
+        <button class="btn btn-outline-success" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      {% if request.GET.q %}
+        <div class="input-group-append">
+          <a href="{% url 'taxi:driver-list' %}" class="btn btn-outline-secondary">
+            Clear
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </form>
 
+  {% if driver_list %}
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>License number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for driver in driver_list %}
+          <tr>
+            <td>{{ driver.id }}</td>
+            <td>
+              <a href="{{ driver.get_absolute_url }}">
+                {{ driver.username }}
+                {% if user == driver %}<span class="badge badge-info">Me</span>{% endif %}
+              </a>
+            </td>
+            <td>{{ driver.first_name }}</td>
+            <td>{{ driver.last_name }}</td>
+            <td>{{ driver.license_number }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  {% else %}
+    <div class="alert alert-info">
+      {% if request.GET.q %}
+        No drivers found matching your search.
+      {% else %}
+        There are no drivers in the service.
+      {% endif %}
+    </div>
+  {% endif %}
 {% endblock %}
