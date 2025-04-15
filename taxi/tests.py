@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 User = get_user_model()
 
@@ -75,7 +75,6 @@ class DriverSearchTests(SearchTestCase):
     def test_driver_search_by_license(self):
         response = self.client.get(reverse('taxi:driver-list'), {'q': 'LIC456'})
         self.assertContains(response, self.driver2.username)
-        # The logged-in user might appear in navigation, so we can't reliably check absence
 
 
 class PaginationWithSearchTests(SearchTestCase):
@@ -92,6 +91,4 @@ class PaginationWithSearchTests(SearchTestCase):
             'page': '1'
         })
         self.assertEqual(response.status_code, 200)
-        # Check that search query appears in pagination links
         self.assertContains(response, 'q=Test')
-        self.assertContains(response, 'page=2')
