@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (
+from taxi.views import (
     index,
     CarListView,
     CarDetailView,
@@ -20,7 +20,10 @@ from .views import (
 )
 
 urlpatterns = [
+    # Home page
     path("", index, name="index"),
+
+    # Manufacturer URLs
     path(
         "manufacturers/",
         ManufacturerListView.as_view(),
@@ -41,6 +44,8 @@ urlpatterns = [
         ManufacturerDeleteView.as_view(),
         name="manufacturer-delete",
     ),
+
+    # Car URLs
     path("cars/", CarListView.as_view(), name="car-list"),
     path("cars/<int:pk>/", CarDetailView.as_view(), name="car-detail"),
     path("cars/create/", CarCreateView.as_view(), name="car-create"),
@@ -51,13 +56,13 @@ urlpatterns = [
         toggle_assign_to_car,
         name="toggle-car-assign",
     ),
+
+    # Driver URLs
     path("drivers/", DriverListView.as_view(), name="driver-list"),
     path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
-    ),
-    path("drivers/", DriverListView.as_view(), name="driver-list"),
-    path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
+        "drivers/<int:pk>/",
+        DriverDetailView.as_view(),
+        name="driver-detail"
     ),
     path("drivers/create/", DriverCreateView.as_view(), name="driver-create"),
     path(
