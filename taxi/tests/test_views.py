@@ -49,7 +49,6 @@ class PrivateManufacturerTest(TestCase):
 
         response = self.client.get(MANUFACTURER_URL, {"name" : "b"})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.status_code, 200)
         manufacturer_names = [
             m.name for m in response.context["manufacturer_list"]
         ]
@@ -113,7 +112,6 @@ class PrivateManufacturerTest(TestCase):
         Car.objects.create(model="TestModel", manufacturer=manufacturer_2)
 
         response = self.client.get(CAR_URL, {"model" : "l"})
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.status_code, 200)
         cars_models = [c.model for c in response.context["car_list"]]
         self.assertIn("Corolla", cars_models)
