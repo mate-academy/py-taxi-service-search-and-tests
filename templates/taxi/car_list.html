@@ -7,6 +7,12 @@
       Create
     </a>
   </h1>
+
+  <form method="get" class="mb-3">
+    <input type="text" name="search" placeholder="Пошук за моделлю" value="{{ request.GET.search }}" class="form-control w-25 d-inline">
+    <button type="submit" class="btn btn-secondary">Пошук</button>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
