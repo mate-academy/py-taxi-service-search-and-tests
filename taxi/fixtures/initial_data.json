@@ -1,0 +1,53 @@
+[
+  {
+    "model": "taxi.driver",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$tPQZgMHZJxnXxvHk$WyLDPkSqQbDxYXEGpHKnWZh9EbBkofWTQZJmHXoJ4+M=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "User",
+      "email": "admin@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-03-19T10:00:00Z",
+      "license_number": "ADM12345"
+    }
+  },
+  {
+    "model": "taxi.manufacturer",
+    "pk": 1,
+    "fields": {
+      "name": "Toyota",
+      "country": "Japan"
+    }
+  },
+  {
+    "model": "taxi.manufacturer",
+    "pk": 2,
+    "fields": {
+      "name": "Ford",
+      "country": "USA"
+    }
+  },
+  {
+    "model": "taxi.car",
+    "pk": 1,
+    "fields": {
+      "model": "Camry",
+      "manufacturer": 1,
+      "drivers": []
+    }
+  },
+  {
+    "model": "taxi.car",
+    "pk": 2,
+    "fields": {
+      "model": "Mustang",
+      "manufacturer": 2,
+      "drivers": []
+    }
+  }
+] 
