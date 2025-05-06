@@ -33,7 +33,13 @@ class DriverModelTests(TestCase):
             password="Test Password",
             license_number="ABC12345",
         )
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} "
+            f"({driver.first_name} "
+            f"{driver.last_name})"
+        )
+
 
 class ManufacturerModelTests(TestCase):
     def test_manufacturer_str(self):
@@ -41,4 +47,8 @@ class ManufacturerModelTests(TestCase):
             name="Test Manufacturer",
             country="Test Country",
         )
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} "
+            f"{manufacturer.country}"
+        )
