@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
@@ -8,7 +7,7 @@ from taxi.models import Car, Driver
 
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
+        queryset=Driver.objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
 
@@ -27,7 +26,9 @@ class DriverCreationForm(UserCreationForm):
         )
 
     def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
+        return self.validate_license_number(
+            self.cleaned_data["license_number"]
+        )
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
@@ -36,17 +37,34 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         fields = ["license_number"]
 
     def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
+        return self.validate_license_number(
+            self.cleaned_data["license_number"]
+        )
+
+    def validate_license_number(
+            self,
+            license_number,
+    ):
+        if len(license_number) != 8:
+            raise ValidationError("License number"
+                                  " should consist of 8 characters")
+        elif (not license_number[:3].isupper()
+              or not license_number[:3].isalpha()):
+            raise ValidationError("First 3 characters"
+                                  " should be uppercase letters")
+        elif not license_number[3:].isdigit():
+            raise ValidationError("Last 5 characters should be digits")
+
+        return license_number
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(max_length=255, required=False)
 
-    return license_number
+
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(max_length=255, required=False)
+
+
+class ManufacturersNameSearchForm(forms.Form):
+    name = forms.CharField(max_length=255, required=False)
