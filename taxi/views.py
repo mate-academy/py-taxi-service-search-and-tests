@@ -1,4 +1,5 @@
 # flake8: noqa
+# left screenshots as comment
 from typing import Any
 
 from django.contrib.auth.decorators import login_required
