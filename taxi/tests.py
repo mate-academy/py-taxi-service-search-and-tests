@@ -38,6 +38,8 @@ class DriverListViewTests(TestCase):
             password="pass1234"
         )
 
+        Driver.objects.create(username="driver1", password="somepass")
+
     def test_search_username_filtering(self):
         response = self.client.get(
             reverse(
