@@ -8,7 +8,8 @@ class ManufacturerSearchTests(TestCase):
     def setUp(self):
         self.user = Driver.objects.create_user(
             username="user",
-            password="testpass123"
+            password="testpass123",
+            license_number="LIC001"
         )
         self.client.login(username="user", password="testpass123")
 
@@ -31,14 +32,19 @@ class DriverListViewTests(TestCase):
     def setUp(self):
         self.user = Driver.objects.create_user(
             username="testuser",
-            password="pass1234"
+            password="pass1234",
+            license_number="LIC001"
         )
         self.client.login(
             username="testuser",
             password="pass1234"
         )
 
-        Driver.objects.create(username="driver1", password="somepass")
+        Driver.objects.create(
+            username="driver1",
+            password="somepass",
+            license_number="LIC002"
+        )
 
     def test_search_username_filtering(self):
         response = self.client.get(
@@ -59,7 +65,8 @@ class CarListViewTests(TestCase):
     def setUp(self):
         self.user = Driver.objects.create_user(
             username="testuser",
-            password="pass1234"
+            password="pass1234",
+            license_number="LIC001"
         )
         self.client.login(username="testuser", password="pass1234")
         manufacturer = Manufacturer.objects.create(name="Toyota")
