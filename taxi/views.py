@@ -13,7 +13,6 @@ from .forms import (
     DriverLicenseUpdateForm,
     CarForm,
     DriverSearchForm,
-
 )
 
 
@@ -77,9 +76,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/car_list.html"
 
     def get_queryset(self):
-        queryset = Car.objects.select_related(
-            "manufacturer"
-        ).prefetch_related("drivers")
+        queryset = Car.objects.select_related("manufacturer").prefetch_related(
+            "drivers"
+        )
         search_query = self.request.GET.get("model")
         if search_query:
             queryset = queryset.filter(model__icontains=search_query)
@@ -117,9 +116,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         queryset = get_user_model().objects.all()
         search_query = self.request.GET.get("username")
         if search_query:
-            queryset = queryset.filter(
-                Q(username__icontains=search_query)
-            )
+            queryset = queryset.filter(Q(username__icontains=search_query))
         return queryset
 
 

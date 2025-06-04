@@ -16,7 +16,6 @@ class SearchTests(TestCase):
         self.manufacturer = Manufacturer.objects.create(
             name="Test Manufacturer",
             country="Test country",
-
         )
         self.car = Car.objects.create(
             manufacturer=self.manufacturer,
@@ -25,17 +24,21 @@ class SearchTests(TestCase):
         self.car.drivers.add(self.user)
 
     def test_search_driver(self):
-        response = self.client.get(reverse("taxi:driver-list"),
-                                   {"username": "test user"}
-                                   )
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": "test user"}
+        )
         self.assertContains(response, "test user")
 
     def test_search_manufacturer(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"),
-                                   {"manufacturer": "Test Manufacturer"})
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            {"manufacturer": "Test Manufacturer"}
+        )
         self.assertContains(response, "Test Manufacturer")
 
     def test_search_car(self):
-        response = self.client.get(reverse("taxi:car-list"),
-                                   {"model": "Test Model"})
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": "Test Model"})
         self.assertContains(response, "Test Model")
