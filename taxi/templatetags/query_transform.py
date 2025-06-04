@@ -1,11 +1,10 @@
 from django import template
-from django.template.context_processors import request
 
 register = template.Library()
 
 
 @register.simple_tag
-def query_transform(queryset, **kwargs):
+def query_transform(request, **kwargs):
     updated = request.Get.copy()
     for key, value in kwargs.items():
         if value is not None:

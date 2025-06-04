@@ -80,4 +80,3 @@ class ManufacturerSearchForm(forms.Form):
         widget=forms.TextInput(
             attrs={"placeholder": "search by Name"})
     )
-
