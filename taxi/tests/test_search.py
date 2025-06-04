@@ -38,6 +38,5 @@ class SearchTests(TestCase):
         self.assertContains(response, "Test Manufacturer")
 
     def test_search_car(self):
-        response = self.client.get(
-            reverse("taxi:car-list"), {"model": "Test Model"})
-        self.assertContains(response, "Test Model")
+        response = self.client.get(reverse("taxi:car-list"), {"model": "Test model"})
+        self.assertContains(response, "Test model")
