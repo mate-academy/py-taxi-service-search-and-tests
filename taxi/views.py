@@ -79,7 +79,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         queryset = Car.objects.select_related("manufacturer").prefetch_related(
             "drivers"
         )
-        search_query = self.request.GET.get("model")
+        search_query = self.request.GET.get("name")
         if search_query:
             queryset = queryset.filter(model__icontains=search_query)
         return queryset
@@ -114,7 +114,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = get_user_model().objects.all()
-        search_query = self.request.GET.get("username")
+        search_query = self.request.GET.get("name")
         if search_query:
             queryset = queryset.filter(Q(username__icontains=search_query))
         return queryset
