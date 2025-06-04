@@ -7,7 +7,11 @@
         Create
       </a>
     </h1>
-
+    <form method="get" action="" class="mb-4">
+      {% block search_form %}
+        {% include "includes/search_form.html" %}
+      {% endblock %}
+    </form>
     {% if driver_list %}
     <table class="table">
       <tr>
