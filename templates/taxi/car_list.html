@@ -9,11 +9,10 @@
     </a>
   </h1>
   <form method="get" action="" class="mb-4">
-  <label>
-    <input type="text" name="model" class="form-control" placeholder="Search by model" value="{{ request.GET.model }}">
-    <input class="btn btn-secondary" type="submit" value="🔎">
-
-  </label>
+    {% block search_form %}
+      {% include "includes/search_form.html" %}
+    {% endblock %}
+  </form>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
