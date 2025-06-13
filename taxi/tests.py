@@ -6,7 +6,7 @@ from taxi.models import Manufacturer, Car, Driver
 
 class ListViewSearchTests(TestCase):
     def setUp(self):
-        self.user = get_user_model.objects.create_user(
+        self.user = get_user_model().objects.create_user(
             username="testUser", password="<PASSWORD>"
         )
         self.client.force_login(self.user)
@@ -25,7 +25,7 @@ class ListViewSearchTests(TestCase):
         Car.objects.create(model="X5", manufacturer=m)
         Car.objects.create(model="Focus", manufacturer=m)
 
-        res = self.client.get(reverse("taxi:car-list"), {"Model": "X5"})
+        res = self.client.get(reverse("taxi:car-list"), {"model": "X5"})
         self.assertContains(res, "X5")
         self.assertNotContains(res, "Focus")
 
