@@ -218,7 +218,7 @@ class PrivateCarTest(TestCase):
         form_data = {
             "model": "Test car 1",
             "manufacturer": self.manufacturer.id,
-            "drivers": self.user.id,
+            "drivers": [self.user.id],
         }
         response = self.client.post(reverse("taxi:car-create"), form_data,)
         self.assertRedirects(response, CAR_LIST_URL)
@@ -234,7 +234,7 @@ class PrivateCarTest(TestCase):
         form_data = {
             "model": "Test car 1",
             "manufacturer": self.manufacturer.id,
-            "drivers": self.user.id
+            "drivers": [self.user.id]
         }
         response = self.client.post(
             reverse(
@@ -246,7 +246,7 @@ class PrivateCarTest(TestCase):
         self.assertRedirects(response, CAR_LIST_URL)
         car.refresh_from_db()
         self.assertEqual(car.model, form_data["model"])
-        self.assertEqual(car.drivers.first().id, form_data["drivers"])
+        self.assertEqual(car.drivers.first().id, form_data["drivers"][0])
 
     def test_car_delete_view(self):
         car = Car.objects.create(

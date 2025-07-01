@@ -29,9 +29,6 @@ class ModelsTests(TestCase):
         )
         self.assertEqual(str(car), f"{car.model}")
 
-    def test_driver_verbose_name(self):
-        pass
-
 
 class DriverModelsTests(TestCase):
     @classmethod
@@ -40,7 +37,7 @@ class DriverModelsTests(TestCase):
         password = "<PASSWORD>"
         first_name = "test_first"
         last_name = "test_last"
-        license_number = "test_license"
+        license_number = "AAA11111"
         Driver.objects.create_user(
             username=username,
             password=password,
