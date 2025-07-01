@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Производители</h1>
+
+  <form method="get" style="margin-bottom: 20px;">
+    <input type="text" name="q" placeholder="Поиск по названию..." value="{{ request.GET.q }}">
+    <button type="submit">Искать</button>
+  </form>
+
+  <ul>
+    {% for manufacturer in manufacturer_list %}
+      <li>{{ manufacturer.name }}</li>
+    {% empty %}
+      <li>Производители не найдены.</li>
+    {% endfor %}
+  </ul>
+
+  {% if is_paginated %}
+    <div>
+      {% if page_obj.has_previous %}
+        <a href="?q={{ request.GET.q }}&page=1">« Первая</a>
+        <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">‹ Назад</a>
+      {% endif %}
+
+      <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+        <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">Вперёд ›</a>
+        <a href="?q={{ request.GET.q }}&page={{ page_obj.paginator.num_pages }}">Последняя »</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
