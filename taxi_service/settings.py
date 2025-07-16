@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "crispy_bootstrap4",
     "crispy_forms",
     "taxi",
 ]
@@ -72,6 +73,10 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "libraries": {
+                "querytransform": "templatetags.querytransform",
+
+            }
         },
     },
 ]
