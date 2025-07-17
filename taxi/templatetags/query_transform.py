@@ -6,9 +6,9 @@ register = template.Library()
 @register.simple_tag
 def query_transform(request, **kwargs):
     update = request.GET.copy()
-    for key1, vay2 in kwargs.items():
-        if vay2 is not None:
-            update[key1] = vay2
+    for first_ag, second_ag in kwargs.items():
+        if second_ag is not None:
+            update[first_ag] = second_ag
         else:
-            update.pop(key1)
+            update.pop(first_ag)
     return update.urlencode()
