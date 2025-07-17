@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+
+from .models import Manufacturer
+import re
 from django.core.exceptions import ValidationError
 
 from taxi.models import Car, Driver
@@ -26,7 +29,7 @@ class DriverCreationForm(UserCreationForm):
             "last_name",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
+    def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
@@ -50,3 +53,19 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class DriverForm(UserCreationForm):
+    class Meta:
+        model = Driver
+        fields = ("username", "first_name", "last_name", "license_number")
+
+    def clean_license_number(self):
+        license_number = self.cleaned_data["license_number"]
+        return validate_license_number(license_number)
+
+
+class ManufacturerForm(forms.ModelForm):
+    class Meta:
+        model = Manufacturer
+        fields = ("name", "country")

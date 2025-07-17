@@ -1,75 +1,117 @@
 from django.urls import path
-
 from .views import (
     index,
+
+    # Cars
     CarListView,
     CarDetailView,
     CarCreateView,
     CarUpdateView,
     CarDeleteView,
+    toggle_assign_to_car,
+
+    # Drivers
     DriverListView,
     DriverDetailView,
     DriverCreateView,
     DriverLicenseUpdateView,
     DriverDeleteView,
+
+    # Manufacturers
     ManufacturerListView,
     ManufacturerCreateView,
     ManufacturerUpdateView,
     ManufacturerDeleteView,
-    toggle_assign_to_car,
 )
 
+app_name = "taxi"
+
 urlpatterns = [
-    path("", index, name="index"),
+    # Home
+    path(
+        "",
+        index,
+        name="index"
+    ),
+
+    # Manufacturers
     path(
         "manufacturers/",
         ManufacturerListView.as_view(),
-        name="manufacturer-list",
+        name="manufacturer-list"
     ),
     path(
         "manufacturers/create/",
         ManufacturerCreateView.as_view(),
-        name="manufacturer-create",
+        name="manufacturer-create"
     ),
     path(
         "manufacturers/<int:pk>/update/",
         ManufacturerUpdateView.as_view(),
-        name="manufacturer-update",
+        name="manufacturer-update"
     ),
     path(
         "manufacturers/<int:pk>/delete/",
         ManufacturerDeleteView.as_view(),
-        name="manufacturer-delete",
+        name="manufacturer-delete"
     ),
-    path("cars/", CarListView.as_view(), name="car-list"),
-    path("cars/<int:pk>/", CarDetailView.as_view(), name="car-detail"),
-    path("cars/create/", CarCreateView.as_view(), name="car-create"),
-    path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
-    path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
+
+    # Cars
+    path(
+        "cars/",
+        CarListView.as_view(),
+        name="car-list"
+    ),
+    path(
+        "cars/create/",
+        CarCreateView.as_view(),
+        name="car-create"
+    ),
+    path(
+        "cars/<int:pk>/",
+        CarDetailView.as_view(),
+        name="car-detail"
+    ),
+    path(
+        "cars/<int:pk>/update/",
+        CarUpdateView.as_view(),
+        name="car-update"
+    ),
+    path(
+        "cars/<int:pk>/delete/",
+        CarDeleteView.as_view(),
+        name="car-delete"
+    ),
     path(
         "cars/<int:pk>/toggle-assign/",
         toggle_assign_to_car,
-        name="toggle-car-assign",
+        name="toggle-car-assign"
     ),
-    path("drivers/", DriverListView.as_view(), name="driver-list"),
+
+    # Drivers
     path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
+        "drivers/",
+        DriverListView.as_view(),
+        name="driver-list"
     ),
-    path("drivers/", DriverListView.as_view(), name="driver-list"),
     path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
+        "drivers/create/",
+        DriverCreateView.as_view(),
+        name="driver-create"
     ),
-    path("drivers/create/", DriverCreateView.as_view(), name="driver-create"),
+    path(
+        "drivers/<int:pk>/",
+        DriverDetailView.as_view(),
+        name="driver-detail"
+    ),
     path(
         "drivers/<int:pk>/update/",
         DriverLicenseUpdateView.as_view(),
-        name="driver-update",
+        name="driver-update"
     ),
     path(
         "drivers/<int:pk>/delete/",
         DriverDeleteView.as_view(),
-        name="driver-delete",
+        name="driver-delete"
     ),
 ]
-
-app_name = "taxi"
