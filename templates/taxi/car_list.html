@@ -7,6 +7,12 @@
       Create
     </a>
   </h1>
+
+<form method="get" class="form-inline mb-3">
+  <input type="text" name="model" placeholder="Пошук за моделлю авто" class="form-control mr-2">
+  <button type="submit" class="btn btn-primary">Знайти</button>
+</form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}

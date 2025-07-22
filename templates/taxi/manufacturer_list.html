@@ -8,6 +8,12 @@
     </a>
   </h1>
 
+<form method="get" class="form-inline mb-3">
+  <input type="text" name="name" placeholder="Пошук за назвою" class="form-control mr-2"
+         value="{{ request.GET.name }}">
+  <button type="submit" class="btn btn-success">Знайти</button>
+</form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
