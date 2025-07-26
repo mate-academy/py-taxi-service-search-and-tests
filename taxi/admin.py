@@ -7,8 +7,8 @@ from .models import Driver, Car, Manufacturer
 class DriverAdmin(UserAdmin):
     list_display = UserAdmin.list_display + ("license_number",)
     fieldsets = UserAdmin.fieldsets + (
-         (("Additional info", {"fields": ("license_number",)}),)
-     )
+        (("Additional info", {"fields": ("license_number",)}),)
+    )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
             (
@@ -23,6 +23,7 @@ class DriverAdmin(UserAdmin):
             ),
         )
     )
+
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):

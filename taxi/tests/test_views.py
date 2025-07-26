@@ -74,11 +74,11 @@ class PrivateDriverFormatTest(TestCase):
         Driver.objects.create_user(
             username="test33",
             password="<PASSWORD>",
-            license_number="ABC131")
+            license_number="ABC13144")
         Driver.objects.create_user(
             username="test2",
             password="<PASSWORD>",
-            license_number="ABC132")
+            license_number="ABC13213")
         res = self.client.get(reverse("taxi:driver-list"))
         self.assertEqual(res.status_code, 200)
         driver_list = Driver.objects.all()
