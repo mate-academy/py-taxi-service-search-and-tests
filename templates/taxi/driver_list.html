@@ -7,6 +7,11 @@
         Create
       </a>
     </h1>
+    
+    <form method="get" action="" class="mb-3">
+      {{ search_form.username }}
+      <button type="submit" class="btn btn-outline-primary btn-sm">Search</button>
+    </form>
 
     {% if driver_list %}
     <table class="table">
