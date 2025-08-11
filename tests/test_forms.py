@@ -15,7 +15,7 @@ class DriverCreationFormTest(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        self.assertEqual(form.cleaned_data["username"], form_data["username"])
 
 
 

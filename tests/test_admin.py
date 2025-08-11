@@ -17,7 +17,7 @@ class AdminSiteTests(TestCase):
         self.driver = Driver.objects.create(
             username="driver_user",
             password="testdriver",
-            license_number="LICENSE1234"
+            license_number="LIC12348"
         )
 
     def test_driver_license_number_listed(self):
