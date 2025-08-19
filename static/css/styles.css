@@ -6,3 +6,14 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+/*ul li.active_mine {*/
+/*    background-color: rgba(40, 167, 69, 0.3); !* зелений фон для активного пункту *!*/
+/*    color: white;                !* білий текст *!*/
+/*    font-weight: bold;           !* жирний шрифт *!*/
+/*}*/
+
+.list-group-item.active {
+    background-color: rgba(40, 167, 69, 0.5) !important; /* зелений фон */
+    border-color: #28a745 !important;
+    color: #fff !important; /* білий текст */
+}
