@@ -7,6 +7,7 @@ from taxi.models import Manufacturer
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 Driver = get_user_model()
 
+
 class PublicManufacturerTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -52,7 +53,6 @@ class PrivateDriverTests(TestCase):
         )
         self.client.force_login(self.user)
 
-
     def test_create_driver(self):
         form_data = {
             "username": "new_driver1",
@@ -66,5 +66,8 @@ class PrivateDriverTests(TestCase):
 
         new_driver = Driver.objects.get(username=form_data["username"])
         self.assertEqual(new_driver.username, form_data["username"])
-        self.assertEqual(new_driver.license_number, form_data["license_number"])
+        self.assertEqual(
+            new_driver.license_number,
+            form_data["license_number"]
+        )
         self.assertTrue(new_driver.check_password(form_data["password1"]))
