@@ -2,32 +2,23 @@
 
 {% block content %}
   <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
+    {{ driver.first_name }} {{ driver.last_name }}
+    <a href="{% url 'taxi:driver-update' driver.pk %}"><i class="bi bi-pencil-square"></i></a>
+    <a href="{% url 'taxi:driver-delete' driver.id %}"><i class="bi bi-trash-fill"></i></a>
   </h1>
-
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
-  <div class="ml-3">
-    <h4>Cars</h4>
-
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
-
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
-  </div>
+  <ul>
+    <li><i class="bi bi-globe"></i> {{ driver.username }}</li>
+    <li><i class="bi bi-tools"></i> {{ driver.license_number }}</li>
+  </ul>
+  <h3>Drives this cars</h3>
+  <hr>
+  {% if driver.cars.all %}
+    <ul>
+      {% for car in driver.cars.all %}
+        <li>
+          <i class="bi bi-car-front"></i>  {{ car.model }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}

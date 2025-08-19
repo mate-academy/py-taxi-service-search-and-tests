@@ -1,23 +1,16 @@
 from django.urls import path
 
-from .views import (
+from taxi.views import (
     index,
-    CarListView,
-    CarDetailView,
-    CarCreateView,
-    CarUpdateView,
-    CarDeleteView,
-    DriverListView,
-    DriverDetailView,
-    DriverCreateView,
-    DriverLicenseUpdateView,
-    DriverDeleteView,
-    ManufacturerListView,
-    ManufacturerCreateView,
-    ManufacturerUpdateView,
-    ManufacturerDeleteView,
-    toggle_assign_to_car,
+    ManufacturerListView, ManufacturerCreateView,
+    ManufacturerUpdateView, ManufacturerDeleteView,
+    CarListView, CarDetailView, CarCreateView,
+    CarUpdateView, CarDeleteView,
+    DriverListView, DriverDetailView, DriverCreateView,
+    DriverUpdateView, DriverDeleteView,
+    assign_to_car, delete_from_car,
 )
+
 
 urlpatterns = [
     path("", index, name="index"),
@@ -46,15 +39,6 @@ urlpatterns = [
     path("cars/create/", CarCreateView.as_view(), name="car-create"),
     path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
     path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
-    path(
-        "cars/<int:pk>/toggle-assign/",
-        toggle_assign_to_car,
-        name="toggle-car-assign",
-    ),
-    path("drivers/", DriverListView.as_view(), name="driver-list"),
-    path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
-    ),
     path("drivers/", DriverListView.as_view(), name="driver-list"),
     path(
         "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
@@ -62,13 +46,19 @@ urlpatterns = [
     path("drivers/create/", DriverCreateView.as_view(), name="driver-create"),
     path(
         "drivers/<int:pk>/update/",
-        DriverLicenseUpdateView.as_view(),
-        name="driver-update",
+        DriverUpdateView.as_view(),
+        name="driver-update"
     ),
     path(
         "drivers/<int:pk>/delete/",
         DriverDeleteView.as_view(),
-        name="driver-delete",
+        name="driver-delete"
+    ),
+    path("cars/<int:pk>/assign/", assign_to_car, name="car-assign"),
+    path(
+        "cars/<int:pk>/from_delete/",
+        delete_from_car,
+        name="from-car-delete"
     ),
 ]
 
