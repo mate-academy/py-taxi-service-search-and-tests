@@ -2,13 +2,16 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
-from taxi.models import Car, Driver
+from taxi.models import Car
+
+User = get_user_model()
 
 
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
+        queryset=User.objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
 
@@ -19,7 +22,7 @@ class CarForm(forms.ModelForm):
 
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        model = Driver
+        model = User
         fields = UserCreationForm.Meta.fields + (
             "license_number",
             "first_name",
@@ -32,7 +35,7 @@ class DriverCreationForm(UserCreationForm):
 
 class DriverLicenseUpdateForm(forms.ModelForm):
     class Meta:
-        model = Driver
+        model = User
         fields = ["license_number"]
 
     def clean_license_number(self):
@@ -50,3 +53,36 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by username"}
+        )
+    )
+
+
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by model"}
+        )
+    )
+
+
+class ManufacturerNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by name"}
+        )
+    )
