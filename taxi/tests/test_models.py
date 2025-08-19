@@ -4,10 +4,16 @@ from django.test import TestCase
 from taxi.models import Manufacturer, Car
 
 
-class  ModelsTests(TestCase):
+class ModelsTests(TestCase):
     def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.create(name="Manufacturer", country="Country")
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        manufacturer = Manufacturer.objects.create(
+            name="Manufacturer",
+            country="Country"
+        )
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
         self.assertEqual(str(manufacturer), "Manufacturer Country")
 
     def test_driver_str(self):
@@ -18,11 +24,18 @@ class  ModelsTests(TestCase):
             last_name="Surname",
             password="1qazcde3",
         )
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} "
+            f"({driver.first_name} {driver.last_name})"
+        )
         self.assertEqual(str(driver), "admin (Name Surname)")
 
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="Manufacturer", country="Country")
+        manufacturer = Manufacturer.objects.create(
+            name="Manufacturer",
+            country="Country"
+        )
         car = Car.objects.create(model="Model", manufacturer=manufacturer)
         self.assertEqual(str(car), car.model)
         self.assertEqual(str(car), "Model")

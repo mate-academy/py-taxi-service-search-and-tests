@@ -6,6 +6,7 @@ from taxi.models import Manufacturer
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
+
 class PublicManufacturerTest(TestCase):
     def setUp(self):
         self.client = Client()

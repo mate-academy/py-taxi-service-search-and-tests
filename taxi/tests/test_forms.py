@@ -1,12 +1,17 @@
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm, CarSearchForm, DriverSearchForm, \
+from taxi.forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarSearchForm,
+    DriverSearchForm,
     ManufacturerSearchForm
+)
 
 
 class FormsTests(TestCase):
     def test_driver_creation_form_valid_data(self):
-        form_data ={
+        form_data = {
             "username": "admin",
             "first_name": "admin_first_name",
             "last_name": "admin_last_name",
@@ -48,17 +53,26 @@ class DriverLicenseUpdateFormTests(TestCase):
         form = DriverLicenseUpdateForm(data={"license_number": "AB123"})
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
-        self.assertIn("License number should consist of 8 characters", form.errors["license_number"])
+        self.assertIn(
+            "License number should consist of 8 characters",
+            form.errors["license_number"]
+        )
 
     def test_invalid_first_three_characters(self):
         form = DriverLicenseUpdateForm(data={"license_number": "abC12345"})
         self.assertFalse(form.is_valid())
-        self.assertIn("First 3 characters should be uppercase letters", form.errors["license_number"])
+        self.assertIn(
+            "First 3 characters should be uppercase letters",
+            form.errors["license_number"]
+        )
 
     def test_invalid_last_five_characters(self):
         form = DriverLicenseUpdateForm(data={"license_number": "ABC12ab5"})
         self.assertFalse(form.is_valid())
-        self.assertIn("Last 5 characters should be digits", form.errors["license_number"])
+        self.assertIn(
+            "Last 5 characters should be digits",
+            form.errors["license_number"]
+        )
 
 
 class SearchFormsTests(TestCase):
