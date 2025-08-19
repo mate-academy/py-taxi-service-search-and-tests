@@ -7,6 +7,16 @@
       Create
     </a>
   </h1>
+
+  <form method="get" role="search" class="mb-3">
+    <div class="input-group">
+      {{ search_form.model }}
+      <button class="input-group-text bg-white border" type="submit">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
