@@ -59,7 +59,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         self.assertIn("license_number", form.errors)
 
 
-class ManufacturerListViewTest(TestCase):
+class AuthenticatedTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser",
@@ -68,6 +68,11 @@ class ManufacturerListViewTest(TestCase):
         )
         self.client = Client()
         self.client.login(username="testuser", password="testpass")
+
+
+class ManufacturerListViewTest(AuthenticatedTestCase):
+    def setUp(self):
+        super().setUp()
 
         Manufacturer.objects.create(name="TestMan", country="Japan")
         Manufacturer.objects.create(name="AnotherMan", country="Japan")
@@ -97,17 +102,11 @@ class ManufacturerListViewTest(TestCase):
         self.assertNotContains(response, "AnotherMan")
 
 
-class CarListViewTest(TestCase):
+class CarListViewTest(AuthenticatedTestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser",
-            password="testpass",
-            license_number="ABC12345"
-        )
-        self.client = Client()
-        self.client.login(username="testuser", password="testpass")
-        man = Manufacturer.objects.create(name="TestMan", country="UA")
+        super().setUp()
 
+        man = Manufacturer.objects.create(name="TestMan", country="UA")
         Car.objects.create(model="TestCar", manufacturer=man)
         Car.objects.create(model="OtherCar", manufacturer=man)
 
@@ -136,15 +135,9 @@ class CarListViewTest(TestCase):
         self.assertNotContains(response, "OtherCar")
 
 
-class DriverListViewTest(TestCase):
+class DriverListViewTest(AuthenticatedTestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser",
-            password="testpass",
-            license_number="ABC12345"
-        )
-        self.client = Client()
-        self.client.login(username="testuser", password="testpass")
+        super().setUp()
 
         User.objects.create_user(
             username="driver1",
@@ -182,15 +175,9 @@ class DriverListViewTest(TestCase):
         self.assertNotContains(response, "driver2")
 
 
-class ToggleAssignToCarViewTest(TestCase):
+class ToggleAssignToCarViewTest(AuthenticatedTestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser",
-            password="testpass",
-            license_number="ABC12345"
-        )
-        self.client = Client()
-        self.client.login(username="testuser", password="testpass")
+        super().setUp()
 
         self.manufacturer = Manufacturer.objects.create(
             name="TestMan",
@@ -212,15 +199,9 @@ class ToggleAssignToCarViewTest(TestCase):
         self.assertNotIn(self.car, self.user.cars.all())
 
 
-class IndexViewTest(TestCase):
+class IndexViewTest(AuthenticatedTestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser",
-            password="testpass",
-            license_number="ABC12345"
-        )
-        self.client = Client()
-        self.client.login(username="testuser", password="testpass")
+        super().setUp()
 
         man1, man2, man3 = Manufacturer.objects.bulk_create((
             Manufacturer(name="TestMan1", country="UA"),
