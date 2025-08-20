@@ -1,14 +1,17 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ValidationError
 
-from taxi.models import Car, Driver
+from taxi.models import Car
+from taxi.validators import validate_license_number
+
+
+User = get_user_model()
 
 
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
+        queryset=User.objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
 
@@ -17,9 +20,18 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=50,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Model"}),
+    )
+
+
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        model = Driver
+        model = User
         fields = UserCreationForm.Meta.fields + (
             "license_number",
             "first_name",
@@ -32,21 +44,26 @@ class DriverCreationForm(UserCreationForm):
 
 class DriverLicenseUpdateForm(forms.ModelForm):
     class Meta:
-        model = Driver
+        model = User
         fields = ["license_number"]
 
     def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=50,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Username"}),
+    )
 
-    return license_number
+
+class ManufacturerNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=50,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Name"}),
+    )
