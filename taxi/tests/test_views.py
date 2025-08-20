@@ -38,12 +38,16 @@ class ManufacturerViewTest(TestCase):
         self.assertTrue(Manufacturer.objects.filter(name="Ford").exists())
 
     def test_manufacturer_list_search_match(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": "Audi"})
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"), {"name": "Audi"}
+        )
         self.assertContains(response, "Audi")
         self.assertNotContains(response, "Ford")
 
     def test_manufacturer_list_search_no_match(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": "Tesla"})
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"), {"name": "Tesla"}
+        )
         self.assertNotContains(response, "Audi")
 
     def test_manufacturer_list_search_empty_param(self):
@@ -91,16 +95,24 @@ class DriverViewTest(TestCase):
         self.assertTrue(User.objects.filter(username="test1").exists())
 
     def test_driver_list_search_match(self):
-        response = self.client.get(reverse("taxi:driver-list"), {"username": "test"})
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "test"}
+        )
         self.assertContains(response, self.user.username)
 
     def test_driver_list_search_no_match(self):
-        response = self.client.get(reverse("taxi:driver-list"), {"username": "random"})
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "random"}
+        )
         driver_list = response.context["driver_list"]
         self.assertQuerysetEqual(driver_list, [])
 
     def test_driver_list_search_empty_param(self):
-        user2 = User.objects.create_user(username="second", password="pass123", license_number="XYZ12345")
+        user2 = User.objects.create_user(
+            username="second",
+            password="pass123",
+            license_number="XYZ12345"
+        )
         response = self.client.get(reverse("taxi:driver-list"))
         self.assertContains(response, self.user.username)
         self.assertContains(response, user2.username)
