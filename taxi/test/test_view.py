@@ -72,6 +72,7 @@ class ManufacturerSearchTests(TestCase):
         Manufacturer.objects.create(name="Test", country="Test")
 
     def test_search_manufacturer_by_name(self):
-        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": "TEST"})
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"), {"name": "TEST"})
         self.assertContains(response, "TEST")
         self.assertContains(response, "Test")

@@ -43,7 +43,6 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
@@ -142,8 +141,10 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         if form.is_valid():
             username = form.cleaned_data.get("username")
             if username:
-                return queryset.filter(user__username__icontains=form.cleaned_data["username"])
+                return queryset.filter(
+                    user__username__icontains=form.cleaned_data["username"])
             return queryset
+
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
