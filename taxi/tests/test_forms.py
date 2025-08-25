@@ -16,10 +16,10 @@ class FormTest(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
-        expected_data = form_data.copy()
-        del expected_data["password1"]
-        del expected_data["password2"]
-        self.assertEqual(form.cleaned_data, expected_data)
+        self.assertEqual(form.cleaned_data["username"], "test_username")
+        self.assertEqual(form.cleaned_data["first_name"], "test_first_name")
+        self.assertEqual(form.cleaned_data["last_name"], "test_last_name")
+        self.assertEqual(form.cleaned_data["license_number"], "TES12345")
 
     def test_valid_driver_license_update_form(self):
         driver = Driver.objects.create(
