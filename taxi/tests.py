@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from taxi.forms import DriverCreationForm
 from taxi.models import Manufacturer, Driver, Car
+from django.test import TestCase
 
 
 class ModelsTests(TestCase):
