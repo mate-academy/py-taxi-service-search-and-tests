@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import Manufacturer, Driver, Car
 
+
 class ManufacturerModelTest(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(
@@ -56,6 +57,7 @@ class CarModelTest(TestCase):
         self.assertEqual(str(self.car.manufacturer), "Toyota Japan")
 
     def test_drivers_relation(self):
-        drivers_usernames = list(self.car.drivers.values_list("username", flat=True))
+        drivers_usernames = (
+            list(self.car.drivers.values_list("username", flat=True)))
         self.assertIn("john_doe", drivers_usernames)
         self.assertIn("alex_smith", drivers_usernames)

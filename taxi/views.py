@@ -98,6 +98,7 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
     def get_queryset(self):
         queryset = Driver.objects.all()
         query = self.request.GET.get("q")
