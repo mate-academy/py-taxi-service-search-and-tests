@@ -23,6 +23,7 @@ manufacturer_base_url = reverse("taxi:manufacturer-list")
 manufacturer_params = urlencode({"name": "BMW"})
 MANUFACTURER_FILTER_URL = f"{manufacturer_base_url}?{manufacturer_params}"
 
+
 class PublicViewsTests(TestCase):
 
     def test_login_required(self):
@@ -75,7 +76,10 @@ class PrivateViewsTests(TestCase):
 
         response = self.client.get(MANUFACTURER_FILTER_URL)
         search_form = response.context["search_form"]
-        self.assertEqual(search_form.initial.get("name"), self.manufacturer.name)
+        self.assertEqual(
+            search_form.initial.get("name"),
+            self.manufacturer.name
+        )
 
     def test_queryset_filters(self):
         response = self.client.get(CAR_FILTER_URL)
