@@ -1,5 +1,3 @@
-from lib2to3.fixes.fix_input import context
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -8,8 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm, CarSearchForm, \
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    DriverSearchForm,
+    CarSearchForm,
     ManufacturerSearchForm
+)
 
 
 @login_required

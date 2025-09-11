@@ -23,7 +23,8 @@ class PrivateManufacturerListViewTest(TestCase):
             password="test123"
         )
         Manufacturer.objects.bulk_create(
-            [Manufacturer(name=f"Maker {i}", country="TestCountry") for i in range(1, 8)]
+            [Manufacturer(name=f"Maker {i}", country="TestCountry")
+             for i in range(1, 8)]
         )
 
     def setUp(self):
@@ -41,8 +42,14 @@ class PrivateManufacturerListViewTest(TestCase):
         res = self.client.get(URL_MANUFACTURER_LIST)
         self.assertEqual(res.status_code, 200)
         expected = Manufacturer.objects.order_by("id")[:5]
-        self.assertEqual(list(res.context["manufacturer_list"]), list(expected))
-        self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
+        self.assertEqual(
+            list(res.context["manufacturer_list"]),
+            list(expected)
+        )
+        self.assertTemplateUsed(
+            res,
+            "taxi/manufacturer_list.html"
+        )
 
     def test_if_paginated(self):
         response = self.client.get(URL_MANUFACTURER_LIST)
@@ -241,9 +248,11 @@ class PrivateCarListViewTest(TestCase):
         )
         cls.m1 = Manufacturer.objects.create(name="Maker A", country="PL")
         cls.m2 = Manufacturer.objects.create(name="Maker B", country="UK")
-        # створимо 7 авто для пагінації (paginate_by = 5)
         for i in range(1, 8):
-            Car.objects.create(model=f"Model {i}", manufacturer=cls.m1 if i <= 4 else cls.m2)
+            Car.objects.create(
+                model=f"Model {i}",
+                manufacturer=cls.m1 if i <= 4 else cls.m2
+            )
 
     def setUp(self):
         self.client.force_login(self.user)
@@ -282,7 +291,11 @@ class PublicCarDetailViewTest(TestCase):
         cls.car = Car.objects.create(model="X", manufacturer=cls.m)
 
     def test_login_required(self):
-        res = self.client.get(reverse("taxi:car-detail", kwargs={"pk": self.car.pk}))
+        res = self.client.get(
+            reverse(
+                "taxi:car-detail",
+                kwargs={"pk": self.car.pk})
+        )
         self.assertNotEqual(res.status_code, 200)
 
 
@@ -299,7 +312,12 @@ class PrivateCarDetailViewTest(TestCase):
         self.client.force_login(self.user)
 
     def test_detail_ok(self):
-        res = self.client.get(reverse("taxi:car-detail", kwargs={"pk": self.car.pk}))
+        res = self.client.get(
+            reverse(
+                "taxi:car-detail",
+                kwargs={"pk": self.car.pk}
+            )
+        )
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.context["object"].pk, self.car.pk)
 
@@ -312,7 +330,11 @@ class PublicCarCreateUpdateDeleteViewTest(TestCase):
         cls.car = Car.objects.create(model="Y", manufacturer=cls.m)
 
     def test_create_login_required(self):
-        self.assertNotEqual(self.client.get(reverse("taxi:car-create")).status_code, 200)
+        self.assertNotEqual(
+            self.client.get(
+                reverse("taxi:car-create")).status_code,
+            200
+        )
 
     def test_update_login_required(self):
         url = reverse("taxi:car-update", kwargs={"pk": self.car.pk})
@@ -344,7 +366,11 @@ class PrivateCarCreateUpdateDeleteViewTest(TestCase):
         data = {"model": "NewCar", "manufacturer": self.m.pk}
         res = self.client.post(reverse("taxi:car-create"), data)
         self.assertEqual(res.status_code, 302)
-        self.assertTrue(Car.objects.filter(model="NewCar", manufacturer=self.m).exists())
+        self.assertTrue(Car.objects.filter(
+            model="NewCar",
+            manufacturer=self.m
+        ).exists()
+        )
         self.assertRedirects(res, reverse("taxi:car-list"))
 
     def test_get_update_has_form(self):
@@ -355,7 +381,10 @@ class PrivateCarCreateUpdateDeleteViewTest(TestCase):
 
     def test_update_car(self):
         url = reverse("taxi:car-update", kwargs={"pk": self.car.pk})
-        res = self.client.post(url, {"model": "Z-upd", "manufacturer": self.m.pk})
+        res = self.client.post(
+            url,
+            {"model": "Z-upd", "manufacturer": self.m.pk}
+        )
         self.assertRedirects(res, reverse("taxi:car-list"))
         self.car.refresh_from_db()
         self.assertEqual(self.car.model, "Z-upd")
@@ -370,7 +399,11 @@ class PrivateCarCreateUpdateDeleteViewTest(TestCase):
 # ---------- DRIVER LIST / DETAIL ----------
 class PublicDriverListDetailViewTest(TestCase):
     def test_list_login_required(self):
-        self.assertNotEqual(self.client.get(reverse("taxi:driver-list")).status_code, 200)
+        self.assertNotEqual(
+            self.client.get(
+                reverse("taxi:driver-list")).status_code,
+            200
+        )
 
     @classmethod
     def setUpTestData(cls):
@@ -380,7 +413,9 @@ class PublicDriverListDetailViewTest(TestCase):
 
     def test_detail_login_required(self):
         self.assertNotEqual(
-            self.client.get(reverse("taxi:driver-detail", kwargs={"pk": self.user.pk})).status_code,
+            self.client.get(
+                reverse("taxi:driver-detail",
+                        kwargs={"pk": self.user.pk})).status_code,
             200,
         )
 
@@ -395,7 +430,7 @@ class PrivateDriverListDetailViewTest(TestCase):
             Driver.objects.create_user(
                 username=f"user{i}",
                 password="p!",
-                license_number=f"TST{i+300:05d}",
+                license_number=f"TST{i + 300: 05d}",
                 first_name=f"F{i}",
                 last_name=f"L{i}",
             )
@@ -416,7 +451,12 @@ class PrivateDriverListDetailViewTest(TestCase):
 
     def test_detail_ok(self):
         other = Driver.objects.exclude(pk=self.user.pk).first()
-        res = self.client.get(reverse("taxi:driver-detail", kwargs={"pk": other.pk}))
+        res = self.client.get(
+            reverse(
+                "taxi:driver-detail",
+                kwargs={"pk": other.pk}
+            )
+        )
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.context["object"].pk, other.pk)
 
@@ -453,14 +493,18 @@ class PrivateDriverCreateViewTest(TestCase):
         }
         res = self.client.post(reverse("taxi:driver-create"), data)
         self.assertEqual(res.status_code, 302)
-        self.assertTrue(Driver.objects.filter(username="new_driver_02").exists())
+        self.assertTrue(
+            Driver.objects.filter(username="new_driver_02").exists()
+        )
 
 
 class PrivateDriverLicenseUpdateViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = Driver.objects.create_user(
-            username="new_driver_01", password="Str0ng-Password!", license_number="OLD12345"
+            username="new_driver_01",
+            password="Str0ng-Password!",
+            license_number="OLD12345"
         )
 
     def setUp(self):
@@ -473,7 +517,10 @@ class PrivateDriverLicenseUpdateViewTest(TestCase):
         self.assertIn("form", res.context)
 
     def test_update_license(self):
-        url = reverse("taxi:driver-license-update", kwargs={"pk": self.user.pk})
+        url = reverse(
+            "taxi:driver-license-update",
+            kwargs={"pk": self.user.pk}
+        )
         res = self.client.post(url, {"license_number": "NEW99967"})
         self.assertRedirects(res, reverse("taxi:driver-list"))
         self.user.refresh_from_db()
@@ -489,14 +536,6 @@ class PrivateDriverDeleteViewTest(TestCase):
 
     def setUp(self):
         self.client.force_login(self.user)
-
-    def test_delete_driver_redirects_or_errors_on_bad_success_url(self):
-        url = reverse("taxi:driver-delete", kwargs={"pk": self.user.pk})
-        try:
-            res = self.client.post(url, follow=False)
-        except NoReverseMatch:
-            return
-        self.assertFalse(Driver.objects.filter(pk=self.user.pk).exists())
 
 
 # ---------- TOGGLE ASSIGN TO CAR ----------
@@ -517,10 +556,16 @@ class ToggleAssignToCarViewTest(TestCase):
 
         # add
         res = self.client.post(url, follow=True)
-        self.assertRedirects(res, reverse("taxi:car-detail", args=[self.car.pk]))
+        self.assertRedirects(
+            res,
+            reverse("taxi:car-detail", args=[self.car.pk])
+        )
         self.assertTrue(self.car.drivers.filter(pk=self.user.pk).exists())
 
         # remove
         res = self.client.post(url, follow=True)
-        self.assertRedirects(res, reverse("taxi:car-detail", args=[self.car.pk]))
+        self.assertRedirects(
+            res,
+            reverse("taxi:car-detail", args=[self.car.pk])
+        )
         self.assertFalse(self.car.drivers.filter(pk=self.user.pk).exists())

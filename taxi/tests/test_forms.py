@@ -26,5 +26,3 @@ class DriverFormTest(TestCase):
     def test_license_number_last_5_letters_are_digits(self):
         last_5 = self.driver.license_number[3:]
         self.assertTrue(last_5.isdigit())
-
-

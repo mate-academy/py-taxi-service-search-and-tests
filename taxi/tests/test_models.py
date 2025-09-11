@@ -8,7 +8,7 @@ class ManufacturerModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        manufacturer = Manufacturer.objects.create(
+        cls.manufacturer = Manufacturer.objects.create(
             name="TestName",
             country="Ukraine"
         )
@@ -21,7 +21,8 @@ class ManufacturerModelTest(TestCase):
         self.assertEqual(name_label, "name")
 
     def test_label_of_country(self):
-        country_label = self.manufacturer._meta.get_field("country").verbose_name
+        country_label = (self.manufacturer.
+                         _meta.get_field("country").verbose_name)
         self.assertEqual(country_label, "country")
 
     def test_name_must_be_unique(self):
@@ -32,11 +33,13 @@ class ManufacturerModelTest(TestCase):
             )
 
     def test_max_length_of_name(self):
-        name_length = self.manufacturer._meta.get_field("name").max_length
+        name_length = (self.manufacturer.
+                       _meta.get_field("name").max_length)
         self.assertEqual(name_length, 255)
 
     def test_max_length_of_country(self):
-        country_length = self.manufacturer._meta.get_field("country").max_length
+        country_length = (self.manufacturer.
+                          _meta.get_field("country").max_length)
         self.assertEqual(country_length, 255)
 
     def test_object_str_is_name_and_country(self):
@@ -60,11 +63,13 @@ class DriverModelTest(TestCase):
         self.driver = Driver.objects.get(pk=1)
 
     def test_label_of_license_number(self):
-        license_label = self.driver._meta.get_field("license_number").verbose_name
+        license_label = (self.driver.
+                         _meta.get_field("license_number").verbose_name)
         self.assertEqual(license_label, "license number")
 
     def test_max_length_of_license_number(self):
-        license_max = self.driver._meta.get_field("license_number").max_length
+        license_max = (self.driver.
+                       _meta.get_field("license_number").max_length)
         self.assertEqual(license_max, 255)
 
     def test_str_name_of_driver(self):
