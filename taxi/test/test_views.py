@@ -1,4 +1,5 @@
 import itertools
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -57,45 +58,78 @@ class ManufacturerSearchTests(TestCase):
     def setUp(self):
         self.user = sample_driver()
         self.client.force_login(self.user)
+        self.m1 = sample_manufacturer(name="BMW")
+        self.m2 = sample_manufacturer(name="Fiat", country="Italy")
+
+    def test_http_200(self):
+        res = self.client.get(MANUFACTURER_LIST_URL)
+        self.assertEqual(res.status_code, 200)
 
     def test_search_manufacturer_by_name(self):
-        m1 = sample_manufacturer(name="BMW")
-        m2 = sample_manufacturer(name="Fiat", country="Italy")
-
         res = self.client.get(MANUFACTURER_LIST_URL, {"name": "BMW"})
+        self.assertContains(res, self.m1.name)
+        self.assertNotContains(res, self.m2.name)
 
-        self.assertContains(res, m1.name)
-        self.assertNotContains(res, m2.name)
+    def test_empty_search_returns_all(self):
+        res = self.client.get(MANUFACTURER_LIST_URL, {"name": ""})
+        self.assertContains(res, self.m1.name)
+        self.assertContains(res, self.m2.name)
+
+    def test_no_match_returns_empty(self):
+        res = self.client.get(MANUFACTURER_LIST_URL, {"name": "NonExistent"})
+        self.assertEqual(list(res.context["manufacturer_list"]), [])
 
 
 class CarSearchTests(TestCase):
     def setUp(self):
         self.user = sample_driver()
         self.client.force_login(self.user)
+        self.c1 = sample_car(model="Continental")
+        self.c2 = sample_car(model="Civic")
+
+    def test_http_200(self):
+        res = self.client.get(CAR_LIST_URL)
+        self.assertEqual(res.status_code, 200)
 
     def test_search_car_by_model(self):
-        c1 = sample_car(model="Continental")
-        c2 = sample_car(model="Civic")
-
         res = self.client.get(CAR_LIST_URL, {"model": "Continental"})
+        self.assertContains(res, self.c1.model)
+        self.assertNotContains(res, self.c2.model)
 
-        self.assertContains(res, c1.model)
-        self.assertNotContains(res, c2.model)
+    def test_empty_search_returns_all(self):
+        res = self.client.get(CAR_LIST_URL, {"model": ""})
+        self.assertContains(res, self.c1.model)
+        self.assertContains(res, self.c2.model)
+
+    def test_no_match_returns_empty(self):
+        res = self.client.get(CAR_LIST_URL, {"model": "NonExistent"})
+        self.assertEqual(list(res.context["car_list"]), [])
 
 
 class DriverSearchTests(TestCase):
     def setUp(self):
-        self.user = sample_driver()
+        self.user = sample_driver(username="alex", license_number="AAA111")
         self.client.force_login(self.user)
+        self.d1 = sample_driver(username="john_doe", license_number="12345")
+        self.d2 = sample_driver(username="jane_doe", license_number="67890")
+
+    def test_http_200(self):
+        res = self.client.get(DRIVER_LIST_URL)
+        self.assertEqual(res.status_code, 200)
 
     def test_search_driver_by_username(self):
-        d1 = sample_driver(username="john_doe", license_number="12345")
-        d2 = sample_driver(username="jane_doe", license_number="67890")
-
         res = self.client.get(DRIVER_LIST_URL, {"username": "john"})
+        self.assertContains(res, self.d1.username)
+        self.assertNotContains(res, self.d2.username)
 
-        self.assertContains(res, d1.username)
-        self.assertNotContains(res, d2.username)
+    def test_empty_search_returns_all(self):
+        res = self.client.get(DRIVER_LIST_URL, {"username": ""})
+        self.assertContains(res, self.d1.username)
+        self.assertContains(res, self.d2.username)
+
+    def test_no_match_returns_empty(self):
+        res = self.client.get(DRIVER_LIST_URL, {"username": "NonExistent"})
+        self.assertEqual(list(res.context["driver_list"]), [])
 
 
 class CarDetailViewTests(TestCase):
@@ -165,7 +199,8 @@ class ManufacturerFormTests(TestCase):
         self.assertEqual(res.status_code, 302)
         self.assertFalse(Manufacturer.
                          objects.
-                         filter(id=manufacturer.id).exists())
+                         filter(id=manufacturer.id).
+                         exists())
 
 
 class CarFormTests(TestCase):
