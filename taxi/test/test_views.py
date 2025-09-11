@@ -11,6 +11,7 @@ DRIVER_LIST_URL = reverse("taxi:driver-list")
 
 manufacturer_counter = itertools.count(1)
 
+
 def sample_manufacturer(name=None, country="Germany"):
     if not name:
         name = f"Manufacturer{next(manufacturer_counter)}"
@@ -23,7 +24,11 @@ def sample_car(model="Civic", manufacturer=None):
     return Car.objects.create(model=model, manufacturer=manufacturer)
 
 
-def sample_driver(username="driver1", password="testpass123", license_number="ABC12345"):
+def sample_driver(
+        username="driver1",
+        password="testpass123",
+        license_number="ABC12345"
+):
     return get_user_model().objects.create_user(
         username=username,
         password=password,
@@ -147,7 +152,7 @@ class ManufacturerFormTests(TestCase):
         manufacturer = sample_manufacturer(name="Audi", country="Germany")
         url = reverse("taxi:manufacturer-update", args=[manufacturer.id])
         data = {"name": "Audi Updated", "country": "Germany"}
-        res = self.client.post(url, data)
+        self.client.post(url, data)
 
         manufacturer.refresh_from_db()
         self.assertEqual(manufacturer.name, "Audi Updated")
@@ -158,7 +163,9 @@ class ManufacturerFormTests(TestCase):
         res = self.client.post(url)
 
         self.assertEqual(res.status_code, 302)
-        self.assertFalse(Manufacturer.objects.filter(id=manufacturer.id).exists())
+        self.assertFalse(Manufacturer.
+                         objects.
+                         filter(id=manufacturer.id).exists())
 
 
 class CarFormTests(TestCase):
@@ -185,8 +192,8 @@ class CarFormTests(TestCase):
         url = reverse("taxi:car-update", args=[car.id])
         data = {"model": "C-Class Updated",
                 "manufacturer": self.manufacturer.id,
-                "drivers": [self.user.id],}
-        res = self.client.post(url, data)
+                "drivers": [self.user.id]}
+        self.client.post(url, data)
 
         car.refresh_from_db()
         self.assertEqual(car.model, "C-Class Updated")
@@ -217,8 +224,6 @@ class DriverFormTests(TestCase):
         res = self.client.post(url, data)
         self.assertEqual(res.status_code, 302)
         self.assertTrue(Driver.objects.filter(username="new_driver").exists())
-
-
 
     def test_delete_driver(self):
         driver = self.user
