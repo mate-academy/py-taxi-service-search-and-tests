@@ -61,6 +61,7 @@ class DriverSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
+        strip=True,
     )
 
 
@@ -73,6 +74,7 @@ class CarSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
+        strip=True,
     )
 
 
@@ -85,4 +87,5 @@ class ManufacturerSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
+        strip=True,
     )

@@ -8,7 +8,7 @@ def query_transform(request, **kwargs):
     updated = request.GET.copy()
     for key, value in kwargs.items():
         if value is not None:
-            updated[key] = value
+            updated[key] = str(value)
         else:
-            updated.pop(key)
+            updated.pop(key, None)
     return updated.urlencode()

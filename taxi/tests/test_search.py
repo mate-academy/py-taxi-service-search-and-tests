@@ -86,3 +86,32 @@ class SearchIntegrationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Toyota")
         self.assertNotContains(response, "Honda")
+
+    def test_empty_queries_return_all_objects(self):
+        manufacturer_form = ManufacturerSearchForm(data={"name": ""})
+        self.assertTrue(manufacturer_form.is_valid())
+        self.assertEqual(Manufacturer.objects.count(), 2)
+
+        car_form = CarSearchForm(data={"model": ""})
+        self.assertTrue(car_form.is_valid())
+        self.assertEqual(Car.objects.count(), 2)
+
+        driver_form = DriverSearchForm(data={"username": ""})
+        self.assertTrue(driver_form.is_valid())
+        self.assertEqual(get_user_model().objects.count(), 3)
+
+    def test_case_insensitive_matching(self):
+
+        manufacturer_queryset = Manufacturer.objects.filter(
+            name__icontains="toyota")
+        self.assertIn(self.manufacturer1, manufacturer_queryset)
+        self.assertNotIn(self.manufacturer2, manufacturer_queryset)
+
+        car_queryset = Car.objects.filter(model__icontains="corolla")
+        self.assertIn(self.car1, car_queryset)
+        self.assertNotIn(self.car2, car_queryset)
+
+        driver_queryset = get_user_model().objects.filter(
+            username__icontains="driver_one")
+        self.assertIn(self.driver1, driver_queryset)
+        self.assertNotIn(self.driver2, driver_queryset)
