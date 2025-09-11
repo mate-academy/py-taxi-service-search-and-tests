@@ -83,7 +83,7 @@ class DriverLicenseUpdateFormTests(TestCase):
             password="StrongPass123!",
             first_name="Test",
             last_name="User",
-            license_number="LIC" + get_random_string(6),
+            license_number="LIC" + get_random_string(5),
         )
 
     def test_valid_license_update(self):

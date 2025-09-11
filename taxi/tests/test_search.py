@@ -101,7 +101,6 @@ class SearchIntegrationTests(TestCase):
         self.assertEqual(get_user_model().objects.count(), 3)
 
     def test_case_insensitive_matching(self):
-
         manufacturer_queryset = Manufacturer.objects.filter(
             name__icontains="toyota")
         self.assertIn(self.manufacturer1, manufacturer_queryset)
@@ -115,3 +114,26 @@ class SearchIntegrationTests(TestCase):
             username__icontains="driver_one")
         self.assertIn(self.driver1, driver_queryset)
         self.assertNotIn(self.driver2, driver_queryset)
+
+    def test_search_by_model_case_insensitive_and_strip(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, {"model": "   corolla   "})
+        self.assertEqual(response.status_code, 200)
+
+    def test_search_input_rendered_driver_list(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url)
+        self.assertContains(response, 'placeholder="Search by username"')
+        self.assertContains(response, 'name="username"')
+
+    def test_search_input_rendered_car_list(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url)
+        self.assertContains(response, 'placeholder="Search by model"')
+        self.assertContains(response, 'name="model"')
+
+    def test_search_input_rendered_manufacturer_list(self):
+        url = reverse("taxi:manufacturer-list")
+        response = self.client.get(url)
+        self.assertContains(response, 'placeholder="Search by name"')
+        self.assertContains(response, 'name="name"')
