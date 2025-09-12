@@ -81,7 +81,10 @@ class CarFormTests(TestCase):
     def test_widget_type_is_checkbox_select_multiple(self):
         from taxi.forms import CarForm
         form = CarForm()
-        self.assertIsInstance(form.fields["drivers"].widget, CheckboxSelectMultiple)
+        self.assertIsInstance(
+            form.fields["drivers"].widget,
+            CheckboxSelectMultiple
+        )
 
     def test_create_car_with_drivers(self):
         from taxi.forms import CarForm
@@ -170,7 +173,14 @@ class DriverCreationFormTests(TestCase):
         form = DriverCreationForm()
         fields = set(form.fields.keys())
         # Перевіряємо, що ключові поля є у формі
-        for name in {"username", "password1", "password2", "license_number", "first_name", "last_name"}:
+        for name in {
+            "username",
+            "password1",
+            "password2",
+            "license_number",
+            "first_name",
+            "last_name"
+        }:
             self.assertIn(name, fields)
 
 
