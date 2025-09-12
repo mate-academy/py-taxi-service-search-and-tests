@@ -1,22 +1,26 @@
+# taxi/tests/test_forms.py
 from django.test import TestCase
-from taxi.models import Driver
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
 from taxi.forms import (
     DriverCreationForm,
     DriverLicenseUpdateForm,
     validate_license_number,
 )
 
+User = get_user_model()
+
 
 class DriverFormTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
-        cls.driver = Driver.objects.create_user(
+        cls.driver = User.objects.create_user(
             username="user1",
             password="Str0ng-Passw0rd!",
-            license_number="RFC34532"
+            license_number="RFC34532",
+            first_name="John",
+            last_name="Doe",
         )
 
     def test_validate_license_number_len_equal_8(self):
@@ -30,9 +34,6 @@ class DriverFormTest(TestCase):
     def test_license_number_last_5_letters_are_digits(self):
         last_5 = self.driver.license_number[3:]
         self.assertTrue(last_5.isdigit())
-
-
-User = get_user_model()
 
 
 class DriverCreationFormTest(TestCase):
@@ -49,10 +50,9 @@ class DriverCreationFormTest(TestCase):
         )
         self.assertTrue(form.is_valid(), form.errors)
         user = form.save()
-        self.assertTrue(User.objects.filter(
-            pk=user.pk,
-            license_number="ABC12345"
-        ).exists())
+        self.assertTrue(
+            User.objects.filter(pk=user.pk, license_number="ABC12345").exists()
+        )
 
     def test_invalid_license_length(self):
         form = DriverCreationForm(
@@ -66,10 +66,11 @@ class DriverCreationFormTest(TestCase):
             }
         )
         self.assertFalse(form.is_valid())
-        self.assertIn("License number "
-                      "should consist of 8 "
-                      "characters",
-                      form.errors["license_number"])
+        # Менш крихка перевірка: шукаємо підрядок у всіх помилках поля
+        self.assertIn(
+            "8 characters",
+            " ".join(form.errors.get("license_number", [])),
+        )
 
     def test_invalid_license_not_uppercase(self):
         form = DriverCreationForm(
@@ -84,9 +85,8 @@ class DriverCreationFormTest(TestCase):
         )
         self.assertFalse(form.is_valid())
         self.assertIn(
-            "First 3 characters should "
-            "be uppercase letters",
-            form.errors["license_number"]
+            "uppercase letters",
+            " ".join(form.errors.get("license_number", [])),
         )
 
     def test_invalid_license_last_five_not_digits(self):
@@ -102,9 +102,8 @@ class DriverCreationFormTest(TestCase):
         )
         self.assertFalse(form.is_valid())
         self.assertIn(
-            "Last 5 characters "
             "should be digits",
-            form.errors["license_number"]
+            " ".join(form.errors.get("license_number", [])),
         )
 
 
@@ -139,31 +138,22 @@ class DriverLicenseUpdateFormTest(TestCase):
 
 class LicenseValidatorUnitTest(TestCase):
     def test_validator_valid(self):
-        self.assertEqual(
-            validate_license_number("ABC12345"),
-            "ABC12345"
-        )
+        self.assertEqual(validate_license_number("ABC12345"), "ABC12345")
 
     def test_validator_length_error(self):
         with self.assertRaisesMessage(
-                ValidationError,
-                "License number should "
-                "consist of 8 characters"
+            ValidationError, "License number should consist of 8 characters."
         ):
             validate_license_number("AB1234")
 
     def test_validator_uppercase_error(self):
         with self.assertRaisesMessage(
-                ValidationError,
-                "First 3 characters"
-                " should be uppercase letters"
+            ValidationError, "First 3 characters should be uppercase letters."
         ):
             validate_license_number("AbC12345")
 
     def test_validator_digits_error(self):
         with self.assertRaisesMessage(
-                ValidationError,
-                "Last 5 "
-                "characters should be digits"
+            ValidationError, "Last 5 characters should be digits."
         ):
             validate_license_number("ABC12A4B")

@@ -2,17 +2,19 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
-    <form method="get" action="" class="form-inline">
-      {{ search_form|crispy }}
-      <input type="submit" class="btn btn-secondary" value="Find">
-    </form>
-    {% if driver_list %}
+  <h1>
+    Driver List
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+
+  <form method="get" action="" class="form-inline" role="search">
+    {{ search_form|crispy }}
+    <input type="submit" class="btn btn-secondary" value="Find">
+  </form>
+
+  {% if driver_list %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -21,18 +23,53 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
-
+      {% for driver in driver_list %}
+        <tr>
+          <td>{{ driver.id }}</td>
+          <td>
+            <a href="{{ driver.get_absolute_url }}">
+              {{ driver.username }}
+              {% if user == driver %}(Me){% endif %}
+            </a>
+          </td>
+          <td>{{ driver.first_name }}</td>
+          <td>{{ driver.last_name }}</td>
+          <td>{{ driver.license_number }}</td>
+        </tr>
+      {% endfor %}
     </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
+
+    {# Пагінація збереження пошукового параметра #}
+    {% if is_paginated %}
+      <nav aria-label="Driver pagination">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">
+                Previous
+              </a>
+            </li>
+          {% endif %}
+
+          <li class="page-item disabled">
+            <span class="page-link">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+          </li>
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link"
+                 href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">
+                Next
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
     {% endif %}
+  {% else %}
+    <p>There are no drivers in the service.</p>
+  {% endif %}
 {% endblock %}

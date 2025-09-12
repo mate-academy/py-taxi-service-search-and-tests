@@ -1,6 +1,9 @@
+# taxi/views.py
+from typing import cast
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,7 +15,7 @@ from .forms import (
     CarForm,
     DriverSearchForm,
     CarSearchForm,
-    ManufacturerSearchForm
+    ManufacturerSearchForm,
 )
 
 
@@ -51,8 +54,11 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ManufacturerListView, self).get_context_data(**kwargs)
-        context["search_form"] = ManufacturerSearchForm()
+        context = super().get_context_data(**kwargs)
+        # інстанс форми з request.GET, щоб зберігалось введене значення
+        context["search_form"] = ManufacturerSearchForm(
+            self.request.GET or None
+        )
         return context
 
 
@@ -78,17 +84,15 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        qs = Car.objects.select_related(
-            "manufacturer"
-        ).order_by("id")
+        qs = Car.objects.select_related("manufacturer").order_by("id")
         model = self.request.GET.get("model")
         if model:
             return qs.filter(model__icontains=model)
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CarListView, self).get_context_data(**kwargs)
-        context["search_form"] = CarSearchForm()
+        context = super().get_context_data(**kwargs)
+        context["search_form"] = CarSearchForm(self.request.GET or None)
         return context
 
 
@@ -118,8 +122,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(DriverListView, self).get_context_data(**kwargs)
-        context["search_form"] = DriverSearchForm()
+        context = super().get_context_data(**kwargs)
+        context["search_form"] = DriverSearchForm(self.request.GET or None)
         return context
 
     def get_queryset(self):
@@ -138,6 +142,14 @@ class DriverDetailView(LoginRequiredMixin, generic.DetailView):
 class DriverCreateView(LoginRequiredMixin, generic.CreateView):
     model = Driver
     form_class = DriverCreationForm
+    success_url = reverse_lazy("taxi:driver-list")
+
+
+class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """Загальне редагування даних водія (НЕ ліцензія)."""
+    model = Driver
+    fields = ["first_name", "last_name"]
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -153,11 +165,12 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 @login_required
 def toggle_assign_to_car(request, pk):
-    driver = Driver.objects.get(id=request.user.id)
-    if (
-        Car.objects.get(id=pk) in driver.cars.all()
-    ):  # probably could check if car exists
-        driver.cars.remove(pk)
+    driver = cast(Driver, request.user)
+    car = get_object_or_404(Car, pk=pk)
+
+    if driver.cars.filter(pk=pk).exists():
+        driver.cars.remove(car)
     else:
-        driver.cars.add(pk)
+        driver.cars.add(car)
+
     return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))

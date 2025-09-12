@@ -1,75 +1,81 @@
+# taxi/tests/test_models.py
 from django.db import IntegrityError
 from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth import get_user_model
 
-from taxi.models import Manufacturer, Driver, Car
+from taxi.models import Manufacturer, Car
+
+User = get_user_model()
 
 
 class ManufacturerModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.manufacturer = Manufacturer.objects.create(
             name="TestName",
-            country="Ukraine"
+            country="Ukraine",
         )
 
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.get(pk=1)
+        # Використовуємо посилання, збережене на класі (без pk=1)
+        self.manufacturer = self.__class__.manufacturer
 
     def test_label_of_name(self):
         name_label = self.manufacturer._meta.get_field("name").verbose_name
         self.assertEqual(name_label, "name")
 
     def test_label_of_country(self):
-        country_label = (self.manufacturer.
-                         _meta.get_field("country").verbose_name)
+        country_label = self.manufacturer._meta.get_field(
+            "country"
+        ).verbose_name
         self.assertEqual(country_label, "country")
 
     def test_name_must_be_unique(self):
         with self.assertRaises(IntegrityError):
-            Manufacturer.objects.create(
-                name="TestName",
-                country="UK"
-            )
+            Manufacturer.objects.create(name="TestName", country="UK")
 
     def test_max_length_of_name(self):
-        name_length = (self.manufacturer.
-                       _meta.get_field("name").max_length)
+        name_length = self.manufacturer._meta.get_field(
+            "name"
+        ).max_length
         self.assertEqual(name_length, 255)
 
     def test_max_length_of_country(self):
-        country_length = (self.manufacturer.
-                          _meta.get_field("country").max_length)
+        country_length = self.manufacturer._meta.get_field(
+            "country"
+        ).max_length
         self.assertEqual(country_length, 255)
 
     def test_object_str_is_name_and_country(self):
-        f_str = (f"{self.manufacturer.name} "
-                 f"{self.manufacturer.country}")
+        f_str = f"{self.manufacturer.name} {self.manufacturer.country}"
         self.assertEqual(f_str, "TestName Ukraine")
 
 
 class DriverModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
-        Driver.objects.create(
+        cls.driver = User.objects.create_user(
             username="user123",
             first_name="Ivan",
             last_name="Ivanov",
-            license_number="ABF23454"
+            license_number="ABF23454",
+            password="x",
         )
 
     def setUp(self):
-        self.driver = Driver.objects.get(pk=1)
+        self.driver = self.__class__.driver
 
     def test_label_of_license_number(self):
-        license_label = (self.driver.
-                         _meta.get_field("license_number").verbose_name)
+        license_label = self.driver._meta.get_field(
+            "license_number"
+        ).verbose_name
         self.assertEqual(license_label, "license number")
 
     def test_max_length_of_license_number(self):
-        license_max = (self.driver.
-                       _meta.get_field("license_number").max_length)
+        license_max = self.driver._meta.get_field(
+            "license_number"
+        ).max_length
         self.assertEqual(license_max, 255)
 
     def test_str_name_of_driver(self):
@@ -79,37 +85,43 @@ class DriverModelTest(TestCase):
         self.assertEqual(str_name, "user123 (Ivan Ivanov)")
 
     def test_absolute_url(self):
-        self.assertEqual(
-            self.driver.get_absolute_url(),
-            "/drivers/1/"
+        expected = reverse(
+            "taxi:driver-detail",
+            kwargs={"pk": self.driver.pk}
         )
+        self.assertEqual(self.driver.get_absolute_url(), expected)
 
 
 class CarModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.manufacturer = Manufacturer.objects.create(
             name="TestName",
             country="UK"
         )
-        cls.driver1 = Driver.objects.create(
+        cls.driver1 = User.objects.create_user(
             username="user12",
             first_name="Ivan",
             last_name="Ivanov",
-            license_number="ACF22222"
+            license_number="ACF22222",
+            password="x",
         )
-        cls.driver2 = Driver.objects.create(
+        cls.driver2 = User.objects.create_user(
             username="user13",
             first_name="Andriy",
             last_name="Andriev",
-            license_number="ACD22122"
+            license_number="ACD22122",
+            password="x",
         )
         cls.car = Car.objects.create(
             model="TestModel",
             manufacturer=cls.manufacturer
         )
         cls.car.drivers.add(cls.driver1, cls.driver2)
+
+    def setUp(self):
+        self.manufacturer = self.__class__.manufacturer
+        self.car = self.__class__.car
 
     def test_label_of_model(self):
         model_label = self.car._meta.get_field("model").verbose_name
@@ -120,10 +132,11 @@ class CarModelTest(TestCase):
         self.assertEqual(model_length, 255)
 
     def test_cascade_deleting(self):
+        # Після видалення виробника — пов’язані авто повинні зникнути
         self.manufacturer.delete()
-        cars = Car.objects.all()
-        self.assertEqual(cars.count(), 0)
+        self.assertFalse(Car.objects.filter(
+            manufacturer=self.manufacturer
+        ).exists())
 
     def test_str_name_of_car(self):
-        str_name = self.car.model
-        self.assertEqual(str_name, "TestModel")
+        self.assertEqual(self.car.__str__(), "TestModel")

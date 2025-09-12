@@ -1,3 +1,4 @@
+# taxi/urls.py
 from django.urls import path
 
 from .views import (
@@ -10,6 +11,7 @@ from .views import (
     DriverListView,
     DriverDetailView,
     DriverCreateView,
+    DriverUpdateView,
     DriverLicenseUpdateView,
     DriverDeleteView,
     ManufacturerListView,
@@ -53,12 +55,18 @@ urlpatterns = [
     ),
     path("drivers/", DriverListView.as_view(), name="driver-list"),
     path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
+        "drivers/<int:pk>/",
+        DriverDetailView.as_view(),
+        name="driver-detail"
     ),
-    path("drivers/create/", DriverCreateView.as_view(), name="driver-create"),
+    path(
+        "drivers/create/",
+        DriverCreateView.as_view(),
+        name="driver-create"
+    ),
     path(
         "drivers/<int:pk>/update/",
-        DriverLicenseUpdateView.as_view(),
+        DriverUpdateView.as_view(),
         name="driver-update",
     ),
     path(
