@@ -52,7 +52,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
-        context["search_form"] = ManufacturerSearchForm
+        context["search_form"] = ManufacturerSearchForm()
         return context
 
 
@@ -78,7 +78,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        qs = Car.objects.select_related("manufacturer")
+        qs = Car.objects.select_related(
+            "manufacturer"
+        ).order_by("id")
         model = self.request.GET.get("model")
         if model:
             return qs.filter(model__icontains=model)
@@ -86,7 +88,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
-        context["search_form"] = CarSearchForm
+        context["search_form"] = CarSearchForm()
         return context
 
 
@@ -117,14 +119,14 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
-        context["search_form"] = DriverSearchForm
+        context["search_form"] = DriverSearchForm()
         return context
 
     def get_queryset(self):
         qs = super().get_queryset()
-        title = self.request.GET.get("username")
-        if title:
-            qs = qs.filter(title__icontains=title)
+        username = self.request.GET.get("username")
+        if username:
+            qs = qs.filter(username__icontains=username)
         return qs
 
 
@@ -146,7 +148,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required

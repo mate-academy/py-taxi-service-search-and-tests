@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
@@ -8,7 +7,7 @@ from taxi.models import Car, Driver
 
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
+        queryset=Driver.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         required=False
     )
@@ -42,7 +41,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
 def validate_license_number(
     license_number,
-):  # regex validation is also possible here
+):
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
     elif not license_number[:3].isupper() or not license_number[:3].isalpha():
@@ -60,7 +59,7 @@ class DriverSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Search by title"
+                "placeholder": "Search by username"
             }
         )
     )
