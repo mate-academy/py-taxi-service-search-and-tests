@@ -63,7 +63,7 @@ class DriverSearchFormTests(TestCase):
         self.assertEqual(form.fields["title"].label, "")
         self.assertEqual(
             form.fields["title"].widget.attrs.get("placeholder"),
-            "Search by driver",
+            "Search by driver username",
         )
 
 
