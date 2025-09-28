@@ -1,6 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Driver, Car, Manufacturer
+
+from .models import Car, Driver
+
+
+@admin.register(Car)
+class CarAdmin(admin.ModelAdmin):
+    search_fields = ("model",)
+    list_filter = ("manufacturer",)
 
 
 @admin.register(Driver)
@@ -23,12 +30,3 @@ class DriverAdmin(UserAdmin):
             ),
         )
     )
-
-
-@admin.register(Car)
-class CarAdmin(admin.ModelAdmin):
-    search_fields = ("model",)
-    list_filter = ("manufacturer",)
-
-
-admin.site.register(Manufacturer)
