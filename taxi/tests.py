@@ -1,8 +1,10 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls.base import reverse
+from django.urls import reverse
 
-from taxi.forms import CarSearchForm, DriverSearchForm
+from taxi.forms import CarSearchForm, DriverSearchForm, ManufacturerSearchForm
 from taxi.models import Car, Manufacturer
 
 
@@ -179,6 +181,10 @@ class TestManufacturerSearch(TestCase):
     def test_search_form_in_context(self):
         response = self.client.get(self.url)
         self.assertIn("search_form", response.context)
+        self.assertIsInstance(
+            response.context["search_form"],
+            ManufacturerSearchForm
+        )
 
     def test_search_all_model(self):
         response = self.client.get(self.url, {"name": ""}, )

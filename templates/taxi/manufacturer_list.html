@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <h1>
@@ -9,7 +9,7 @@
     </a>
   </h1>
   <form action="" method="get" class="form-inline">
-    {{ search_form|crispy }}
+    {% crispy search_form %}
     <input type="Submit" class="btn btn-secondary" value="🔍">
   </form>
   
