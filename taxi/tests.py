@@ -73,6 +73,14 @@ class TestCarSearch(TestCase):
         self.assertIn("M4", models)
         self.assertIn("M5", models)
 
+    def test_search_no_models(self):
+        response = self.client.get(self.url, {"model": "Q"}, )
+        cars = response.context["car_list"]
+        self.assertEqual(len(cars), 0)
+        models = [car.model for car in cars]
+        self.assertNotIn("M4", models)
+        self.assertNotIn("M5", models)
+
 
 class TestDriverSearch(TestCase):
     def setUp(self):
@@ -132,6 +140,14 @@ class TestDriverSearch(TestCase):
         self.assertEqual(len(cont), 1)
         self.assertEqual("Garry", cont[0].username)
 
+    def test_search_no_drivers(self):
+        response = self.client.get(self.url, {"username": "F"}, )
+        drivers = response.context["driver_list"]
+        self.assertEqual(len(drivers), 0)
+        usernames = [d.username for d in drivers]
+        self.assertNotIn("Jake", usernames)
+        self.assertNotIn("Garry", usernames)
+
 
 class TestManufacturerSearch(TestCase):
     def setUp(self):
@@ -178,3 +194,11 @@ class TestManufacturerSearch(TestCase):
         manufacturers1 = [i.name for i in manufacturers]
         self.assertIn("BMW", manufacturers1)
         self.assertIn("Mercedes", manufacturers1)
+
+    def test_search_no_manufacturers(self):
+        response = self.client.get(self.url, {"name": "F"}, )
+        manufacturers = response.context["manufacturer_list"]
+        self.assertEqual(len(manufacturers), 0)
+        names = [m.name for m in manufacturers]
+        self.assertNotIn("BMW", names)
+        self.assertNotIn("Toyota", names)
