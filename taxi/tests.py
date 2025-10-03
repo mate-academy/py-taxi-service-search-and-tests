@@ -1,5 +1,3 @@
-import json
-
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -183,3 +181,138 @@ class FormTest(TestCase):
             form.data["license_number"],
             form_data["license_number"]
         )
+
+
+class ManufacturerSearchViewTest(TestCase):
+    def setUp(self):
+        self.m1 = Manufacturer.objects.create(name="Toyota", country="Japan")
+        self.m2 = Manufacturer.objects.create(name="Ford", country="USA")
+        self.m3 = Manufacturer.objects.create(name="Tesla", country="USA")
+        self.user = get_user_model().objects.create_user(
+            username="test_username",
+            password="test_password",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_returns_filtered_results(self):
+        url = reverse("taxi:manufacturer-list")
+        response = self.client.get(url, {"name": "Tes"})
+
+        self.assertEqual(response.status_code, 200)
+        manufacturer_list = response.context["manufacturer_list"]
+        self.assertIn(self.m3, manufacturer_list)
+        self.assertNotIn(self.m1, manufacturer_list)
+        self.assertNotIn(self.m2, manufacturer_list)
+
+    def test_search_empty_returns_all(self):
+        url = reverse("taxi:manufacturer-list")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        manufacturer_list = response.context["manufacturer_list"]
+        self.assertIn(self.m1, manufacturer_list)
+        self.assertIn(self.m2, manufacturer_list)
+        self.assertIn(self.m3, manufacturer_list)
+
+    def test_search_form_in_context(self):
+        url = reverse("taxi:manufacturer-list")
+        response = self.client.get(url, {"name": "BMW"})
+
+        self.assertEqual(response.status_code, 200)
+        search_form = response.context["search_form"]
+        self.assertEqual(search_form.initial["name"], "BMW")
+
+
+class CarSearchViewTest(TestCase):
+    def setUp(self):
+        self.m1 = Manufacturer.objects.create(name="Toyota", country="Japan")
+        self.m2 = Manufacturer.objects.create(name="Ford", country="USA")
+        self.m3 = Manufacturer.objects.create(name="Tesla", country="USA")
+        self.c1 = Car.objects.create(model="model_1", manufacturer=self.m1)
+        self.c2 = Car.objects.create(model="model_2", manufacturer=self.m2)
+        self.c3 = Car.objects.create(model="model_3", manufacturer=self.m3)
+        self.user = get_user_model().objects.create_user(
+            username="test_username",
+            password="test_password",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_returns_filtered_results(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, {"model": "model_1"})
+
+        self.assertEqual(response.status_code, 200)
+        car_list = response.context["car_list"]
+        self.assertIn(self.c1, car_list)
+        self.assertNotIn(self.c2, car_list)
+        self.assertNotIn(self.c3, car_list)
+
+    def test_search_empty_returns_all(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        car_list = response.context["car_list"]
+        self.assertIn(self.c1, car_list)
+        self.assertIn(self.c2, car_list)
+        self.assertIn(self.c3, car_list)
+
+    def test_search_form_in_context(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, {"model": "model_4"})
+
+        self.assertEqual(response.status_code, 200)
+        search_form = response.context["search_form"]
+        self.assertEqual(search_form.initial["model"], "model_4")
+
+
+class DriverSearchViewTest(TestCase):
+    def setUp(self):
+        self.d1 = get_user_model().objects.create_user(
+            username="username_1",
+            password="password_1",
+            license_number="license_number_1",
+        )
+        self.d2 = get_user_model().objects.create_user(
+            username="username_2",
+            password="password_2",
+            license_number="license_number_2",
+        )
+        self.d3 = get_user_model().objects.create_user(
+            username="username_3",
+            password="password_3",
+            license_number="license_number_3",
+        )
+        self.user = get_user_model().objects.create_user(
+            username="test_username",
+            password="test_password",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_returns_filtered_results(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url, {"username": "username_1"})
+
+        self.assertEqual(response.status_code, 200)
+        driver_list = response.context["driver_list"]
+        self.assertIn(self.d1, driver_list)
+        self.assertNotIn(self.d2, driver_list)
+        self.assertNotIn(self.d3, driver_list)
+
+    def test_search_empty_returns_all(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        driver_list = response.context["driver_list"]
+        self.assertIn(self.d1, driver_list)
+        self.assertIn(self.d2, driver_list)
+        self.assertIn(self.d3, driver_list)
+
+    def test_search_form_in_context(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url, {"username": "username_4"})
+
+        self.assertEqual(response.status_code, 200)
+        search_form = response.context["search_form"]
+        self.assertEqual(search_form.initial["username"], "username_4")
