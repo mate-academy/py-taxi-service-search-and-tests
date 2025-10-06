@@ -43,8 +43,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(self, manufacturer_name=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
+        manufacturer_name = self.request.GET.get("name", "")
         context["search_form"] = ManufacturerSearchForm(
             initial={"name": manufacturer_name}
         )
@@ -82,8 +83,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
 
-    def get_context_data(self, car_model=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
+        car_model = self.request.GET.get("model", "")
         context["search_form"] = CarSearchForm(
             initial={"model": car_model}
         )
@@ -123,7 +125,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
-    def get_context_data(self, username=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["username"] = username
@@ -158,7 +160,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
