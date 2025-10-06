@@ -51,7 +51,9 @@ class ManufacturerListViewTest(TestCase):
         Manufacturer.objects.create(name="Audi", country="Germany")
         Manufacturer.objects.create(name="Mercedes", country="Germany")
 
-        response = self.client.get(MANUFACTURER_URL, {"name": "NonExistentManufacturer"})
+        response = self.client.get(
+            MANUFACTURER_URL,
+            {"name": "NonExistentManufacturer"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["manufacturer_list"]), 0)
 
@@ -100,7 +102,9 @@ class CarListViewTest(TestCase):
         """Test that non-matching search query returns no results"""
         Car.objects.create(model="BMW X5", manufacturer=self.manufacturer)
         Car.objects.create(model="Audi A4", manufacturer=self.manufacturer)
-        Car.objects.create(model="Mercedes C-Class", manufacturer=self.manufacturer)
+        Car.objects.create(
+            model="Mercedes C-Class",
+            manufacturer=self.manufacturer)
 
         response = self.client.get(CAR_URL, {"model": "NonExistentModel"})
         self.assertEqual(response.status_code, 200)
@@ -144,16 +148,21 @@ class DriverListViewTest(TestCase):
             username="john_doe", password="test123", license_number="LIC00001"
         )
         Driver.objects.create_user(
-            username="jane_smith", password="test123", license_number="LIC00002"
+            username="jane_smith",
+            password="test123",
+            license_number="LIC00002"
         )
         Driver.objects.create_user(
-            username="bob_johnson", password="test123", license_number="LIC00003"
+            username="bob_johnson",
+            password="test123",
+            license_number="LIC00003"
         )
 
         response = self.client.get(DRIVER_URL, {"username": "john"})
         # Only "john_doe" contains "john" in username
         self.assertEqual(len(response.context["driver_list"]), 2)
-        self.assertEqual(response.context["driver_list"][0].username, "john_doe")
+        self.assertEqual(
+            response.context["driver_list"][0].username, "john_doe")
 
     def test_get_queryset_without_search_returns_all(self):
         Driver.objects.create_user(
@@ -173,13 +182,19 @@ class DriverListViewTest(TestCase):
             username="john_doe", password="test123", license_number="LIC00001"
         )
         Driver.objects.create_user(
-            username="jane_smith", password="test123", license_number="LIC00002"
+            username="jane_smith",
+            password="test123",
+            license_number="LIC00002"
         )
         Driver.objects.create_user(
-            username="bob_johnson", password="test123", license_number="LIC00003"
+            username="bob_johnson",
+            password="test123",
+            license_number="LIC00003"
         )
 
-        response = self.client.get(DRIVER_URL, {"username": "NonExistentUsername"})
+        response = self.client.get(
+            DRIVER_URL,
+            {"username": "NonExistentUsername"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["driver_list"]), 0)
 
@@ -198,7 +213,9 @@ class DriverDetailViewTest(TestCase):
 
     def test_prefetch_related_optimization(self):
         driver = Driver.objects.create_user(
-            username="testdriver", password="test123", license_number="LIC00004"
+            username="testdriver",
+            password="test123",
+            license_number="LIC00004"
         )
         car1 = Car.objects.create(
             model="Car 1",
