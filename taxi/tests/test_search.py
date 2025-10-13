@@ -35,6 +35,27 @@ class SearchTests(TestCase):
         res = self.client.get(f"{url}?model=TestCarA")
         self.assertEqual(list(res.context["car_list"]), [car_1, car_2])
 
+    def test_car_return_empty_search(self):
+        manufacturer_1 = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
+        Car.objects.create(
+            model="TestCarA",
+            manufacturer=manufacturer_1,
+        )
+        Car.objects.create(
+            model="TestCarA",
+            manufacturer=manufacturer_1,
+        )
+        Car.objects.create(
+            model="TestCarB",
+            manufacturer=manufacturer_1,
+        )
+        url = reverse("taxi:car-list")
+        res = self.client.get(f"{url}?model=TestCarG")
+        self.assertEqual(list(res.context["car_list"]), [])
+
     def test_manufacturer_correct_search(self):
         manufacturer_1 = Manufacturer.objects.create(
             name="BMWT",
@@ -54,6 +75,24 @@ class SearchTests(TestCase):
             list(res.context["manufacturer_list"]),
             [manufacturer_1, manufacturer_2]
         )
+    def test_manufacturer_return_empty_search(self):
+        Manufacturer.objects.create(
+            name="BMWT",
+            country="Germany"
+        )
+        Manufacturer.objects.create(
+            name="Audi",
+            country="Germany"
+        )
+        Manufacturer.objects.create(
+            name="OpelT",
+            country="Germany"
+        )
+        url = reverse("taxi:manufacturer-list")
+        res = self.client.get(f"{url}?name=G")
+        self.assertEqual(list(res.context["manufacturer_list"]), []
+        )
+
 
     def test_driver_correct_search(self):
         driver_1 = get_user_model().objects.create_user(
@@ -76,4 +115,27 @@ class SearchTests(TestCase):
         self.assertEqual(
             list(res.context["driver_list"]),
             [driver_1, driver_2]
+        )
+
+    def test_driver_return_empty_search(self):
+        get_user_model().objects.create_user(
+            username="John",
+            password="testuser1",
+            license_number="TES12345"
+        )
+        get_user_model().objects.create_user(
+            username="Tom",
+            password="testuser2",
+            license_number="TES12346"
+        )
+        get_user_model().objects.create_user(
+            username="Jeremmy",
+            password="testuser3",
+            license_number="TES12347"
+        )
+        url = reverse("taxi:driver-list")
+        res = self.client.get(f"{url}?username=g")
+        self.assertEqual(
+            list(res.context["driver_list"]),
+            []
         )
