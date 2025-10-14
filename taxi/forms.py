@@ -55,10 +55,19 @@ def validate_license_number(
 class DriverUsernameSearchForm(forms.Form):
     username = forms.CharField(max_length=255, required=False)
 
+    def clean_username(self):
+        return self.cleaned_data.get("username", "").strip()
+
 
 class CarModelSearchForm(forms.Form):
     model = forms.CharField(max_length=255, required=False)
 
+    def clean_model(self):
+        return self.cleaned_data.get("model", "").strip()
+
 
 class ManufacturerNameSearchForm(forms.Form):
     name = forms.CharField(max_length=255, required=False)
+
+    def clean_name(self):
+        return self.cleaned_data.get("name", "").strip()

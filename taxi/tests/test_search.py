@@ -34,6 +34,13 @@ class SearchTests(TestCase):
         url = reverse("taxi:car-list")
         res = self.client.get(f"{url}?model=TestCarA")
         self.assertEqual(list(res.context["car_list"]), [car_1, car_2])
+        self.assertEqual(res.wsgi_request.GET.get("model"), "TestCarA")
+
+        new_url = reverse("taxi:car-list")
+        new_res = self.client.get(new_url)
+        self.assertEqual(
+            list(new_res.context["car_list"]),
+            list(Car.objects.all()))
 
     def test_car_return_empty_search(self):
         manufacturer_1 = Manufacturer.objects.create(
@@ -75,6 +82,14 @@ class SearchTests(TestCase):
             list(res.context["manufacturer_list"]),
             [manufacturer_1, manufacturer_2]
         )
+        self.assertEqual(res.wsgi_request.GET.get("name"), "t")
+
+        new_url = reverse("taxi:manufacturer-list")
+        new_res = self.client.get(new_url)
+        self.assertEqual(
+            list(new_res.context["manufacturer_list"]),
+            list(Manufacturer.objects.all()))
+
     def test_manufacturer_return_empty_search(self):
         Manufacturer.objects.create(
             name="BMWT",
@@ -90,9 +105,7 @@ class SearchTests(TestCase):
         )
         url = reverse("taxi:manufacturer-list")
         res = self.client.get(f"{url}?name=G")
-        self.assertEqual(list(res.context["manufacturer_list"]), []
-        )
-
+        self.assertEqual(list(res.context["manufacturer_list"]), [])
 
     def test_driver_correct_search(self):
         driver_1 = get_user_model().objects.create_user(
@@ -116,6 +129,13 @@ class SearchTests(TestCase):
             list(res.context["driver_list"]),
             [driver_1, driver_2]
         )
+        self.assertEqual(res.wsgi_request.GET.get("username"), "o")
+
+        new_url = reverse("taxi:driver-list")
+        new_res = self.client.get(new_url)
+        self.assertEqual(
+            list(new_res.context["driver_list"]),
+            list(get_user_model().objects.all()))
 
     def test_driver_return_empty_search(self):
         get_user_model().objects.create_user(
