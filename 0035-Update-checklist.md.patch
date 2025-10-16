@@ -1,0 +1,41 @@
+From 96787f179107c255627723ff8ac49b65f9153d22 Mon Sep 17 00:00:00 2001
+From: Yaroslav <104159378+Y-Havryliv@users.noreply.github.com>
+Date: Thu, 10 Nov 2022 10:37:35 +0200
+Subject: [PATCH 35/52] Update checklist.md
+
+---
+ checklist.md | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
+
+diff --git a/checklist.md b/checklist.md
+index 7008fee..f86afd7 100644
+--- a/checklist.md
++++ b/checklist.md
+@@ -7,23 +7,7 @@ Make sure you don't push db files (files with `.sqlite`, `.db3`, etc. extension)
+ ## Don't forget to attach all screenshots of created/modified pages.
+ 
+ ## Code Efficiency
+-1. Use `UserCreationForm` while creating user.
+-
+-Good example:
+-
+-```python
+-class DriverCreateForm(UserCreationForm):
+-    pass
+-```
+-
+-Bad example:
+-
+-```python
+-class DriverCreateForm(forms.ModelForm):
+-    pass
+-```
+-
+-2. Don't override `template_name`, `context_object_name` and so on if they are the same as default ones.
++Don't override `template_name`, `context_object_name` and so on if they are the same as default ones.
+ 
+ ## Code Style
+ 1. Make sure you've added a blank line at the end to all your files including `.css`, `.html` and `.gitignore`.
+-- 
+2.45.1.windows.1
+

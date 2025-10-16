@@ -1,0 +1,108 @@
+From df3cca7a0ad2d070467088e26e8bc83d93b3a1b2 Mon Sep 17 00:00:00 2001
+From: Dmytro Svirsa <104418771+DmytroSvirsa@users.noreply.github.com>
+Date: Mon, 29 Aug 2022 14:46:12 +0300
+Subject: [PATCH 27/52] from django.contrib.auth import get_user_model
+
+---
+ tests/test_taxi_service_forms.py | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/tests/test_taxi_service_forms.py b/tests/test_taxi_service_forms.py
+index 0a36b7d..25ac02f 100644
+--- a/tests/test_taxi_service_forms.py
++++ b/tests/test_taxi_service_forms.py
+@@ -36,38 +36,38 @@ class CarTest(TestCase):
+         )
+ 
+     def test_update_car(self):
+-        self.car = Car.objects.create(
++        car = Car.objects.create(
+             model="Continental",
+             manufacturer=self.manufacturer,
+         )
+         response = self.client.post(
+             reverse(
+                 "taxi:car-update",
+-                kwargs={"pk": self.car.id}),
++                kwargs={"pk": car.id}),
+             {
+-                "pk": self.car.id,
++                "pk": car.id,
+                 "model": "Not Continental",
+                 "manufacturer": self.manufacturer.id,
+                 "drivers": [self.user.id]
+             }
+         )
+-        Car.objects.get(id=self.car.id).refresh_from_db()
++        Car.objects.get(id=car.id).refresh_from_db()
+         self.assertEqual(response.status_code, 302)
+         self.assertEqual(
+-            Car.objects.get(id=self.car.id).model,
++            Car.objects.get(id=car.id).model,
+             "Not Continental"
+         )
+ 
+     def test_delete_car(self):
+-        self.car = Car.objects.create(
++        car = Car.objects.create(
+             model="Continental",
+             manufacturer=self.manufacturer,
+         )
+         response = self.client.post(
+-            reverse("taxi:car-delete", kwargs={"pk": self.car.id})
++            reverse("taxi:car-delete", kwargs={"pk": car.id})
+         )
+         self.assertEqual(response.status_code, 302)
+-        self.assertFalse(Car.objects.filter(id=self.car.id).exists())
++        self.assertFalse(Car.objects.filter(id=car.id).exists())
+ 
+ 
+ class ManufacturerTest(TestCase):
+@@ -95,37 +95,37 @@ class ManufacturerTest(TestCase):
+         self.assertEqual(Manufacturer.objects.get(id=1).name, "Lincoln")
+ 
+     def test_update_manufacturer(self):
+-        self.manufacturer = Manufacturer.objects.create(
++        manufacturer = Manufacturer.objects.create(
+             name="Lincoln",
+             country="USA",
+         )
+         response = self.client.post(
+             reverse(
+                 "taxi:manufacturer-update",
+-                kwargs={"pk": self.manufacturer.id}
++                kwargs={"pk": manufacturer.id}
+             ),
+             {
+                 "name": "Not Lincoln",
+                 "country": "USA"
+             }
+         )
+-        Manufacturer.objects.get(id=self.manufacturer.id).refresh_from_db()
++        Manufacturer.objects.get(id=manufacturer.id).refresh_from_db()
+         self.assertEqual(response.status_code, 302)
+         self.assertEqual(
+-            Manufacturer.objects.get(id=self.manufacturer.id).name,
++            Manufacturer.objects.get(id=manufacturer.id).name,
+             "Not Lincoln"
+         )
+ 
+     def test_delete_manufacturer(self):
+-        self.manufacturer = Manufacturer.objects.create(
++        manufacturer = Manufacturer.objects.create(
+             name="Lincoln",
+             country="USA",
+         )
+         response = self.client.post(
+             reverse("taxi:manufacturer-delete",
+-                    kwargs={"pk": self.manufacturer.id})
++                    kwargs={"pk": manufacturer.id})
+         )
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(
+-            Manufacturer.objects.filter(id=self.manufacturer.id).exists()
++            Manufacturer.objects.filter(id=manufacturer.id).exists()
+         )
+-- 
+2.45.1.windows.1
+

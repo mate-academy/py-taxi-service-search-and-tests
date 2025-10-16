@@ -1,0 +1,64 @@
+From 30672510ef12588a37586dc26883e5811007dde4 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 01:03:38 +0300
+Subject: [PATCH 48/52] Changed DriverLicenseUpdateForm
+
+---
+ taxi/forms.py | 2 +-
+ taxi/views.py | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+index d8a2827..ae8c8df 100644
+--- a/taxi/forms.py
++++ b/taxi/forms.py
+@@ -35,7 +35,7 @@ custom_code_validator = RegexValidator(
+ )
+ 
+ 
+-class LicenseForm(forms.ModelForm):
++class DriverLicenseUpdateForm(forms.ModelForm):
+     license_number = forms.CharField(
+         max_length=8,
+         validators=[custom_code_validator],
+diff --git a/taxi/views.py b/taxi/views.py
+index 00c6288..74281f0 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
+ from django.urls import reverse, reverse_lazy
+ from django.views import generic
+ 
+-from taxi.forms import DriverForm, CarForm, LicenseForm
++from taxi.forms import DriverForm, CarForm, DriverLicenseUpdateForm
+ from taxi.models import Driver, Manufacturer, Car, Customer
+ 
+ 
+@@ -123,7 +123,7 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
+ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
+     model = Driver
+     form_class = DriverForm
+-    second_form_class = LicenseForm
++    second_form_class = DriverLicenseUpdateForm
+ 
+     def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+@@ -135,13 +135,13 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
+ 
+ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
+     model = Driver
+-    form_class = LicenseForm
++    form_class = DriverLicenseUpdateForm
+ 
+ 
+ class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
+     model = Driver
+     form_class = DriverForm
+-    second_form_class = LicenseForm
++    second_form_class = DriverLicenseUpdateForm
+ 
+ 
+ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
+-- 
+2.45.1.windows.1
+

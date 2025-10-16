@@ -1,0 +1,26 @@
+From 13dedf5f6cc98b9b6908814c314c51d953f35447 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 01:00:57 +0300
+Subject: [PATCH 47/52] Changed form.py
+
+---
+ taxi/forms.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+index 001cc50..d8a2827 100644
+--- a/taxi/forms.py
++++ b/taxi/forms.py
+@@ -29,7 +29,8 @@ class CarForm(forms.ModelForm):
+ 
+ custom_code_validator = RegexValidator(
+     regex=r"^[A-Z]{3}[0-9]{5}$",
+-    message="Enter exactly 8 characters: 3 uppercase letters followed by 5 digits.",
++    message="Enter exactly 8 characters: "
++            "3 uppercase letters followed by 5 digits.",
+     code="invalid_code",
+ )
+ 
+-- 
+2.45.1.windows.1
+

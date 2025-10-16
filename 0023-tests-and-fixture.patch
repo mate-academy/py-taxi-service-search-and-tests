@@ -1,0 +1,402 @@
+From a6d29b0c5a7a433ed160baf5d6fba746660d0d65 Mon Sep 17 00:00:00 2001
+From: Dmytro Svirsa <104418771+DmytroSvirsa@users.noreply.github.com>
+Date: Mon, 29 Aug 2022 09:59:22 +0300
+Subject: [PATCH 23/52] tests and fixture
+
+---
+ .github/workflows/test.yml |  28 +++++
+ README.md                  |   8 ++
+ taxi_service_db_data.json  | 224 +++++++++++++++++++++++++++++++++++++
+ tests/__init__.py          |   0
+ tests/test_taxi_view.py    |  89 +++++++++++++++
+ 5 files changed, 349 insertions(+)
+ create mode 100644 .github/workflows/test.yml
+ create mode 100644 taxi_service_db_data.json
+ create mode 100644 tests/__init__.py
+ create mode 100644 tests/test_taxi_view.py
+
+diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+new file mode 100644
+index 0000000..d9e4e5d
+--- /dev/null
++++ b/.github/workflows/test.yml
+@@ -0,0 +1,28 @@
++name: Test
++
++on:
++  pull_request:
++    branches:
++      - "master"
++
++jobs:
++  test:
++    runs-on: ubuntu-latest
++    timeout-minutes: 10
++
++    steps:
++      - name: Checkout repo
++        uses: actions/checkout@v2
++
++      - name: Set Up Python 3.10
++        uses: actions/setup-python@v2
++        with:
++          python-version: "3.10"
++
++      - name: Install requirements
++        run: |
++          python -m pip install --upgrade pip
++          pip install -r requirements.txt
++      - name: Run tests
++        timeout-minutes: 5
++        run: python manage.py test
+diff --git a/README.md b/README.md
+index 81de1bb..ff3a449 100644
+--- a/README.md
++++ b/README.md
+@@ -2,7 +2,15 @@
+ 
+ - Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start.
+ - Make sure that you change the settings for [html-files](https://github.com/mate-academy/py-task-guideline/blob/main/html_settings/README.MD).
++- Use the following command to load prepared data from fixture to test and debug your code:
++  
++`python manage.py loaddata taxi_service_db_data.json`
+ 
++- After loading data from fixture you can use following superuser (or create another one by yourself):
++  - Login: `admin.user`
++  - Password: `1qazcde3`
++
++Feel free to add more data using admin panel, if needed.
+ 
+ In this task, you will implement a custom form and django built-in forms to create,
+ update or delete content from the site.
+diff --git a/taxi_service_db_data.json b/taxi_service_db_data.json
+new file mode 100644
+index 0000000..f8efce2
+--- /dev/null
++++ b/taxi_service_db_data.json
+@@ -0,0 +1,224 @@
++[
++  {
++    "model": "taxi.manufacturer",
++    "pk": 1,
++    "fields": {
++      "name": "Lincoln",
++      "country": "USA"
++    }
++  },
++  {
++    "model": "taxi.manufacturer",
++    "pk": 2,
++    "fields": {
++      "name": "Ford Motor Company",
++      "country": "USA"
++    }
++  },
++  {
++    "model": "taxi.manufacturer",
++    "pk": 3,
++    "fields": {
++      "name": "General Motors",
++      "country": "USA"
++    }
++  },
++  {
++    "model": "taxi.manufacturer",
++    "pk": 4,
++    "fields": {
++      "name": "Toyota",
++      "country": "Japan"
++    }
++  },
++  {
++    "model": "taxi.manufacturer",
++    "pk": 5,
++    "fields": {
++      "name": "Suzuki",
++      "country": "Japan"
++    }
++  },
++  {
++    "model": "taxi.manufacturer",
++    "pk": 6,
++    "fields": {
++      "name": "Mitsubishi",
++      "country": "Japan"
++    }
++  },
++  {
++    "model": "taxi.driver",
++    "pk": 1,
++    "fields": {
++      "password": "pbkdf2_sha256$320000$6uM28XWOFX6ewyloJzjqmt$L+ZhofPylneoaL2iZS4sZu4ZMUNb4oIevfAdzOMn/eE=",
++      "last_login": "2022-08-08T14:14:03Z",
++      "is_superuser": true,
++      "username": "admin.user",
++      "first_name": "Admin",
++      "last_name": "User",
++      "email": "admin.user@taxi.com",
++      "is_staff": true,
++      "is_active": true,
++      "date_joined": "2022-08-08T13:58:29Z",
++      "license_number": "ADM56984",
++      "groups": [],
++      "user_permissions": []
++    }
++  },
++  {
++    "model": "taxi.driver",
++    "pk": 2,
++    "fields": {
++      "password": "pbkdf2_sha256$320000$73Z1Y57bcoscZ37s9rE9v0$4SEQ0TtXwJKzO5/CRdFSrTifatiPjkZ38gM2H8Kqsdg=",
++      "last_login": null,
++      "is_superuser": false,
++      "username": "joyce.byers",
++      "first_name": "Joyce",
++      "last_name": "Byers",
++      "email": "joyce.byers@taxi.com",
++      "is_staff": false,
++      "is_active": true,
++      "date_joined": "2022-08-08T14:17:04Z",
++      "license_number": "JOY26458",
++      "groups": [],
++      "user_permissions": []
++    }
++  },
++  {
++    "model": "taxi.driver",
++    "pk": 3,
++    "fields": {
++      "password": "pbkdf2_sha256$320000$QtPol3T7x9quBj4BnbnVwW$UwT4kihkRfSvQEWEeuqVKwMgis2ikKVZfJDBcQMvOKY=",
++      "last_login": null,
++      "is_superuser": false,
++      "username": "jim.hopper",
++      "first_name": "Jim",
++      "last_name": "Hopper",
++      "email": "jim.hopper@taxi.com",
++      "is_staff": false,
++      "is_active": true,
++      "date_joined": "2022-08-08T14:19:09Z",
++      "license_number": "JIM26531",
++      "groups": [],
++      "user_permissions": []
++    }
++  },
++  {
++    "model": "taxi.driver",
++    "pk": 4,
++    "fields": {
++      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l1$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
++      "last_login": null,
++      "is_superuser": false,
++      "username": "jonathan.byers",
++      "first_name": "Jonathan",
++      "last_name": "Byers",
++      "email": "jonathan.byers@taxi.com",
++      "is_staff": false,
++      "is_active": true,
++      "date_joined": "2022-08-08T14:19:09Z",
++      "license_number": "JON26231",
++      "groups": [],
++      "user_permissions": []
++    }
++  },
++    {
++    "model": "taxi.driver",
++    "pk": 5,
++    "fields": {
++      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l1$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
++      "last_login": null,
++      "is_superuser": false,
++      "username": "dustin.henderson",
++      "first_name": "Dustin",
++      "last_name": "Henderson",
++      "email": "dustin.henderson@taxi.com",
++      "is_staff": false,
++      "is_active": true,
++      "date_joined": "2022-08-09T14:19:09Z",
++      "license_number": "DUS25131",
++      "groups": [],
++      "user_permissions": []
++    }
++  },
++  {
++    "model": "taxi.car",
++    "pk": 1,
++    "fields": {
++      "model": "Lincoln Continental",
++      "manufacturer": 1,
++      "drivers": [
++        3
++      ]
++    }
++  },
++  {
++    "model": "taxi.car",
++    "pk": 2,
++    "fields": {
++      "model": "Toyota Yaris",
++      "manufacturer": 4,
++      "drivers": [
++        2,
++        3
++      ]
++    }
++  },
++  {
++    "model": "taxi.car",
++    "pk": 3,
++    "fields": {
++      "model": "Suzuki Vitara",
++      "manufacturer": 5,
++      "drivers": [
++        1,
++        2,
++        5
++      ]
++    }
++  },
++  {
++    "model": "taxi.car",
++    "pk": 4,
++    "fields": {
++      "model": "Mitsubishi Eclipse",
++      "manufacturer": 6,
++      "drivers": [
++        1
++      ]
++    }
++  },
++  {
++    "model": "taxi.car",
++    "pk": 5,
++    "fields": {
++      "model": "Mitsubishi Lancer",
++      "manufacturer": 6,
++      "drivers": [
++      ]
++    }
++  },
++  {
++    "model": "taxi.car",
++    "pk": 6,
++    "fields": {
++      "model": "Ford Focus",
++      "manufacturer": 2,
++      "drivers": [
++        4
++      ]
++    }
++  },
++    {
++    "model": "taxi.car",
++    "pk": 7,
++    "fields": {
++      "model": "Cadillac Escalade",
++      "manufacturer": 3,
++      "drivers": [
++        5
++      ]
++    }
++  }
++]
+diff --git a/tests/__init__.py b/tests/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/test_taxi_view.py b/tests/test_taxi_view.py
+new file mode 100644
+index 0000000..6715baf
+--- /dev/null
++++ b/tests/test_taxi_view.py
+@@ -0,0 +1,89 @@
++from django.contrib.auth import get_user_model
++from django.test import TestCase
++from django.urls import reverse
++
++from taxi.models import Car, Manufacturer
++
++TestCase.fixtures = ["taxi_service_db_data.json", ]
++
++
++class CarTest(TestCase):
++    def setUp(self) -> None:
++        self.client.force_login(get_user_model().objects.get(id=1))
++
++    def test_update_car(self):
++        response = self.client.post(
++            reverse(
++                "taxi:car-update",
++                kwargs={"pk": 1}),
++            {
++                "pk": 1,
++                "model": "Not Lincoln",
++                "manufacturer": 3,
++                "drivers": [2]
++            }
++        )
++        Car.objects.get(id=1).refresh_from_db()
++        self.assertEqual(response.status_code, 302)
++        self.assertEqual(Car.objects.get(id=1).model, "Not Lincoln")
++
++    def test_create_car(self):
++        response = self.client.post(
++            reverse("taxi:car-create"),
++            {
++                "model": "Not only Lincoln",
++                "manufacturer": 3,
++                "drivers": [
++                    2
++                ]
++            }
++        )
++        self.assertEqual(response.status_code, 302)
++        self.assertEqual(Car.objects.get(id=8).model, "Not only Lincoln")
++
++    def test_delete_car(self):
++        response = self.client.post(
++            reverse("taxi:car-delete", kwargs={"pk": 1})
++        )
++        self.assertEqual(response.status_code, 302)
++        self.assertFalse(Car.objects.filter(id=1).exists())
++
++
++class ManufacturerTest(TestCase):
++    def setUp(self) -> None:
++        self.client.force_login(get_user_model().objects.get(id=1))
++
++    def test_update_manufacturer(self):
++        response = self.client.post(
++            reverse(
++                "taxi:manufacturer-update",
++                kwargs={"pk": 1}
++            ),
++            {
++                "name": "Not Lincoln",
++                "country": "USA"
++            }
++        )
++        Manufacturer.objects.get(id=1).refresh_from_db()
++        self.assertEqual(response.status_code, 302)
++        self.assertEqual(Manufacturer.objects.get(id=1).name, "Not Lincoln")
++
++    def test_create_manufacturer(self):
++        response = self.client.post(
++            reverse(
++                "taxi:manufacturer-create",
++            ),
++            {
++                "name": "Not Lincoln",
++                "country": "USA"
++            }
++        )
++        self.assertEqual(response.status_code, 302)
++        self.assertEqual(Manufacturer.objects.get(id=7).name, "Not Lincoln")
++
++    def test_delete_car(self):
++        response = self.client.post(
++            reverse("taxi:manufacturer-delete", kwargs={"pk": 1})
++        )
++        self.assertEqual(response.status_code, 302)
++        self.assertFalse(Manufacturer.objects.filter(id=1).exists())
+-- 
+2.45.1.windows.1
+

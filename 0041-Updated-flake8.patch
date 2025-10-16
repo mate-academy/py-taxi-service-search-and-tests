@@ -1,0 +1,27 @@
+From d7b8cbbd8958d644cc9a5ba970375331eb8b35e4 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Thu, 11 Sep 2025 20:42:55 +0200
+Subject: [PATCH 41/52] Updated flake8
+
+---
+ .flake8 | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/.flake8 b/.flake8
+index b5381af..8db941e 100644
+--- a/.flake8
++++ b/.flake8
+@@ -4,7 +4,4 @@ ignore = E203, E266, W503, N807, N818, F401
+ max-line-length = 79
+ max-complexity = 18
+ select = B,C,E,F,W,T4,B9,Q0,N8,VNE
+-exclude =
+-    **migrations
+-    venv
+-    tests
+\ No newline at end of file
++exclude = .venv,venv,__pycache__,migrations
+\ No newline at end of file
+-- 
+2.45.1.windows.1
+

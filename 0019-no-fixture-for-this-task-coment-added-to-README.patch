@@ -1,0 +1,26 @@
+From 3bb12cf49fff2ba1162f6db40d7f83b523751d9f Mon Sep 17 00:00:00 2001
+From: Dmytro Svirsa <dima.s@mate.academy>
+Date: Tue, 9 Aug 2022 11:01:22 +0300
+Subject: [PATCH 19/52] no fixture for this task coment added to README
+
+---
+ README.md | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/README.md b/README.md
+index 2b1e991..ec141a1 100644
+--- a/README.md
++++ b/README.md
+@@ -5,6 +5,9 @@
+ In this task, you will implement a custom form and django built-in forms to create,
+ update or delete content from the site.
+ 
++Since this task is the last step before deploying your project, 
++there is no fixture attached to this task, we strongly recommend that you fill it out yourself.
++
+ 1. Implement:
+     - `Create`, `Update`, `Delete` views for `Car`, 
+     - `Create`, `Update`, `Delete` views for `Manufacturer`.
+-- 
+2.45.1.windows.1
+

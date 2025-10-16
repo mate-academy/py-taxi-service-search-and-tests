@@ -1,0 +1,24 @@
+From e0db12c13cf9f9cbc91afc6971acbfa964958432 Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 18:16:46 +0300
+Subject: [PATCH 11/52] Update settings.py
+
+---
+ taxi_service/settings.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+index eea1e53..c2b1646 100644
+--- a/taxi_service/settings.py
++++ b/taxi_service/settings.py
+@@ -40,6 +40,7 @@ INSTALLED_APPS = [
+     "django.contrib.sessions",
+     "django.contrib.messages",
+     "django.contrib.staticfiles",
++    "debug_toolbar",
+     "taxi",
+ ]
+ 
+-- 
+2.45.1.windows.1
+

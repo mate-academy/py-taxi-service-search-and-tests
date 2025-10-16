@@ -1,0 +1,40 @@
+From 15d7b1dc903ebf2b4fe441f75ef16e0ab0c8f462 Mon Sep 17 00:00:00 2001
+From: Dmytro Svirsa <104418771+DmytroSvirsa@users.noreply.github.com>
+Date: Wed, 7 Dec 2022 11:36:48 +0300
+Subject: [PATCH 36/52] Update checklist.md
+
+---
+ checklist.md | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/checklist.md b/checklist.md
+index f86afd7..559d35c 100644
+--- a/checklist.md
++++ b/checklist.md
+@@ -87,6 +87,23 @@ path("create/", ManufacturerCreateView.as_view(), name="manufacturer-create")
+ 5. Add `Cancel` button apart from `Delete` one. The `Cancel` button will lead to the previous page the user was on.
+ 
+ 6. Make sure you use 2 whitespaces indentations in your `.html` files.
++7. Use `-` to split words in URL identification parameter `name`, not the `_`.
++
++Good example:
++
++```python
++urlpatterns = [
++    path("buses/", BusListView.as_view(), name="bus-list"),
++]
++ ```
++
++Bad example:
++
++```python
++urlpatterns = [
++    path("buses/", BusListView.as_view(), name="bus_list"),
++]
++ ```
+ 
+ ## Clean Code
+ Add comments, prints, and functions to check your solution when you write your code. 
+-- 
+2.45.1.windows.1
+

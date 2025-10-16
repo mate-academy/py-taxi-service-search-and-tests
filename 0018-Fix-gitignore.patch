@@ -1,0 +1,21 @@
+From 9d0cb274e52d205ba71cf5bc677b0ae4d732a98e Mon Sep 17 00:00:00 2001
+From: danylott <d.tuytuyshkin@gmail.com>
+Date: Mon, 8 Aug 2022 16:06:24 +0300
+Subject: [PATCH 18/52] Fix gitignore
+
+---
+ .gitignore | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/.gitignore b/.gitignore
+index b26d611..b9b230d 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -6,3 +6,4 @@
+ venv/
+ .pytest_cache/
+ **__pycache__/
++db.sqlite3
+-- 
+2.45.1.windows.1
+

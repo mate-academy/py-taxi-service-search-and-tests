@@ -1,0 +1,1160 @@
+From 4cbb2c634b6c09ac73d69ec498bab610fff85e56 Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 16:28:30 +0300
+Subject: [PATCH 02/52] Forms
+
+---
+ .flake8                                       |   8 --
+ .github/workflows/test.yml                    |  31 ----
+ .gitignore                                    |   2 -
+ README.md                                     |  23 ++-
+ app/db/migrations/0001_initial.py             |  21 ---
+ app/db/models.py                              |   8 --
+ app/init_django_orm.py                        |   7 -
+ app/main.py                                   |  14 --
+ app/manage.py                                 |  10 --
+ app/settings.py                               |  20 ---
+ app/tests/__init__.py                         |   0
+ app/tests/test_main.py                        |  12 --
+ manage.py                                     |  22 +++
+ pytest.ini                                    |   3 -
+ requirements.txt                              |   3 -
+ static/css/styles.css                         |   3 +
+ {app => taxi}/__init__.py                     |   0
+ taxi/admin.py                                 |  23 +++
+ taxi/apps.py                                  |   6 +
+ taxi/migrations/0001_initial.py               |  66 +++++++++
+ {app/db => taxi/migrations}/__init__.py       |   0
+ taxi/models.py                                |  37 +++++
+ taxi/tests.py                                 |   3 +
+ taxi/urls.py                                  |  14 ++
+ taxi/views.py                                 |  54 +++++++
+ .../migrations => taxi_service}/__init__.py   |   0
+ taxi_service/asgi.py                          |  16 +++
+ taxi_service/settings.py                      | 134 ++++++++++++++++++
+ taxi_service/urls.py                          |  26 ++++
+ taxi_service/wsgi.py                          |  16 +++
+ templates/base.html                           |  40 ++++++
+ templates/includes/pagination.html            |  17 +++
+ templates/includes/sidebar.html               |  15 ++
+ templates/registration/logged_out.html        |   7 +
+ templates/registration/login.html             |  23 +++
+ templates/taxi/car_detail.html                |  12 ++
+ templates/taxi/car_list.html                  |  17 +++
+ templates/taxi/driver_detail.html             |  26 ++++
+ templates/taxi/driver_list.html               |  30 ++++
+ templates/taxi/index.html                     |  18 +++
+ templates/taxi/manufacturer_list.html         |  33 +++++
+ 41 files changed, 678 insertions(+), 142 deletions(-)
+ delete mode 100644 .flake8
+ delete mode 100644 .github/workflows/test.yml
+ delete mode 100644 app/db/migrations/0001_initial.py
+ delete mode 100644 app/db/models.py
+ delete mode 100644 app/init_django_orm.py
+ delete mode 100644 app/main.py
+ delete mode 100644 app/manage.py
+ delete mode 100644 app/settings.py
+ delete mode 100644 app/tests/__init__.py
+ delete mode 100644 app/tests/test_main.py
+ create mode 100755 manage.py
+ delete mode 100644 pytest.ini
+ create mode 100644 static/css/styles.css
+ rename {app => taxi}/__init__.py (100%)
+ create mode 100644 taxi/admin.py
+ create mode 100644 taxi/apps.py
+ create mode 100644 taxi/migrations/0001_initial.py
+ rename {app/db => taxi/migrations}/__init__.py (100%)
+ create mode 100644 taxi/models.py
+ create mode 100644 taxi/tests.py
+ create mode 100644 taxi/urls.py
+ create mode 100644 taxi/views.py
+ rename {app/db/migrations => taxi_service}/__init__.py (100%)
+ create mode 100644 taxi_service/asgi.py
+ create mode 100644 taxi_service/settings.py
+ create mode 100644 taxi_service/urls.py
+ create mode 100644 taxi_service/wsgi.py
+ create mode 100644 templates/base.html
+ create mode 100644 templates/includes/pagination.html
+ create mode 100644 templates/includes/sidebar.html
+ create mode 100644 templates/registration/logged_out.html
+ create mode 100644 templates/registration/login.html
+ create mode 100644 templates/taxi/car_detail.html
+ create mode 100644 templates/taxi/car_list.html
+ create mode 100644 templates/taxi/driver_detail.html
+ create mode 100644 templates/taxi/driver_list.html
+ create mode 100644 templates/taxi/index.html
+ create mode 100644 templates/taxi/manufacturer_list.html
+
+diff --git a/.flake8 b/.flake8
+deleted file mode 100644
+index 00a8cd7..0000000
+--- a/.flake8
++++ /dev/null
+@@ -1,8 +0,0 @@
+-[flake8]
+-ignore = E203, E266, W503
+-max-line-length = 79
+-max-complexity = 18
+-select = B,C,E,F,W,T4,B9
+-exclude =
+-    **migrations
+-    venv
+diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+deleted file mode 100644
+index f30dc9d..0000000
+--- a/.github/workflows/test.yml
++++ /dev/null
+@@ -1,31 +0,0 @@
+-name: Test
+-
+-on:
+-  pull_request:
+-    branches:
+-      - "master"
+-
+-jobs:
+-  test:
+-    runs-on: ubuntu-latest
+-    timeout-minutes: 10
+-
+-    steps:
+-      - name: Checkout repo
+-        uses: actions/checkout@v2
+-
+-      - name: Set Up Python 3.8
+-        uses: actions/setup-python@v2
+-        with:
+-          python-version: 3.8
+-
+-      - name: Install requirements
+-        run: |
+-          python -m pip install --upgrade pip
+-          pip install -r requirements.txt
+-      - name: Run flake8
+-        run: flake8 app/
+-
+-      - name: Run tests
+-        timeout-minutes: 5
+-        run: pytest app/
+\ No newline at end of file
+diff --git a/.gitignore b/.gitignore
+index fd1f3e4..b26d611 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -6,5 +6,3 @@
+ venv/
+ .pytest_cache/
+ **__pycache__/
+-*.pyc
+-app/db.sqlite3
+\ No newline at end of file
+diff --git a/README.md b/README.md
+index b986630..aa5c7eb 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,22 @@
+-# Django ORM boilerplate for GitHub tasks
++# Taxi service authentication 
+ 
+-- Warning: Use `pytest app` for testing - not simple `pytest`
+ - Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start
+-- Implement the task described [here](app/main.py)
+\ No newline at end of file
++
++In this task, you will implement a custom form and django built-in forms for create,
++update or delete content from the site.
++
++1. Implement `Create`, `Update`, `Delete` views for `Driver`, `Car`, 
++`Manufacturer`.
++2. On driver list page create button that leads to the driver creation page.
++3. Create a driver licence update page. The form on this page must check that 
++licence:
++    - Consist only of 8 characters
++    - First 3 characters are uppercase letters
++    - Last 5 characters are digits
++4. On driver detail page add buttons that lead to update driver's licence page and
++driver deletion page.
++5. On car list page add button that leads to the car creation page. On car 
++detail page add buttons that lead to car update page and car deletion page.
++6. On manufacturer list page add button that leads to the manufacturer creation
++page. Also, add columns `Update`, `Delete`, and add links for update page and 
++deletion page for each manufacturer.
+diff --git a/app/db/migrations/0001_initial.py b/app/db/migrations/0001_initial.py
+deleted file mode 100644
+index 621228f..0000000
+--- a/app/db/migrations/0001_initial.py
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# Generated by Django 4.0.2 on 2022-02-16 06:57
+-
+-from django.db import migrations, models
+-
+-
+-class Migration(migrations.Migration):
+-
+-    initial = True
+-
+-    dependencies = [
+-    ]
+-
+-    operations = [
+-        migrations.CreateModel(
+-            name='User',
+-            fields=[
+-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-                ('name', models.CharField(max_length=50)),
+-            ],
+-        ),
+-    ]
+diff --git a/app/db/models.py b/app/db/models.py
+deleted file mode 100644
+index 14d904c..0000000
+--- a/app/db/models.py
++++ /dev/null
+@@ -1,8 +0,0 @@
+-from django.db import models
+-
+-
+-class User(models.Model):
+-    name = models.CharField(max_length=50)
+-
+-    def __str__(self):
+-        return self.name
+diff --git a/app/init_django_orm.py b/app/init_django_orm.py
+deleted file mode 100644
+index e1ec234..0000000
+--- a/app/init_django_orm.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-import sys
+-import os
+-import django
+-
+-sys.dont_write_bytecode = True
+-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+-django.setup()
+diff --git a/app/main.py b/app/main.py
+deleted file mode 100644
+index f7c4704..0000000
+--- a/app/main.py
++++ /dev/null
+@@ -1,14 +0,0 @@
+-import init_django_orm  # noqa: F401
+-
+-from db.models import User
+-
+-
+-def main():
+-    User.objects.create(name='Dan')
+-    User.objects.create(name='Robert')
+-
+-    return User.objects.all()
+-
+-
+-if __name__ == '__main__':
+-    print(main())
+diff --git a/app/manage.py b/app/manage.py
+deleted file mode 100644
+index e163372..0000000
+--- a/app/manage.py
++++ /dev/null
+@@ -1,10 +0,0 @@
+-#!/usr/bin/env python
+-import os
+-import sys
+-
+-
+-if __name__ == "__main__":
+-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+-    from django.core.management import execute_from_command_line
+-
+-    execute_from_command_line(sys.argv)
+diff --git a/app/settings.py b/app/settings.py
+deleted file mode 100644
+index 915f4d4..0000000
+--- a/app/settings.py
++++ /dev/null
+@@ -1,20 +0,0 @@
+-import os
+-
+-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+-
+-# SECURITY WARNING: Modify this secret key if using in production!
+-SECRET_KEY = "6few3nci_q_o@l1dlbk81%wcxe!*6r29yu629&d97!hiqat9fa"
+-
+-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+-
+-DATABASES = {
+-    "default": {
+-        "ENGINE": "django.db.backends.sqlite3",
+-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+-    }
+-}
+-
+-USE_TZ = False
+-
+-INSTALLED_APPS = ("db",)
+diff --git a/app/tests/__init__.py b/app/tests/__init__.py
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/app/tests/test_main.py b/app/tests/test_main.py
+deleted file mode 100644
+index a41cf6d..0000000
+--- a/app/tests/test_main.py
++++ /dev/null
+@@ -1,12 +0,0 @@
+-import pytest
+-
+-from ..main import main
+-
+-
+-@pytest.mark.django_db
+-def test_main():
+-    users = main()
+-    assert list(users.values_list("name")) == [
+-        ("Dan",),
+-        ("Robert",),
+-    ]
+diff --git a/manage.py b/manage.py
+new file mode 100755
+index 0000000..e6082a2
+--- /dev/null
++++ b/manage.py
+@@ -0,0 +1,22 @@
++#!/usr/bin/env python
++"""Django's command-line utility for administrative tasks."""
++import os
++import sys
++
++
++def main():
++    """Run administrative tasks."""
++    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taxi_service.settings")
++    try:
++        from django.core.management import execute_from_command_line
++    except ImportError as exc:
++        raise ImportError(
++            "Couldn't import Django. Are you sure it's installed and "
++            "available on your PYTHONPATH environment variable? Did you "
++            "forget to activate a virtual environment?"
++        ) from exc
++    execute_from_command_line(sys.argv)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/pytest.ini b/pytest.ini
+deleted file mode 100644
+index e3d7d3d..0000000
+--- a/pytest.ini
++++ /dev/null
+@@ -1,3 +0,0 @@
+-[pytest]
+-DJANGO_SETTINGS_MODULE = settings
+-addopts = --reuse-db
+\ No newline at end of file
+diff --git a/requirements.txt b/requirements.txt
+index c70f77b..754abbf 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1 @@
+ django==4.0.2
+-pytest==6.2.5
+-flake8==4.0.1
+-pytest-django==4.5.2
+\ No newline at end of file
+diff --git a/static/css/styles.css b/static/css/styles.css
+new file mode 100644
+index 0000000..1d8a1b3
+--- /dev/null
++++ b/static/css/styles.css
+@@ -0,0 +1,3 @@
++body {
++    margin-top: 20px;
++}
+diff --git a/app/__init__.py b/taxi/__init__.py
+similarity index 100%
+rename from app/__init__.py
+rename to taxi/__init__.py
+diff --git a/taxi/admin.py b/taxi/admin.py
+new file mode 100644
+index 0000000..01ed860
+--- /dev/null
++++ b/taxi/admin.py
+@@ -0,0 +1,23 @@
++from django.contrib import admin
++from django.contrib.auth.admin import UserAdmin
++from .models import Driver, Car, Manufacturer
++
++
++@admin.register(Driver)
++class DriverAdmin(UserAdmin):
++    list_display = UserAdmin.list_display + ("license_number",)
++    fieldsets = UserAdmin.fieldsets + (
++        (("Additional info", {"fields": ("license_number",)}),)
++    )
++    add_fieldsets = UserAdmin.add_fieldsets + (
++        (("Additional info", {"fields": ("first_name", "last_name", "license_number",)}),)
++    )
++
++
++@admin.register(Car)
++class CarAdmin(admin.ModelAdmin):
++    search_fields = ("model",)
++    list_filter = ("manufacturer",)
++
++
++admin.site.register(Manufacturer)
+diff --git a/taxi/apps.py b/taxi/apps.py
+new file mode 100644
+index 0000000..5e913a3
+--- /dev/null
++++ b/taxi/apps.py
+@@ -0,0 +1,6 @@
++from django.apps import AppConfig
++
++
++class TaxiConfig(AppConfig):
++    default_auto_field = "django.db.models.BigAutoField"
++    name = "taxi"
+diff --git a/taxi/migrations/0001_initial.py b/taxi/migrations/0001_initial.py
+new file mode 100644
+index 0000000..a591e14
+--- /dev/null
++++ b/taxi/migrations/0001_initial.py
+@@ -0,0 +1,66 @@
++# Generated by Django 4.0.2 on 2022-04-18 08:08
++
++from django.conf import settings
++import django.contrib.auth.models
++import django.contrib.auth.validators
++from django.db import migrations, models
++import django.db.models.deletion
++import django.utils.timezone
++
++
++class Migration(migrations.Migration):
++
++    initial = True
++
++    dependencies = [
++        ('auth', '0012_alter_user_first_name_max_length'),
++    ]
++
++    operations = [
++        migrations.CreateModel(
++            name='Driver',
++            fields=[
++                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
++                ('password', models.CharField(max_length=128, verbose_name='password')),
++                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
++                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
++                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
++                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
++                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
++                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
++                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
++                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
++                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
++                ('license_number', models.CharField(max_length=255, unique=True)),
++                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
++                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
++            ],
++            options={
++                'verbose_name': 'driver',
++                'verbose_name_plural': 'drivers',
++            },
++            managers=[
++                ('objects', django.contrib.auth.models.UserManager()),
++            ],
++        ),
++        migrations.CreateModel(
++            name='Manufacturer',
++            fields=[
++                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
++                ('name', models.CharField(max_length=255)),
++                ('country', models.CharField(max_length=255)),
++            ],
++            options={
++                'ordering': ['name'],
++            },
++        ),
++        migrations.CreateModel(
++            name='Car',
++            fields=[
++                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
++                ('model', models.CharField(max_length=255)),
++                ('drivers', models.ManyToManyField(related_name='cars', to=settings.AUTH_USER_MODEL)),
++                ('manufacturer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='taxi.manufacturer')),
++            ],
++        ),
++    ]
+diff --git a/app/db/__init__.py b/taxi/migrations/__init__.py
+similarity index 100%
+rename from app/db/__init__.py
+rename to taxi/migrations/__init__.py
+diff --git a/taxi/models.py b/taxi/models.py
+new file mode 100644
+index 0000000..7e6e0c4
+--- /dev/null
++++ b/taxi/models.py
+@@ -0,0 +1,37 @@
++from django.db import models
++from django.contrib.auth.models import AbstractUser
++from django.urls import reverse
++
++
++class Manufacturer(models.Model):
++    name = models.CharField(max_length=255)
++    country = models.CharField(max_length=255)
++
++    class Meta:
++        ordering = ["name"]
++
++    def __str__(self):
++        return f"{self.name} {self.country}"
++
++
++class Driver(AbstractUser):
++    license_number = models.CharField(max_length=255, unique=True)
++
++    class Meta:
++        verbose_name = "driver"
++        verbose_name_plural = "drivers"
++
++    def __str__(self):
++        return f"{self.username} ({self.first_name} {self.last_name})"
++
++    def get_absolute_url(self):
++        return reverse("taxi:driver-detail", kwargs={'pk': self.pk})
++
++
++class Car(models.Model):
++    model = models.CharField(max_length=255)
++    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
++    drivers = models.ManyToManyField(Driver, related_name="cars")
++
++    def __str__(self):
++        return self.model
+diff --git a/taxi/tests.py b/taxi/tests.py
+new file mode 100644
+index 0000000..7ce503c
+--- /dev/null
++++ b/taxi/tests.py
+@@ -0,0 +1,3 @@
++from django.test import TestCase
++
++# Create your tests here.
+diff --git a/taxi/urls.py b/taxi/urls.py
+new file mode 100644
+index 0000000..7cff9b7
+--- /dev/null
++++ b/taxi/urls.py
+@@ -0,0 +1,14 @@
++from django.urls import path
++
++from .views import index, CarListView, CarDetailView, DriverListView, DriverDetailView, ManufacturerListView
++
++urlpatterns = [
++    path("", index, name="index"),
++    path("manufacturers/", ManufacturerListView.as_view(), name="manufacturer-list"),
++    path("cars/", CarListView.as_view(), name="car-list"),
++    path("cars/<int:pk>/", CarDetailView.as_view(), name="car-detail"),
++    path("drivers/", DriverListView.as_view(), name="driver-list"),
++    path("drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail")
++]
++
++app_name = "taxi"
+diff --git a/taxi/views.py b/taxi/views.py
+new file mode 100644
+index 0000000..5fa7161
+--- /dev/null
++++ b/taxi/views.py
+@@ -0,0 +1,54 @@
++from django.contrib.auth.decorators import login_required
++from django.shortcuts import render
++from django.views import generic
++from django.contrib.auth.mixins import LoginRequiredMixin
++
++from .models import Driver, Car, Manufacturer
++
++
++@login_required
++def index(request):
++    """View function for the home page of the site."""
++
++    num_drivers = Driver.objects.count()
++    num_cars = Car.objects.count()
++    num_manufacturers = Manufacturer.objects.count()
++
++    num_visits = request.session.get("num_visits", 0)
++    request.session["num_visits"] = num_visits + 1
++
++    context = {
++        "num_drivers": num_drivers,
++        "num_cars": num_cars,
++        "num_manufacturers": num_manufacturers,
++        "num_visits": num_visits,
++    }
++
++    return render(request, "taxi/index.html", context=context)
++
++
++class ManufacturerListView(LoginRequiredMixin, generic.ListView):
++    model = Manufacturer
++    context_object_name = "manufacturer_list"
++    template_name = "taxi/manufacturer_list.html"
++    paginate_by = 2
++
++
++class CarListView(LoginRequiredMixin, generic.ListView):
++    model = Car
++    paginate_by = 2
++    queryset = Car.objects.all().select_related("manufacturer")
++
++
++class CarDetailView(LoginRequiredMixin, generic.DetailView):
++    model = Car
++
++
++class DriverListView(LoginRequiredMixin, generic.ListView):
++    model = Driver
++    paginate_by = 2
++
++
++class DriverDetailView(LoginRequiredMixin, generic.DetailView):
++    model = Driver
++    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+diff --git a/app/db/migrations/__init__.py b/taxi_service/__init__.py
+similarity index 100%
+rename from app/db/migrations/__init__.py
+rename to taxi_service/__init__.py
+diff --git a/taxi_service/asgi.py b/taxi_service/asgi.py
+new file mode 100644
+index 0000000..b503e3e
+--- /dev/null
++++ b/taxi_service/asgi.py
+@@ -0,0 +1,16 @@
++"""
++ASGI config for taxi_service project.
++
++It exposes the ASGI callable as a module-level variable named ``application``.
++
++For more information on this file, see
++https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
++"""
++
++import os
++
++from django.core.asgi import get_asgi_application
++
++os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taxi_service.settings")
++
++application = get_asgi_application()
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+new file mode 100644
+index 0000000..eea1e53
+--- /dev/null
++++ b/taxi_service/settings.py
+@@ -0,0 +1,134 @@
++"""
++Django settings for taxi_service project.
++
++Generated by "django-admin startproject" using Django 4.0.2.
++
++For more information on this file, see
++https://docs.djangoproject.com/en/4.0/topics/settings/
++
++For the full list of settings and their values, see
++https://docs.djangoproject.com/en/4.0/ref/settings/
++"""
++
++from pathlib import Path
++
++# Build paths inside the project like this: BASE_DIR / "subdir".
++BASE_DIR = Path(__file__).resolve().parent.parent
++
++
++# Quick-start development settings - unsuitable for production
++# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
++
++# SECURITY WARNING: keep the secret key used in production secret!
++SECRET_KEY = "django-insecure-8ovil3xu6=eaoqd#-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
++
++# SECURITY WARNING: don"t run with debug turned on in production!
++DEBUG = True
++
++ALLOWED_HOSTS = []
++
++INTERNAL_IPS = [
++    "127.0.0.1",
++]
++
++# Application definition
++
++INSTALLED_APPS = [
++    "django.contrib.admin",
++    "django.contrib.auth",
++    "django.contrib.contenttypes",
++    "django.contrib.sessions",
++    "django.contrib.messages",
++    "django.contrib.staticfiles",
++    "taxi",
++]
++
++MIDDLEWARE = [
++    "django.middleware.security.SecurityMiddleware",
++    "django.contrib.sessions.middleware.SessionMiddleware",
++    "django.middleware.common.CommonMiddleware",
++    "django.middleware.csrf.CsrfViewMiddleware",
++    "django.contrib.auth.middleware.AuthenticationMiddleware",
++    "django.contrib.messages.middleware.MessageMiddleware",
++    "django.middleware.clickjacking.XFrameOptionsMiddleware",
++]
++
++ROOT_URLCONF = "taxi_service.urls"
++
++TEMPLATES = [
++    {
++        "BACKEND": "django.template.backends.django.DjangoTemplates",
++        "DIRS": [BASE_DIR / "templates"],
++        "APP_DIRS": True,
++        "OPTIONS": {
++            "context_processors": [
++                "django.template.context_processors.debug",
++                "django.template.context_processors.request",
++                "django.contrib.auth.context_processors.auth",
++                "django.contrib.messages.context_processors.messages",
++            ],
++        },
++    },
++]
++
++WSGI_APPLICATION = "taxi_service.wsgi.application"
++
++
++# Database
++# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
++
++DATABASES = {
++    "default": {
++        "ENGINE": "django.db.backends.sqlite3",
++        "NAME": BASE_DIR / "db.sqlite3",
++    }
++}
++
++
++# Password validation
++# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
++
++AUTH_PASSWORD_VALIDATORS = [
++    {
++        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
++    },
++    {
++        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
++    },
++    {
++        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
++    },
++    {
++        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
++    },
++]
++
++AUTH_USER_MODEL = "taxi.Driver"
++
++LOGIN_REDIRECT_URL = '/'
++
++# Internationalization
++# https://docs.djangoproject.com/en/4.0/topics/i18n/
++
++LANGUAGE_CODE = "en-us"
++
++TIME_ZONE = "Europe/Kiev"
++
++USE_I18N = True
++
++USE_TZ = True
++
++
++# Static files (CSS, JavaScript, Images)
++# https://docs.djangoproject.com/en/4.0/howto/static-files/
++
++STATIC_URL = "static/"
++
++STATICFILES_DIRS = (BASE_DIR / "static",)
++
++STATIC_ROOT = BASE_DIR / "staticfiles"
++
++# Default primary key field type
++# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
++
++DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+diff --git a/taxi_service/urls.py b/taxi_service/urls.py
+new file mode 100644
+index 0000000..baf83d1
+--- /dev/null
++++ b/taxi_service/urls.py
+@@ -0,0 +1,26 @@
++"""taxi_service URL Configuration
++
++The `urlpatterns` list routes URLs to views. For more information please see:
++    https://docs.djangoproject.com/en/4.0/topics/http/urls/
++Examples:
++Function views
++    1. Add an import:  from my_app import views
++    2. Add a URL to urlpatterns:  path("", views.home, name="home")
++Class-based views
++    1. Add an import:  from other_app.views import Home
++    2. Add a URL to urlpatterns:  path("", Home.as_view(), name="home")
++Including another URLconf
++    1. Import the include() function: from django.urls import include, path
++    2. Add a URL to urlpatterns:  path("blog/", include("blog.urls"))
++"""
++from django.contrib import admin
++from django.urls import path, include
++from django.conf import settings
++from django.conf.urls.static import static
++
++
++urlpatterns = [
++    path("admin/", admin.site.urls),
++    path("", include("taxi.urls", namespace="taxi")),
++    path("accounts/", include("django.contrib.auth.urls")),
++] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+diff --git a/taxi_service/wsgi.py b/taxi_service/wsgi.py
+new file mode 100644
+index 0000000..f568b40
+--- /dev/null
++++ b/taxi_service/wsgi.py
+@@ -0,0 +1,16 @@
++"""
++WSGI config for taxi_service project.
++
++It exposes the WSGI callable as a module-level variable named ``application``.
++
++For more information on this file, see
++https://docs.djangoproject.com/en/4.0/howto/deployment/wsgi/
++"""
++
++import os
++
++from django.core.wsgi import get_wsgi_application
++
++os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taxi_service.settings")
++
++application = get_wsgi_application()
+diff --git a/templates/base.html b/templates/base.html
+new file mode 100644
+index 0000000..03f76e0
+--- /dev/null
++++ b/templates/base.html
+@@ -0,0 +1,40 @@
++<!DOCTYPE html>
++<html lang="en">
++
++<head>
++    {% block title %}<title>Taxi Service</title>{% endblock %}
++    <meta charset="utf-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1">
++    <link rel="stylesheet"
++          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
++          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
++          crossorigin="anonymous">
++    <!-- Add additional CSS in static file -->
++    {% load static %}
++    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
++</head>
++
++<body>
++<div class="container-fluid">
++    <div class="row">
++        <div class="col-sm-2">
++
++            {% block sidebar %}
++                {% include "includes/sidebar.html" %}
++            {% endblock %}
++
++        </div>
++        <div class="col-sm-10 ">
++
++            {% block content %}{% endblock %}
++
++            {% block pagination %}
++                {% include "includes/pagination.html" %}
++            {% endblock %}
++
++        </div>
++    </div>
++</div>
++</body>
++
++</html>
+diff --git a/templates/includes/pagination.html b/templates/includes/pagination.html
+new file mode 100644
+index 0000000..118c280
+--- /dev/null
++++ b/templates/includes/pagination.html
+@@ -0,0 +1,17 @@
++{% if is_paginated %}
++  <ul class="pagination">
++    {% if page_obj.has_previous %}
++      <li class="page-item">
++        <a href="?page= {{ page_obj.previous_page_number }}" class="page-link">prev</a>
++      </li>
++    {% endif %}
++    <li class="page-item active">
++      <span class="page-link">{{ page_obj.number }} of {{ paginator.num_pages }}</span>
++    </li>
++    {% if page_obj.has_next %}
++      <li class="page-item">
++        <a href="?page= {{ page_obj.next_page_number }}" class="page-link">next</a>
++      </li>
++    {% endif %}
++  </ul>
++{% endif %}
+diff --git a/templates/includes/sidebar.html b/templates/includes/sidebar.html
+new file mode 100644
+index 0000000..78262d2
+--- /dev/null
++++ b/templates/includes/sidebar.html
+@@ -0,0 +1,15 @@
++<ul class="sidebar-nav list-group">
++  {% if user.is_authenticated %}
++    <li class="list-group-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
++    <li class="list-group-item"><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
++  {% else %}
++    <li class="list-group-item"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
++  {% endif %}
++
++  <br>
++
++  <li class="list-group-item"><a href="{% url 'taxi:index' %}">Home</a></li>
++  <li class="list-group-item"><a href="{% url 'taxi:driver-list' %}">All drivers</a></li>
++  <li class="list-group-item"><a href="{% url 'taxi:car-list' %}">All cars</a></li>
++  <li class="list-group-item"><a href="{% url 'taxi:manufacturer-list' %}">All manufacturers</a></li>
++</ul>
+diff --git a/templates/registration/logged_out.html b/templates/registration/logged_out.html
+new file mode 100644
+index 0000000..477ad4d
+--- /dev/null
++++ b/templates/registration/logged_out.html
+@@ -0,0 +1,7 @@
++{% extends "base.html" %}
++
++{% block content %}
++<p>Logged out!</p>
++
++<a href="{% url 'login'%}">Click here to login again.</a>
++{% endblock %}
+\ No newline at end of file
+diff --git a/templates/registration/login.html b/templates/registration/login.html
+new file mode 100644
+index 0000000..234fb53
+--- /dev/null
++++ b/templates/registration/login.html
+@@ -0,0 +1,23 @@
++{% extends "base.html" %}
++
++{% block content %}
++
++{% if form.errors %}
++  <p>Your username and password didn't match. Please try again.</p>
++{% endif %}
++
++<h1>Login</h1>
++
++{% if next %}
++  <p>Please login to see this page.</p>
++{% endif %}
++
++<form method="post" action="{% url 'login' %}">
++{% csrf_token %}
++{{ form.as_p }}
++
++<input type="submit" value="Login" class="btn btn-primary" />
++<input type="hidden" name="next" value="{{ next }}" />
++</form>
++
++{% endblock %}
+\ No newline at end of file
+diff --git a/templates/taxi/car_detail.html b/templates/taxi/car_detail.html
+new file mode 100644
+index 0000000..ffdbe71
+--- /dev/null
++++ b/templates/taxi/car_detail.html
+@@ -0,0 +1,12 @@
++{% extends "base.html" %}
++
++{% block content %}
++  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
++  <h1>Drivers</h1>
++  <hr>
++  <ul>
++  {% for driver in car.drivers.all %}
++    <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
++  {% endfor %}
++  </ul>
++{% endblock %}
+diff --git a/templates/taxi/car_list.html b/templates/taxi/car_list.html
+new file mode 100644
+index 0000000..e107b57
+--- /dev/null
++++ b/templates/taxi/car_list.html
+@@ -0,0 +1,17 @@
++{% extends "base.html" %}
++
++{% block content %}
++  <h1>Car list</h1>
++  {% if car_list %}
++    <ul>
++      {% for car in car_list %}
++        <li>
++          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
++          {{ car.model }} ({{ car.manufacturer.name }})
++        </li>
++      {% endfor %}
++    </ul>
++  {% else %}
++    <p>There are no cars in taxi</p>
++  {% endif %}
++{% endblock %}
+diff --git a/templates/taxi/driver_detail.html b/templates/taxi/driver_detail.html
+new file mode 100644
+index 0000000..e70fcab
+--- /dev/null
++++ b/templates/taxi/driver_detail.html
+@@ -0,0 +1,26 @@
++{% extends "base.html" %}
++
++{% block content %}
++  <h1>
++    Username: {{ driver.username }}
++  </h1>
++
++  <p><strong>First name:</strong> {{ driver.first_name }}</p>
++  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
++  <p><strong>License number:</strong> {{ driver.license_number }}</p>
++  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
++
++  <div class="ml-3">
++    <h4>Cars</h4>
++
++    {% for car in driver.cars.all %}
++        <hr>
++        <p><strong>Model:</strong> {{ car.model }}</p>
++        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
++        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
++
++    {% empty %}
++      <p>No cars!</p>
++    {% endfor %}
++  </div>
++{% endblock %}
+\ No newline at end of file
+diff --git a/templates/taxi/driver_list.html b/templates/taxi/driver_list.html
+new file mode 100644
+index 0000000..c8aafc9
+--- /dev/null
++++ b/templates/taxi/driver_list.html
+@@ -0,0 +1,30 @@
++{% extends "base.html" %}
++
++{% block content %}
++    <h1>Driver List
++    </h1>
++
++    {% if driver_list %}
++    <table class="table">
++      <tr>
++        <th>ID</th>
++        <th>Username</th>
++        <th>First name</th>
++        <th>Last name</th>
++        <th>License number</th>
++      </tr>
++    {% for driver in driver_list %}
++      <tr>
++        <td>{{ driver.id }}</td>
++        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
++        <td>{{ driver.first_name }}</td>
++        <td>{{ driver.last_name }}</td>
++        <td>{{ driver.license_number }}</td>
++      </tr>
++    {% endfor %}
++
++    </table>
++    {% else %}
++      <p>There are no drivers in the service.</p>
++    {% endif %}
++{% endblock %}
+\ No newline at end of file
+diff --git a/templates/taxi/index.html b/templates/taxi/index.html
+new file mode 100644
+index 0000000..7d3c73a
+--- /dev/null
++++ b/templates/taxi/index.html
+@@ -0,0 +1,18 @@
++{% extends "base.html" %}
++
++{% block content %}
++    <h1>Taxi Service Home</h1>
++    <p>Welcome to Best Taxi Ever!</p>
++    <h2>Dynamic content</h2>
++    <p>The Taxi service has the following record counts:</p>
++    <ul>
++        <li><strong>Cars:</strong> {{ num_cars }}</li>
++        <li><strong>Drivers:</strong> {{ num_drivers }}</li>
++        <li><strong>Manufacturers:</strong> {{ num_manufacturers }}</li>
++    </ul>
++
++    <p>You have visited this page
++        {{ num_visits }} time{{ num_visits|pluralize }}.
++    </p>
++
++{% endblock %}
+diff --git a/templates/taxi/manufacturer_list.html b/templates/taxi/manufacturer_list.html
+new file mode 100644
+index 0000000..ace27a5
+--- /dev/null
++++ b/templates/taxi/manufacturer_list.html
+@@ -0,0 +1,33 @@
++{% extends "base.html" %}
++
++{% block content %}
++    <h1>Manufacturer List
++    </h1>
++
++    {% if manufacturer_list %}
++      <table class="table">
++        <tr>
++          <th>ID</th>
++          <th>Name</th>
++          <th>Country</th>
++        </tr>
++
++        {% for manufacturer in manufacturer_list %}
++            <tr>
++              <td>
++                  {{ manufacturer.id }}
++              </td>
++              <td>
++                  {{ manufacturer.name }}
++              </td>
++              <td>
++                  {{ manufacturer.country }}
++              </td>
++          </tr>
++        {% endfor %}
++      </table>
++
++    {% else %}
++        <p>There are no manufacturers in the service.</p>
++    {% endif %}
++{% endblock %}
+\ No newline at end of file
+-- 
+2.45.1.windows.1
+

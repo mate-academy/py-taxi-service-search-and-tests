@@ -1,33 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+  <h1>Name: {{ driver.username }}<a style="float: right" href="{% url 'taxi:driver-update' pk=driver.id %}">Edit</a></h1>
+  <p><strong>First name: </strong>{{ driver.first_name }}</p>
+  <p><strong>Last name: </strong>{{ driver.last_name }}</p>
+  <p><strong>License plate: </strong>{{ driver.license_number }}</p>
+  <div class="ml-3">
+    <h3>Cars:</h3>
+    {% for car in driver.cars.all %}
+      <hr>
+      <p class="text-muted">{{ car.id }}</p>
+      <p>{{ car.model }}</p>
+    {% empty %}
+      <p>No car!</p>
+    {% endfor %}
+  </div>
+  <div class="mt-3">
+    <a class="btn btn-secondary btn-sm" href="{% url 'taxi:driver-update' pk=driver.id %}">
+      Update
+    </a>
+    <a class="btn btn-danger btn-sm" href="{% url 'taxi:driver-delete' pk=driver.id %}">
       Delete
     </a>
-
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
-  </h1>
-
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
-  <div class="ml-3">
-    <h4>Cars</h4>
-
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
-
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
   </div>
 {% endblock %}

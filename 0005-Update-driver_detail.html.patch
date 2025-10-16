@@ -1,0 +1,23 @@
+From c6cc3f80339f11324c5d26ca3f6a059b7163afdd Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 16:32:17 +0300
+Subject: [PATCH 05/52] Update driver_detail.html
+
+---
+ templates/taxi/driver_detail.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/templates/taxi/driver_detail.html b/templates/taxi/driver_detail.html
+index e70fcab..7880846 100644
+--- a/templates/taxi/driver_detail.html
++++ b/templates/taxi/driver_detail.html
+@@ -23,4 +23,4 @@
+       <p>No cars!</p>
+     {% endfor %}
+   </div>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

@@ -1,0 +1,22 @@
+From 925c5d8b78ec12ca5f23783715f94574a836c681 Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 18:17:40 +0300
+Subject: [PATCH 12/52] Update urls.py
+
+---
+ taxi_service/urls.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/taxi_service/urls.py b/taxi_service/urls.py
+index baf83d1..04a3748 100644
+--- a/taxi_service/urls.py
++++ b/taxi_service/urls.py
+@@ -23,4 +23,5 @@ urlpatterns = [
+     path("admin/", admin.site.urls),
+     path("", include("taxi.urls", namespace="taxi")),
+     path("accounts/", include("django.contrib.auth.urls")),
++    path('__debug__/', include('debug_toolbar.urls')),
+ ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+-- 
+2.45.1.windows.1
+

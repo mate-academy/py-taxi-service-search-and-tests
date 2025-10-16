@@ -1,0 +1,149 @@
+From de81e03104d93daab6be253736b375c87a8b72f8 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 00:57:17 +0300
+Subject: [PATCH 45/52] Fixed long line issue
+
+---
+ taxi/forms.py                                 |  5 +++--
+ taxi/models.py                                |  4 +++-
+ taxi/views.py                                 |  6 ++++--
+ taxi_service/settings.py                      | 19 +++++++------------
+ tests/test_taxi_service_forms.py              | 10 ++++++++--
+ ...t_taxi_service_user_form_and_validation.py |  7 +++----
+ 6 files changed, 28 insertions(+), 23 deletions(-)
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+index d286281..015329f 100644
+--- a/taxi/forms.py
++++ b/taxi/forms.py
+@@ -36,8 +36,9 @@ custom_code_validator = RegexValidator(
+ 
+ class LicenseForm(forms.ModelForm):
+     license_number = forms.CharField(
+-        max_length=8, validators=[custom_code_validator], help_text="Format: ABC12345"
+-    )
++        max_length=8,
++        validators=[custom_code_validator],
++        help_text="Format: ABC12345")
+ 
+     class Meta:
+         model = Driver
+diff --git a/taxi/models.py b/taxi/models.py
+index 66dbe75..fe8aa07 100644
+--- a/taxi/models.py
++++ b/taxi/models.py
+@@ -31,7 +31,9 @@ class Driver(AbstractUser):
+ 
+ class Car(models.Model):
+     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
+-    drivers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="cars")
++    drivers = models.ManyToManyField(
++        settings.AUTH_USER_MODEL,
++        related_name="cars")
+     model = models.CharField(max_length=255)
+ 
+     class Meta:
+diff --git a/taxi/views.py b/taxi/views.py
+index d1bb97b..031cfe6 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -41,7 +41,8 @@ class CarListView(LoginRequiredMixin, generic.ListView):
+     model = Car
+     template_name = "taxi/car_list.html"
+     context_object_name = "car_list"
+-    queryset = Car.objects.select_related("manufacturer").order_by("manufacturer__name")
++    queryset = Car.objects.select_related(
++        "manufacturer").order_by("manufacturer__name")
+     paginate_by = 5
+ 
+ 
+@@ -125,7 +126,8 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
+ 
+     def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+-        context["second_form"] = self.second_form_class(self.request.POST or None)
++        context["second_form"] = self.second_form_class(
++            self.request.POST or None)
+         return context
+ 
+ 
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+index 181db4b..6a58e21 100644
+--- a/taxi_service/settings.py
++++ b/taxi_service/settings.py
+@@ -90,18 +90,13 @@ DATABASES = {
+ AUTH_PASSWORD_VALIDATORS = [
+     {
+         "NAME": "django.contrib.auth.password_validation"
+-        ".UserAttributeSimilarityValidator",
+-    },
+-    {
+-        "NAME": "django.contrib.auth.password_validation" ".MinimumLengthValidator",
+-    },
+-    {
+-        "NAME": "django.contrib.auth.password_validation" ".CommonPasswordValidator",
+-    },
+-    {
+-        "NAME": "django.contrib.auth.password_validation" ".NumericPasswordValidator",
+-    },
+-]
++        ".UserAttributeSimilarityValidator", }, {
++            "NAME": "django.contrib.auth.password_validation"
++            ".MinimumLengthValidator", }, {
++                "NAME": "django.contrib.auth.password_validation"
++                ".CommonPasswordValidator", }, {
++                    "NAME": "django.contrib.auth.password_validation"
++                    ".NumericPasswordValidator", }, ]
+ 
+ AUTH_USER_MODEL = "taxi.Driver"
+ 
+diff --git a/tests/test_taxi_service_forms.py b/tests/test_taxi_service_forms.py
+index 03c7cac..652fc4d 100644
+--- a/tests/test_taxi_service_forms.py
++++ b/tests/test_taxi_service_forms.py
+@@ -57,7 +57,11 @@ class CarTest(TestCase):
+             model="Continental",
+             manufacturer=self.manufacturer,
+         )
+-        response = self.client.post(reverse("taxi:car-delete", kwargs={"pk": car.id}))
++        response = self.client.post(
++            reverse(
++                "taxi:car-delete",
++                kwargs={
++                    "pk": car.id}))
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(Car.objects.filter(id=car.id).exists())
+ 
+@@ -107,4 +111,6 @@ class ManufacturerTest(TestCase):
+             reverse("taxi:manufacturer-delete", kwargs={"pk": manufacturer.id})
+         )
+         self.assertEqual(response.status_code, 302)
+-        self.assertFalse(Manufacturer.objects.filter(id=manufacturer.id).exists())
++        self.assertFalse(
++            Manufacturer.objects.filter(
++                id=manufacturer.id).exists())
+diff --git a/tests/test_taxi_service_user_form_and_validation.py b/tests/test_taxi_service_user_form_and_validation.py
+index d885092..2770689 100644
+--- a/tests/test_taxi_service_user_form_and_validation.py
++++ b/tests/test_taxi_service_user_form_and_validation.py
+@@ -9,8 +9,7 @@ class ValidLicenseNumberFormTests(TestCase):
+     @staticmethod
+     def create_form(test_license_number):
+         return DriverLicenseUpdateForm(
+-            data={"license_number": test_license_number}
+-        )
++            data={"license_number": test_license_number})
+ 
+     def test_validation_license_number_with_valid_data(self):
+         self.assertTrue(self.create_form("TES12345").is_valid())
+@@ -68,5 +67,5 @@ class DriverViewsTest(TestCase):
+         )
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(
+-            get_user_model().objects.filter(id=driver.id).exists()
+-        )
++            get_user_model().objects.filter(
++                id=driver.id).exists())
+-- 
+2.45.1.windows.1
+

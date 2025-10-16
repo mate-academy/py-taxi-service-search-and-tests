@@ -1,0 +1,147 @@
+From 79216d1a6abc0539067eb353477e58583ac6f711 Mon Sep 17 00:00:00 2001
+From: Yaroslav Havryliv <yaroslav.h@mate.academy>
+Date: Wed, 9 Nov 2022 18:14:18 +0200
+Subject: [PATCH 34/52] checklist added
+
+---
+ README.md    |   4 +-
+ checklist.md | 109 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 112 insertions(+), 1 deletion(-)
+ create mode 100644 checklist.md
+
+diff --git a/README.md b/README.md
+index 7ed0e6d..0e7feff 100644
+--- a/README.md
++++ b/README.md
+@@ -1,6 +1,6 @@
+ # Taxi service forms
+ 
+-- Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start.
++Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before starting.
+ - Make sure that you change the settings for [html-files](https://github.com/mate-academy/py-task-guideline/blob/main/html_settings/README.MD).
+ - Use the following command to load prepared data from fixture to test and debug your code:
+   
+@@ -26,3 +26,5 @@ deletion page for each manufacturer.
+ 4. Use crispy forms in your forms to make website more beautiful.
+ 
+ NOTE: Attach screenshots of all created or modified pages to pull request. It's important to attach images not links to them.
++
++### Note: Check your code using this [checklist](checklist.md) before pushing your solution.
+diff --git a/checklist.md b/checklist.md
+new file mode 100644
+index 0000000..7008fee
+--- /dev/null
++++ b/checklist.md
+@@ -0,0 +1,109 @@
++# Сheck Your Code Against the Following Points
++
++## Don't Push db files
++
++Make sure you don't push db files (files with `.sqlite`, `.db3`, etc. extension).
++
++## Don't forget to attach all screenshots of created/modified pages.
++
++## Code Efficiency
++1. Use `UserCreationForm` while creating user.
++
++Good example:
++
++```python
++class DriverCreateForm(UserCreationForm):
++    pass
++```
++
++Bad example:
++
++```python
++class DriverCreateForm(forms.ModelForm):
++    pass
++```
++
++2. Don't override `template_name`, `context_object_name` and so on if they are the same as default ones.
++
++## Code Style
++1. Make sure you've added a blank line at the end to all your files including `.css`, `.html` and `.gitignore`.
++2. Use `()` instead of `backslash — \` in if-statements.
++
++Good example:
++
++```python
++if (first_condition and second_condition 
++        and third_condition):
++    #  some actions
++```
++
++Also possible one:
++
++```python
++if (first_condition and
++    second_condition):
++    #  some actions
++```
++
++Bad example:
++
++```python
++if first_condition and second_condition \
++    and third_condition:
++    # some actions
++```
++
++3. Group imports using `()` if needed.
++
++Good example:
++
++```python
++from django.contrib.auth.mixins import (
++    LoginRequiredMixin, 
++    UserPassesTestMixin, 
++    PermissionRequiredMixin,
++)
++```
++
++Bad example:
++
++```python
++from django.contrib.auth.mixins import LoginRequiredMixin, \
++    UserPassesTestMixin, PermissionRequiredMixin
++```
++
++4. Use correct path names.
++
++Good example:
++
++```python
++path(
++    "manufacurers/create/", 
++    ManufacturerCreateView.as_view(), 
++    name="manufacturer-create"
++),
++```
++
++Bad example:
++
++```python
++path(
++    "manufacturers/manufacturer_create/", 
++    ManufacturerCreateView.as_view(), 
++    name="manufacturer-create"
++)
++```
++
++Another bad example:
++
++```python
++path("create/", ManufacturerCreateView.as_view(), name="manufacturer-create")
++```
++
++5. Add `Cancel` button apart from `Delete` one. The `Cancel` button will lead to the previous page the user was on.
++
++6. Make sure you use 2 whitespaces indentations in your `.html` files.
++
++## Clean Code
++Add comments, prints, and functions to check your solution when you write your code. 
++Don't forget to delete them when you are ready to commit and push your code.
+-- 
+2.45.1.windows.1
+

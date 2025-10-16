@@ -1,0 +1,23 @@
+From edefd5b5a30fbf997d1fa2fba44273fca79fad2d Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 16:31:44 +0300
+Subject: [PATCH 04/52] Update driver_list.html
+
+---
+ templates/taxi/driver_list.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/templates/taxi/driver_list.html b/templates/taxi/driver_list.html
+index c8aafc9..b740f95 100644
+--- a/templates/taxi/driver_list.html
++++ b/templates/taxi/driver_list.html
+@@ -27,4 +27,4 @@
+     {% else %}
+       <p>There are no drivers in the service.</p>
+     {% endif %}
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

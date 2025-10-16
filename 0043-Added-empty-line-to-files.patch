@@ -1,0 +1,71 @@
+From 11a9a8d25a29582f5bfbe80a76822802bae49d06 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sat, 13 Sep 2025 23:36:41 +0200
+Subject: [PATCH 43/52] Added empty line to files
+
+---
+ templates/registration/logout.html | 2 +-
+ templates/taxi/customer_form.html  | 2 +-
+ templates/taxi/customer_list.html  | 2 +-
+ templates/taxi/driver_detail.html  | 2 +-
+ templates/taxi/index.html          | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/templates/registration/logout.html b/templates/registration/logout.html
+index 9c99086..8aab1ef 100644
+--- a/templates/registration/logout.html
++++ b/templates/registration/logout.html
+@@ -2,4 +2,4 @@
+ {% block content %}
+   <p>Logged out</p>
+   <a href="{% url 'login' %}">Click here to log in again</a>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/customer_form.html b/templates/taxi/customer_form.html
+index 9199196..e609c63 100644
+--- a/templates/taxi/customer_form.html
++++ b/templates/taxi/customer_form.html
+@@ -7,4 +7,4 @@
+     {{ form.as_p }}
+   <input type="submit" value="Submit">
+   </form>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/customer_list.html b/templates/taxi/customer_list.html
+index 01dc05d..ef89f07 100644
+--- a/templates/taxi/customer_list.html
++++ b/templates/taxi/customer_list.html
+@@ -10,4 +10,4 @@
+       {% endfor %}
+     </ul>
+   {% endif %}
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/driver_detail.html b/templates/taxi/driver_detail.html
+index 9c52094..3a4b4b7 100644
+--- a/templates/taxi/driver_detail.html
++++ b/templates/taxi/driver_detail.html
+@@ -15,4 +15,4 @@
+       <p>No car!</p>
+     {% endfor %}
+   </div>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/index.html b/templates/taxi/index.html
+index 65c739c..4df1b96 100644
+--- a/templates/taxi/index.html
++++ b/templates/taxi/index.html
+@@ -12,4 +12,4 @@
+       <li>Number of manufactures: {{ num_manufacturers }}</li>
+   </ul>
+   <p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

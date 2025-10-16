@@ -1,0 +1,25 @@
+From 3c3762d30114f37d0276258580d5f5956f669c26 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 01:26:45 +0300
+Subject: [PATCH 51/52] Delete redefinition
+
+---
+ taxi/views.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/taxi/views.py b/taxi/views.py
+index 1286ab7..7327124 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -10,7 +10,7 @@ from django.urls import reverse, reverse_lazy
+ from django.views import generic
+ 
+ from taxi.forms import CarForm, DriverCreationForm
+-from taxi.models import Driver, Manufacturer, Car, Customer
++from taxi.models import Manufacturer, Car, Customer
+ 
+ 
+ Driver = get_user_model()
+-- 
+2.45.1.windows.1
+

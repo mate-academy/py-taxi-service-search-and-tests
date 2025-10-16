@@ -1,0 +1,35 @@
+From b9c34a55738235d1b008945c9cc5ebb1aa018dca Mon Sep 17 00:00:00 2001
+From: polinatytarenko <p.tytarenko.20@gmail.com>
+Date: Wed, 6 Jul 2022 08:27:22 +0300
+Subject: [PATCH 16/52] Add subtask: assign me to this car/delete me from this
+ car button
+
+---
+ README.md | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index 975b079..b5b26a2 100644
+--- a/README.md
++++ b/README.md
+@@ -18,7 +18,16 @@ license:
+ 4. On the driver detail page add buttons that lead to the driver's license updating page and
+ driver deletion page.
+ 5. On the car list page add button that leads to the car creation page. On the car 
+-detail page, add buttons that lead to the car update page and car deletion page.
++detail page add buttons that lead to the car update page and car deletion page.
+ 6. On the manufacturer list page, add the button that leads to the manufacturer creation
+ page. Also, add columns `Update`, `Delete`, and add links for the updating page and 
+ deletion page for each manufacturer.
++7. On the car detail page add button `Assign me to this car`. This button adds 
++current user to car drivers. When current user is already a driver of this car, 
++there should be `Delete me from this car` button that deletes user from car drivers.
++
++The car detail page should look like this:
++![image](https://mate-academy-images.s3.eu-central-1.amazonaws.com/django-forms-1.png)
++![image](https://mate-academy-images.s3.eu-central-1.amazonaws.com/django-forms-2.png)
++
++NOTE: Attach screenshots of all created or modified pages to pull request. It's important to attach images not links to them.
+-- 
+2.45.1.windows.1
+

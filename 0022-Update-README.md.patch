@@ -1,0 +1,26 @@
+From 910b927f4c1da99afc91a7e1a09f782222d82b20 Mon Sep 17 00:00:00 2001
+From: Nataliia Zakharchuk <62181026+Nattalli@users.noreply.github.com>
+Date: Wed, 17 Aug 2022 16:48:17 +0300
+Subject: [PATCH 22/52] Update README.md
+
+---
+ README.md | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index ec141a1..81de1bb 100644
+--- a/README.md
++++ b/README.md
+@@ -1,6 +1,8 @@
+ # Taxi service forms
+ 
+-- Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start
++- Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start.
++- Make sure that you change the settings for [html-files](https://github.com/mate-academy/py-task-guideline/blob/main/html_settings/README.MD).
++
+ 
+ In this task, you will implement a custom form and django built-in forms to create,
+ update or delete content from the site.
+-- 
+2.45.1.windows.1
+

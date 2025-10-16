@@ -1,0 +1,39 @@
+From 616158874d4c3a97182a4ff05ccb8fa61d67cee5 Mon Sep 17 00:00:00 2001
+From: Yaroslav Havryliv <yaroslav.h@mate.academy>
+Date: Mon, 27 Feb 2023 14:34:01 +0200
+Subject: [PATCH 37/52] added note about crispy_forms
+
+---
+ README.md | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/README.md b/README.md
+index 0e7feff..9a9fa18 100644
+--- a/README.md
++++ b/README.md
+@@ -28,3 +28,22 @@ deletion page for each manufacturer.
+ NOTE: Attach screenshots of all created or modified pages to pull request. It's important to attach images not links to them.
+ 
+ ### Note: Check your code using this [checklist](checklist.md) before pushing your solution.
++
++# Note
++Follow these steps if you need to use `crispy_forms` v2.0 with Python 3.11:
++
++1. Add `CRISPY_TEMPLATE_PACK` to `settings.py`.
++
++```python
++CRISPY_TEMPLATE_PACK="bootstrap4"
++```
++
++2. Add these apps to `INSTALLED_APPS` and install them corresponding to the `CRISPY_TEMPLATE_PACK` bootstrap version.
++
++```python
++INSTALLED APPS = [
++   ...,
++   "crispy_bootstrap4",
++   "crispy_forms",
++]
++```
+-- 
+2.45.1.windows.1
+

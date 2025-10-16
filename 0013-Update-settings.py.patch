@@ -1,0 +1,24 @@
+From 88cd21a7f46d14ebac7a35ac854055b8e2d9c8bc Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 18:29:18 +0300
+Subject: [PATCH 13/52] Update settings.py
+
+---
+ taxi_service/settings.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+index c2b1646..8d3d23f 100644
+--- a/taxi_service/settings.py
++++ b/taxi_service/settings.py
+@@ -46,6 +46,7 @@ INSTALLED_APPS = [
+ 
+ MIDDLEWARE = [
+     "django.middleware.security.SecurityMiddleware",
++    "debug_toolbar.middleware.DebugToolbarMiddleware",
+     "django.contrib.sessions.middleware.SessionMiddleware",
+     "django.middleware.common.CommonMiddleware",
+     "django.middleware.csrf.CsrfViewMiddleware",
+-- 
+2.45.1.windows.1
+

@@ -1,0 +1,23 @@
+From 9291329289e1440f5831bd3e88c77dc5e157ed81 Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 16:32:49 +0300
+Subject: [PATCH 06/52] Update login.html
+
+---
+ templates/registration/login.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/templates/registration/login.html b/templates/registration/login.html
+index 234fb53..29d734f 100644
+--- a/templates/registration/login.html
++++ b/templates/registration/login.html
+@@ -20,4 +20,4 @@
+ <input type="hidden" name="next" value="{{ next }}" />
+ </form>
+ 
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

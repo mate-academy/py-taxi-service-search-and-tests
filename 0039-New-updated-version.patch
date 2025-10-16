@@ -1,0 +1,82 @@
+From fac5935c9d10522b392536ba4ab55cfb34d22e49 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Thu, 11 Sep 2025 16:28:51 +0200
+Subject: [PATCH 39/52] New updated version
+
+---
+ taxi/models.py                                  |  5 ++++-
+ templates/taxi/car_confirm_delete.html          |  1 +
+ templates/taxi/car_detail.html                  | 11 ++++++++---
+ templates/taxi/manufacturer_confirm_delete.html |  1 +
+ 4 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/taxi/models.py b/taxi/models.py
+index 16dcc5c..a807bb4 100644
+--- a/taxi/models.py
++++ b/taxi/models.py
+@@ -57,5 +57,8 @@ class Customer(models.Model):
+     class Meta:
+         verbose_name_plural = "customers"
+ 
+-    def __set__(self):
++    def __str__(self):
+         return self.full_name
++
++    def get_absolute_url(self):
++        return reverse('taxi:customer-detail', kwargs={'pk': self.pk})
+diff --git a/templates/taxi/car_confirm_delete.html b/templates/taxi/car_confirm_delete.html
+index 19d6083..986eb0f 100644
+--- a/templates/taxi/car_confirm_delete.html
++++ b/templates/taxi/car_confirm_delete.html
+@@ -6,5 +6,6 @@
+   <form action="" method="post">
+     {% csrf_token %}
+     <input type="submit" value="Yes, delete" class="btn btn-danger">
++    <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+   </form>
+ {% endblock %}
+\ No newline at end of file
+diff --git a/templates/taxi/car_detail.html b/templates/taxi/car_detail.html
+index 37ddbe0..6aef4a8 100644
+--- a/templates/taxi/car_detail.html
++++ b/templates/taxi/car_detail.html
+@@ -4,15 +4,20 @@
+   <h1>Model: {{ car.model }}</h1>
+   <p><strong>Name: </strong>{{ car.manufacturer.name }}</p>
+   <p><strong>Country: </strong>{{ car.manufacturer.country }}</p>
++
+   <div class="ml-3">
+     <h3>Drivers:</h3>
+     {% for driver in car.drivers.all %}
+       <hr>
+       <p class="text-muted">{{ driver.id }}</p>
+-      <p>{{ driver.first_name }} {{ driver.last_name }}
+-      </p>
++      <p>{{ driver.first_name }} {{ driver.last_name }}</p>
+     {% empty %}
+       <p>No driver!</p>
+     {% endfor %}
+   </div>
+-{% endblock %}
+\ No newline at end of file
++
++  <div class="mt-3">
++    <a href="{% url 'taxi:car-update' car.pk %}" class="btn btn-primary">Update Car</a>
++    <a href="{% url 'taxi:car-delete' car.pk %}" class="btn btn-danger">Delete Car</a>
++  </div>
++{% endblock %}
+diff --git a/templates/taxi/manufacturer_confirm_delete.html b/templates/taxi/manufacturer_confirm_delete.html
+index 5c97077..17e8a7c 100644
+--- a/templates/taxi/manufacturer_confirm_delete.html
++++ b/templates/taxi/manufacturer_confirm_delete.html
+@@ -6,5 +6,6 @@
+   <form action="" method="post">
+     {% csrf_token %}
+     <input type="submit" value="Yes, delete" class="btn btn-danger">
++    <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+   </form>
+ {% endblock %}
+\ No newline at end of file
+-- 
+2.45.1.windows.1
+

@@ -1,0 +1,47 @@
+From 7508c86f958b86c12aaeaec345d958d599c9bea0 Mon Sep 17 00:00:00 2001
+From: Nataliia Zakharchuk <62181026+Nattalli@users.noreply.github.com>
+Date: Wed, 17 Aug 2022 14:07:24 +0300
+Subject: [PATCH 21/52] Update index.html
+
+---
+ templates/taxi/index.html | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/templates/taxi/index.html b/templates/taxi/index.html
+index 7d3c73a..04097ea 100644
+--- a/templates/taxi/index.html
++++ b/templates/taxi/index.html
+@@ -1,18 +1,18 @@
+ {% extends "base.html" %}
+ 
+ {% block content %}
+-    <h1>Taxi Service Home</h1>
+-    <p>Welcome to Best Taxi Ever!</p>
+-    <h2>Dynamic content</h2>
+-    <p>The Taxi service has the following record counts:</p>
+-    <ul>
+-        <li><strong>Cars:</strong> {{ num_cars }}</li>
+-        <li><strong>Drivers:</strong> {{ num_drivers }}</li>
+-        <li><strong>Manufacturers:</strong> {{ num_manufacturers }}</li>
+-    </ul>
++  <h1>Taxi Service Home</h1>
++  <p>Welcome to Best Taxi Ever!</p>
++  <h2>Dynamic content</h2>
++  <p>The Taxi service has the following record counts:</p>
++  <ul>
++    <li><strong>Cars:</strong> {{ num_cars }}</li>
++    <li><strong>Drivers:</strong> {{ num_drivers }}</li>
++    <li><strong>Manufacturers:</strong> {{ num_manufacturers }}</li>
++  </ul>
+ 
+-    <p>You have visited this page
+-        {{ num_visits }} time{{ num_visits|pluralize }}.
+-    </p>
++  <p>You have visited this page
++    {{ num_visits }} time{{ num_visits|pluralize }}.
++  </p>
+ 
+ {% endblock %}
+-- 
+2.45.1.windows.1
+

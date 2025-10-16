@@ -1,0 +1,156 @@
+From ff5e031c5d796dab9a058c9b619e379a538088dc Mon Sep 17 00:00:00 2001
+From: Dmytro Svirsa <104418771+DmytroSvirsa@users.noreply.github.com>
+Date: Mon, 29 Aug 2022 10:57:21 +0300
+Subject: [PATCH 25/52] no fixture used inside tests
+
+---
+ tests/test_taxi_service_forms.py | 90 ++++++++++++++++++++------------
+ 1 file changed, 57 insertions(+), 33 deletions(-)
+
+diff --git a/tests/test_taxi_service_forms.py b/tests/test_taxi_service_forms.py
+index 6715baf..287e62a 100644
+--- a/tests/test_taxi_service_forms.py
++++ b/tests/test_taxi_service_forms.py
+@@ -4,44 +4,56 @@ from django.urls import reverse
+ 
+ from taxi.models import Car, Manufacturer
+ 
+-TestCase.fixtures = ["taxi_service_db_data.json", ]
+-
+ 
+ class CarTest(TestCase):
+     def setUp(self) -> None:
+-        self.client.force_login(get_user_model().objects.get(id=1))
++        self.user = get_user_model().objects.create_user(
++            username="admin.user",
++            license_number="ADM12345",
++            first_name="Admin",
++            last_name="User",
++            password="1qazcde3"
++        )
++        self.client.force_login(self.user)
++        self.manufacturer = Manufacturer.objects.create(
++            name="Lincoln",
++            country="USA",
++        )
++
++    def create_car(self):
++        return self.client.post(
++            reverse("taxi:car-create"),
++            {
++                "model": "Continental",
++                "manufacturer": 1,
++                "drivers": [1]
++            }
++        )
++
++    def test_create_car(self):
++        response = self.create_car()
++        self.assertEqual(response.status_code, 302)
++        self.assertEqual(Car.objects.get(id=1).model, "Continental")
+ 
+     def test_update_car(self):
++        self.create_car()
+         response = self.client.post(
+             reverse(
+                 "taxi:car-update",
+                 kwargs={"pk": 1}),
+             {
+                 "pk": 1,
+-                "model": "Not Lincoln",
+-                "manufacturer": 3,
+-                "drivers": [2]
++                "model": "Not Continental",
++                "manufacturer": 1,
++                "drivers": [1]
+             }
+         )
+         Car.objects.get(id=1).refresh_from_db()
+         self.assertEqual(response.status_code, 302)
+-        self.assertEqual(Car.objects.get(id=1).model, "Not Lincoln")
+-
+-    def test_create_car(self):
+-        response = self.client.post(
+-            reverse("taxi:car-create"),
+-            {
+-                "model": "Not only Lincoln",
+-                "manufacturer": 3,
+-                "drivers": [
+-                    2
+-                ]
+-            }
+-        )
+-        self.assertEqual(response.status_code, 302)
+-        self.assertEqual(Car.objects.get(id=8).model, "Not only Lincoln")
++        self.assertEqual(Car.objects.get(id=1).model, "Not Continental")
+ 
+     def test_delete_car(self):
++        self.create_car()
+         response = self.client.post(
+             reverse("taxi:car-delete", kwargs={"pk": 1})
+         )
+@@ -51,37 +63,49 @@ class CarTest(TestCase):
+ 
+ class ManufacturerTest(TestCase):
+     def setUp(self) -> None:
+-        self.client.force_login(get_user_model().objects.get(id=1))
++        self.user = get_user_model().objects.create_user(
++            username="admin.user",
++            license_number="ADM12345",
++            first_name="Admin",
++            last_name="User",
++            password="1qazcde3"
++        )
++        self.client.force_login(self.user)
+ 
+-    def test_update_manufacturer(self):
+-        response = self.client.post(
++    def create_manufacturer(self):
++        return self.client.post(
+             reverse(
+-                "taxi:manufacturer-update",
+-                kwargs={"pk": 1}
++                "taxi:manufacturer-create",
+             ),
+             {
+-                "name": "Not Lincoln",
++                "name": "Lincoln",
+                 "country": "USA"
+             }
+         )
+-        Manufacturer.objects.get(id=1).refresh_from_db()
+-        self.assertEqual(response.status_code, 302)
+-        self.assertEqual(Manufacturer.objects.get(id=1).name, "Not Lincoln")
+ 
+     def test_create_manufacturer(self):
++        response = self.create_manufacturer()
++        self.assertEqual(response.status_code, 302)
++        self.assertEqual(Manufacturer.objects.get(id=1).name, "Lincoln")
++
++    def test_update_manufacturer(self):
++        self.create_manufacturer()
+         response = self.client.post(
+             reverse(
+-                "taxi:manufacturer-create",
++                "taxi:manufacturer-update",
++                kwargs={"pk": 1}
+             ),
+             {
+                 "name": "Not Lincoln",
+                 "country": "USA"
+             }
+         )
++        Manufacturer.objects.get(id=1).refresh_from_db()
+         self.assertEqual(response.status_code, 302)
+-        self.assertEqual(Manufacturer.objects.get(id=7).name, "Not Lincoln")
++        self.assertEqual(Manufacturer.objects.get(id=1).name, "Not Lincoln")
+ 
+-    def test_delete_car(self):
++    def test_delete_manufacturer(self):
++        self.create_manufacturer()
+         response = self.client.post(
+             reverse("taxi:manufacturer-delete", kwargs={"pk": 1})
+         )
+-- 
+2.45.1.windows.1
+

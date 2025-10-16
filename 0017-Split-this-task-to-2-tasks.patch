@@ -1,0 +1,48 @@
+From 9b693760ffb0b0a0f3b6f9c0580491f05792878e Mon Sep 17 00:00:00 2001
+From: danylott <d.tuytuyshkin@gmail.com>
+Date: Mon, 8 Aug 2022 16:06:12 +0300
+Subject: [PATCH 17/52] Split this task to 2 tasks
+
+---
+ README.md | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
+
+diff --git a/README.md b/README.md
+index b5b26a2..2b1e991 100644
+--- a/README.md
++++ b/README.md
+@@ -7,27 +7,12 @@ update or delete content from the site.
+ 
+ 1. Implement:
+     - `Create`, `Update`, `Delete` views for `Car`, 
+-    - `Create`, `Update`, `Delete` views for `Manufacturer`, 
+-    - `Create`, `Delete` views for `Driver`, 
+-2. On the driver list page create a button that leads to the driver creation page.
+-3. Create a driver's license update page. The form on this page must check that 
+-license:
+-    - Consist only of 8 characters
+-    - First 3 characters are uppercase letters
+-    - Last 5 characters are digits
+-4. On the driver detail page add buttons that lead to the driver's license updating page and
+-driver deletion page.
+-5. On the car list page add button that leads to the car creation page. On the car 
++    - `Create`, `Update`, `Delete` views for `Manufacturer`.
++2. On the car list page add button that leads to the car creation page. On the car 
+ detail page add buttons that lead to the car update page and car deletion page.
+-6. On the manufacturer list page, add the button that leads to the manufacturer creation
++3. On the manufacturer list page, add the button that leads to the manufacturer creation
+ page. Also, add columns `Update`, `Delete`, and add links for the updating page and 
+ deletion page for each manufacturer.
+-7. On the car detail page add button `Assign me to this car`. This button adds 
+-current user to car drivers. When current user is already a driver of this car, 
+-there should be `Delete me from this car` button that deletes user from car drivers.
+-
+-The car detail page should look like this:
+-![image](https://mate-academy-images.s3.eu-central-1.amazonaws.com/django-forms-1.png)
+-![image](https://mate-academy-images.s3.eu-central-1.amazonaws.com/django-forms-2.png)
++4. Use crispy forms in your forms to make website more beautiful.
+ 
+ NOTE: Attach screenshots of all created or modified pages to pull request. It's important to attach images not links to them.
+-- 
+2.45.1.windows.1
+

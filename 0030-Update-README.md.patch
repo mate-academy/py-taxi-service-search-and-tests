@@ -1,0 +1,26 @@
+From c7a172d236e094486b77712a8473b2a72da47006 Mon Sep 17 00:00:00 2001
+From: Dmytro Svirsa <104418771+DmytroSvirsa@users.noreply.github.com>
+Date: Thu, 8 Sep 2022 15:11:56 +0300
+Subject: [PATCH 30/52] Update README.md
+
+---
+ README.md | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/README.md b/README.md
+index ff3a449..7ed0e6d 100644
+--- a/README.md
++++ b/README.md
+@@ -15,9 +15,6 @@ Feel free to add more data using admin panel, if needed.
+ In this task, you will implement a custom form and django built-in forms to create,
+ update or delete content from the site.
+ 
+-Since this task is the last step before deploying your project, 
+-there is no fixture attached to this task, we strongly recommend that you fill it out yourself.
+-
+ 1. Implement:
+     - `Create`, `Update`, `Delete` views for `Car`, 
+     - `Create`, `Update`, `Delete` views for `Manufacturer`.
+-- 
+2.45.1.windows.1
+

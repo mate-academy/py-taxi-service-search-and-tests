@@ -1,0 +1,25 @@
+From ee97226fbf6496b281b4f26e1d7f49da4f23a896 Mon Sep 17 00:00:00 2001
+From: polinatytarenko <p.tytarenko.20@gmail.com>
+Date: Wed, 27 Apr 2022 10:42:19 +0300
+Subject: [PATCH 14/52] Fix num_visits display
+
+---
+ taxi/views.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/taxi/views.py b/taxi/views.py
+index 5fa7161..6749aa8 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -21,7 +21,7 @@ def index(request):
+         "num_drivers": num_drivers,
+         "num_cars": num_cars,
+         "num_manufacturers": num_manufacturers,
+-        "num_visits": num_visits,
++        "num_visits": num_visits + 1,
+     }
+ 
+     return render(request, "taxi/index.html", context=context)
+-- 
+2.45.1.windows.1
+

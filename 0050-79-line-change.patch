@@ -1,0 +1,169 @@
+From 423423b6dfe66fb4b9af381c8c982f5b9dd3def3 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 01:24:47 +0300
+Subject: [PATCH 50/52] 79 line change
+
+---
+ taxi/forms.py                                       |  3 ++-
+ taxi/models.py                                      |  4 +++-
+ taxi/urls.py                                        |  4 +++-
+ taxi/views.py                                       |  4 +++-
+ taxi_service/settings.py                            | 13 +++++++++----
+ tests/test_taxi_service_forms.py                    | 12 +++++++++---
+ tests/test_taxi_service_user_form_and_validation.py |  8 ++++++--
+ 7 files changed, 35 insertions(+), 13 deletions(-)
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+index aa77e68..d2367a8 100644
+--- a/taxi/forms.py
++++ b/taxi/forms.py
+@@ -7,7 +7,8 @@ from taxi.models import Driver, Car
+ 
+ custom_code_validator = RegexValidator(
+     regex=r"^[A-Z]{3}[0-9]{5}$",
+-    message="Enter exactly 8 characters: " "3 uppercase letters followed by 5 digits.",
++    message="Enter exactly 8 characters: "
++    "3 uppercase letters followed by 5 digits.",
+     code="invalid_code",
+ )
+ 
+diff --git a/taxi/models.py b/taxi/models.py
+index 66dbe75..9f97350 100644
+--- a/taxi/models.py
++++ b/taxi/models.py
+@@ -31,7 +31,9 @@ class Driver(AbstractUser):
+ 
+ class Car(models.Model):
+     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
+-    drivers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="cars")
++    drivers = models.ManyToManyField(
++        settings.AUTH_USER_MODEL, related_name="cars"
++    )
+     model = models.CharField(max_length=255)
+ 
+     class Meta:
+diff --git a/taxi/urls.py b/taxi/urls.py
+index 032435a..0c70c17 100644
+--- a/taxi/urls.py
++++ b/taxi/urls.py
+@@ -32,7 +32,9 @@ urlpatterns = [
+     path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
+     path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
+     path("drivers/", DriverListView.as_view(), name="driver-list"),
+-    path("drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"),
++    path(
++        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
++    ),
+     path("driver/create/", DriverCreateView.as_view(), name="driver-create"),
+     path(
+         "driver/update/<int:pk>/",
+diff --git a/taxi/views.py b/taxi/views.py
+index ae97cfa..1286ab7 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -44,7 +44,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
+     model = Car
+     template_name = "taxi/car_list.html"
+     context_object_name = "car_list"
+-    queryset = Car.objects.select_related("manufacturer").order_by("manufacturer__name")
++    queryset = Car.objects.select_related("manufacturer").order_by(
++        "manufacturer__name"
++    )
+     paginate_by = 5
+ 
+ 
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+index 181db4b..3c656e1 100644
+--- a/taxi_service/settings.py
++++ b/taxi_service/settings.py
+@@ -20,7 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
+ # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+ 
+ # SECURITY WARNING: keep the secret key used in production secret!
+-SECRET_KEY = "django-insecure-8ovil3xu6=eaoqd#" "-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
++SECRET_KEY = (
++    "django-insecure-8ovil3xu6=eaoqd#" "-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
++)
+ 
+ # SECURITY WARNING: don't run with debug turned on in production!
+ DEBUG = True
+@@ -93,13 +95,16 @@ AUTH_PASSWORD_VALIDATORS = [
+         ".UserAttributeSimilarityValidator",
+     },
+     {
+-        "NAME": "django.contrib.auth.password_validation" ".MinimumLengthValidator",
++        "NAME": "django.contrib.auth.password_validation"
++        ".MinimumLengthValidator",
+     },
+     {
+-        "NAME": "django.contrib.auth.password_validation" ".CommonPasswordValidator",
++        "NAME": "django.contrib.auth.password_validation"
++        ".CommonPasswordValidator",
+     },
+     {
+-        "NAME": "django.contrib.auth.password_validation" ".NumericPasswordValidator",
++        "NAME": "django.contrib.auth.password_validation"
++        ".NumericPasswordValidator",
+     },
+ ]
+ 
+diff --git a/tests/test_taxi_service_forms.py b/tests/test_taxi_service_forms.py
+index 03c7cac..6a92357 100644
+--- a/tests/test_taxi_service_forms.py
++++ b/tests/test_taxi_service_forms.py
+@@ -57,7 +57,9 @@ class CarTest(TestCase):
+             model="Continental",
+             manufacturer=self.manufacturer,
+         )
+-        response = self.client.post(reverse("taxi:car-delete", kwargs={"pk": car.id}))
++        response = self.client.post(
++            reverse("taxi:car-delete", kwargs={"pk": car.id})
++        )
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(Car.objects.filter(id=car.id).exists())
+ 
+@@ -89,7 +91,9 @@ class ManufacturerTest(TestCase):
+             country="USA",
+         )
+         response = self.client.post(
+-            reverse("taxi:manufacturer-update", kwargs={"pk": manufacturer.id}),
++            reverse(
++                "taxi:manufacturer-update", kwargs={"pk": manufacturer.id}
++            ),
+             {"name": "Not Lincoln", "country": "USA"},
+         )
+         Manufacturer.objects.get(id=manufacturer.id).refresh_from_db()
+@@ -107,4 +111,6 @@ class ManufacturerTest(TestCase):
+             reverse("taxi:manufacturer-delete", kwargs={"pk": manufacturer.id})
+         )
+         self.assertEqual(response.status_code, 302)
+-        self.assertFalse(Manufacturer.objects.filter(id=manufacturer.id).exists())
++        self.assertFalse(
++            Manufacturer.objects.filter(id=manufacturer.id).exists()
++        )
+diff --git a/tests/test_taxi_service_user_form_and_validation.py b/tests/test_taxi_service_user_form_and_validation.py
+index 10e7066..d885092 100644
+--- a/tests/test_taxi_service_user_form_and_validation.py
++++ b/tests/test_taxi_service_user_form_and_validation.py
+@@ -8,7 +8,9 @@ from taxi.forms import DriverLicenseUpdateForm
+ class ValidLicenseNumberFormTests(TestCase):
+     @staticmethod
+     def create_form(test_license_number):
+-        return DriverLicenseUpdateForm(data={"license_number": test_license_number})
++        return DriverLicenseUpdateForm(
++            data={"license_number": test_license_number}
++        )
+ 
+     def test_validation_license_number_with_valid_data(self):
+         self.assertTrue(self.create_form("TES12345").is_valid())
+@@ -65,4 +67,6 @@ class DriverViewsTest(TestCase):
+             reverse("taxi:driver-delete", kwargs={"pk": driver.id})
+         )
+         self.assertEqual(response.status_code, 302)
+-        self.assertFalse(get_user_model().objects.filter(id=driver.id).exists())
++        self.assertFalse(
++            get_user_model().objects.filter(id=driver.id).exists()
++        )
+-- 
+2.45.1.windows.1
+

@@ -1,0 +1,23 @@
+From 503d47bfb9b8cb14eddd6101157180865decff7b Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 16:33:21 +0300
+Subject: [PATCH 07/52] Update logged_out.html
+
+---
+ templates/registration/logged_out.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/templates/registration/logged_out.html b/templates/registration/logged_out.html
+index 477ad4d..c81bd38 100644
+--- a/templates/registration/logged_out.html
++++ b/templates/registration/logged_out.html
+@@ -4,4 +4,4 @@
+ <p>Logged out!</p>
+ 
+ <a href="{% url 'login'%}">Click here to login again.</a>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

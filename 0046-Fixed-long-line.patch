@@ -1,0 +1,301 @@
+From 26bbfdd4909588dd3f6ae036122eb5b212b47a13 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 00:59:26 +0300
+Subject: [PATCH 46/52] Fixed long line
+
+---
+ taxi/forms.py                                 |  3 +-
+ taxi/migrations/0001_initial.py               | 17 ++++++++---
+ ...r_options_alter_driver_options_and_more.py |  8 ++++--
+ taxi/models.py                                |  4 +--
+ taxi/urls.py                                  | 28 +++++++++++++++----
+ taxi/views.py                                 |  8 ++++--
+ taxi_service/settings.py                      | 26 +++++++++++------
+ tests/test_taxi_service_forms.py              | 14 +++++-----
+ ...t_taxi_service_user_form_and_validation.py |  7 +++--
+ 9 files changed, 80 insertions(+), 35 deletions(-)
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+index 015329f..001cc50 100644
+--- a/taxi/forms.py
++++ b/taxi/forms.py
+@@ -38,7 +38,8 @@ class LicenseForm(forms.ModelForm):
+     license_number = forms.CharField(
+         max_length=8,
+         validators=[custom_code_validator],
+-        help_text="Format: ABC12345")
++        help_text="Format: ABC12345",
++    )
+ 
+     class Meta:
+         model = Driver
+diff --git a/taxi/migrations/0001_initial.py b/taxi/migrations/0001_initial.py
+index 280b5db..58de24c 100644
+--- a/taxi/migrations/0001_initial.py
++++ b/taxi/migrations/0001_initial.py
+@@ -29,7 +29,10 @@ class Migration(migrations.Migration):
+                         verbose_name="ID",
+                     ),
+                 ),
+-                ("password", models.CharField(max_length=128, verbose_name="password")),
++                (
++                    "password",
++                    models.CharField(max_length=128, verbose_name="password"),
++                ),
+                 (
+                     "last_login",
+                     models.DateTimeField(
+@@ -74,7 +77,9 @@ class Migration(migrations.Migration):
+                 (
+                     "email",
+                     models.EmailField(
+-                        blank=True, max_length=254, verbose_name="email address"
++                        blank=True,
++                        max_length=254,
++                        verbose_name="email address",
+                     ),
+                 ),
+                 (
+@@ -96,10 +101,14 @@ class Migration(migrations.Migration):
+                 (
+                     "date_joined",
+                     models.DateTimeField(
+-                        default=django.utils.timezone.now, verbose_name="date joined"
++                        default=django.utils.timezone.now,
++                        verbose_name="date joined",
+                     ),
+                 ),
+-                ("license_number", models.CharField(max_length=255, unique=True)),
++                (
++                    "license_number",
++                    models.CharField(max_length=255, unique=True),
++                ),
+                 (
+                     "groups",
+                     models.ManyToManyField(
+diff --git a/taxi/migrations/0003_customer_alter_car_options_alter_driver_options_and_more.py b/taxi/migrations/0003_customer_alter_car_options_alter_driver_options_and_more.py
+index 389e3e9..5d3a0fd 100644
+--- a/taxi/migrations/0003_customer_alter_car_options_alter_driver_options_and_more.py
++++ b/taxi/migrations/0003_customer_alter_car_options_alter_driver_options_and_more.py
+@@ -25,7 +25,10 @@ class Migration(migrations.Migration):
+                 ),
+                 ("full_name", models.CharField(max_length=255)),
+                 ("birth_year", models.IntegerField()),
+-                ("hobby", models.CharField(blank=True, max_length=255, null=True)),
++                (
++                    "hobby",
++                    models.CharField(blank=True, max_length=255, null=True),
++                ),
+             ],
+             options={
+                 "verbose_name_plural": "customers",
+@@ -47,7 +50,8 @@ class Migration(migrations.Migration):
+             model_name="car",
+             name="manufacturer",
+             field=models.ForeignKey(
+-                on_delete=django.db.models.deletion.CASCADE, to="taxi.manufacturer"
++                on_delete=django.db.models.deletion.CASCADE,
++                to="taxi.manufacturer",
+             ),
+         ),
+         migrations.AlterField(
+diff --git a/taxi/models.py b/taxi/models.py
+index fe8aa07..9f97350 100644
+--- a/taxi/models.py
++++ b/taxi/models.py
+@@ -32,8 +32,8 @@ class Driver(AbstractUser):
+ class Car(models.Model):
+     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
+     drivers = models.ManyToManyField(
+-        settings.AUTH_USER_MODEL,
+-        related_name="cars")
++        settings.AUTH_USER_MODEL, related_name="cars"
++    )
+     model = models.CharField(max_length=255)
+ 
+     class Meta:
+diff --git a/taxi/urls.py b/taxi/urls.py
+index 483553e..0c70c17 100644
+--- a/taxi/urls.py
++++ b/taxi/urls.py
+@@ -32,15 +32,25 @@ urlpatterns = [
+     path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
+     path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
+     path("drivers/", DriverListView.as_view(), name="driver-list"),
+-    path("drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"),
++    path(
++        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
++    ),
+     path("driver/create/", DriverCreateView.as_view(), name="driver-create"),
+     path(
+         "driver/update/<int:pk>/",
+         DriverLicenseUpdateView.as_view(),
+         name="driver-update",
+     ),
+-    path("driver/<int:pk>/delete/", DriverDeleteView.as_view(), name="driver-delete"),
+-    path("manufacturers/", ManufacturerListView.as_view(), name="manufacturer-list"),
++    path(
++        "driver/<int:pk>/delete/",
++        DriverDeleteView.as_view(),
++        name="driver-delete",
++    ),
++    path(
++        "manufacturers/",
++        ManufacturerListView.as_view(),
++        name="manufacturer-list",
++    ),
+     path(
+         "manufacturers/create/",
+         ManufacturerCreateView.as_view(),
+@@ -57,10 +67,18 @@ urlpatterns = [
+         name="manufacturer-delete",
+     ),
+     path("test-session/", test_session_view, name="test-session"),
+-    path("customer/create/", CustomerCreateView.as_view(), name="customer-create"),
++    path(
++        "customer/create/",
++        CustomerCreateView.as_view(),
++        name="customer-create",
++    ),
+     path("customers/", CustomerListView.as_view(), name="customer-list"),
+     path("car/<int:pk>/assign", assign_to_car, name="car-assign"),
+-    path("car/<int:pk>/assign/delete", delete_assign_to_car, name="car-delete-assign"),
++    path(
++        "car/<int:pk>/assign/delete",
++        delete_assign_to_car,
++        name="car-delete-assign",
++    ),
+ ]
+ 
+ app_name = "taxi"
+diff --git a/taxi/views.py b/taxi/views.py
+index 031cfe6..00c6288 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -41,8 +41,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
+     model = Car
+     template_name = "taxi/car_list.html"
+     context_object_name = "car_list"
+-    queryset = Car.objects.select_related(
+-        "manufacturer").order_by("manufacturer__name")
++    queryset = Car.objects.select_related("manufacturer").order_by(
++        "manufacturer__name"
++    )
+     paginate_by = 5
+ 
+ 
+@@ -127,7 +128,8 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
+     def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+         context["second_form"] = self.second_form_class(
+-            self.request.POST or None)
++            self.request.POST or None
++        )
+         return context
+ 
+ 
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+index 6a58e21..3c656e1 100644
+--- a/taxi_service/settings.py
++++ b/taxi_service/settings.py
+@@ -20,7 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
+ # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+ 
+ # SECURITY WARNING: keep the secret key used in production secret!
+-SECRET_KEY = "django-insecure-8ovil3xu6=eaoqd#" "-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
++SECRET_KEY = (
++    "django-insecure-8ovil3xu6=eaoqd#" "-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
++)
+ 
+ # SECURITY WARNING: don't run with debug turned on in production!
+ DEBUG = True
+@@ -90,13 +92,21 @@ DATABASES = {
+ AUTH_PASSWORD_VALIDATORS = [
+     {
+         "NAME": "django.contrib.auth.password_validation"
+-        ".UserAttributeSimilarityValidator", }, {
+-            "NAME": "django.contrib.auth.password_validation"
+-            ".MinimumLengthValidator", }, {
+-                "NAME": "django.contrib.auth.password_validation"
+-                ".CommonPasswordValidator", }, {
+-                    "NAME": "django.contrib.auth.password_validation"
+-                    ".NumericPasswordValidator", }, ]
++        ".UserAttributeSimilarityValidator",
++    },
++    {
++        "NAME": "django.contrib.auth.password_validation"
++        ".MinimumLengthValidator",
++    },
++    {
++        "NAME": "django.contrib.auth.password_validation"
++        ".CommonPasswordValidator",
++    },
++    {
++        "NAME": "django.contrib.auth.password_validation"
++        ".NumericPasswordValidator",
++    },
++]
+ 
+ AUTH_USER_MODEL = "taxi.Driver"
+ 
+diff --git a/tests/test_taxi_service_forms.py b/tests/test_taxi_service_forms.py
+index 652fc4d..6a92357 100644
+--- a/tests/test_taxi_service_forms.py
++++ b/tests/test_taxi_service_forms.py
+@@ -58,10 +58,8 @@ class CarTest(TestCase):
+             manufacturer=self.manufacturer,
+         )
+         response = self.client.post(
+-            reverse(
+-                "taxi:car-delete",
+-                kwargs={
+-                    "pk": car.id}))
++            reverse("taxi:car-delete", kwargs={"pk": car.id})
++        )
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(Car.objects.filter(id=car.id).exists())
+ 
+@@ -93,7 +91,9 @@ class ManufacturerTest(TestCase):
+             country="USA",
+         )
+         response = self.client.post(
+-            reverse("taxi:manufacturer-update", kwargs={"pk": manufacturer.id}),
++            reverse(
++                "taxi:manufacturer-update", kwargs={"pk": manufacturer.id}
++            ),
+             {"name": "Not Lincoln", "country": "USA"},
+         )
+         Manufacturer.objects.get(id=manufacturer.id).refresh_from_db()
+@@ -112,5 +112,5 @@ class ManufacturerTest(TestCase):
+         )
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(
+-            Manufacturer.objects.filter(
+-                id=manufacturer.id).exists())
++            Manufacturer.objects.filter(id=manufacturer.id).exists()
++        )
+diff --git a/tests/test_taxi_service_user_form_and_validation.py b/tests/test_taxi_service_user_form_and_validation.py
+index 2770689..d885092 100644
+--- a/tests/test_taxi_service_user_form_and_validation.py
++++ b/tests/test_taxi_service_user_form_and_validation.py
+@@ -9,7 +9,8 @@ class ValidLicenseNumberFormTests(TestCase):
+     @staticmethod
+     def create_form(test_license_number):
+         return DriverLicenseUpdateForm(
+-            data={"license_number": test_license_number})
++            data={"license_number": test_license_number}
++        )
+ 
+     def test_validation_license_number_with_valid_data(self):
+         self.assertTrue(self.create_form("TES12345").is_valid())
+@@ -67,5 +68,5 @@ class DriverViewsTest(TestCase):
+         )
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(
+-            get_user_model().objects.filter(
+-                id=driver.id).exists())
++            get_user_model().objects.filter(id=driver.id).exists()
++        )
+-- 
+2.45.1.windows.1
+

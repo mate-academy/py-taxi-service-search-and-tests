@@ -1,0 +1,42 @@
+From f7df48b60ab4631f156381da321d28c5b3dba618 Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 18:14:16 +0300
+Subject: [PATCH 09/52] Update README.md
+
+---
+ README.md | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/README.md b/README.md
+index 8351ed9..975b079 100644
+--- a/README.md
++++ b/README.md
+@@ -1,19 +1,21 @@
+-# Taxi service authentication 
++# Taxi service forms
+ 
+ - Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start
+ 
+ In this task, you will implement a custom form and django built-in forms to create,
+ update or delete content from the site.
+ 
+-1. Implement `Create`, `Update`, `Delete` views for `Driver`, `Car`, 
+-`Manufacturer`.
++1. Implement:
++    - `Create`, `Update`, `Delete` views for `Car`, 
++    - `Create`, `Update`, `Delete` views for `Manufacturer`, 
++    - `Create`, `Delete` views for `Driver`, 
+ 2. On the driver list page create a button that leads to the driver creation page.
+ 3. Create a driver's license update page. The form on this page must check that 
+ license:
+     - Consist only of 8 characters
+     - First 3 characters are uppercase letters
+     - Last 5 characters are digits
+-4. On t driver detail page add buttons that lead to the driver's license updating page and
++4. On the driver detail page add buttons that lead to the driver's license updating page and
+ driver deletion page.
+ 5. On the car list page add button that leads to the car creation page. On the car 
+ detail page, add buttons that lead to the car update page and car deletion page.
+-- 
+2.45.1.windows.1
+

@@ -1,0 +1,82 @@
+From 934a445080e75c6af4c285902e3f21a4513f0ab2 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Thu, 11 Sep 2025 18:43:46 +0200
+Subject: [PATCH 40/52] Update mistakes
+
+---
+ static/css/styles.css                           | 2 +-
+ taxi/models.py                                  | 2 +-
+ templates/taxi/car_confirm_delete.html          | 2 +-
+ templates/taxi/car_form.html                    | 2 +-
+ templates/taxi/manufacturer_confirm_delete.html | 2 +-
+ templates/taxi/manufacturer_form.html           | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/static/css/styles.css b/static/css/styles.css
+index c43197b..e271b09 100644
+--- a/static/css/styles.css
++++ b/static/css/styles.css
+@@ -5,4 +5,4 @@ body {
+ .sidebar-nav {
+     list-style: none;
+     padding: 0;
+-}
+\ No newline at end of file
++}
+diff --git a/taxi/models.py b/taxi/models.py
+index a807bb4..fe1ebad 100644
+--- a/taxi/models.py
++++ b/taxi/models.py
+@@ -61,4 +61,4 @@ class Customer(models.Model):
+         return self.full_name
+ 
+     def get_absolute_url(self):
+-        return reverse('taxi:customer-detail', kwargs={'pk': self.pk})
++        return reverse("taxi:customer-detail", kwargs={"pk": self.pk})
+diff --git a/templates/taxi/car_confirm_delete.html b/templates/taxi/car_confirm_delete.html
+index 986eb0f..50b74d1 100644
+--- a/templates/taxi/car_confirm_delete.html
++++ b/templates/taxi/car_confirm_delete.html
+@@ -8,4 +8,4 @@
+     <input type="submit" value="Yes, delete" class="btn btn-danger">
+     <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+   </form>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/car_form.html b/templates/taxi/car_form.html
+index dea9314..25b33cc 100644
+--- a/templates/taxi/car_form.html
++++ b/templates/taxi/car_form.html
+@@ -7,4 +7,4 @@
+     {{ form|crispy }}
+   <input class="btn btn-primary" type="submit" value="Submit">
+   </form>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/manufacturer_confirm_delete.html b/templates/taxi/manufacturer_confirm_delete.html
+index 17e8a7c..77e5b67 100644
+--- a/templates/taxi/manufacturer_confirm_delete.html
++++ b/templates/taxi/manufacturer_confirm_delete.html
+@@ -8,4 +8,4 @@
+     <input type="submit" value="Yes, delete" class="btn btn-danger">
+     <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+   </form>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+diff --git a/templates/taxi/manufacturer_form.html b/templates/taxi/manufacturer_form.html
+index 887e997..76a40cb 100644
+--- a/templates/taxi/manufacturer_form.html
++++ b/templates/taxi/manufacturer_form.html
+@@ -7,4 +7,4 @@
+     {{ form|crispy }}
+   <input class="btn btn-primary" type="submit" value="Submit">
+   </form>
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

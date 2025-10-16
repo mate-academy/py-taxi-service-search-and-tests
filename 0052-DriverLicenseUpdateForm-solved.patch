@@ -1,0 +1,60 @@
+From c14ab48270d0c98fa3267e8cf7804f97c998dbc3 Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 01:29:52 +0300
+Subject: [PATCH 52/52] DriverLicenseUpdateForm solved
+
+---
+ taxi/forms.py | 12 ++++++++++++
+ taxi/views.py |  6 ++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+index d2367a8..e171ce2 100644
+--- a/taxi/forms.py
++++ b/taxi/forms.py
+@@ -29,6 +29,18 @@ class DriverCreationForm(UserCreationForm):
+         )
+ 
+ 
++class DriverLicenseUpdateForm(forms.ModelForm):
++    license_number = forms.CharField(
++        max_length=8,
++        validators=[custom_code_validator],
++        help_text="Format: ABC12345",
++    )
++
++    class Meta:
++        model = get_user_model()
++        fields = ["license_number"]
++
++
+ class CarForm(forms.ModelForm):
+     drivers = forms.ModelMultipleChoiceField(
+         queryset=get_user_model().objects.all(),
+diff --git a/taxi/views.py b/taxi/views.py
+index 7327124..71be2ff 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -9,7 +9,9 @@ from django.shortcuts import render, get_object_or_404, redirect
+ from django.urls import reverse, reverse_lazy
+ from django.views import generic
+ 
+-from taxi.forms import CarForm, DriverCreationForm
++from taxi.forms import (CarForm,
++                        DriverCreationForm,
++                        DriverLicenseUpdateForm)
+ from taxi.models import Manufacturer, Car, Customer
+ 
+ 
+@@ -130,7 +132,7 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
+ 
+ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
+     model = Driver
+-    form_class = DriverCreationForm
++    form_class = DriverLicenseUpdateForm
+ 
+ 
+ class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
+-- 
+2.45.1.windows.1
+

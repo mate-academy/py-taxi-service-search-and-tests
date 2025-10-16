@@ -1,0 +1,23 @@
+From 8efc3a860e452d5f5a8c6d21345b91d8812ee8d2 Mon Sep 17 00:00:00 2001
+From: Oleksii Proshchenko <80070761+MasterpieceElbow@users.noreply.github.com>
+Date: Mon, 18 Apr 2022 16:31:20 +0300
+Subject: [PATCH 03/52] Update manufacturer_list.html
+
+---
+ templates/taxi/manufacturer_list.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/templates/taxi/manufacturer_list.html b/templates/taxi/manufacturer_list.html
+index ace27a5..2a31bcf 100644
+--- a/templates/taxi/manufacturer_list.html
++++ b/templates/taxi/manufacturer_list.html
+@@ -30,4 +30,4 @@
+     {% else %}
+         <p>There are no manufacturers in the service.</p>
+     {% endif %}
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
+-- 
+2.45.1.windows.1
+

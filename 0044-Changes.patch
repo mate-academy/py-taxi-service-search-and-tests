@@ -1,0 +1,493 @@
+From eb0c83006c3e523d8d8b341851f3fbc3ea37472e Mon Sep 17 00:00:00 2001
+From: Qellexi <qellexi@gmail.com>
+Date: Sun, 21 Sep 2025 00:37:47 +0300
+Subject: [PATCH 44/52] Changes
+
+---
+ taxi/forms.py                             | 44 ++++++++++++++++
+ taxi/models.py                            | 13 +++--
+ taxi/urls.py                              | 63 +++++++++++++----------
+ taxi/views.py                             | 63 +++++++++++++++++++----
+ taxi_service/settings.py                  | 14 ++---
+ taxi_service/urls.py                      |  1 +
+ templates/taxi/car_detail.html            | 14 +++--
+ templates/taxi/driver_confirm_delete.html | 11 ++++
+ templates/taxi/driver_detail.html         | 10 +++-
+ templates/taxi/driver_form.html           | 11 ++++
+ templates/taxi/driver_list.html           |  2 +-
+ tests/test_taxi_service_forms.py          | 12 ++---
+ 12 files changed, 191 insertions(+), 67 deletions(-)
+ create mode 100644 taxi/forms.py
+ create mode 100644 templates/taxi/driver_confirm_delete.html
+ create mode 100644 templates/taxi/driver_form.html
+
+diff --git a/taxi/forms.py b/taxi/forms.py
+new file mode 100644
+index 0000000..d286281
+--- /dev/null
++++ b/taxi/forms.py
+@@ -0,0 +1,44 @@
++from django import forms
++from django.contrib.auth import get_user_model
++from django.contrib.auth.forms import UserCreationForm
++from django.core.validators import RegexValidator
++
++from taxi.models import Driver, Car
++
++
++class DriverForm(forms.ModelForm):
++    class Meta(UserCreationForm.Meta):
++        model = Driver
++        fields = UserCreationForm.Meta.fields + (
++            "first_name",
++            "last_name",
++        )
++
++
++class CarForm(forms.ModelForm):
++    drivers = forms.ModelMultipleChoiceField(
++        queryset=get_user_model().objects.all(),
++        widget=forms.CheckboxSelectMultiple,
++        required=False,
++    )
++
++    class Meta:
++        model = Car
++        fields = "__all__"
++
++
++custom_code_validator = RegexValidator(
++    regex=r"^[A-Z]{3}[0-9]{5}$",
++    message="Enter exactly 8 characters: 3 uppercase letters followed by 5 digits.",
++    code="invalid_code",
++)
++
++
++class LicenseForm(forms.ModelForm):
++    license_number = forms.CharField(
++        max_length=8, validators=[custom_code_validator], help_text="Format: ABC12345"
++    )
++
++    class Meta:
++        model = Driver
++        fields = ["license_number"]
+diff --git a/taxi/models.py b/taxi/models.py
+index fe1ebad..66dbe75 100644
+--- a/taxi/models.py
++++ b/taxi/models.py
+@@ -31,19 +31,18 @@ class Driver(AbstractUser):
+ 
+ class Car(models.Model):
+     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
+-    drivers = models.ManyToManyField(
+-        settings.AUTH_USER_MODEL,
+-        related_name="cars"
+-    )
++    drivers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="cars")
+     model = models.CharField(max_length=255)
+ 
+     class Meta:
+         ordering = ("manufacturer", "model")
+ 
+     def __str__(self):
+-        return (f"{self.manufacturer.name} "
+-                f"{self.manufacturer.country}: "
+-                f"{self.model}")
++        return (
++            f"{self.manufacturer.name} "
++            f"{self.manufacturer.country}: "
++            f"{self.model}"
++        )
+ 
+     def get_absolute_url(self):
+         return reverse("taxi:car-detail", kwargs={"pk": self.pk})
+diff --git a/taxi/urls.py b/taxi/urls.py
+index 87ca436..483553e 100644
+--- a/taxi/urls.py
++++ b/taxi/urls.py
+@@ -1,18 +1,28 @@
+ from django.contrib import admin
+ from django.urls import path
+ 
+-from taxi.views import (index,
+-                        CarListView,
+-                        CarDetailView,
+-                        DriverListView,
+-                        DriverDetailView,
+-                        ManufacturerListView,
+-                        test_session_view, CustomerCreateView,
+-                        CustomerListView, CarCreateView,
+-                        CarUpdateView, CarDeleteView,
+-                        ManufacturerCreateView,
+-                        ManufacturerUpdateView,
+-                        ManufacturerDeleteView)
++from taxi.views import (
++    index,
++    CarListView,
++    CarDetailView,
++    DriverListView,
++    DriverDetailView,
++    ManufacturerListView,
++    test_session_view,
++    CustomerCreateView,
++    CustomerListView,
++    CarCreateView,
++    CarUpdateView,
++    CarDeleteView,
++    ManufacturerCreateView,
++    ManufacturerUpdateView,
++    ManufacturerDeleteView,
++    DriverCreateView,
++    DriverDeleteView,
++    DriverLicenseUpdateView,
++    assign_to_car,
++    delete_assign_to_car,
++)
+ 
+ urlpatterns = [
+     path("", index, name="index"),
+@@ -22,38 +32,35 @@ urlpatterns = [
+     path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
+     path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
+     path("drivers/", DriverListView.as_view(), name="driver-list"),
++    path("drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"),
++    path("driver/create/", DriverCreateView.as_view(), name="driver-create"),
+     path(
+-        "drivers/<int:pk>/",
+-        DriverDetailView.as_view(),
+-        name="driver-detail"
+-    ),
+-    path(
+-        "manufacturers/",
+-        ManufacturerListView.as_view(),
+-        name="manufacturer-list"
++        "driver/update/<int:pk>/",
++        DriverLicenseUpdateView.as_view(),
++        name="driver-update",
+     ),
++    path("driver/<int:pk>/delete/", DriverDeleteView.as_view(), name="driver-delete"),
++    path("manufacturers/", ManufacturerListView.as_view(), name="manufacturer-list"),
+     path(
+         "manufacturers/create/",
+         ManufacturerCreateView.as_view(),
+-        name="manufacturer-create"
++        name="manufacturer-create",
+     ),
+     path(
+         "manufacturers/<int:pk>/update/",
+         ManufacturerUpdateView.as_view(),
+-        name="manufacturer-update"
++        name="manufacturer-update",
+     ),
+     path(
+         "manufacturers/<int:pk>/delete/",
+         ManufacturerDeleteView.as_view(),
+-        name="manufacturer-delete"
++        name="manufacturer-delete",
+     ),
+     path("test-session/", test_session_view, name="test-session"),
+-    path(
+-        "customer/create/",
+-        CustomerCreateView.as_view(),
+-        name="customer-create"
+-    ),
++    path("customer/create/", CustomerCreateView.as_view(), name="customer-create"),
+     path("customers/", CustomerListView.as_view(), name="customer-list"),
++    path("car/<int:pk>/assign", assign_to_car, name="car-assign"),
++    path("car/<int:pk>/assign/delete", delete_assign_to_car, name="car-delete-assign"),
+ ]
+ 
+ app_name = "taxi"
+diff --git a/taxi/views.py b/taxi/views.py
+index 21a65b5..d1bb97b 100644
+--- a/taxi/views.py
++++ b/taxi/views.py
+@@ -4,10 +4,11 @@ from django.contrib.auth.decorators import login_required
+ from django.contrib.auth.mixins import LoginRequiredMixin
+ from django.db.models import Prefetch
+ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+-from django.shortcuts import render
++from django.shortcuts import render, get_object_or_404, redirect
+ from django.urls import reverse, reverse_lazy
+ from django.views import generic
+ 
++from taxi.forms import DriverForm, CarForm, LicenseForm
+ from taxi.models import Driver, Manufacturer, Car, Customer
+ 
+ 
+@@ -40,8 +41,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
+     model = Car
+     template_name = "taxi/car_list.html"
+     context_object_name = "car_list"
+-    queryset = (Car.objects.select_related("manufacturer").
+-                order_by("manufacturer__name"))
++    queryset = Car.objects.select_related("manufacturer").order_by("manufacturer__name")
+     paginate_by = 5
+ 
+ 
+@@ -62,9 +62,7 @@ class DriverDetailView(LoginRequiredMixin, generic.DetailView):
+ 
+ 
+ def test_session_view(request: HttpRequest) -> HttpResponse:
+-    return HttpResponse(
+-        "<h1>Test Session</h1>"
+-    )
++    return HttpResponse("<h1>Test Session</h1>")
+ 
+ 
+ class CustomerCreateView(LoginRequiredMixin, generic.CreateView):
+@@ -82,9 +80,7 @@ class CustomerListView(LoginRequiredMixin, generic.ListView):
+ 
+ class CarCreateView(LoginRequiredMixin, generic.CreateView):
+     model = Car
+-    fields = "__all__"
+-    success_url = reverse_lazy("taxi:car-list")
+-    template_name = "taxi/car_form.html"
++    form_class = CarForm
+ 
+ 
+ class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
+@@ -120,3 +116,52 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
+     fields = "__all__"
+     success_url = reverse_lazy("taxi:manufacturer-list")
+     template_name = "taxi/manufacturer_confirm_delete.html"
++
++
++class DriverCreateView(LoginRequiredMixin, generic.CreateView):
++    model = Driver
++    form_class = DriverForm
++    second_form_class = LicenseForm
++
++    def get_context_data(self, **kwargs):
++        context = super().get_context_data(**kwargs)
++        context["second_form"] = self.second_form_class(self.request.POST or None)
++        return context
++
++
++class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
++    model = Driver
++    form_class = LicenseForm
++
++
++class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
++    model = Driver
++    form_class = DriverForm
++    second_form_class = LicenseForm
++
++
++class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
++    model = Driver
++    success_url = reverse_lazy("taxi:driver-list")
++    template_name = "taxi/driver_confirm_delete.html"
++
++
++@login_required
++def assign_to_car(request, pk):
++    car = get_object_or_404(Car, pk=pk)
++    user = request.user
++
++    if user not in car.drivers.all():
++        car.drivers.add(user)
++
++    return redirect("taxi:car-detail", pk=user.id)
++
++
++def delete_assign_to_car(request, pk):
++    car = get_object_or_404(Car, pk=pk)
++    user = request.user
++
++    if user in car.drivers.all():
++        car.drivers.remove(user)
++
++    return redirect("taxi:car-detail", pk=user.id)
+diff --git a/taxi_service/settings.py b/taxi_service/settings.py
+index 4b2103b..181db4b 100644
+--- a/taxi_service/settings.py
++++ b/taxi_service/settings.py
+@@ -20,8 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
+ # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+ 
+ # SECURITY WARNING: keep the secret key used in production secret!
+-SECRET_KEY = "django-insecure-8ovil3xu6=eaoqd#" \
+-             "-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
++SECRET_KEY = "django-insecure-8ovil3xu6=eaoqd#" "-#&ricv159p0pypoh5_lgm*)-dfcjqe=yc"
+ 
+ # SECURITY WARNING: don't run with debug turned on in production!
+ DEBUG = True
+@@ -91,19 +90,16 @@ DATABASES = {
+ AUTH_PASSWORD_VALIDATORS = [
+     {
+         "NAME": "django.contrib.auth.password_validation"
+-                ".UserAttributeSimilarityValidator",
++        ".UserAttributeSimilarityValidator",
+     },
+     {
+-        "NAME": "django.contrib.auth.password_validation"
+-                ".MinimumLengthValidator",
++        "NAME": "django.contrib.auth.password_validation" ".MinimumLengthValidator",
+     },
+     {
+-        "NAME": "django.contrib.auth.password_validation"
+-                ".CommonPasswordValidator",
++        "NAME": "django.contrib.auth.password_validation" ".CommonPasswordValidator",
+     },
+     {
+-        "NAME": "django.contrib.auth.password_validation"
+-                ".NumericPasswordValidator",
++        "NAME": "django.contrib.auth.password_validation" ".NumericPasswordValidator",
+     },
+ ]
+ 
+diff --git a/taxi_service/urls.py b/taxi_service/urls.py
+index 6404b8a..f0abe40 100644
+--- a/taxi_service/urls.py
++++ b/taxi_service/urls.py
+@@ -13,6 +13,7 @@ Including another URLconf
+     1. Import the include() function: from django.urls import include, path
+     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+ """
++
+ from django.contrib import admin
+ from django.urls import path, include
+ 
+diff --git a/templates/taxi/car_detail.html b/templates/taxi/car_detail.html
+index 6aef4a8..d7d59a9 100644
+--- a/templates/taxi/car_detail.html
++++ b/templates/taxi/car_detail.html
+@@ -6,7 +6,15 @@
+   <p><strong>Country: </strong>{{ car.manufacturer.country }}</p>
+ 
+   <div class="ml-3">
+-    <h3>Drivers:</h3>
++    <h3>Drivers:{% if user in car.drivers.all %}
++      <a style="float: right" class="btn btn-danger btn-sm" href="{% url 'taxi:car-delete-assign' pk=car.id %}">
++        Delete me from this car
++      </a>
++    {% else %}
++      <a style="float: right" class="btn btn-primary btn-sm" href="{% url 'taxi:car-assign' pk=car.id %}">
++        Assign me to this car
++      </a>
++    {% endif %}</h3>
+     {% for driver in car.drivers.all %}
+       <hr>
+       <p class="text-muted">{{ driver.id }}</p>
+@@ -17,7 +25,7 @@
+   </div>
+ 
+   <div class="mt-3">
+-    <a href="{% url 'taxi:car-update' car.pk %}" class="btn btn-primary">Update Car</a>
+-    <a href="{% url 'taxi:car-delete' car.pk %}" class="btn btn-danger">Delete Car</a>
++    <a class="btn btn-secondary btn-sm" href="{% url 'taxi:car-update' car.pk %}">Update</a>
++    <a class="btn btn-danger btn-sm" href="{% url 'taxi:car-delete' car.pk %}">Delete</a>
+   </div>
+ {% endblock %}
+diff --git a/templates/taxi/driver_confirm_delete.html b/templates/taxi/driver_confirm_delete.html
+new file mode 100644
+index 0000000..1cfe929
+--- /dev/null
++++ b/templates/taxi/driver_confirm_delete.html
+@@ -0,0 +1,11 @@
++{% extends "base.html" %}
++{% block content %}
++  <h1>Delete Driver</h1>
++  <p>Are you sure you want to delete the driver: {{ driver }}</p>
++  <p><b>Attention!</b><i> Driver's data will be totally deleted</i></p>
++  <form action="" method="post">
++    {% csrf_token %}
++    <input type="submit" value="Yes, delete" class="btn btn-danger">
++    <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
++  </form>
++{% endblock %}
+diff --git a/templates/taxi/driver_detail.html b/templates/taxi/driver_detail.html
+index 3a4b4b7..6381289 100644
+--- a/templates/taxi/driver_detail.html
++++ b/templates/taxi/driver_detail.html
+@@ -1,7 +1,7 @@
+ {% extends "base.html" %}
+ 
+ {% block content %}
+-  <h1>Name: {{ driver.username }}</h1>
++  <h1>Name: {{ driver.username }}<a style="float: right" href="{% url 'taxi:driver-update' pk=driver.id %}">Edit</a></h1>
+   <p><strong>First name: </strong>{{ driver.first_name }}</p>
+   <p><strong>Last name: </strong>{{ driver.last_name }}</p>
+   <p><strong>License plate: </strong>{{ driver.license_number }}</p>
+@@ -15,4 +15,12 @@
+       <p>No car!</p>
+     {% endfor %}
+   </div>
++  <div class="mt-3">
++    <a class="btn btn-secondary btn-sm" href="{% url 'taxi:driver-update' pk=driver.id %}">
++      Update
++    </a>
++    <a class="btn btn-danger btn-sm" href="{% url 'taxi:driver-delete' pk=driver.id %}">
++      Delete
++    </a>
++  </div>
+ {% endblock %}
+diff --git a/templates/taxi/driver_form.html b/templates/taxi/driver_form.html
+new file mode 100644
+index 0000000..9cb65fd
+--- /dev/null
++++ b/templates/taxi/driver_form.html
+@@ -0,0 +1,11 @@
++{% extends "base.html" %}
++{% load crispy_forms_filters %}
++{% block content %}
++  <h1>{{ object|yesno:"Update,Create" }} Driver</h1>
++  <form action="" method="post" novalidate>
++    {% csrf_token %}
++    {{ form|crispy }}
++    {{ second_form|crispy }}
++  <input class="btn btn-primary" type="submit" value="Submit">
++  </form>
++{% endblock %}
+diff --git a/templates/taxi/driver_list.html b/templates/taxi/driver_list.html
+index 50deb08..2d38583 100644
+--- a/templates/taxi/driver_list.html
++++ b/templates/taxi/driver_list.html
+@@ -1,7 +1,7 @@
+ {% extends "base.html" %}
+ 
+ {% block content %}
+-  <h1>Driver List</h1>
++  <h1>Driver List <a style="float: right" href="{% url 'taxi:driver-create' %}">+</a></h1>
+ 
+   {% if driver_list %}
+     <table border="1" cellpadding="5" cellspacing="0">
+diff --git a/tests/test_taxi_service_forms.py b/tests/test_taxi_service_forms.py
+index 6a92357..03c7cac 100644
+--- a/tests/test_taxi_service_forms.py
++++ b/tests/test_taxi_service_forms.py
+@@ -57,9 +57,7 @@ class CarTest(TestCase):
+             model="Continental",
+             manufacturer=self.manufacturer,
+         )
+-        response = self.client.post(
+-            reverse("taxi:car-delete", kwargs={"pk": car.id})
+-        )
++        response = self.client.post(reverse("taxi:car-delete", kwargs={"pk": car.id}))
+         self.assertEqual(response.status_code, 302)
+         self.assertFalse(Car.objects.filter(id=car.id).exists())
+ 
+@@ -91,9 +89,7 @@ class ManufacturerTest(TestCase):
+             country="USA",
+         )
+         response = self.client.post(
+-            reverse(
+-                "taxi:manufacturer-update", kwargs={"pk": manufacturer.id}
+-            ),
++            reverse("taxi:manufacturer-update", kwargs={"pk": manufacturer.id}),
+             {"name": "Not Lincoln", "country": "USA"},
+         )
+         Manufacturer.objects.get(id=manufacturer.id).refresh_from_db()
+@@ -111,6 +107,4 @@ class ManufacturerTest(TestCase):
+             reverse("taxi:manufacturer-delete", kwargs={"pk": manufacturer.id})
+         )
+         self.assertEqual(response.status_code, 302)
+-        self.assertFalse(
+-            Manufacturer.objects.filter(id=manufacturer.id).exists()
+-        )
++        self.assertFalse(Manufacturer.objects.filter(id=manufacturer.id).exists())
+-- 
+2.45.1.windows.1
+
