@@ -8,6 +8,25 @@
       </a>
     </h1>
 
+    <!-- Search Form -->
+    <form method="get" class="mb-3" role="search">
+        <label for="driver-search" class="visually-hidden">Search drivers</label>
+        <div class="input-group">
+            <input type="text" name="q" id="driver-search"
+                class="form-control"
+                placeholder="Search by username..."
+                value="{{ q }}">
+            <button type="submit" class="btn btn-outline-secondary">Search</button>
+            {% if q %}
+                <a href="{% url 'taxi:driver-list' %}" class="btn btn-outline-danger">Clear</a>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if q %}
+        <p><strong>Search results for "{{ q }}":</strong></p>
+    {% endif %}
+
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -26,9 +45,50 @@
         <td>{{ driver.license_number }}</td>
       </tr>
     {% endfor %}
-
     </table>
     {% else %}
-      <p>There are no drivers in the service.</p>
+      {% if q %}
+        <p>No drivers found for "{{ q }}".</p>
+      {% else %}
+        <p>There are no drivers in the service.</p>
+      {% endif %}
+    {% endif %}
+
+    {% if is_paginated %}
+        <nav aria-label="Search results pages">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if q %}q={{ q|urlencode }}&amp;{% endif %}page=1">
+                            First
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if q %}q={{ q|urlencode }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">
+                            Previous
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item active">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if q %}q={{ q|urlencode }}&amp;{% endif %}page={{ page_obj.next_page_number }}">
+                            Next
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if q %}q={{ q|urlencode }}&amp;{% endif %}page={{ page_obj.paginator.num_pages }}">
+                            Last
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     {% endif %}
 {% endblock %}
