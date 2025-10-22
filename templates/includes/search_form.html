@@ -1,3 +1,4 @@
+{% load crispy_forms_filters %}
 <form action="" method="get" class="form-inline">
   {% csrf_token %}
   {{ search_form|crispy }}
