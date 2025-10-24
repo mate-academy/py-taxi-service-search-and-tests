@@ -9,6 +9,7 @@ MANUFACTURER_URL = "/manufacturers/"
 CAR_URL = "/cars/"
 DRIVER_URL = "/drivers/"
 
+
 class PublicIndexTest(TestCase):
     def test_login_required(self):
         response = self.client.get("/")
@@ -35,7 +36,9 @@ class PrivateManufacturerViewTest(TestCase):
     def setUpTestData(cls):
         number_of_objects = 6
         for i in range(number_of_objects):
-            Manufacturer.objects.create(name=f"Test name {i}", country=f"Test country {i}")
+            Manufacturer.objects.create(
+                name=f"Test name {i}", country=f"Test country {i}"
+            )
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
@@ -72,7 +75,7 @@ class PrivateManufacturerViewTest(TestCase):
         response = self.client.get(MANUFACTURER_URL + "?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context["is_paginated"] == True)
+        self.assertTrue(response.context["is_paginated"])
         self.assertEqual(response.context["page_obj"].number, 2)
         self.assertEqual(len(response.context["manufacturer_list"]), 1)
 
@@ -135,7 +138,9 @@ class PrivateCarViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         number_of_objects = 6
-        cls.manufacturer = Manufacturer.objects.create(name="Test name", country="Test country")
+        cls.manufacturer = Manufacturer.objects.create(
+            name="Test name", country="Test country"
+        )
         for i in range(number_of_objects):
             Car.objects.create(
                 model=f"Test model {i}",
@@ -168,7 +173,7 @@ class PrivateCarViewTest(TestCase):
         response = self.client.get(CAR_URL + "?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context["is_paginated"] == True)
+        self.assertTrue(response.context["is_paginated"])
         self.assertEqual(response.context["page_obj"].number, 2)
         self.assertEqual(len(response.context["car_list"]), 1)
 
@@ -187,7 +192,7 @@ class PrivateCarViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["car_list"]), 5)
 
-    def test_search_form_search_by_name_icontains(self):
+    def test_search_form_search_by_model_icontains(self):
         manufacturer = Manufacturer.objects.get(id=1)
         Car.objects.create(model="It model", manufacturer=manufacturer)
         url = reverse("taxi:car-list")
@@ -211,7 +216,9 @@ class PrivateCarCreateViewTest(TestCase):
         self.client.force_login(self.user)
 
     def test_create_car(self):
-        manufacturer = Manufacturer.objects.create(name="Test name", country="Test country")
+        manufacturer = Manufacturer.objects.create(
+            name="Test name", country="Test country"
+        )
         driver = get_user_model().objects.create_user(
             username="test_driver",
             password="password",
@@ -220,7 +227,9 @@ class PrivateCarCreateViewTest(TestCase):
         form_data = {
             "model": "Test mode",
             "manufacturer": manufacturer.id,
-            "drivers": [driver.id,]
+            "drivers": [
+                driver.id,
+            ],
         }
         self.client.post(reverse("taxi:car-create"), data=form_data)
         new_car = Car.objects.get(model=form_data["model"])
@@ -239,11 +248,13 @@ class PrivateDriverViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         number_of_objects = 6
+        digits = 00000
         for i in range(number_of_objects):
+            digits += 1
             get_user_model().objects.create_user(
                 username=f"test_user_{i}",
                 password="password",
-                license_number=f"ABC{i*5}",
+                license_number=f"ABC{digits}",
             )
 
     def setUp(self):
@@ -265,11 +276,11 @@ class PrivateDriverViewTest(TestCase):
         self.assertTrue(response.context["is_paginated"])
         self.assertEqual(len(response.context["driver_list"]), 5)
 
-    def test_lists_all_manufacturers(self):
+    def test_lists_all_drivers(self):
         response = self.client.get(DRIVER_URL + "?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("is_paginated" in response.context)
-        self.assertTrue(response.context["is_paginated"] == True)
+        self.assertTrue(response.context["is_paginated"])
         self.assertEqual(response.context["page_obj"].number, 2)
         self.assertEqual(len(response.context["driver_list"]), 1)
 
@@ -282,13 +293,13 @@ class PrivateDriverViewTest(TestCase):
         self.assertIsInstance(form, DriverSearchForm)
         self.assertEqual(form.initial["username"], "user")
 
-    def test_search_form_search_without_name(self):
+    def test_search_form_search_without_username(self):
         url = reverse("taxi:driver-list")
         response = self.client.get(url, {"username": ""})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["driver_list"]), 5)
 
-    def test_search_form_search_by_name_icontains(self):
+    def test_search_form_search_by_username_icontains(self):
         get_user_model().objects.create_user(
             username="it user",
             password="password",
@@ -323,10 +334,19 @@ class PrivateDriverCreateViewTest(TestCase):
             "last_name": "last",
             "license_number": "ABC12445",
         }
-        self.client.post(reverse("taxi:driver-create"), data=form_data)
-        new_driver = get_user_model().objects.get(username=form_data["username"])
+        self.client.post(
+            reverse("taxi:driver-create"),
+            data=form_data
+        )
+        new_driver = get_user_model().objects.get(
+            username=form_data["username"]
+        )
 
-        self.assertEqual(new_driver.username, form_data["username"])
-        self.assertEqual(new_driver.license_number, form_data["license_number"])
-
-
+        self.assertEqual(
+            new_driver.username,
+            form_data["username"]
+        )
+        self.assertEqual(
+            new_driver.license_number,
+            form_data["license_number"]
+        )

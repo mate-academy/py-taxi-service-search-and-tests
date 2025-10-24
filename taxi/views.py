@@ -4,11 +4,15 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from pyexpat import model
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, ManufacturerSearchForm, DriverSearchForm, \
-    CarSearchForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    ManufacturerSearchForm,
+    DriverSearchForm,
+    CarSearchForm)
 
 
 @login_required
@@ -28,7 +32,6 @@ def index(request):
         "num_manufacturers": num_manufacturers,
         "num_visits": num_visits + 1,
     }
-
     return render(request, "taxi/index.html", context=context)
 
 
@@ -85,7 +88,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Car.objects.all()
+        queryset = super().get_queryset()
         model = self.request.GET.get("model")
         if model:
             queryset = queryset.filter(model__icontains=model)

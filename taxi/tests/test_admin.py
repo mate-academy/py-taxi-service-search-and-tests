@@ -38,7 +38,9 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, "Additional info")
 
     def test_car_search_fields(self):
-        manufacturer = Manufacturer.objects.create(name="Test name", country="Test country")
+        manufacturer = Manufacturer.objects.create(
+            name="Test name", country="Test country"
+        )
         car = Car.objects.create(
             model="Test model",
             manufacturer=manufacturer,
@@ -50,8 +52,12 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, car.model)
 
     def test_car_list_filter(self):
-        manufacturer1 = Manufacturer.objects.create(name="Manufacturer 1", country="Country 1")
-        manufacturer2 = Manufacturer.objects.create(name="Manufacturer 2", country="Country 2")
+        manufacturer1 = Manufacturer.objects.create(
+            name="Manufacturer 1", country="Country 1"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="Manufacturer 2", country="Country 2"
+        )
         car1 = Car.objects.create(
             model="Car 1",
             manufacturer=manufacturer1,
@@ -61,13 +67,18 @@ class AdminSiteTests(TestCase):
             manufacturer=manufacturer2,
         )
 
-        url = reverse("admin:taxi_car_changelist") + f"?manufacturer__id={manufacturer1.id}"
+        url = (
+            reverse("admin:taxi_car_changelist") + f"?manufacturer__id= "
+            f"{manufacturer1.id}"
+        )
         res = self.client.get(url)
         self.assertContains(res, car1.model)
         self.assertNotContains(res, car2.model)
 
     def test_manufacturer_listed(self):
-        manufacturer = Manufacturer.objects.create(name="Test name", country="Test country")
+        manufacturer = Manufacturer.objects.create(
+            name="Test name", country="Test country"
+        )
         url = reverse("admin:taxi_manufacturer_changelist")
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)

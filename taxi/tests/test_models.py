@@ -18,22 +18,22 @@ class ManufacturerModelTest(TestCase):
 
     def test_manufacturer_name_label(self):
         manufacturer = Manufacturer.objects.get(id=1)
-        field_label = manufacturer._meta.get_field('name').verbose_name
-        self.assertEqual(field_label, 'name')
+        field_label = manufacturer._meta.get_field("name").verbose_name
+        self.assertEqual(field_label, "name")
 
     def test_manufacturer_country_label(self):
         manufacturer = Manufacturer.objects.get(id=1)
-        field_label = manufacturer._meta.get_field('country').verbose_name
-        self.assertEqual(field_label, 'country')
+        field_label = manufacturer._meta.get_field("country").verbose_name
+        self.assertEqual(field_label, "country")
 
     def test_manufacturer_name_max_length(self):
         manufacturer = Manufacturer.objects.get(id=1)
-        max_length = manufacturer._meta.get_field('name').max_length
+        max_length = manufacturer._meta.get_field("name").max_length
         self.assertEqual(max_length, 255)
 
     def test_manufacturer_country_max_length(self):
         manufacturer = Manufacturer.objects.get(id=1)
-        max_length = manufacturer._meta.get_field('country').max_length
+        max_length = manufacturer._meta.get_field("country").max_length
         self.assertEqual(max_length, 255)
 
     def test_manufacturer_str(self):
@@ -43,9 +43,15 @@ class ManufacturerModelTest(TestCase):
 
     def test_manufacturer_ordering(self):
         manufacturer = Manufacturer.objects.get(id=1)
-        manufacturer1 = Manufacturer.objects.create(name="Test name 1", country="Test country 1")
-        manufacturer3 = Manufacturer.objects.create(name="Test name 3", country="Test country 2")
-        manufacturer2 = Manufacturer.objects.create(name="Test name 2", country="Test country 3")
+        manufacturer1 = Manufacturer.objects.create(
+            name="Test name 1", country="Test country 1"
+        )
+        manufacturer3 = Manufacturer.objects.create(
+            name="Test name 3", country="Test country 2"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="Test name 2", country="Test country 3"
+        )
         self.assertListEqual(
             list(Manufacturer.objects.all()),
             [manufacturer1, manufacturer2, manufacturer3, manufacturer],
@@ -64,10 +70,16 @@ class DriverModelTest(TestCase):
         )
 
     def test_driver_moder_verbose_name(self):
-        self.assertEqual(force_str(Driver._meta.verbose_name), "driver")
+        self.assertEqual(
+            force_str(Driver._meta.verbose_name),
+            "driver"
+        )
 
     def test_driver_moder_verbose_name_plural(self):
-        self.assertEqual(force_str(Driver._meta.verbose_name_plural), "drivers")
+        self.assertEqual(
+            force_str(Driver._meta.verbose_name_plural),
+            "drivers"
+        )
 
     def test_driver_license_number_exists(self):
         driver = Driver.objects.get(id=1)
@@ -85,12 +97,17 @@ class DriverModelTest(TestCase):
 
     def test_driver_get_absolute_url(self):
         driver = Driver.objects.get(id=1)
-        self.assertEqual(driver.get_absolute_url(), f"{DRIVER_URL}{driver.pk}/")
+        self.assertEqual(
+            driver.get_absolute_url(),
+            f"{DRIVER_URL}{driver.pk}/"
+        )
 
 
 class CarModelTest(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Test name", country="Test country")
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test name", country="Test country"
+        )
         self.car = Car.objects.create(
             model="Test model",
             manufacturer=self.manufacturer,
@@ -116,4 +133,3 @@ class CarModelTest(TestCase):
 
     def test_car_reverse_related_name_cars(self):
         self.assertIn(self.car, self.driver.cars.all())
-
