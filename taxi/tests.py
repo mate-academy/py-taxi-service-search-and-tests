@@ -16,6 +16,7 @@ class ModelTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
+            license_number="ABC12345",
         )
         self.test_car = Car.objects.create(
             model="test model",
@@ -85,17 +86,18 @@ class CarSearchTest(TestCase):
         self.manuf1 = Manufacturer.objects.create(
             name="Tesla", country="US"
         )
-        self.test_driver = get_user_model().objects.create_user(
-            username="test_driver",
+        self.driver = get_user_model().objects.create_user(
+            username="driver",
             first_name="Test",
             last_name="Driver",
             password="password123",
+            license_number="XYZ67890",
         )
         self.test_car = Car.objects.create(
             model="S1",
             manufacturer=self.manuf1,
         )
-        self.test_car.drivers.set([self.test_driver])
+        self.test_car.drivers.set([self.driver])
 
         # створюємо користувача, бо сторінка під LoginRequiredMixin
         self.user = get_user_model().objects.create_user(
@@ -135,6 +137,7 @@ class DriverSearchTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
+            license_number="XYZ67330",
         )
 
         # створюємо користувача, бо сторінка під LoginRequiredMixin
