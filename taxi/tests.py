@@ -20,7 +20,7 @@ class ModelTest(TestCase):
         self.test_car = Car.objects.create(
             model="test model",
             manufacturer=self.test_manuf,
-            driver=self.test_driver,
+            drivers=self.test_driver,
         )
 
     def test_manufacturer_str(self):
