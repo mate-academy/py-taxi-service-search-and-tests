@@ -16,6 +16,7 @@ class ModelTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
+            licence_number="YTG34567",
         )
         self.test_car = Car.objects.create(
             model="test model",
@@ -90,6 +91,7 @@ class CarSearchTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
+            license_number="LIJ23456",
         )
         self.test_car = Car.objects.create(
             model="S1",
@@ -135,6 +137,7 @@ class DriverSearchTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
+            license_number="ERW12345",
         )
 
         # створюємо користувача, бо сторінка під LoginRequiredMixin
