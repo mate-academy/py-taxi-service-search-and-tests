@@ -16,7 +16,6 @@ class ModelTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
-            licence_number="YTG34567",
         )
         self.test_car = Car.objects.create(
             model="test model",
@@ -91,7 +90,6 @@ class CarSearchTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
-            license_number="LIJ23456",
         )
         self.test_car = Car.objects.create(
             model="S1",
@@ -116,7 +114,7 @@ class CarSearchTest(TestCase):
 
     def test_search_is_case_insensitive(self):
         url = reverse("taxi:car-list")
-        response = self.client.get(url, {"model": "S1"})
+        response = self.client.get(url, {"model": "s1"})
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Tesla")
@@ -137,7 +135,6 @@ class DriverSearchTest(TestCase):
             first_name="Test",
             last_name="Driver",
             password="password123",
-            license_number="ERW12345",
         )
 
         # створюємо користувача, бо сторінка під LoginRequiredMixin
@@ -157,7 +154,7 @@ class DriverSearchTest(TestCase):
 
     def test_search_is_case_insensitive(self):
         url = reverse("taxi:driver-list")
-        response = self.client.get(url, {"username": "test_driver"})
+        response = self.client.get(url, {"username": "TEST_driver"})
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "test_driver")
