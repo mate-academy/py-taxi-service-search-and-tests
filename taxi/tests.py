@@ -19,8 +19,7 @@ class ModelTest(TestCase):
         )
         self.test_car = Car.objects.create(
             model="test model",
-            manufacturer=self.test_manuf,
-            drivers=self.test_driver
+            manufacturer=self.test_manuf
         )
         self.test_car.drivers.set([self.test_driver])
 
