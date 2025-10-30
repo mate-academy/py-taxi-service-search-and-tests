@@ -78,3 +78,91 @@ class ManufacturerSearchTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "BMW Motors")
         self.assertContains(response, "Test Manufacturer")
+
+
+class CarSearchTest(TestCase):
+    def setUp(self):
+        self.manuf1 = Manufacturer.objects.create(
+            name="Tesla", country="US"
+        )
+        self.test_driver = get_user_model().objects.create_user(
+            username="test_driver",
+            first_name="Test",
+            last_name="Driver",
+            password="password123",
+        )
+        self.test_car = Car.objects.create(
+            model="S1",
+            manufacturer=self.manuf1,
+        )
+        self.test_car.drivers.set([self.test_driver])
+
+        # створюємо користувача, бо сторінка під LoginRequiredMixin
+        self.user = get_user_model().objects.create_user(
+            username="testuser",
+            password="password123"
+        )
+        self.client.login(username="testuser", password="password123")
+
+    def test_search_returns_correct_results(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, {"model": "S1"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Tesla")
+        self.assertNotContains(response, "S1")
+
+    def test_search_is_case_insensitive(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, {"model": "S1"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Tesla")
+
+    def test_search_with_no_query_returns_all(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Tesla")
+        self.assertContains(response, "S1")
+
+
+class DriverSearchTest(TestCase):
+    def setUp(self):
+        self.test_driver = get_user_model().objects.create_user(
+            username="test_driver",
+            first_name="Test",
+            last_name="Driver",
+            password="password123",
+        )
+
+        # створюємо користувача, бо сторінка під LoginRequiredMixin
+        self.user = get_user_model().objects.create_user(
+            username="testuser",
+            password="password123"
+        )
+        self.client.login(username="testuser", password="password123")
+
+    def test_search_returns_correct_results(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url, {"username": "test_driver"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "test_driver")
+        self.assertNotContains(response, "Test Driver")
+
+    def test_search_is_case_insensitive(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url, {"username": "test_driver"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "test_driver")
+
+    def test_search_with_no_query_returns_all(self):
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "test_driver")
+        self.assertContains(response, "Test Driver")
