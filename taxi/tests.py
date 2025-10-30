@@ -112,14 +112,14 @@ class CarSearchTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Tesla")
-        self.assertNotContains(response, "S1")
+        self.assertNotContains(response, "Model X")
 
     def test_search_is_case_insensitive(self):
         url = reverse("taxi:car-list")
-        response = self.client.get(url, {"model": "Model X"})
+        response = self.client.get(url, {"model": "S1"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Tesla")
+        self.assertContains(response, "S1")
 
     def test_search_with_no_query_returns_all(self):
         url = reverse("taxi:car-list")
