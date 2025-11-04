@@ -81,3 +81,28 @@ class ViewTest(TestCase):
         self.assertContains(response, "ZZZZ")
         self.assertFalse(response.context["page_obj"].has_next())
         self.assertTrue(response.context["page_obj"].has_previous())
+
+    def test_car_search_by_model(self):
+        mn = Manufacturer.objects.create(name="TEST116", country="3321")
+        car_one = Car.objects.create(manufacturer=mn, model="TEST1133")
+        car_two = Car.objects.create(manufacturer=mn, model="TEST3456")
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, data={"searched_model": "1133"})
+        self.assertContains(response, car_one.model)
+        self.assertNotContains(response, car_two.model)
+
+    def test_driver_search_by_username(self):
+        driver_one = get_user_model().objects.create_user(
+            username="Test3344",
+            password="TestPass1234",
+            license_number="TET221122",
+        )
+        driver_two = get_user_model().objects.create_user(
+            username="Test2211",
+            password="TestPass1234",
+            license_number="TET221123",
+        )
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url, data={"searched_username": "3344"})
+        self.assertContains(response, driver_one.username)
+        self.assertNotContains(response, driver_two.username)

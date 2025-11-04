@@ -37,7 +37,7 @@ class AdminTest(TestCase):
         self.assertContains(response, "TestFirstName")
 
     def test_driver_additional_info_add_display(self):
-        user = get_user_model().objects.create_user(
+        get_user_model().objects.create_user(
             username="TestUser",
             password="TestPassword",
             first_name="TestFirstName",

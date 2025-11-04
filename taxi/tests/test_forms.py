@@ -40,6 +40,6 @@ class FormTest(TestCase):
                 self.assertRaises(
                     ValidationError,
                     validate_license_number,
-                    form.instance.license_number,
+                    license_number,
                 )
                 self.assertFalse(form.is_valid())
