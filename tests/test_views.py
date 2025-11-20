@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.template.defaultfilters import first
 from django.test import TestCase
 from django.urls import reverse
 
@@ -82,26 +83,20 @@ class ViewsTest(TestCase):
         self.assertIn("form", response.context)
 
     def test_driver_search(self):
-        manufacturer_1 = Manufacturer.objects.create(
-            name="Test Manufacturer 1",
-            country="Test Country 1",
+        driver_1 = get_user_model().objects.create_user(
+            username="test_username1",
+            password="test_password1",
+            license_number="ABC01234"
         )
-        manufacturer_2 = Manufacturer.objects.create(
-            name="Test Manufacturer 2",
-            country="Test Country 2",
+        driver_2 = get_user_model().objects.create_user(
+            username="test_username2",
+            password="test_password2",
+            license_number="DEF56789"
         )
-        car_1 = Car.objects.create(
-            model="Test Model 1",
-            manufacturer=manufacturer_1,
-        )
-        car_2 = Car.objects.create(
-            model="Test Model 2",
-            manufacturer=manufacturer_2,
-        )
-        url = reverse("taxi:car-list")
-        response = self.client.get(url, data={"model": "2"})
-        self.assertContains(response, car_2.model)
-        self.assertNotContains(response, car_1.model)
+        url = reverse("taxi:driver-list")
+        response = self.client.get(url, data={"username": "1"})
+        self.assertContains(response, driver_1.username)
+        self.assertNotContains(response, driver_2.username)
         self.assertIn("form", response.context)
 
     def test_manufacturer_delete_view(self):

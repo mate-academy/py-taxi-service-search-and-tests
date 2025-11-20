@@ -53,7 +53,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = ManufacturerSearchForm()
+        context["form"] = ManufacturerSearchForm(self.request.GET)
         return context
 
 
@@ -89,7 +89,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = CarSearchForm()
+        context["form"] = CarSearchForm(self.request.GET)
         return context
 
 
@@ -129,7 +129,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = DriverSearchForm()
+        context["form"] = DriverSearchForm(self.request.GET)
         return context
 
 
@@ -151,7 +151,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
