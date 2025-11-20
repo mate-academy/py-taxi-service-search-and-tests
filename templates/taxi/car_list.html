@@ -2,10 +2,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <form action="" method="get">
-    {{ search_form|crispy }}
-    <input type="submit" value="Search" class="btn btn-secondary">
-  </form>
+  {% include 'includes/search_form.html' %}
   <h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">

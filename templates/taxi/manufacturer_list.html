@@ -2,9 +2,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <form>
-    {{ search_form|crispy }}
-  </form>
+  {% include 'includes/search_form.html' %}
   <h1>
     Manufacturer List
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
