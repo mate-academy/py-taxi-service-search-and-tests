@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Delete driver?</h1>
-  <form action="" method="post">
-    {% csrf_token %}
-
-    <input type="submit" value="Yes" class="btn btn-danger">
-  </form>
+  {% include "includes/confirm_deletion.html" %}
 {% endblock %}

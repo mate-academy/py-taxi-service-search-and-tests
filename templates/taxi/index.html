@@ -1,18 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Taxi Service Home</h1>
-    <p>Welcome to Best Taxi Ever!</p>
-    <h2>Dynamic content</h2>
-    <p>The Taxi service has the following record counts:</p>
-    <ul>
-        <li><strong>Cars:</strong> {{ num_cars }}</li>
-        <li><strong>Drivers:</strong> {{ num_drivers }}</li>
-        <li><strong>Manufacturers:</strong> {{ num_manufacturers }}</li>
-    </ul>
+    <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 font-italic">Taxi Service Home</h1>
+            <p class="lead my-3">Welcome to Best Taxi Ever! We provide the most reliable service in the city.</p>
+        </div>
+    </div>
 
-    <p>You have visited this page
-        {{ num_visits }} time{{ num_visits|pluralize }}.
-    </p>
+    <h3 class="mb-3 border-bottom pb-2">Service Statistics</h3>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center border-primary mb-3">
+                <div class="card-header bg-primary text-white">Cars</div>
+                <div class="card-body">
+                    <h1 class="card-title display-4">{{ num_cars }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center border-success mb-3">
+                <div class="card-header bg-success text-white">Drivers</div>
+                <div class="card-body">
+                    <h1 class="card-title display-4">{{ num_drivers }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center border-info mb-3">
+                <div class="card-header bg-info text-white">Manufacturers</div>
+                <div class="card-body">
+                    <h1 class="card-title display-4">{{ num_manufacturers }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-light text-center mt-4 text-muted">
+        You have visited this page <strong>{{ num_visits }}</strong> time{{ num_visits|pluralize }}.
+    </div>
 
 {% endblock %}

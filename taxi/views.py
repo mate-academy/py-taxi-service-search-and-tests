@@ -167,10 +167,6 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
     model = Driver
     form_class = DriverCreationForm
 
-    def post(self, request, *args, **kwargs):
-        print(request.POST)
-        return HttpResponseRedirect(reverse_lazy("taxi:driver-list"))
-
 
 class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Driver

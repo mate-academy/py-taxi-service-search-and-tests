@@ -3,34 +3,44 @@
 
 {% block content %}
     {% include 'includes/search_form.html' %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+        <h1>Driver List</h1>
+        <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary">
+          Create
+        </a>
+    </div>
 
     {% if driver_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
-      </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>License number</th>
+            </tr>
+          </thead>
+        {% for driver in driver_list %}
+          <tr>
+            <td>{{ driver.id }}</td>
+            <td>
+                <a href="{{ driver.get_absolute_url }}">
+                    {{ driver.username }}
+                    {% if user == driver %} <span class="badge badge-success">(Me)</span>{% endif %}
+                </a>
+            </td>
+            <td>{{ driver.first_name }}</td>
+            <td>{{ driver.last_name }}</td>
+            <td>{{ driver.license_number }}</td>
+          </tr>
+        {% endfor %}
 
-    </table>
+        </table>
+    </div>
     {% else %}
-      <p>There are no drivers in the service.</p>
+      <div class="alert alert-info">There are no drivers in the service.</div>
     {% endif %}
 {% endblock %}
