@@ -11,7 +11,7 @@ from taxi.models import (
 from taxi.forms import (
     DriverLicenseUpdateForm,
     DriverCreationForm,
-    validate_license_number
+    validate_license_number,
 )
 from taxi.urls import app_name
 
@@ -42,10 +42,7 @@ class TestFormValidateLicenseNumber(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Manufacturer.objects.create(
-            name="test-manufacturer",
-            country="test-country"
-        )
+        Manufacturer.objects.create(name="test-manufacturer", country="test-country")
         user = get_user_model().objects.create_user(
             username="test-user",
             license_number="TES33355",
@@ -71,12 +68,10 @@ class TestFormValidateLicenseNumber(TestCase):
 
         form_user = get_user_model().objects.get(pk=2)
         self.assertTrue(
-            form_user.username == data["username"] and
-            form_user.license_number == data["license_number"]
+            form_user.username == data["username"]
+            and form_user.license_number == data["license_number"]
         )
-        self.assertTrue(
-            form_user.check_password("1qazcde3")
-        )
+        self.assertTrue(form_user.check_password("1qazcde3"))
 
     def test_driver_create_used_validation(self):
         data = {
@@ -90,7 +85,9 @@ class TestFormValidateLicenseNumber(TestCase):
         data = {
             "license_number": "TES44455",
         }
-        form = DriverLicenseUpdateForm(instance=get_user_model().objects.get(pk=1), data=data)
+        form = DriverLicenseUpdateForm(
+            instance=get_user_model().objects.get(pk=1), data=data
+        )
 
         self.assertTrue(form.is_valid())
         form.save()
@@ -104,5 +101,7 @@ class TestFormValidateLicenseNumber(TestCase):
         data = {
             "license_number": "novalid",
         }
-        form = DriverLicenseUpdateForm(instance=get_user_model().objects.get(pk=1), data=data)
+        form = DriverLicenseUpdateForm(
+            instance=get_user_model().objects.get(pk=1), data=data
+        )
         self.assertFalse(form.is_valid())

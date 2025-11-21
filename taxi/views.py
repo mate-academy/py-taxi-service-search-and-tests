@@ -12,7 +12,7 @@ from .forms import (
     CarForm,
     DriverUsernameSearchForm,
     CarModelSearchForm,
-    ManufacturerNameSearchForm
+    ManufacturerNameSearchForm,
 )
 
 
@@ -43,17 +43,11 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
-    def get_context_data(
-            self,
-            *,
-            object_list=...,
-            **kwargs
-    ):
+    def get_context_data(self, *, object_list=..., **kwargs):
         context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name")
         context["search_form"] = ManufacturerNameSearchForm(initial={"name": name})
         return context
-
 
     def get_queryset(self):
         form = ManufacturerNameSearchForm(self.request.GET)
@@ -87,12 +81,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
 
-    def get_context_data(
-            self,
-            *,
-            object_list=...,
-            **kwargs
-    ):
+    def get_context_data(self, *, object_list=..., **kwargs):
         context = super(CarListView, self).get_context_data(**kwargs)
         model = self.request.GET.get("model")
         context["search_form"] = CarModelSearchForm(initial={"model": model})
@@ -134,15 +123,12 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
-    def get_context_data(
-            self,
-            *,
-            object_list=...,
-            **kwargs
-    ):
+    def get_context_data(self, *, object_list=..., **kwargs):
         context = super(DriverListView, self).get_context_data(**kwargs)
         username = self.request.GET.get("username")
-        context["search_form"] = DriverUsernameSearchForm(initial={"username": username})
+        context["search_form"] = DriverUsernameSearchForm(
+            initial={"username": username}
+        )
 
         return context
 
@@ -182,7 +168,9 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
-    if Car.objects.get(id=pk) in driver.cars.all():  # probably could check if car exists
+    if (
+        Car.objects.get(id=pk) in driver.cars.all()
+    ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
