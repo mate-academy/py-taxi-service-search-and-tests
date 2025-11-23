@@ -77,5 +77,7 @@ class ManufacturerNameSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search by Manufacturer"}),
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by Manufacturer"}
+        ),
     )
