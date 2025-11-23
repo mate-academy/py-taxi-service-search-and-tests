@@ -10,7 +10,10 @@ class ModelsTests(TestCase):
             name="Test Manufacturer",
             country="Test Country",
         )
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )
 
     def test_driver_str(self):
         driver = Driver.objects.create_user(
@@ -18,7 +21,10 @@ class ModelsTests(TestCase):
             first_name="Test first name",
             last_name="Test last name",
         )
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_car_str(self):
         car = Car.objects.create(
@@ -38,4 +44,7 @@ class ModelsTests(TestCase):
             password="test123",
             license_number="ASD55443",
         )
-        self.assertEqual(driver.get_absolute_url(), reverse("taxi:driver-detail", kwargs={"pk": driver.pk}))
+        self.assertEqual(
+            driver.get_absolute_url(),
+            reverse("taxi:driver-detail", kwargs={"pk": driver.pk})
+        )

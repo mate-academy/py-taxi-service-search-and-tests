@@ -6,6 +6,7 @@ from taxi.models import Manufacturer, Car, Driver
 
 MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
 
+
 class PublicManufacturerViewTest(TestCase):
     def test_logen_required(self):
         res = self.client.get(MANUFACTURER_LIST_URL)
@@ -51,7 +52,10 @@ User = get_user_model()
 
 class CarListViewQuerysetTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="12345"
+        )
         self.m1 = Manufacturer.objects.create(name="Toyota")
         self.m2 = Manufacturer.objects.create(name="BMW")
 
@@ -76,15 +80,33 @@ class CarListViewQuerysetTest(TestCase):
 
 class DriverListViewQuerysetTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="21313sa",license_number="12345")
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="21313sa",
+            license_number="12345"
+        )
 
-        Driver.objects.create(username="testuser1", password="21313swa",license_number="123444")
-        Driver.objects.create(username="testuser2", password="21313saa",license_number="12345e")
-        Driver.objects.create(username="testuser3", password="21313sda",license_number="123452")
+        Driver.objects.create(
+            username="testuser1",
+            password="21313swa",
+            license_number="123444"
+        )
+        Driver.objects.create(
+            username="testuser2",
+            password="21313saa",
+            license_number="12345e"
+        )
+        Driver.objects.create(
+            username="testuser3",
+            password="21313sda",
+            license_number="123452"
+        )
         self.client.force_login(self.user)
 
     def test_queryset_filtering(self):
-        res = self.client.get(reverse("taxi:driver-list") + "?username=testuser1")
+        res = self.client.get(
+            reverse("taxi:driver-list") + "?username=testuser1"
+        )
         self.assertEqual(res.status_code, 200)
         drivers = res.context["object_list"]
         self.assertEqual(len(drivers), 1)
@@ -98,7 +120,11 @@ class DriverListViewQuerysetTest(TestCase):
 
 class ManufacturerListViewQuerysetTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="21313sa",license_number="12345")
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="21313sa",
+            license_number="12345"
+        )
 
         Manufacturer.objects.create(name="Toyota", country="US")
         Manufacturer.objects.create(name="BMW", country="Lutsk")
@@ -106,7 +132,9 @@ class ManufacturerListViewQuerysetTest(TestCase):
         self.client.force_login(self.user)
 
     def test_queryset_filtering(self):
-        res = self.client.get(reverse("taxi:manufacturer-list") + "?name=Toyota")
+        res = self.client.get(
+            reverse("taxi:manufacturer-list") + "?name=Toyota"
+        )
         self.assertEqual(res.status_code, 200)
         manufacturers = res.context["object_list"]
         self.assertEqual(len(manufacturers), 1)
