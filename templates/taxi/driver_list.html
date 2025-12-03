@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+  <h1>
+    Driver List
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
 
-    {% if driver_list %}
+  <form method="get" action="" class="mb-3">
+    {{ search_form.query }}
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if request.GET.query %}
+      <a href="{% url 'taxi:driver-list' %}" class="btn btn-secondary">Clear</a>
+    {% endif %}
+  </form>
+
+  {% if driver_list %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -17,18 +25,33 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
-
+      {% for driver in driver_list %}
+        <tr>
+          <td>{{ driver.id }}</td>
+          <td>
+            <a href="{{ driver.get_absolute_url }}">
+              {{ driver.username }} {% if user == driver %}(Me){% endif %}
+            </a>
+          </td>
+          <td>{{ driver.first_name }}</td>
+          <td>{{ driver.last_name }}</td>
+          <td>{{ driver.license_number }}</td>
+        </tr>
+      {% endfor %}
     </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  {% else %}
+    <p>No drivers found.</p>
+  {% endif %}
+
+  {% if is_paginated %}
+    <nav>
+      {% if page_obj.has_previous %}
+        <a href="?query={{ request.GET.query }}&page={{ page_obj.previous_page_number }}">Prev</a>
+      {% endif %}
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      {% if page_obj.has_next %}
+        <a href="?query={{ request.GET.query }}&page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </nav>
+  {% endif %}
 {% endblock %}

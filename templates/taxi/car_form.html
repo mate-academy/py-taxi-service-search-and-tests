@@ -2,11 +2,19 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>{{ object|yesno:"Update,Create" }} car</h1>
+  <h1>
+    {% if form.instance.pk %}
+      Update car
+    {% else %}
+      Create car
+    {% endif %}
+  </h1>
+
   <form action="" method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
-
-    <input type="submit" value="Submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">
+      {% if form.instance.pk %}Update{% else %}Create{% endif %}
+    </button>
   </form>
 {% endblock %}

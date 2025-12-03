@@ -7,16 +7,37 @@
       Create
     </a>
   </h1>
+
+  <form method="get" action="" class="mb-3">
+    {{ search_form.query }}
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if request.GET.query %}
+      <a href="{% url 'taxi:car-list' %}" class="btn btn-secondary">Clear</a>
+    {% endif %}
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no cars in taxi</p>
+    <p>No cars found.</p>
+  {% endif %}
+
+  {% if is_paginated %}
+    <nav>
+      {% if page_obj.has_previous %}
+        <a href="?query={{ request.GET.query }}&page={{ page_obj.previous_page_number }}">Prev</a>
+      {% endif %}
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      {% if page_obj.has_next %}
+        <a href="?query={{ request.GET.query }}&page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </nav>
   {% endif %}
 {% endblock %}
