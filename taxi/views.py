@@ -6,7 +6,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import (DriverCreationForm,
+                    DriverLicenseUpdateForm,
+                    CarForm,
+                    DriverSearchForm,
+                    CarSearchForm,
+                    ManufacturerSearchForm)
 
 
 @login_required
@@ -36,6 +41,21 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ManufacturerListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["manufacturers_search_form"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Manufacturer.objects.all()
+        name = self.request.GET.get("name",)
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -58,6 +78,20 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CarListView, self).get_context_data(**kwargs)
+        model = self.request.GET.get("model", "")
+        context["cars_search_form"] = CarSearchForm(
+            initial={"model": model}
+        )
+        return context
+
+    def get_queryset(self):
+        model = self.request.GET.get("model")
+        if model:
+            return self.queryset.filter(model__icontains=model)
+        return self.queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +118,21 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["drivers_search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Driver.objects.all()
+        username = self.request.GET.get("username",)
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
@@ -117,3 +166,50 @@ def toggle_assign_to_car(request, pk):
     else:
         driver.cars.add(pk)
     return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+
+
+def driver_search(request):
+    form = DriverSearchForm(request.GET or None)
+    drivers = Driver.objects.all()
+
+    if form.is_valid():
+        drivers = drivers.filter(
+            username__icontains=form.cleaned_data["username"]
+        )
+
+    return render(
+        request,
+        "taxi/driver_list.html",
+        {"form": form, "drivers_search_form": drivers}
+    )
+
+
+def car_search(request):
+    form = CarSearchForm(request.GET or None)
+    cars = Car.objects.all()
+
+    if form.is_valid():
+        cars = cars.filter(model__icontains=form.cleaned_data["model"])
+
+    return render(
+        request,
+        "taxi/car_list.html",
+        {"form": form, "cars_search_form": cars}
+    )
+
+
+def manufacturer_search(request):
+    form = ManufacturerSearchForm(request.GET or None)
+    manufacturers = Manufacturer.objects.all()
+
+    if form.is_valid():
+        manufacturers = form.cleaned_data.get("manufacturer")
+        manufacturers = manufacturers.filter(
+            username__icontains=form.cleaned_data["manufacturer"]
+        )
+
+    return render(
+        request,
+        "taxi/manufacturer_list.html",
+        {"form": form, "manufacturers_search_form": manufacturers}
+    )
