@@ -1,22 +1,28 @@
 {% extends "base.html" %}
+{% load query_transform %}
+
 
 {% block content %}
-  <h1>
+<h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
-      Create
+        Create
     </a>
-  </h1>
-  {% if car_list %}
-    <ul>
-      {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no cars in taxi</p>
-  {% endif %}
+</h1>
+<form class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" value="{{ request.GET.search }}">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+{% if car_list %}
+<ul>
+    {% for car in car_list %}
+    <li>
+        <a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.id }}</a>
+        {{ car.model }} ({{ car.manufacturer.name }})
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>There are no cars in taxi</p>
+{% endif %}
 {% endblock %}
