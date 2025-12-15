@@ -8,6 +8,15 @@
     </a>
   </h1>
 
+  <form method="get" class="form-inline mb-3">
+    <div class="input-group">
+      <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search by name...">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </div>
+    </div>
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -44,6 +53,7 @@
       {% endfor %}
     </table>
 
+    {% include "includes/pagination.html" %}
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}

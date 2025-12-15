@@ -7,15 +7,27 @@
       Create
     </a>
   </h1>
+
+  <form method="get" class="form-inline mb-3">
+    <div class="input-group">
+      <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search by model...">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </div>
+    </div>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url "taxi:car-detail" pk=car.id %}">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
     </ul>
+
+    {% include "includes/pagination.html" %}
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
