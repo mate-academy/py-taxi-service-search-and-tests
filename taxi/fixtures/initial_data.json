@@ -1,0 +1,177 @@
+[
+  {"model": "taxi.manufacturer", "pk": 1, "fields": {"name": "Mercedes-Benz", "country": "Germany"}},
+  {"model": "taxi.manufacturer", "pk": 2, "fields": {"name": "Toyota", "country": "Japan"}},
+  {"model": "taxi.manufacturer", "pk": 3, "fields": {"name": "Tesla", "country": "USA"}},
+  {"model": "taxi.manufacturer", "pk": 4, "fields": {"name": "Volkswagen", "country": "Germany"}},
+  {"model": "taxi.manufacturer", "pk": 5, "fields": {"name": "Hyundai", "country": "South Korea"}},
+  {"model": "taxi.manufacturer", "pk": 6, "fields": {"name": "Ford", "country": "USA"}},
+  {"model": "taxi.manufacturer", "pk": 7, "fields": {"name": "BMW", "country": "Germany"}},
+  {"model": "taxi.manufacturer", "pk": 8, "fields": {"name": "Renault", "country": "France"}},
+
+    {
+    "model": "taxi.driver",
+    "pk": 1,
+    "fields": {
+      "username": "admin.user",
+      "first_name": "Agent",
+      "last_name": "007",
+      "license_number": "OOO77777",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$1200000$euS1w1YckFZODOppBsIpie$txiURBIbshCnXBl6b8hC38uShb229wVvqMucI0gWhMU="
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 2,
+    "fields": {
+      "username": "oleg_dov",
+      "first_name": "Олег",
+      "last_name": "Довгий",
+      "license_number": "ASD123456",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 3,
+    "fields": {
+      "username": "mary_sol",
+      "first_name": "Марія",
+      "last_name": "Соловей",
+      "license_number": "QWE987654",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 4,
+    "fields": {
+      "username": "vitaliy_k",
+      "first_name": "Віталій",
+      "last_name": "Коваль",
+      "license_number": "FGH777444",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 5,
+    "fields": {
+      "username": "anna_m",
+      "first_name": "Анна",
+      "last_name": "Мороз",
+      "license_number": "JKL333222",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 6,
+    "fields": {
+      "username": "sergiy_p",
+      "first_name": "Сергій",
+      "last_name": "Петренко",
+      "license_number": "VBN123123",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 7,
+    "fields": {
+      "username": "olena_g",
+      "first_name": "Олена",
+      "last_name": "Гончар",
+      "license_number": "RTY000999",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 8,
+    "fields": {
+      "username": "maks_z",
+      "first_name": "Максим",
+      "last_name": "Захарчук",
+      "license_number": "HJK555444",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 9,
+    "fields": {
+      "username": "julia_v",
+      "first_name": "Юлія",
+      "last_name": "Василенко",
+      "license_number": "BNM888777",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+  {
+    "model": "taxi.driver",
+    "pk": 10,
+    "fields": {
+      "username": "taras_g",
+      "first_name": "Тарас",
+      "last_name": "Гнатюк",
+      "license_number": "POI666555",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-12-14T12:00:00Z",
+      "password": "pbkdf2_sha256$260000$lorem_ipsum_for_hash$actual_password_hash"
+    }
+  },
+
+  {"model": "taxi.car", "pk": 1, "fields": {"model": "E-Class (W213)", "manufacturer": 1, "drivers": [1, 2, 4]}},
+  {"model": "taxi.car", "pk": 2, "fields": {"model": "Camry (XV70)", "manufacturer": 2, "drivers": [3, 5]}},
+  {"model": "taxi.car", "pk": 3, "fields": {"model": "Model 3", "manufacturer": 3, "drivers": [2, 6]}},
+  {"model": "taxi.car", "pk": 4, "fields": {"model": "Passat B8", "manufacturer": 4, "drivers": [7]}},
+  {"model": "taxi.car", "pk": 5, "fields": {"model": "Elantra", "manufacturer": 5, "drivers": [8, 9]}},
+  {"model": "taxi.car", "pk": 6, "fields": {"model": "Focus", "manufacturer": 6, "drivers": [10]}},
+  {"model": "taxi.car", "pk": 7, "fields": {"model": "X5 (G05)", "manufacturer": 7, "drivers": [1, 5, 7]}},
+  {"model": "taxi.car", "pk": 8, "fields": {"model": "Megane", "manufacturer": 8, "drivers": [3, 6]}},
+  {"model": "taxi.car", "pk": 9, "fields": {"model": "C-Class (W206)", "manufacturer": 1, "drivers": [4]}},
+  {"model": "taxi.car", "pk": 10, "fields": {"model": "Corolla", "manufacturer": 2, "drivers": [8, 10]}},
+  {"model": "taxi.car", "pk": 11, "fields": {"model": "Model S", "manufacturer": 3, "drivers": [1]}},
+  {"model": "taxi.car", "pk": 12, "fields": {"model": "Golf 8", "manufacturer": 4, "drivers": [9]}},
+  {"model": "taxi.car", "pk": 13, "fields": {"model": "Tucson", "manufacturer": 5, "drivers": [2, 7]}},
+  {"model": "taxi.car", "pk": 14, "fields": {"model": "Mondeo", "manufacturer": 6, "drivers": [5, 6]}},
+  {"model": "taxi.car", "pk": 15, "fields": {"model": "5 Series (G30)", "manufacturer": 7, "drivers": [3, 4]}}
+]
