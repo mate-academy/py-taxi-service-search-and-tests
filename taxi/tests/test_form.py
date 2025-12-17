@@ -16,22 +16,23 @@ User = get_user_model()
 
 
 class FormsTestCase(TestCase):
-
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(name="Toyota",
                                                         country="Japan"
                                                         )
-        self.user = User.objects.create_user(username="testuser",
-                                             password="password123",
-                                             license_number="ABC12345"
-                                             )
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="password123",
+            license_number="ABC12345"
+        )
         self.car = Car.objects.create(model="Corolla",
                                       manufacturer=self.manufacturer
                                       )
         self.car.drivers.add(self.user)
 
     def test_car_form_valid(self):
-        form_data = {"model": "Corolla", "manufacturer": self.manufacturer.id,
+        form_data = {"model": "Corolla",
+                     "manufacturer": self.manufacturer.id,
                      "drivers": [self.user.id]}
         form = CarForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -63,13 +64,14 @@ class FormsTestCase(TestCase):
 
     def test_driver_license_update_form_invalid_length(self):
         form = DriverLicenseUpdateForm(instance=self.user,
-                                       data={"license_number": "ABC1234"})
+                                       data={"license_number": "ABC1234"}
+                                       )
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
 
     def test_validate_license_number_raises(self):
         with self.assertRaises(ValidationError):
-            validate_license_number("A1C12345")  # first 3 chars invalid
+            validate_license_number("A1C12345")
 
     def test_drivers_username_search_form(self):
         form = DriversUsernameSearchForm(data={"username": "testuser"})
@@ -82,6 +84,6 @@ class FormsTestCase(TestCase):
         self.assertEqual(form.cleaned_data["model"], "")
 
     def test_manufacturer_search_form(self):
-        form = ManufacturerSearchForm(data={"manufacturer": "Toyota"})
+        form = ManufacturerSearchForm(data={"name": "Toyota"})
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data["manufacturer"], "Toyota")
+        self.assertEqual(form.cleaned_data["name"], "Toyota")
