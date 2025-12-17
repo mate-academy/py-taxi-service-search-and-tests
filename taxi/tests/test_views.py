@@ -74,3 +74,33 @@ class ViewsTestCase(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Car.objects.filter(model="Civic").exists())
+
+    def test_car_search_view(self):
+        url = reverse("taxi:car-list") + "?model=Corolla"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.car.model)
+        Car.objects.create(model="Civic",
+                           manufacturer=self.manufacturer
+                           )
+        response = self.client.get(url)
+        self.assertNotContains(response, "Civic")
+
+    def test_driver_search_view(self):
+        url = reverse("taxi:driver-list") + "?username=driver1"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.user.username)
+        self.assertNotContains(response, self.driver2.username)
+
+    def test_car_pagination_with_search(self):
+        for i in range(6):
+            Car.objects.create(model=f"Car{i}",
+                               manufacturer=self.manufacturer
+                               )
+        url = reverse("taxi:car-list") + "?model=Car"
+        response = self.client.get(url)
+        self.assertContains(response, "Car0")
+        self.assertContains(response, "Car4")
+        response = self.client.get(url + "&page=2")
+        self.assertContains(response, "Car5")
