@@ -10,6 +10,7 @@ class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        required=False,
     )
 
     class Meta:
@@ -26,7 +27,7 @@ class DriverCreationForm(UserCreationForm):
             "last_name",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
+    def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
@@ -39,14 +40,30 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
+def validate_license_number(license_number):
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
+    if not license_number[:3].isupper() or not license_number[:3].isalpha():
         raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
+    if not license_number[3:].isdigit():
         raise ValidationError("Last 5 characters should be digits")
-
     return license_number
+
+
+# --- SEARCH FORMS ---
+class DriverSearchForm(forms.Form):
+    search = forms.CharField(
+        max_length=255, required=False, label="Search by username"
+    )
+
+
+class CarSearchForm(forms.Form):
+    search = forms.CharField(
+        max_length=255, required=False, label="Search by model"
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    search = forms.CharField(
+        max_length=255, required=False, label="Search by name"
+    )

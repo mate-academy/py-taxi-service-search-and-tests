@@ -7,6 +7,16 @@
       Create
     </a>
   </h1>
+  <form method="get">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search by model"
+        value="{{ request.GET.search }}"
+    >
+    <button type="submit">Search</button>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}

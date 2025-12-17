@@ -8,6 +8,16 @@
     </a>
   </h1>
 
+  <form method="get">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search by name"
+        value="{{ request.GET.search }}"
+    >
+    <button type="submit">Search</button>
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -21,30 +31,30 @@
       {% for manufacturer in manufacturer_list %}
         <tr>
           <td>
-              {{ manufacturer.id }}
+            {{ manufacturer.id }}
           </td>
           <td>
-              {{ manufacturer.name }}
+            {{ manufacturer.name }}
           </td>
           <td>
-              {{ manufacturer.country }}
+            {{ manufacturer.country }}
           </td>
           <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
-              </a>
-            </td>
-            <td>
-              <a style="color: red"
-                href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
-                Delete
-              </a>
-            </td>
+            <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
+              Update
+            </a>
+          </td>
+          <td>
+            <a style="color: red"
+               href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
+              Delete
+            </a>
+          </td>
         </tr>
       {% endfor %}
     </table>
 
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+    <p>There are no manufacturers in the service.</p>
   {% endif %}
 {% endblock %}
