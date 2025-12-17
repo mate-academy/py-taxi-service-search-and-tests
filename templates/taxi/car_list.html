@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <form method="get" class="form-inline mb-3">
+  <input
+    type="text"
+    name="search"
+    class="form-control mr-2"
+    placeholder="Search by model"
+    value="{{ request.GET.search }}"
+  >
+  <button type="submit" class="btn btn-primary">
+    Search
+  </button>
+</form>
   <h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">

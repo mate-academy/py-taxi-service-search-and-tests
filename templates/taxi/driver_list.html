@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
+  <form method="get" class="form-inline mb-3">
+  <input
+    type="text"
+    name="search"
+    class="form-control mr-2"
+    placeholder="Search by username"
+    value="{{ request.GET.search }}"
+  >
+  <button type="submit" class="btn btn-primary">
+    Search
+  </button>
+</form>
+
+  <h1>
       Driver List
       <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
         Create
