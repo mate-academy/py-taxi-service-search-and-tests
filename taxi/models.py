@@ -11,7 +11,8 @@ class Manufacturer(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name} {self.country}"
+        # Expect just the manufacturer name
+        return self.name
 
 
 class Driver(AbstractUser):
@@ -22,7 +23,8 @@ class Driver(AbstractUser):
         verbose_name_plural = "drivers"
 
     def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
+        # Expect just the username
+        return self.username
 
     def get_absolute_url(self):
         return reverse("taxi:driver-detail", kwargs={"pk": self.pk})
