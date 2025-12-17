@@ -8,6 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Driver, Car, Manufacturer
 from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 @login_required
 def index(request):
@@ -32,9 +36,17 @@ def index(request):
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
-    context_object_name = "manufacturer_list"
-    template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+    context_object_name = "manufacturer_list"
+
+    def get_queryset(self):
+        queryset = Manufacturer.objects.all().order_by("name")
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -57,7 +69,16 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
+    context_object_name = "car_list"
+
+    def get_queryset(self):
+        queryset = Car.objects.select_related("manufacturer").order_by("model")
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.filter(model__icontains=query)
+
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +105,16 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+    context_object_name = "driver_list"
+
+    def get_queryset(self):
+        queryset = Driver.objects.all().order_by("username")
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.filter(username__icontains=query)
+
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
@@ -104,7 +135,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
