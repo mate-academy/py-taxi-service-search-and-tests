@@ -8,6 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Driver, Car, Manufacturer
 from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 @login_required
 def index(request):
@@ -32,9 +36,16 @@ def index(request):
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
-    context_object_name = "manufacturer_list"
-    template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -57,7 +68,15 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related("manufacturer")
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.filter(model__icontains=query)
+
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -82,8 +101,17 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = Driver
+    model = User
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.filter(username__icontains=query)
+
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):

@@ -7,6 +7,16 @@
       Create
     </a>
   </h1>
+  <form method="get" class="mb-3">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search manufacturer"
+      value="{{ request.GET.q }}"
+      class="form-control"
+    >
+  </form>
+
 
   {% if manufacturer_list %}
     <table class="table">
