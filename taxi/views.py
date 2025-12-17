@@ -37,9 +37,10 @@ def index(request):
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
     paginate_by = 5
+    context_object_name = "manufacturer_list"
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Manufacturer.objects.all().order_by("name")
         query = self.request.GET.get("q")
 
         if query:
@@ -68,9 +69,10 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
+    context_object_name = "car_list"
 
     def get_queryset(self):
-        queryset = super().get_queryset().select_related("manufacturer")
+        queryset = Car.objects.select_related("manufacturer").order_by("model")
         query = self.request.GET.get("q")
 
         if query:
@@ -101,11 +103,12 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = User
+    model = Driver
     paginate_by = 5
+    context_object_name = "driver_list"
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Driver.objects.all().order_by("username")
         query = self.request.GET.get("q")
 
         if query:
@@ -132,7 +135,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
