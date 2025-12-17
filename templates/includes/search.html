@@ -1,0 +1,11 @@
+<form method="get" class="d-flex mb-3" role="search">
+    <input 
+        class="form-control me-2" 
+        type="search" 
+        name="q" 
+        value="{{ request.GET.q|default_if_none:'' }}" 
+        placeholder="{{ placeholder|default:'Search' }}" 
+        aria-label="Search"
+    >
+    <button class="btn btn-outline-primary" type="submit">Search</button>
+</form>
