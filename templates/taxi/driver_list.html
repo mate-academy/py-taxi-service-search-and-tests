@@ -8,6 +8,11 @@
       </a>
     </h1>
 
+    <form method="get" class="mb-3">
+        {{ search_form.search }}
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>

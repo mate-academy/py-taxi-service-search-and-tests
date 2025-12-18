@@ -7,6 +7,13 @@
       Create
     </a>
   </h1>
+
+    <form method="get" class="mb-3">
+        {{ search_form.search }}
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+    </form>
+
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
@@ -20,3 +27,4 @@
     <p>There are no cars in taxi</p>
   {% endif %}
 {% endblock %}
+
