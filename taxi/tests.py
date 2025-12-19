@@ -148,7 +148,9 @@ class ManufacturerListViewTest(TestCase):
         self.client.force_login(admin_user)
         res = self.client.get(self.url)
         manufacturers = Manufacturer.objects.all()
-        self.assertEqual(list(res.context["manufacturer_list"]), list(manufacturers))
+        self.assertEqual(
+            list(res.context["manufacturer_list"]), list(manufacturers)
+        )
 
     def test_manufacturer_list_filtered(self):
         admin_user = get_user_model().objects.create_superuser(
@@ -156,7 +158,8 @@ class ManufacturerListViewTest(TestCase):
         )
         self.client.force_login(admin_user)
         res = self.client.get(self.url + "?name=Test1")
-        expected_queryset = Manufacturer.objects.filter(name="Test1").order_by("name")
+        expected_queryset = (Manufacturer.objects.filter(name="Test1")
+                             .order_by("name"))
         self.assertQuerySetEqual(
             res.context["manufacturer_list"],
             expected_queryset
@@ -194,7 +197,8 @@ class CarListViewTest(TestCase):
 
     def test_car_list_filtered(self):
         res = self.client.get(self.url + "?model=Model1")
-        expected_queryset = Car.objects.filter(model="Model1").order_by("model")
+        expected_queryset = (Car.objects.filter(model="Model1")
+                             .order_by("model"))
         self.assertQuerySetEqual(
             res.context["car_list"],
             expected_queryset
@@ -208,18 +212,19 @@ class DriverListViewTest(TestCase):
         )
         self.client.force_login(self.admin_user)
         self.url = reverse("taxi:driver-list")
-        driver1 = Driver.objects.create(
+        Driver.objects.create(
             username="Driver1",
             license_number="CBA54321"
         )
-        driver2 = Driver.objects.create(
+        Driver.objects.create(
             username="Driver2",
             license_number="ABC12345"
         )
 
     def test_driver_list_filtered(self):
         res = self.client.get(self.url + "?username=Driver2")
-        expected_queryset = Driver.objects.filter(username="Driver2").order_by("username")
+        expected_queryset = (Driver.objects.filter(username="Driver2")
+                             .order_by("username"))
         self.assertQuerySetEqual(
             res.context["driver_list"],
             expected_queryset
@@ -272,7 +277,7 @@ class FormTest(TestCase):
         )
         self.client.force_login(self.admin_user)
         url = reverse("taxi:driver-create")
-        res = self.client.post(url, data=self.form_data)
+        self.client.post(url, data=self.form_data)
         driver = get_user_model().objects.get(
             username=self.form_data["username"]
         )
