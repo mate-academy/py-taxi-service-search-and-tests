@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
   <h1>
     Manufacturer List
@@ -7,7 +7,10 @@
       Create
     </a>
   </h1>
-
+  <form method="get" class="form-inline mb-3">
+    {{ search_form|crispy }}
+    <button type="submit" class="btn btn-secondary ml-2">Search</button>
+  </form>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -17,7 +20,6 @@
         <th>Update</th>
         <th>Delete</th>
       </tr>
-
       {% for manufacturer in manufacturer_list %}
         <tr>
           <td>
@@ -43,7 +45,6 @@
         </tr>
       {% endfor %}
     </table>
-
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
