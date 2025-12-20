@@ -21,15 +21,16 @@ class CarFormTest(TestCase):
             name="Tesla",
             country="USA"
         )
+        self.user = get_user_model().objects.create_user(
+            username="testuser",
+            password="12345"
+        )
 
     def test_car_form_valid(self):
-        user = get_user_model().objects.create(username="testuser")
-        manufacturer = Manufacturer.objects.create(name="BMW")
-
         form_data = {
-            "model": "X5",
-            "manufacturer": manufacturer.id,
-            "drivers": [user.id],
+            "model": "Model S",
+            "manufacturer": self.manufacturer.id,
+            "drivers": [self.user.id],
         }
 
         form = CarForm(data=form_data)

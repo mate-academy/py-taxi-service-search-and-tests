@@ -35,19 +35,21 @@ class SearchTests(PrivatePagesTests):
             password="pass",
             license_number="BBB22222"
         )
-
-        self.manufacturer = Manufacturer.objects.create(
+        self.manufacturer1 = Manufacturer.objects.create(
             name="BMW",
             country="Germany"
         )
-
+        self.manufacturer2 = Manufacturer.objects.create(
+            name="Audi",
+            country="Germany"
+        )
         self.car1 = Car.objects.create(
             model="X5",
-            manufacturer=self.manufacturer
+            manufacturer=self.manufacturer1
         )
         self.car2 = Car.objects.create(
-            model="X3",
-            manufacturer=self.manufacturer
+            model="A6",
+            manufacturer=self.manufacturer2
         )
 
     def test_driver_search(self):
@@ -64,7 +66,7 @@ class SearchTests(PrivatePagesTests):
             {"model": "X5"}
         )
         self.assertContains(response, "X5")
-        self.assertNotContains(response, "X3")
+        self.assertNotContains(response, "A6")
 
     def test_manufacturer_search(self):
         response = self.client.get(
@@ -72,3 +74,4 @@ class SearchTests(PrivatePagesTests):
             {"name": "BMW"}
         )
         self.assertContains(response, "BMW")
+        self.assertNotContains(response, "Audi")
