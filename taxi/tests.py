@@ -133,7 +133,7 @@ class ManufacturerListViewTest(TestCase):
         res = self.client.get(self.url)
         self.assertNotEqual(res.status_code, 200)
 
-    def test_login_not_required(self):
+    def test_view_accessible_for_logged_in_user(self):
         admin_user = get_user_model().objects.create_superuser(
             "superuser"
         )
@@ -245,42 +245,59 @@ class FormTest(TestCase):
     def test_driver_form_is_valid(self):
         form = DriverCreationForm(data=self.form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, self.form_data)
-
-    def test_driver_form_is_invalid_password_check(self):
-        form_data = {
-            "username": "DriverUserName234",
-            "password1": "user12test13",
-            "password2": "user12test12",
-            "license_number": "LSN12345",
-            "first_name": "DriverFirstName",
-            "last_name": "DriverLastName",
-        }
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-
-    def test_driver_form_is_invalid_license_number(self):
-        form_data = {
-            "username": "DriverUserName234",
-            "password1": "user12test13",
-            "password2": "user12test13",
-            "license_number": "LSn12345",
-            "first_name": "DriverFirstName",
-            "last_name": "DriverLastName",
-        }
-        form = DriverCreationForm(data=form_data)
-        self.assertFalse(form.is_valid())
-
-    def test_driver_creation_form(self):
-        self.admin_user = get_user_model().objects.create_superuser(
-            "superuser"
+        self.assertEqual(
+            form.cleaned_data["username"], self.form_data["username"]
         )
-        self.client.force_login(self.admin_user)
-        url = reverse("taxi:driver-create")
-        self.client.post(url, data=self.form_data)
-        driver = get_user_model().objects.get(
-            username=self.form_data["username"]
+        self.assertEqual(
+            form.cleaned_data["password1"], self.form_data["password1"]
         )
-        self.assertEqual(driver.username, self.form_data["username"])
-        self.assertEqual(driver.first_name, self.form_data["first_name"])
-        self.assertEqual(driver.last_name, self.form_data["last_name"])
+        self.assertEqual(
+            form.cleaned_data["license_number"],
+            self.form_data["license_number"]
+        )
+        self.assertEqual(
+            form.cleaned_data["first_name"],
+            self.form_data["first_name"]
+        )
+        self.assertEqual(
+            form.cleaned_data["last_name"],
+            self.form_data["last_name"]
+        )
+
+        def test_driver_form_is_invalid_password_check(self):
+            form_data = {
+                "username": "DriverUserName234",
+                "password1": "user12test13",
+                "password2": "user12test12",
+                "license_number": "LSN12345",
+                "first_name": "DriverFirstName",
+                "last_name": "DriverLastName",
+            }
+            form = DriverCreationForm(data=form_data)
+            self.assertFalse(form.is_valid())
+
+        def test_driver_form_is_invalid_license_number(self):
+            form_data = {
+                "username": "DriverUserName234",
+                "password1": "user12test13",
+                "password2": "user12test13",
+                "license_number": "LSn12345",
+                "first_name": "DriverFirstName",
+                "last_name": "DriverLastName",
+            }
+            form = DriverCreationForm(data=form_data)
+            self.assertFalse(form.is_valid())
+
+        def test_driver_creation_form(self):
+            self.admin_user = get_user_model().objects.create_superuser(
+                "superuser"
+            )
+            self.client.force_login(self.admin_user)
+            url = reverse("taxi:driver-create")
+            self.client.post(url, data=self.form_data)
+            driver = get_user_model().objects.get(
+                username=self.form_data["username"]
+            )
+            self.assertEqual(driver.username, self.form_data["username"])
+            self.assertEqual(driver.first_name, self.form_data["first_name"])
+            self.assertEqual(driver.last_name, self.form_data["last_name"])
