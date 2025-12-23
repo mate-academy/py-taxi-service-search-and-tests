@@ -132,3 +132,78 @@ class PrivateDriverTests(TestCase):
                          form_data["license_number"])
         self.assertEqual(new_driver.first_name, form_data["first_name"])
         self.assertEqual(new_driver.last_name, form_data["last_name"])
+
+
+class ManufacturerSearchViewTest(TestCase):
+    def setUp(self):
+        Manufacturer.objects.create(name="Mercedes-Benz")
+        Manufacturer.objects.create(name="Volkswagen")
+        self.user = get_user_model().objects.create_user(
+            username="user",
+            password="test1234",
+        )
+        self.client.force_login(self.user)
+
+    def test_manufacturer_list(self):
+        manufacturer_url = reverse("taxi:manufacturer-list")
+        response = self.client.get(
+            manufacturer_url,
+            data={"name": "Merc"},
+        )
+        self.assertEqual(response.status_code, 200)
+        queryset = response.context["manufacturer_list"]
+        returned_manufacturers = {
+            manufacturer.name for manufacturer in queryset
+        }
+        self.assertEqual(returned_manufacturers, {"Mercedes-Benz"})
+        self.assertEqual(response.status_code, 200)
+
+
+class CarSearchViewTest(TestCase):
+    def setUp(self):
+        manufacturer = Manufacturer.objects.create()
+        Car.objects.create(model="Passat",
+                           manufacturer=manufacturer)
+        Car.objects.create(model="AMG",
+                           manufacturer=manufacturer)
+        self.user = get_user_model().objects.create_user(
+            username="user",
+            password="test1234",
+        )
+        self.client.force_login(self.user)
+
+    def test_cars_search(self):
+        car_url = reverse("taxi:car-list")
+        response = self.client.get(
+            car_url,
+            data={"model": "pas"},
+        )
+        self.assertEqual(response.status_code, 200)
+        queryset = response.context["car_list"]
+        returned_models = {car.model for car in queryset}
+        self.assertEqual(returned_models, {"Passat"})
+        self.assertEqual(response.status_code, 200)
+
+
+class DriverSearchViewTest(TestCase):
+    def setUp(self):
+        Driver.objects.create(username="Jeremy",
+                              license_number="HJK123456")
+        Driver.objects.create(username="bob",
+                              license_number="ASD456123")
+        self.user = get_user_model().objects.create(
+            username="test_username",
+            password="test_123",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_drivers(self):
+        driver_url = reverse("taxi:driver-list")
+        response = self.client.get(
+            driver_url,
+            data={"username": "Jere"},
+        )
+        queryset = response.context["driver_list"]
+        returned_usernames = {driver.username for driver in queryset}
+        self.assertEqual(returned_usernames, {"Jeremy"})
+        self.assertEqual(response.status_code, 200)
