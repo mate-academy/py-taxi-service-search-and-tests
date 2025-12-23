@@ -32,7 +32,7 @@ class DriverModelTest(TestCase):
     def setUpTestData(cls):
         cls.username = "test12"
         cls.password = "testtest"
-        cls.license_number = "A1V2B2"
+        cls.license_number = "TES12345"
         cls.first_name = "Bob"
         cls.last_name = "Bobovich"
 

@@ -266,6 +266,43 @@ class PrivateDriverTest(TestCase):
             get_user_model().objects.filter(pk=driver_to_delete.pk).exists()
         )
 
+    def test_driver_search(self):
+        user1 = get_user_model().objects.create_user(
+            username="alice",
+            password="p",
+            license_number="OLD00001"
+        )
+        user2 = get_user_model().objects.create_user(
+            username="albert",
+            password="p",
+            license_number="OLD00002"
+        )
+        user3 = get_user_model().objects.create_user(
+            username="bob",
+            password="p",
+            license_number="OLD00003"
+        )
+
+        url = reverse("taxi:driver-list")
+
+        response = self.client.get(url, data={"username": "al"})
+        driver_list = response.context["driver_list"]
+
+        self.assertIn(user1, driver_list)
+        self.assertIn(user2, driver_list)
+        self.assertNotIn(user3, driver_list)
+
+        response = self.client.get(url, data={"username": "bob"})
+        driver_list = response.context["driver_list"]
+
+        self.assertIn(user3, driver_list)
+        self.assertNotIn(user1, driver_list)
+        self.assertEqual(len(driver_list), 1)
+
+        response = self.client.get(url, data={"username": "zorro"})
+        driver_list = response.context["driver_list"]
+        self.assertEqual(len(driver_list), 0)
+
 
 class IndexViewTests(TestCase):
     def setUp(self):
