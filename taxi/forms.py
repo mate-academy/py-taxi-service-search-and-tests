@@ -6,6 +6,19 @@ from django.core.exceptions import ValidationError
 from taxi.models import Car, Driver
 
 
+class SearchForm(forms.Form):
+    search_field = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(),
+    )
+
+    def __init__(self, *args, placeholder="Search...", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["search_field"].widget.attrs["placeholder"] = placeholder
+
+
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
