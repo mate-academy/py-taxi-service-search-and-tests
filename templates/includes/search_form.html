@@ -1,0 +1,49 @@
+{% load crispy_forms_filters %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form action="" method="get" class="search-form-custom card p-2 shadow-sm">
+                <div class="d-flex align-items-center">
+
+                    <div class="flex-grow-1 me-2">
+                        {{ search_form|crispy }}
+                    </div>
+
+                    <div class="flex-shrink-0">
+                        <button type="submit" class="btn btn-secondary" style="margin-top: 2px;">
+                            Search
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .search-form-custom label {
+        display: none !important;
+    }
+
+    .search-form-custom .form-group {
+        margin-bottom: 0 !important;
+    }
+
+    .search-form-custom.card {
+        border-radius: 10px;
+        border: 1px solid #eee;
+    }
+
+    .search-form-custom input.form-control {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .search-form-custom:focus-within {
+        box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25) !important;
+        border-color: #6c757d;
+    }
+</style>

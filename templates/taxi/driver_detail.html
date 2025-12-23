@@ -1,33 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="m-0">Driver: {{ driver.username }}</h2>
+        <div>
+            <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary">
+                Update license
+            </a>
+            <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger">
+                Delete
+            </a>
+        </div>
+    </div>
 
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
-  </h1>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>First name:</strong> {{ driver.first_name }}</p>
+                <p><strong>Last name:</strong> {{ driver.last_name }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>License number:</strong> {{ driver.license_number }}</p>
+                <p><strong>Is staff:</strong> {{ driver.is_staff|yesno:"Yes,No" }}</p>
+            </div>
+        </div>
 
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
-  <div class="ml-3">
-    <h4>Cars</h4>
-
-    {% for car in driver.cars.all %}
         <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
 
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
-  </div>
+        <h4>Cars assigned</h4>
+        <div class="list-group mt-3">
+            {% for car in driver.cars.all %}
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ car.model }}</h5>
+                        <small class="text-muted">Id: {{car.id}}</small>
+                    </div>
+                    <p class="mb-1">Manufacturer: {{ car.manufacturer.name }}</p>
+                </div>
+            {% empty %}
+              <div class="alert alert-warning">No cars assigned!</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

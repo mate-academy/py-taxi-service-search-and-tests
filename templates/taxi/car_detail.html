@@ -1,35 +1,65 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+<div class="card mt-3 mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center bg-light">
+    <h2 class="m-0 text-dark">{{ car.model }}</h2>
+    <div>
+        <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-outline-secondary btn-sm">
+          <i class="fa fa-pencil"></i> Update
+        </a>
+        <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-outline-danger btn-sm">
+          <i class="fa fa-trash"></i> Delete
+        </a>
+    </div>
+  </div>
 
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
-    Drivers
+  <div class="card-body">
+    <h5 class="card-title text-muted">Information</h5>
+    <p class="card-text">
+        <strong>Manufacturer:</strong> {{ car.manufacturer.name }} <br>
+        <strong>Country:</strong> {{ car.manufacturer.country }}
+    </p>
 
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
+    <hr>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="m-0">Drivers assigned</h4>
+
+        {% if car in user.cars.all %}
+          <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger btn-sm">
+            Remove me from this car
+          </a>
+        {% else %}
+          <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success btn-sm">
+            Assign me to this car
+          </a>
+        {% endif %}
+    </div>
+
+    {% if car.drivers.all %}
+        <div class="list-group">
+          {% for driver in car.drivers.all %}
+            <a href="{{ driver.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <span>
+                    {{ driver.username }}
+                    <small class="text-muted">
+                      {% if driver.first_name or driver.last_name %}
+                      ({{ driver.first_name }} {{ driver.last_name }})
+                      {% endif %}
+                    </small>
+                </span>
+                {% if user == driver %}
+                    <span class="badge badge-primary badge-pill">Me</span>
+                {% endif %}
+            </a>
+          {% endfor %}
+        </div>
     {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
+        <div class="alert alert-secondary text-center" role="alert">
+            No drivers currently assigned to this car.
+        </div>
     {% endif %}
-
-  </h1>
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+  </div>
+</div>
 {% endblock %}

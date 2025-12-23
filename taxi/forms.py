@@ -17,6 +17,10 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(max_length=120, required=False)
+
+
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
@@ -39,6 +43,10 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(max_length=120, required=False)
+
+
 def validate_license_number(
     license_number,
 ):  # regex validation is also possible here
@@ -50,3 +58,7 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class ManufacturerNameSearchForm(forms.Form):
+    name = forms.CharField(max_length=255, required=False)
