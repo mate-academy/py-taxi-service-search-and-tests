@@ -7,6 +7,11 @@
       Create
     </a>
   </h1>
+  
+  <form method="GET" action="{% url 'taxi:manufacturer-list' %}">
+      <input type="text" name="search" placeholder="Search by name" value="{{ request.GET.search }}">
+      <button type="submit" class="btn btn-primary">Search</button>
+  </form>
 
   {% if manufacturer_list %}
     <table class="table">
