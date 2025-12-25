@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_filters %}
+
 {% block content %}
   <h1>
     Manufacturer List
@@ -7,6 +9,11 @@
       Create
     </a>
   </h1>
+
+{% block search %}
+    {% include "includes/search.html" %}
+  {% endblock %}
+  <br>
 
   {% if manufacturer_list %}
     <table class="table">
@@ -40,6 +47,7 @@
                 Delete
               </a>
             </td>
+            
         </tr>
       {% endfor %}
     </table>

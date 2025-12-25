@@ -10,11 +10,12 @@ class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        required=False
     )
 
     class Meta:
         model = Car
-        fields = "__all__"
+        fields = ("model", "manufacturer", "drivers")
 
 
 class DriverCreationForm(UserCreationForm):
@@ -50,3 +51,35 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            {"placeholder": "Search by username"}
+        )
+    )
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=63,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            {"placeholder": "Search by model"}
+        )
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=63,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            {"placeholder": "Search by name"}
+        )
+    )
