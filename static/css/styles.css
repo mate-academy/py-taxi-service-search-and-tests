@@ -1,8 +1,17 @@
 body {
     margin-top: 20px;
+    background-color: lightgray;
+}
+
+html{
+    background-color: lightgray;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
+}
+
+.button-search{
+    margin-left: 20px;
 }
