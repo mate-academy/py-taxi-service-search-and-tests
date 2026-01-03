@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -39,14 +41,24 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+def validate_license_number(license_number):
+    pattern = r"^[A-Z]{3}\d{5}$"
 
+    if not re.fullmatch(pattern, license_number):
+        raise forms.ValidationError(
+            "License number must be 8 characters: first 3 uppercase "
+            "letters followed by 5 digits (e.g., ABC12345)."
+        )
     return license_number
+
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(max_length=255, required=False)
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(max_length=255, required=False)
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(max_length=255, required=False)
