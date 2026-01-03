@@ -7,6 +7,12 @@
       Create
     </a>
   </h1>
+<form class="form-inline justify-content-center">
+        <div class="form-group mb-2">
+                    {{ ManufacturerSearchForm }}
+        </div>
+        <button type="submit" class="btn btn-primary mb-2 ml-2">Search</button>
+    </form>
 
   {% if manufacturer_list %}
     <table class="table">
