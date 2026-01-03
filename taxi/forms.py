@@ -17,6 +17,19 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
+class CarSearchForm(forms.Form):
+    car = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Car model",
+            }
+        )
+    )
+
+
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
@@ -37,6 +50,32 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
     def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
+
+
+class DriverSearchForm(forms.Form):
+    driver = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Driver's username"
+            }
+        )
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    manufacturer = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Manufacturer name"
+            }
+        )
+    )
 
 
 def validate_license_number(
