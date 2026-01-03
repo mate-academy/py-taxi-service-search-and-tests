@@ -7,7 +7,10 @@
         Create
       </a>
     </h1>
-
+  {% block form %}
+    {% include "includes/form.html" %}
+  {% endblock %}
+  <br>
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -32,3 +35,4 @@
       <p>There are no drivers in the service.</p>
     {% endif %}
 {% endblock %}
+
