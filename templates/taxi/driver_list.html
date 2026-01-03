@@ -8,6 +8,15 @@
       </a>
     </h1>
 
+    <!-- Форма поиска -->
+    <form method="get" class="form-inline mb-4">
+        <div class="form-group">
+            <input type="text" name="search" class="form-control" placeholder="Search by username" value="{{ request.GET.search }}">
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+    </form>
+
+    <!-- Список драйверов -->
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -17,7 +26,7 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
+      {% for driver in driver_list %}
       <tr>
         <td>{{ driver.id }}</td>
         <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
@@ -25,10 +34,10 @@
         <td>{{ driver.last_name }}</td>
         <td>{{ driver.license_number }}</td>
       </tr>
-    {% endfor %}
-
+      {% endfor %}
     </table>
     {% else %}
       <p>There are no drivers in the service.</p>
     {% endif %}
+
 {% endblock %}

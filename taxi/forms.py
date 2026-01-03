@@ -3,7 +3,31 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from taxi.models import Car, Driver
+from taxi.models import Car, Driver, Manufacturer
+
+
+class CarSearchForm(forms.Form):
+    search = forms.CharField(
+        required=False,
+        label="Search by model",
+        widget=forms.TextInput(attrs={"placeholder": "Enter car model"}),
+    )
+
+
+class DriverSearchForm(forms.Form):
+    search = forms.CharField(
+        required=False,
+        label="Search by username",
+        widget=forms.TextInput(attrs={"placeholder": "Enter username"}),
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="Search by name"
+    )
 
 
 class CarForm(forms.ModelForm):

@@ -7,15 +7,38 @@
       Create
     </a>
   </h1>
+
+  <!-- Форма поиска -->
+  <form method="get" class="form-inline mb-4">
+    {{ form.as_p }}  <!-- Вставляем форму, которая будет передана из views.py -->
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+  </form>
+
+  <!-- Список машин -->
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
+          <a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.model }}</a>
+          ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
     </ul>
+
+    <!-- Пагинация -->
+    {% if is_paginated %}
+      <div>
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <div>
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
