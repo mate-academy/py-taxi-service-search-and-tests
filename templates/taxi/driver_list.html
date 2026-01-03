@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
+  <form method="get" action="">
+  {{ search_form|crispy }}
+    <input type="submit" value="Search">
+  </form>
     <h1>
       Driver List
       <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
