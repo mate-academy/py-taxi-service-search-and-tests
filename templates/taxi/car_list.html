@@ -7,6 +7,9 @@
       Create
     </a>
   </h1>
+  {% block searching %}
+    {% include "includes/searching.html" %}
+  {% endblock %}
   {% if car_list %}
     <ul>
       {% for car in car_list %}
