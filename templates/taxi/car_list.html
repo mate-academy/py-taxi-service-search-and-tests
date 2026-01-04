@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <h1>
@@ -7,6 +8,12 @@
       Create
     </a>
   </h1>
+
+  <form method="get" class="mb-3">
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
@@ -17,6 +24,6 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no cars in taxi</p>
+    <p>There are no cars in the service.</p>
   {% endif %}
 {% endblock %}
