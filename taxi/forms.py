@@ -3,7 +3,40 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from taxi.models import Car, Driver
+from taxi.models import Car
+
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            {"placeholder": "Search by username"}
+        )
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            {"placeholder": "Search by name"}
+        )
+    )
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            {"placeholder": "Search by model name"}
+        )
+    )
 
 
 class CarForm(forms.ModelForm):
@@ -19,7 +52,7 @@ class CarForm(forms.ModelForm):
 
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        model = Driver
+        model = get_user_model()
         fields = UserCreationForm.Meta.fields + (
             "license_number",
             "first_name",
@@ -32,7 +65,7 @@ class DriverCreationForm(UserCreationForm):
 
 class DriverLicenseUpdateForm(forms.ModelForm):
     class Meta:
-        model = Driver
+        model = get_user_model()
         fields = ["license_number"]
 
     def clean_license_number(self):
