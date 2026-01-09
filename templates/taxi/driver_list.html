@@ -1,34 +1,89 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
+  <h1>
+    Drivers
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+
+  <form method="get" action="" class="form-inline mb-3">
+    <input
+      type="text"
+      name="username"
+      class="form-control mr-2"
+      placeholder="Search by username..."
+      value="{{ search_query }}"
+      style="width: 300px;"
+    >
+    <button class="btn btn-primary" type="submit">Search</button>
+
+    {% if search_query %}
+      <a href="{% url 'taxi:driver-list' %}" class="btn btn-secondary ml-2">
+        Clear
       </a>
-    </h1>
-
-    {% if driver_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
-      </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
-
-    </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
     {% endif %}
+  </form>
+
+  {% if search_query %}
+    <p class="text-muted">Search results for: "{{ search_query }}"</p>
+  {% endif %}
+
+  {% if driver_list %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>License number</th>
+          <th>First name</th>
+          <th>Last name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for driver in driver_list %}
+          <tr>
+            <td>{{ driver.id }}</td>
+            <td>
+              <a href="{% url 'taxi:driver-detail' pk=driver.pk %}">
+                {{ driver.username }}
+              </a>
+            </td>
+            <td>{{ driver.license_number }}</td>
+            <td>{{ driver.first_name }}</td>
+            <td>{{ driver.last_name }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if is_paginated %}
+      <div class="pagination">
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+            <a href="?username={{ search_query }}&page=1">&laquo; first</a>
+            <a href="?username={{ search_query }}&page={{ page_obj.previous_page_number }}">
+              previous
+            </a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?username={{ search_query }}&page={{ page_obj.next_page_number }}">
+              next
+            </a>
+            <a href="?username={{ search_query }}&page={{ page_obj.paginator.num_pages }}">
+              last &raquo;
+            </a>
+          {% endif %}
+        </span>
+      </div>
+    {% endif %}
+  {% else %}
+    <p>There are no drivers in the service.</p>
+  {% endif %}
 {% endblock %}
