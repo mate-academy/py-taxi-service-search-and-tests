@@ -6,6 +6,48 @@ from django.core.exceptions import ValidationError
 from taxi.models import Car, Driver
 
 
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by username...",
+                "style" : "width: 65vw;",
+            }
+        )
+    )
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by model...",
+                "style" : "width: 65vw;",
+            }
+        )
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by name...",
+                "style" : "width: 65vw;",
+            }
+        )
+    )
+
+
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
@@ -18,9 +60,9 @@ class CarForm(forms.ModelForm):
 
 
 class DriverCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+    class Meta(UserCreationForm.Meta):  # type: ignore
         model = Driver
-        fields = UserCreationForm.Meta.fields + (
+        fields = UserCreationForm.Meta.fields + (  # type: ignore
             "license_number",
             "first_name",
             "last_name",
