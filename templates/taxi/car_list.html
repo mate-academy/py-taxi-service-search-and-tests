@@ -7,11 +7,24 @@
       Create
     </a>
   </h1>
+
+  <form method="get" class="mb-3">
+    <input
+      type="text"
+      name="model"
+      placeholder="Search by model"
+      value="{{ model }}"
+    >
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %}">
+            {{ car.id }}
+          </a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
