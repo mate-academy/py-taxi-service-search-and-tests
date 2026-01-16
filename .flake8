@@ -1,9 +1,15 @@
 [flake8]
-inline-quotes = "
-ignore = E203, E266, W503, N807, N818, F401
-max-line-length = 79
-max-complexity = 18
-select = B,C,E,F,W,T4,B9,Q0,N8,VNE
-exclude =
-    **migrations
-    venv
+max-line-length = 88
+exclude = 
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    migrations,
+    *migrations*,
+    manage.py
+ignore = 
+    Q000,
+    F401
+per-file-ignores =
+    */tests/*:F401
