@@ -18,7 +18,7 @@
         <th>Delete</th>
       </tr>
 
-      {% for manufacturer in manufacturer_list %}
+      {% for Manufacturer in manufacturer_list %}
         <tr>
           <td>
               {{ manufacturer.id }}
@@ -47,4 +47,15 @@
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
+
+<form method="get">
+  <input type="text" name="q" placeholder="Wyszukaj po nazwie...">
+  <button type="submit">Szukaj</button>
+</form>
+<ul>
+    {% for Manufacturer in manufacturers %}
+        <li>{{ manufacturer.name }}</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

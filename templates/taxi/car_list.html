@@ -9,7 +9,7 @@
   </h1>
   {% if car_list %}
     <ul>
-      {% for car in car_list %}
+      {% for Car in car_list %}
         <li>
           <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
@@ -19,4 +19,15 @@
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
+
+<form method="get">
+    <input type="text" name="q" placeholder="Wyszukaj po modelu...">
+    <button type="submit">Szukaj</button>
+</form>
+<ul>
+    {% for Car in cars %}
+        <li>{{ car.model }}</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

@@ -17,7 +17,7 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
+    {% for Driver in driver_list %}
       <tr>
         <td>{{ driver.id }}</td>
         <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
@@ -31,4 +31,15 @@
     {% else %}
       <p>There are no drivers in the service.</p>
     {% endif %}
+
+<form method="get">
+    <input type="text" name="q" placeholder="Wyszukaj po nazwie użytkownika...">
+    <button type="submit">Szukaj</button>
+</form>
+<ul>
+    {% for Driver in drivers %}
+        <li>{{ driver.username }}</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
