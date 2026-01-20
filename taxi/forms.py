@@ -17,6 +17,15 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Model"}),
+    )
+
+
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
@@ -26,7 +35,7 @@ class DriverCreationForm(UserCreationForm):
             "last_name",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
+    def clean_license_number(self):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
@@ -39,9 +48,27 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         return validate_license_number(self.cleaned_data["license_number"])
 
 
+class DriverUsernameSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Username"}),
+    )
+
+
+class ManufacturersNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Name"}),
+    )
+
+
 def validate_license_number(
     license_number,
-):  # regex validation is also possible here
+):
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
     elif not license_number[:3].isupper() or not license_number[:3].isalpha():
