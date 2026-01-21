@@ -1,14 +1,27 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="m-0 mb-3 text-center w-100">
       Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+    </h1>
+    <div>
+      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary">
         Create
       </a>
-    </h1>
+    </div>
+  </div>
 
-    {% if driver_list %}
+  <form method="get" action="" class="form-inline d-flex justify-content-center">
+    {{ search_form|crispy }}
+    <input type="submit" class="btn btn-outline-secondary" value="Search">
+  </form>
+  <br>
+
+
+  {% if driver_list %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -17,18 +30,19 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
+      {% for driver in driver_list %}
+        <tr>
+          <td>{{ driver.id }}</td>
+          <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a>
+          </td>
+          <td>{{ driver.first_name }}</td>
+          <td>{{ driver.last_name }}</td>
+          <td>{{ driver.license_number }}</td>
+        </tr>
+      {% endfor %}
 
     </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  {% else %}
+    <p>There are no drivers in the service.</p>
+  {% endif %}
 {% endblock %}
