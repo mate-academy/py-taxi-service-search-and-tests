@@ -4,13 +4,14 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django import forms
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, CarSearchForm
+from django.db.models import QuerySet
 
 
 @login_required
-def index(request):
+def index(request) -> HttpResponseRedirect:
     """View function for the home page of the site."""
 
     num_drivers = Driver.objects.count()
@@ -54,10 +55,32 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=100,
+        required=False,
+        label="Search by model"
+    )
+
+
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        model_name = self.request.GET.get("model", "")
+        context["search_form"] = CarSearchForm(initial={"model": model_name})
+        return context
+
+    def get_queryset(self) -> QuerySet:
+        queryset = Car.objects.select_related("manufacturer")
+        form = CarSearchForm(self.request.GET)
+        if form.is_valid():
+            model = form.cleaned_data.get("model")
+            if model:
+                queryset = queryset.filter(model__icontains=model)
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -108,7 +131,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_assign_to_car(request, pk):
+def toggle_assign_to_car(request, pk) -> HttpResponseRedirect:
     driver = Driver.objects.get(id=request.user.id)
     if (
         Car.objects.get(id=pk) in driver.cars.all()
