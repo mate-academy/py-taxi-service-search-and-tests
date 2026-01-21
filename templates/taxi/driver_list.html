@@ -8,6 +8,11 @@
       </a>
     </h1>
 
+    {% block search %}
+    {% include "includes/search.html" %}
+  {% endblock %}
+  <br>
+
     {% if driver_list %}
     <table class="table">
       <tr>
