@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+
 
 from .models import Driver, Car, Manufacturer
 from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
@@ -36,6 +38,13 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(Q(name__icontains=query))
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -58,6 +67,13 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(Q(model__icontains=query))
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +100,13 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(Q(username__icontains=query))
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
