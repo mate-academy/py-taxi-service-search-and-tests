@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <form action="" method="get">
+  {{ search_form }}
+  <input type="submit">
+  </form>
   <h1>
     Manufacturer List
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
