@@ -7,6 +7,11 @@
       Create
     </a>
   </h1>
+  <form method="get" class="form-inline mb-3">
+    {{ search_form.model }}
+    <button type="submit" class="btn btn-outline-primary ml-2">Search</button>
+    <a href="{% url 'taxi:car-list' %}" class="btn btn-outline-secondary ml-2">Clear</a>
+  </form>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
