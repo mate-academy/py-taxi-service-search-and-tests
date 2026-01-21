@@ -7,7 +7,7 @@
       Create
     </a>
   </h1>
-
+  {% include "includes/search_form.html" %}
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -17,7 +17,6 @@
         <th>Update</th>
         <th>Delete</th>
       </tr>
-
       {% for manufacturer in manufacturer_list %}
         <tr>
           <td>
@@ -43,7 +42,6 @@
         </tr>
       {% endfor %}
     </table>
-
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
