@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="px-4 h4">
   <h1>Delete manufacturer?</h1>
   <form action="" method="post">
     {% csrf_token %}
 
-    <input type="submit" value="Yes" class="btn btn-danger">
+    <input type="submit" value="Yes, i'm sure" class="h4 btn btn-danger">
+    <a class="btn btn-secondary h4" href="{% url 'taxi:manufacturer-list' %}">No, thanks</a>
   </form>
+</div>
 {% endblock %}
