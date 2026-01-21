@@ -40,7 +40,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
 
 def validate_license_number(
-    license_number,
+        license_number,
 ):  # regex validation is also possible here
     if len(license_number) != 8:
         raise ValidationError("License number should consist of 8 characters")
@@ -50,3 +50,16 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class SearchForm(forms.Form):
+    search_query = forms.CharField(
+        min_length=0,
+        required=False,
+        label="",
+    )
+
+    def __init__(self, search_by, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["search_query"].widget.attrs["placeholder"] = \
+            f"Search by {search_by}"

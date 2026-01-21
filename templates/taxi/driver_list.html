@@ -1,34 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
+{% include "includes/search.html" %}
+<h1>
+    Driver List
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
         Create
-      </a>
-    </h1>
+    </a>
+</h1>
 
-    {% if driver_list %}
-    <table class="table">
-      <tr>
+{% if driver_list %}
+<table class="table">
+    <tr>
         <th>ID</th>
         <th>Username</th>
         <th>First name</th>
         <th>Last name</th>
         <th>License number</th>
-      </tr>
+    </tr>
     {% for driver in driver_list %}
-      <tr>
+    <tr>
         <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
+        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a>
+        </td>
         <td>{{ driver.first_name }}</td>
         <td>{{ driver.last_name }}</td>
         <td>{{ driver.license_number }}</td>
-      </tr>
+    </tr>
     {% endfor %}
 
-    </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+</table>
+{% else %}
+<p>There are no drivers in the service.</p>
+{% endif %}
 {% endblock %}
