@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <h1>
@@ -8,6 +9,10 @@
       </a>
     </h1>
 
+    <form method="get" action="" class="form-inline">
+      {{ search_form|crispy }}
+      <input class="btn-secondary" type="submit" value="🔎">
+    </form>
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -26,9 +31,8 @@
         <td>{{ driver.license_number }}</td>
       </tr>
     {% endfor %}
-
     </table>
     {% else %}
       <p>There are no drivers in the service.</p>
     {% endif %}
-{% endblock %}
+      {% endblock %}
