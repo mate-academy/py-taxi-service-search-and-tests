@@ -7,7 +7,11 @@
       Create
     </a>
   </h1>
+
   {% if car_list %}
+
+    {% include "includes/search_form.html" %}
+
     <ul>
       {% for car in car_list %}
         <li>
