@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <h1>
@@ -31,4 +32,10 @@
     {% else %}
       <p>There are no drivers in the service.</p>
     {% endif %}
+  <div class="mb-2">
+    <form action="" method="get">
+      {{ search_form|crispy }}
+      <input type="submit" class="btn btn-primary">
+    </form>
+  </div>
 {% endblock %}
