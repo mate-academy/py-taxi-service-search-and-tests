@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 from .models import Driver, Car, Manufacturer
 from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
@@ -30,13 +31,6 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
-    model = Manufacturer
-    context_object_name = "manufacturer_list"
-    template_name = "taxi/manufacturer_list.html"
-    paginate_by = 5
-
-
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
@@ -52,12 +46,6 @@ class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
 class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Manufacturer
     success_url = reverse_lazy("taxi:manufacturer-list")
-
-
-class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
-    paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -79,11 +67,6 @@ class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
 class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("taxi:car-list")
-
-
-class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = Driver
-    paginate_by = 5
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
@@ -117,3 +100,45 @@ def toggle_assign_to_car(request, pk):
     else:
         driver.cars.add(pk)
     return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+
+
+class DriverListView(ListView):
+    model = Driver
+    context_object_name = "driver_list"
+    template_name = "taxi/driver_list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        username = self.request.GET.get("username", "")
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+        return queryset
+
+
+class CarListView(ListView):
+    model = Car
+    context_object_name = "car_list"
+    template_name = "taxi/car_list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        model = self.request.GET.get("model", "")
+        if model:
+            queryset = queryset.filter(model__icontains=model)
+        return queryset
+
+
+class ManufacturerListView(ListView):
+    model = Manufacturer
+    context_object_name = "manufacturer_list"
+    template_name = "taxi/manufacturer_list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.GET.get("name", "")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset

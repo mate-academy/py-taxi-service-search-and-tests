@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+<form method="get">
+  <input type="text" name="name" placeholder="Пошук за іменем" value="{{ request.GET.username }}">
+  <button type="submit">Пошук</button>
+</form>
 
   {% if manufacturer_list %}
     <table class="table">
