@@ -7,6 +7,12 @@
       Create
     </a>
   </h1>
+    {% load crispy_forms_filters %}
+    <form action="" method="get" class="form-inline">
+    {% csrf_token %}
+    {{ search_field|crispy }}
+        <input type="submit" value="Search" class="btn btn-secondary">
+    </form>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
