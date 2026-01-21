@@ -1,0 +1,29 @@
+{% load crispy_forms_filters %}
+
+<input type="checkbox" id="search-toggle" style="display:none;" 
+  {% if request.GET.model or request.GET.username or request.GET.name %} checked {% endif %}>
+<label for="search-toggle" class="btn btn-outline-primary">🔎</label>
+
+<div class="search-container">
+    <form method="GET" action="" class="form-inline mb-3">
+        {{ search_form|crispy }}
+        <button type="submit" class="btn btn-outline-primary mt-2">
+          Search
+        </button>
+    </form>
+</div>
+
+<style>
+    .search-container {
+        display: none;
+        margin-top: 10px;
+    }
+    
+    #search-toggle:checked ~ .search-container {
+        display: block;
+    }
+    
+    label[for="search-toggle"] {
+        cursor: pointer;
+    }
+</style>
