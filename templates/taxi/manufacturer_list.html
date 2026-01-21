@@ -7,6 +7,13 @@
       Create
     </a>
   </h1>
+  
+  <form action="" method="get" class="form-group">
+    <div class="d-inline-flex">
+      {{ search_form }}
+      <input class="btn btn-secondary ml-3" type="submit" value="Search">
+    </div>
+  </form>
 
   {% if manufacturer_list %}
     <table class="table">
