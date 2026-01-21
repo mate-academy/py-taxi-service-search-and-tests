@@ -1,8 +1,41 @@
 body {
     margin-top: 20px;
+    background-color: wheat;
 }
 
 .link-to-page {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+h1 {
+    color: black;
+    font-size: 1.5rem;
+}
+
+p {
+    color: black;
+    font-size: 1.5rem;
+}
+
+tr {
+    color: black;
+    font-size: 1.5rem;
+
+}
+
+ul {
+    color: black;
+    font-size: 1.5rem;
+}
+
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    background-color: wheat;
+    border: 1px solid rgba(0, 0, 0, .125);
+    font-size: 1.5rem;
+}
+
