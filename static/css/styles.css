@@ -1,8 +1,222 @@
+/* Base styles */
 body {
-    margin-top: 20px;
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+  font-family: 'Roboto', sans-serif;
+  color: white;
 }
 
-.link-to-page {
-    float: right;
-    margin: 0 2px 0 2px;
+/* Gradient animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h1, p {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+/* Login form styles */
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glowing animated border */
+.login-form::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ff00ff, #00ffff, #ff00ff);
+  background-size: 400% 400%;
+  animation: borderGlow 5s linear infinite;
+  z-index: -1;
+}
+
+/* Border animation */
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.login-form:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Form inputs */
+input[type="text"], input[type="password"], input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #fdbb2d;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Focus glow effect */
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+  border-color: #00c6ff;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.8);
+  outline: none;
+}
+
+/* Hi-tech Button Style with Gradient and Glow */
+.custom-btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(270deg, #00c6ff, #0072ff, #00c6ff);
+  background-size: 200% 200%;
+  border: 2px solid transparent;
+  border-radius: 30px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  overflow: hidden;
+  animation: buttonGradient 4s linear infinite;
+}
+
+/* Button gradient animation */
+@keyframes buttonGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glowing outline effect */
+.custom-btn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 30px;
+  background: linear-gradient(270deg, #ff00ff, #00ffff, #ff00ff);
+  background-size: 400% 400%;
+  animation: buttonGlow 3s linear infinite;
+  z-index: -1;
+}
+
+/* Button glow animation */
+@keyframes buttonGlow {
+  0% { background-position: 0% 50%; box-shadow: 0 0 10px rgba(0, 198, 255, 0.5); }
+  50% { background-position: 100% 50%; box-shadow: 0 0 20px rgba(0, 198, 255, 1); }
+  100% { background-position: 0% 50%; box-shadow: 0 0 10px rgba(0, 198, 255, 0.5); }
+}
+
+/* Hover effect */
+.custom-btn:hover {
+  transform: translateY(-3px) scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(0, 198, 255, 1);
+}
+
+/* Active click effect */
+.custom-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Hi-tech Button Style - Thinner Version */
+.custom-btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 1px 30px; /* Reduced vertical padding to make the button thinner */
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #00c6ff, #0072ff); /* Cool futuristic gradient */
+  border: 1px solid transparent; /* Transparent border */
+  border-radius: 30px; /* Smooth rounded corners */
+  background-clip: padding-box; /* Ensures gradient border is visible */
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), 0 1px 6px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+  letter-spacing: 1px; /* Adds some space between letters */
+  text-transform: uppercase; /* Make the text uppercase for a techy look */
+}
+
+/* Hi-tech Chrome Border Effect */
+.custom-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #f0f0f0, #dcdcdc, #b0b0b0); /* Subtle chrome effect */
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for the button */
+.custom-btn:hover {
+  background: linear-gradient(135deg, #0072ff, #00c6ff); /* Reversed gradient for hover */
+  transform: translateY(-5px); /* Lift the button on hover */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+  filter: brightness(1.2); /* Slight brightness boost */
+}
+
+/* Active (click) effect */
+.custom-btn:active {
+  transform: translateY(2px); /* Button presses down when clicked */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.2); /* Shadow deepens on click */
+}
+
+/* Glowing text effect */
+.custom-btn::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: rgba(255, 255, 255, 0.1); /* Light glow around the button */
+  border-radius: 30px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* White glowing border effect */
+  animation: glow 1.5s infinite alternate;
+  z-index: -2;
+}
+
+/* Animation for glowing effect */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  }
 }
