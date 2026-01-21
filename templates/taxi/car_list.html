@@ -4,8 +4,10 @@
   <h1>
     Car list
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
+      Create</a>
+  
+    {% include "includes/search.html" %}  
+  
   </h1>
   {% if car_list %}
     <ul>
