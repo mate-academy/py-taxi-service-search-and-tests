@@ -1,15 +1,15 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
-
+    <h1 class="list-group-item bg-primary rounded d-flex align-items-center">
+  <span class="flex-grow-1 text-light">Driver List</span>
+  <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-dark-blue link-to-page ml-auto" style="width: 20%;">Create</a>
+  </h1>
+    {% include "includes/search_line.html" %}
     {% if driver_list %}
-    <table class="table">
+    <table class="table table-striped table-bordered">
+    <thead class="table-primary">
       <tr>
         <th>ID</th>
         <th>Username</th>
@@ -17,6 +17,7 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
+    </thead>
     {% for driver in driver_list %}
       <tr>
         <td>{{ driver.id }}</td>
