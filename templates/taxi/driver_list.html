@@ -7,7 +7,9 @@
         Create
       </a>
     </h1>
-
+    {% if search_form %}
+        {% include "includes/search.html" %}
+    {% endif %}
     {% if driver_list %}
     <table class="table">
       <tr>
