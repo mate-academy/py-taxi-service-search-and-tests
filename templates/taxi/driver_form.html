@@ -3,10 +3,7 @@
 
 {% block content %}
   <h1>Create driver</h1>
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
-    {{ form|crispy }}
 
-    <input type="submit" value="Submit" class="btn btn-primary">
-  </form>
+    {% include 'includes/forms/creation_form.html' %}
+
 {% endblock %}
