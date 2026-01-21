@@ -14,7 +14,6 @@
   <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
   <h1>
     Drivers
-
     {% if car in user.cars.all %}
       <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
         Delete me from this car
