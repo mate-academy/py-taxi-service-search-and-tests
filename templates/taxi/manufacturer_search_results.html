@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Search Results for Manufacturers</h2>
+<ul>
+  {% for manufacturer in manufacturer_list %}
+  <li>{{ manufacturer.name }}</li>
+  {% empty %}
+  <li>No manufacturers found</li>
+  {% endfor %}
+</ul>
+{% endblock %}

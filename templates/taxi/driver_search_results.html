@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Search Results for Drivers</h2>
+<ul>
+  {% for driver in driver_list %}
+  <li>{{ driver.username }}</li>
+  {% empty %}
+  <li>No drivers found</li>
+  {% endfor %}
+</ul>
+{% endblock %}
