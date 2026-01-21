@@ -8,6 +8,11 @@
     </a>
   </h1>
 
+  <form method="get" class="form-inline mb-3">
+    <input type="text" name="name" class="form-control mr-2" placeholder="Search by name" value="{{ request.GET.name }}">
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -35,7 +40,7 @@
               </a>
             </td>
             <td>
-              <a style="color: red"
+              <a class="delete-link"
                 href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
                 Delete
               </a>
