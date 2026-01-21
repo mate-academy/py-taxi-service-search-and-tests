@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-
 from taxi.models import Car, Driver
 
 
@@ -48,5 +47,17 @@ def validate_license_number(
         raise ValidationError("First 3 characters should be uppercase letters")
     elif not license_number[3:].isdigit():
         raise ValidationError("Last 5 characters should be digits")
-
     return license_number
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(),
+        label="",
+    )
+
+    def __init__(self, *args, **kwargs):
+        placeholder = kwargs.pop("placeholder", "Search...")
+        super().__init__(*args, **kwargs)
+        self.fields["search"].widget.attrs["placeholder"] = placeholder
