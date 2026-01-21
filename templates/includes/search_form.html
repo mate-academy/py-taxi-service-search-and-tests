@@ -1,0 +1,9 @@
+{% load crispy_forms_filters %}
+
+<form method="get" novalidate>
+  {{ search_form|crispy }}
+
+  {% comment %}
+   submit with enter keyboard
+  {% endcomment %}
+</form>
