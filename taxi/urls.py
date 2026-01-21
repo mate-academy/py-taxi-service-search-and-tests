@@ -70,6 +70,7 @@ urlpatterns = [
         DriverDeleteView.as_view(),
         name="driver-delete",
     ),
+
 ]
 
 app_name = "taxi"
