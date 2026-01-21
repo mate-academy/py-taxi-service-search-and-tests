@@ -1,33 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">Driver: {{ driver.username }}</h3>
+      <div>
+        <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary">
+          Update license
+        </a>
+        <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger">
+          Delete
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <p><strong>First name:</strong> {{ driver.first_name }}</p>
+          <p><strong>Last name:</strong> {{ driver.last_name }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>License number:</strong> {{ driver.license_number }}</p>
+          <p><strong>Is staff:</strong> {{ driver.is_staff|yesno:"Yes,No" }}</p>
+        </div>
+      </div>
 
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
-    </a>
-  </h1>
-
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
-
-  <div class="ml-3">
-    <h4>Cars</h4>
-
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
-
-    {% empty %}
-      <p>No cars!</p>
-    {% endfor %}
+      <h4 class="border-top pt-3">Assigned Cars</h4>
+      {% if driver.cars.all %}
+        <div class="row">
+          {% for car in driver.cars.all %}
+            <div class="col-md-6 mb-3">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">{{ car.model }}</h5>
+                  <p class="card-text">
+                    <strong>Manufacturer:</strong> {{ car.manufacturer.name }}<br>
+                    <small class="text-muted">ID: {{ car.id }}</small>
+                  </p>
+                  <a href="{% url 'taxi:car-detail' pk=car.id %}" class="btn btn-sm btn-outline-dark">
+                    View details
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info">
+          No cars assigned to this driver.
+        </div>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}

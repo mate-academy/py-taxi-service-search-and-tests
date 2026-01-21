@@ -1,35 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
-    {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">{{ car.model }}</h3>
+      <div>
+        <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary">
+          Update
+        </a>
+        <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger">
+          Delete
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="card-text"><strong>Manufacturer:</strong> {{ car.manufacturer.name }}, {{ car.manufacturer.country }}</p>
 
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
-    Drivers
+      <h4 class="mt-4">Drivers</h4>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        {% if car in user.cars.all %}
+          <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger">
+            Delete me from this car
+          </a>
+        {% else %}
+          <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success">
+            Assign me to this car
+          </a>
+        {% endif %}
+      </div>
 
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
-    {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
-    {% endif %}
-
-  </h1>
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+      <ul class="list-group">
+        {% for driver in car.drivers.all %}
+          <li class="list-group-item">
+            {{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})
+          </li>
+        {% empty %}
+          <li class="list-group-item">No drivers assigned to this car.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

@@ -1,8 +1,98 @@
+:root {
+    --taxi-yellow: #FFD700;
+    --taxi-dark: #212529;
+    --taxi-light: #f8f9fa;
+}
+
 body {
-    margin-top: 20px;
+    background-color: var(--taxi-light);
+    margin-top: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--taxi-dark);
 }
 
 .link-to-page {
     float: right;
-    margin: 0 2px 0 2px;
+    margin: 0 0 10px 10px;
+}
+
+a {
+    color: var(--taxi-dark);
+}
+
+a:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+.table {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.table thead th {
+    background-color: var(--taxi-dark);
+    color: white;
+    border-bottom: 2px solid var(--taxi-yellow);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: var(--taxi-yellow);
+    color: var(--taxi-dark);
+    font-weight: bold;
+    border-bottom: none;
+}
+
+.form-control:focus {
+    border-color: var(--taxi-yellow);
+    box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+}
+
+.alert {
+    border-radius: 0;
+}
+
+#index-content {
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+#index-content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#index-content li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#index-content li:last-child {
+    border-bottom: none;
+}
+
+.delete-confirmation {
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.delete-confirmation h1 {
+    color: #dc3545;
+    margin-bottom: 20px;
 }
