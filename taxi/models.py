@@ -9,6 +9,8 @@ class Manufacturer(models.Model):
 
     class Meta:
         ordering = ["name"]
+        verbose_name = "manufacturer"
+        verbose_name_plural = "manufacturers"
 
     def __str__(self):
         return f"{self.name} {self.country}"
