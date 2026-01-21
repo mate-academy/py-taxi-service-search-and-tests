@@ -8,6 +8,11 @@
       </a>
     </h1>
 
+    <form method="get" class="form-inline mb-3">
+        <input type="text" name="q" class="form-control mr-2" placeholder="Search..." value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>
