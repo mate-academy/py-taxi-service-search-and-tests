@@ -1,15 +1,15 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 from taxi.models import Car, Driver
 
 
-class CarForm(forms.ModelForm):
+class CarCreateForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
+        queryset=Driver.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        required=False,
     )
 
     class Meta:
@@ -17,36 +17,66 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
-class DriverCreationForm(UserCreationForm):
+class LicenseValidatorMixin(forms.ModelForm):
+    FIRST_CHARS_NUMBER = 3
+    LAST_CHARS_NUMBER = 5
+
+    license_number = forms.CharField(
+        max_length=8,
+        min_length=8,
+        validators=[
+            RegexValidator(
+                regex="^[A-Z]{" + str(FIRST_CHARS_NUMBER) + "}",
+                message=f"The first {FIRST_CHARS_NUMBER} characters of the "
+                f"license number must be uppercase letters!"
+            ),
+            RegexValidator(
+                regex=r"^\D*(\d{" + str(LAST_CHARS_NUMBER) + "})$",
+                message=f"Last {LAST_CHARS_NUMBER} characters must be digits!",
+            ),
+        ]
+    )
+
+
+class DriverCreationForm(LicenseValidatorMixin):
+    MIN_USERNAME_LENGTH = 3
+
     class Meta(UserCreationForm.Meta):
         model = Driver
         fields = UserCreationForm.Meta.fields + (
-            "license_number",
+            "password",
             "first_name",
             "last_name",
+            "email",
+            "license_number",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        if len(username) < DriverCreationForm.MIN_USERNAME_LENGTH:
+            raise forms.ValidationError(
+                f"Username is too short. Min. length is "
+                f"{DriverCreationForm.MIN_USERNAME_LENGTH} symbols."
+            )
+        return username
 
 
-class DriverLicenseUpdateForm(forms.ModelForm):
+class DriverLicenseUpdateForm(LicenseValidatorMixin):
+
     class Meta:
         model = Driver
         fields = ["license_number"]
 
-    def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
 
+class ListSearchForm(forms.Form):
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
-    if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
-    elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+    search_data = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput()
+    )
 
-    return license_number
+    def __init__(self, *args, placeholder="Search", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["search_data"].widget.attrs["placeholder"] = placeholder

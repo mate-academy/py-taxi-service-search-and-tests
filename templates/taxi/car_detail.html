@@ -1,35 +1,38 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <h1>
-    {{ car.model }}
-    <a href="{% url 'taxi:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-
-    <a href="{% url 'taxi:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
-  <h1>
-    Drivers
-
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
-    {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
-    {% endif %}
-
-  </h1>
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+      <div class="content">
+      
+      <a href="{% url 'taxi:car-list'%}"> &lt; back </a>
+        <h1>Car info</h1>
+        Model: {{ car.model }}
+        <br>Manufacturer: {{ car.manufacturer }}
+        <br>
+        <a href="{% url 'taxi:car-update' car.id %}">
+          <br>
+          <button>UPDATE</button>
+        </a>
+        <a href="{% url 'taxi:car-delete' car.id %}">
+          <button class="delete">DELETE</button>
+        </a>
+        <br><br>Drivers:
+        <ul>
+        {%  for driver in car.drivers.all %}
+          <li><a href="{% url 'taxi:driver-detail' driver.id %}">{{ driver.first_name}} {{ driver.last_name }}</a>
+        (License number: {{ driver.license_number }})</li>
+      {% endfor %}
+    </ul>
+      {% if user.is_authenticated %}
+        {% if user.id in object.drivers.in_bulk %}
+          <a href="{% url 'taxi:car-delete-driver' car.id %}">
+            <button class="delete">Delete me from this car</button>
+          </a>
+        {% else %}
+          <a href="{% url 'taxi:car-add-driver' car.id %}">
+            <button>Assign me to this car</button>
+          </a>
+        {% endif %}
+      {% endif %}
+      
+      </div>
 {% endblock %}

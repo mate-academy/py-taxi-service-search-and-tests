@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+      <div class="content">
+        <div class="form-container">
+          <h2>Update License </h2>
+          <h3>Driver {{ object.username }}</h3>           
+          <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <br>  
+            <button type="submit">Save</button>
+          </form>
+        </div>
+      </div>
+{% endblock %}
