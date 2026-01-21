@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -47,4 +48,14 @@
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
+
+  <br><br><br>
+  {% if search_form %}
+  <form method="get" action="" style="width: 55%;" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="Submit" value="🔍" style="margin-left: 10px;">
+  </form>
+  {% endif %}
+  <br><br>
+  
 {% endblock %}
