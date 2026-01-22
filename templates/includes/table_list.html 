@@ -1,0 +1,24 @@
+<table class="table">
+    <thead>
+        <tr>
+            {% for header in headers %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if items %}
+            {% for item in items %}
+                <tr>
+                    {% for value in item.values %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="{{ headers|length }}">No items found.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

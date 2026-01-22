@@ -1,0 +1,8 @@
+{% load static %}
+
+
+<form method="GET" action="">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <input type="text" name="q" placeholder="Search by {{ search_placeholder }}" />
+    <button type="submit">Search</button>
+</form>
