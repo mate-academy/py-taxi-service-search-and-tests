@@ -116,4 +116,38 @@ def toggle_assign_to_car(request, pk):
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
-    return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+    return HttpResponseRedirect(reverse_lazy("taxi:car-detail",
+                                             args=[pk]))
+
+
+def driver_list(request):
+    query = request.GET.get("q", "")
+    drivers = Driver.objects.filter(username__icontains=query)
+    context = {
+        "query": query,
+        "drivers": drivers,
+    }
+    return render(request,
+                  "taxi/driver_list.html", context)
+
+
+def car_list(request):
+    query = request.GET.get("q", "")
+    cars = Car.objects.filter(model__icontains=query)
+    context = {
+        "query": query,
+        "cars": cars,
+    }
+    return render(request,
+                  "taxi/car_list.html", context)
+
+
+def manufacturer_list(request):
+    query = request.GET.get("q", "")
+    manufacturers = Manufacturer.objects.filter(name__icontains=query)
+    context = {
+        "query": query,
+        "manufacturers": manufacturers,
+    }
+    return render(request,
+                  "taxi/manufacturer_list.html", context)
