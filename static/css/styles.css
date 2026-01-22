@@ -6,3 +6,11 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.br-empty {
+    list-style: none;
+}
+
+.sidebar-bg li{
+    background-color: #d3e7ff;
+}
