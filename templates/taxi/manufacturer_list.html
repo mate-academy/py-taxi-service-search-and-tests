@@ -8,6 +8,17 @@
     </a>
   </h1>
 
+  <form method="get" class="form-inline mb-3">
+    <input
+      type="text"
+      name="q"
+      value="{{ search_q }}"
+      placeholder="Search by name"
+      class="form-control mr-2"
+    >
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -20,31 +31,24 @@
 
       {% for manufacturer in manufacturer_list %}
         <tr>
+          <td>{{ manufacturer.id }}</td>
+          <td>{{ manufacturer.name }}</td>
+          <td>{{ manufacturer.country }}</td>
           <td>
-              {{ manufacturer.id }}
+            <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
+              Update
+            </a>
           </td>
           <td>
-              {{ manufacturer.name }}
+            <a style="color: red"
+               href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
+              Delete
+            </a>
           </td>
-          <td>
-              {{ manufacturer.country }}
-          </td>
-          <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
-              </a>
-            </td>
-            <td>
-              <a style="color: red"
-                href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
-                Delete
-              </a>
-            </td>
         </tr>
       {% endfor %}
     </table>
-
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+    <p>There are no manufacturers in the service.</p>
   {% endif %}
 {% endblock %}
