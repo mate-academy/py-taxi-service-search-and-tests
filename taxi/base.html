@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Taxi</title>
+</head>
+<body>
+  <nav>
+    <a href="{% url 'taxi:index' %}">Home</a> |
+    <a href="{% url 'taxi:driver-list' %}">Drivers</a> |
+    <a href="{% url 'taxi:car-list' %}">Cars</a> |
+    <a href="{% url 'taxi:manufacturer-list' %}">Manufacturers</a>
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>
