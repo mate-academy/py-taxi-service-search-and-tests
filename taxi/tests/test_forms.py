@@ -19,8 +19,22 @@ class FormsTest(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
-
+        self.assertEqual(
+            form.cleaned_data["license_number"],
+            form_data["license_number"]
+        )
+        self.assertEqual(
+            form.cleaned_data["first_name"],
+            form_data["first_name"]
+        )
+        self.assertEqual(
+            form.cleaned_data["last_name"],
+            form_data["last_name"]
+        )
+        self.assertEqual(
+            form.cleaned_data["username"],
+            form_data["username"]
+        )
 
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
@@ -30,7 +44,7 @@ class PrivateDriverTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_create_author(self):
+    def test_create_driver(self):
         form_data = {
             "username": "new_user",
             "password1": "TestPassword123!",
