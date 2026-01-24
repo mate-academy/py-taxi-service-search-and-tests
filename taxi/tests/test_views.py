@@ -254,7 +254,7 @@ class LoginCarListTest(LoginMixin, TestCase):
         self.assertIn(car, driver.cars.all())
         self.assertRedirects(
             response,
-            reverse("taxi:car-detail", args=[driver.id])
+            reverse("taxi:car-detail", args=[car.id])
         )
 
 

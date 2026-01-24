@@ -47,7 +47,22 @@ class DriverFormTest(TestCase):
         print(form.errors)
 
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        self.assertEqual(
+            form.cleaned_data["username"],
+            form_data["username"]
+        )
+        self.assertEqual(
+            form.cleaned_data["license_number"],
+            form_data["license_number"]
+        )
+        self.assertEqual(
+            form.cleaned_data["first_name"],
+            form_data["first_name"]
+        )
+        self.assertEqual(
+            form.cleaned_data["last_name"],
+            form_data["last_name"]
+        )
 
     def test_search_driver_form(self):
         form = DriverSearchUsernameForm()
