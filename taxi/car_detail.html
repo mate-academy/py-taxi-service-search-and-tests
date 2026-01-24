@@ -1,0 +1,21 @@
+{% extends "taxi/base.html" %}
+
+{% block content %}
+  <h1>{{ car.model }}</h1>
+  <p>Manufacturer: {{ car.manufacturer.name }}</p>
+
+  <p>
+    <a href="{% url 'taxi:toggle-car-assign' car.id %}">
+      Toggle assign me
+    </a>
+  </p>
+
+  <h3>Drivers</h3>
+  <ul>
+    {% for driver in car.drivers.all %}
+      <li>{{ driver.username }}</li>
+    {% empty %}
+      <li>No drivers</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

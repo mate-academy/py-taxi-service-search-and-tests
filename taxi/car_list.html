@@ -1,0 +1,19 @@
+{% extends "taxi/base.html" %}
+
+{% block content %}
+  <h1>Cars</h1>
+
+  {% include "includes/search_form.html" %}
+
+  <ul>
+    {% for car in car_list %}
+      <li>
+        <a href="{% url 'taxi:car-detail' car.id %}">
+          {{ car.model }} ({{ car.manufacturer.name }})
+        </a>
+      </li>
+    {% empty %}
+      <li>No cars found</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
