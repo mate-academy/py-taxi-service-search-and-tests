@@ -32,15 +32,18 @@ class SearchTests(TestCase):
         self.assertIn("search_form", response.context)
 
         object_list = response.context["object_list"]
-        usernames = [d.username for d in object_list]
+        usernames = [driver.username for driver in object_list]
 
         self.assertIn("alice", usernames)
         self.assertNotIn("bob", usernames)
 
     def test_car_search_by_model(self):
-        m = Manufacturer.objects.create(name="Tesla", country="USA")
-        Car.objects.create(model="Model S", manufacturer=m)
-        Car.objects.create(model="Corolla", manufacturer=m)
+        manufacturer = Manufacturer.objects.create(
+            name="Tesla",
+            country="USA",
+        )
+        Car.objects.create(model="Model S", manufacturer=manufacturer)
+        Car.objects.create(model="Corolla", manufacturer=manufacturer)
 
         url = reverse("taxi:car-list")
         response = self.client.get(url, {"model": "model"})
@@ -49,7 +52,7 @@ class SearchTests(TestCase):
         self.assertIn("search_form", response.context)
 
         object_list = response.context["object_list"]
-        models = [c.model for c in object_list]
+        models = [car.model for car in object_list]
 
         self.assertIn("Model S", models)
         self.assertNotIn("Corolla", models)
@@ -65,7 +68,7 @@ class SearchTests(TestCase):
         self.assertIn("search_form", response.context)
 
         object_list = response.context["object_list"]
-        names = [m.name for m in object_list]
+        names = [manufacturer.name for manufacturer in object_list]
 
         self.assertIn("Toyota", names)
         self.assertNotIn("Tesla", names)
@@ -83,17 +86,20 @@ class CoreFeatureTests(TestCase):
     def test_index_increments_num_visits(self):
         url = reverse("taxi:index")
 
-        response1 = self.client.get(url)
-        self.assertEqual(response1.status_code, 200)
-        self.assertEqual(response1.context["num_visits"], 1)
+        response_first = self.client.get(url)
+        self.assertEqual(response_first.status_code, 200)
+        self.assertEqual(response_first.context["num_visits"], 1)
 
-        response2 = self.client.get(url)
-        self.assertEqual(response2.status_code, 200)
-        self.assertEqual(response2.context["num_visits"], 2)
+        response_second = self.client.get(url)
+        self.assertEqual(response_second.status_code, 200)
+        self.assertEqual(response_second.context["num_visits"], 2)
 
     def test_toggle_assign_to_car_adds_and_removes_driver(self):
-        m = Manufacturer.objects.create(name="BMW", country="Germany")
-        car = Car.objects.create(model="X5", manufacturer=m)
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany",
+        )
+        car = Car.objects.create(model="X5", manufacturer=manufacturer)
 
         toggle_url = reverse("taxi:toggle-car-assign", args=[car.id])
 
