@@ -36,6 +36,7 @@ class FormsTest(TestCase):
             form_data["username"]
         )
 
+
 class PrivateDriverTest(TestCase):
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
