@@ -55,7 +55,7 @@ class CarSearchForm(forms.Form):
     )
 
 class ManufacturerSearchForm(forms.Form):
-    model = forms.CharField(
+    name = forms.CharField(
         max_length=100,
         required=False,
         widget=forms.TextInput(attrs={"placeholder": "Name"}),
