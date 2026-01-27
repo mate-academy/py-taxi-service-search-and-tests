@@ -93,3 +93,55 @@ class ManufacturerCRUDTest(BaseViewTest):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Manufacturer.objects.filter(
             id=self.manufacturer.pk).exists())
+
+
+class SearchFeaturesTest(BaseViewTest):
+    def setUp(self):
+        self.car1 = (
+            Car.objects.create(
+                model="Model S",
+                manufacturer=self.manufacturer))
+        self.car2 = (
+            Car.objects.create(
+                model="Camry",
+                manufacturer=self.manufacturer))
+
+        self.other_driver = Driver.objects.create_user(
+            username="johndoe",
+            password="password123",
+            license_number="XYZ78901"
+        )
+
+    def test_car_search_by_model(self):
+        """Car search test by model name"""
+        url = reverse("taxi:car-list")
+
+        response = self.client.get(url, {"model": "Model"})
+        self.assertContains(response, "Model S")
+        self.assertNotContains(response, "Camry")
+
+        response = self.client.get(url, {"model": "Camry"})
+        self.assertContains(response, "Camry")
+        self.assertNotContains(response, "Model S")
+
+    def test_driver_search_by_username(self):
+        """Driver search test by username"""
+        url = reverse("taxi:driver-list")
+
+        response = self.client.get(url, {"username": "john"})
+        self.assertContains(response, "johndoe")
+        self.assertNotContains(response, "main.driver")
+
+        response = self.client.get(url, {"username": "main"})
+        self.assertContains(response, "main.driver")
+        self.assertNotContains(response, "johndoe")
+
+    def test_manufacturer_search_by_name(self):
+        """Manufacturer search test by name (for complete coverage)"""
+        url = reverse("taxi:manufacturer-list")
+
+        response = self.client.get(url, {"name": "Tesla"})
+        self.assertContains(response, "Tesla")
+
+        response = self.client.get(url, {"name": "Toyota"})
+        self.assertNotContains(response, "Tesla")

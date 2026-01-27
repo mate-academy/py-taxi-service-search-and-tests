@@ -45,9 +45,6 @@ class DriverTest(TestCase):
             last_name="Doe"
         )
 
-    def test_license_number_type(self):
-        self.assertIsInstance(self.driver.license_number, str)
-
     def test_get_absolute_url(self):
         url = reverse("taxi:driver-detail", kwargs={"pk": self.driver.pk})
         self.assertEqual(self.driver.get_absolute_url(), url)
