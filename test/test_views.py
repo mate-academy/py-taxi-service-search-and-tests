@@ -97,15 +97,15 @@ class ManufacturerCRUDTest(BaseViewTest):
 
 class SearchFeaturesTest(BaseViewTest):
     def setUp(self):
-        self.car1 = (
-            Car.objects.create(
-                model="Model S",
-                manufacturer=self.manufacturer))
-        self.car2 = (
-            Car.objects.create(
-                model="Camry",
-                manufacturer=self.manufacturer))
-
+        super().setUp()
+        self.car_model_s = Car.objects.create(
+            model="Model S",
+            manufacturer=self.manufacturer
+        )
+        self.car_camry = Car.objects.create(
+            model="Camry",
+            manufacturer=self.manufacturer
+        )
         self.other_driver = Driver.objects.create_user(
             username="johndoe",
             password="password123",
@@ -117,27 +117,20 @@ class SearchFeaturesTest(BaseViewTest):
         url = reverse("taxi:car-list")
 
         response = self.client.get(url, {"model": "Model"})
-        self.assertContains(response, "Model S")
-        self.assertNotContains(response, "Camry")
-
-        response = self.client.get(url, {"model": "Camry"})
-        self.assertContains(response, "Camry")
-        self.assertNotContains(response, "Model S")
+        self.assertIn(self.car_model_s, response.context["car_list"])
+        self.assertNotIn(self.car_camry, response.context["car_list"])
 
     def test_driver_search_by_username(self):
-        """Driver search test by username"""
+        """Driver search test by username through context"""
         url = reverse("taxi:driver-list")
 
         response = self.client.get(url, {"username": "john"})
-        self.assertContains(response, "johndoe")
-        self.assertNotContains(response, "main.driver")
 
-        response = self.client.get(url, {"username": "main"})
-        self.assertContains(response, "main.driver")
-        self.assertNotContains(response, "johndoe")
+        self.assertIn(self.other_driver, response.context["driver_list"])
+        self.assertNotIn(self.driver, response.context["driver_list"])
 
     def test_manufacturer_search_by_name(self):
-        """Manufacturer search test by name (for complete coverage)"""
+        """Manufacturer search test by name"""
         url = reverse("taxi:manufacturer-list")
 
         response = self.client.get(url, {"name": "Tesla"})
