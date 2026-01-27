@@ -7,7 +7,17 @@
       Create
     </a>
   </h1>
+<div class="search-container">
+  <form action="" method="get" class="d-flex align-items-center mb-3">
+    {{ manufacturers_search_form.name }}
 
+    <input type="submit" value="🔍 Search" class="btn btn-primary ml-2">
+
+    {% if request.GET.name %}
+        <a href="{% url 'taxi:manufacturer-list' %}" class="btn btn-secondary ml-2">Clear search</a>
+    {% endif %}
+</form>
+</div>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
