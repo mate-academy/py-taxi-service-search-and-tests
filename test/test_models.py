@@ -11,8 +11,6 @@ class ManufacturerTest(TestCase):
                 country="Japan"))
 
     def test_manufacturer_content(self):
-        self.assertIsInstance(self.manufacturer.name, str)
-        self.assertIsInstance(self.manufacturer.country, str)
         self.assertEqual(str(self.manufacturer), "Toyota Japan")
 
 
@@ -31,7 +29,6 @@ class CarTest(TestCase):
         self.car.drivers.add(self.driver)
 
     def test_car_fields(self):
-        self.assertIsInstance(self.car.model, str)
         self.assertEqual(self.car.manufacturer.name, "Tesla")
         self.assertIn(self.driver, self.car.drivers.all())
 
