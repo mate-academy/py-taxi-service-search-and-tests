@@ -81,3 +81,84 @@ class FormTest(TestCase):
         form_data = {"license_number": "ab123"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertFalse(form.is_valid())
+
+
+class FilterListTest(TestCase):
+    def setUp(self) -> None:
+        user = get_user_model()
+        self.user = user.objects.create_user(
+            username="notshowed2",
+            password="test16790",
+            license_number="TES76548",
+        )
+        self.client.force_login(self.user)
+
+    def test_driver_filter_list(self):
+        driver1 = get_user_model().objects.create_user(
+            username="test1",
+            password="test12345",
+            license_number="TES12345",
+        )
+        driver2 = get_user_model().objects.create_user(
+            username="notshowed",
+            password="test67890",
+            license_number="EST12345",
+        )
+        driver3 = get_user_model().objects.create_user(
+            username="test3",
+            password="test09876",
+            license_number="SET12345",
+        )
+        response = self.client.get(reverse("taxi:driver-list"), {"username": "test"})
+        resp_list = response.context["driver_list"]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(resp_list), 2)
+        self.assertIn(driver1, resp_list)
+        self.assertIn(driver3, resp_list)
+        self.assertNotIn(driver2, resp_list)
+
+    def test_manufacturer_filter_list(self):
+        manufacturer1 = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        manufacturer2 = Manufacturer.objects.create(
+            name="Skoda",
+            country="Ukraine"
+        )
+        manufacturer3 = Manufacturer.objects.create(
+            name="Tesla",
+            country="USA"
+        )
+        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": "t"})
+        resp_list = response.context["manufacturer_list"]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(resp_list), 2)
+        self.assertContains(response, manufacturer1.name)
+        self.assertContains(response, manufacturer3.name)
+        self.assertNotContains(response, manufacturer2.name)
+
+    def test_car_filter_list(self):
+        manufacturer = Manufacturer.objects.create(
+            name="John",
+            country="Japan"
+        )
+        car1 = Car.objects.create(
+            model="Camry",
+            manufacturer=manufacturer,
+        )
+        car2 = Car.objects.create(
+            model="Camry89",
+            manufacturer=manufacturer,
+        )
+        car3 = Car.objects.create(
+            model="Toyota",
+            manufacturer=manufacturer,
+        )
+        response = self.client.get(reverse("taxi:car-list"), {"model": "camry"})
+        resp_list = response.context["car_list"]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(resp_list), 2)
+        self.assertIn(car1, resp_list)
+        self.assertIn(car2, resp_list)
+        self.assertNotIn(car3, resp_list)
