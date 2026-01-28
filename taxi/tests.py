@@ -109,7 +109,10 @@ class FilterListTest(TestCase):
             password="test09876",
             license_number="SET12345",
         )
-        response = self.client.get(reverse("taxi:driver-list"), {"username": "test"})
+        response = self.client.get(reverse(
+            "taxi:driver-list"),
+            {"username": "test"}
+        )
         resp_list = response.context["driver_list"]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(resp_list), 2)
@@ -130,7 +133,10 @@ class FilterListTest(TestCase):
             name="Tesla",
             country="USA"
         )
-        response = self.client.get(reverse("taxi:manufacturer-list"), {"name": "t"})
+        response = self.client.get(reverse(
+            "taxi:manufacturer-list"),
+            {"name": "t"}
+        )
         resp_list = response.context["manufacturer_list"]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(resp_list), 2)
@@ -155,7 +161,10 @@ class FilterListTest(TestCase):
             model="Toyota",
             manufacturer=manufacturer,
         )
-        response = self.client.get(reverse("taxi:car-list"), {"model": "camry"})
+        response = self.client.get(reverse(
+            "taxi:car-list"),
+            {"model": "camry"}
+        )
         resp_list = response.context["car_list"]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(resp_list), 2)
