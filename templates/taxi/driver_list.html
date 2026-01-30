@@ -7,8 +7,20 @@
         Create
       </a>
     </h1>
+    <form method="get" action="">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Buscar por Username..." name="q" value="{{ request.GET.q }}">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
 
-    {% if driver_list %}
+    {% if request.GET.q %}
+        <p>Resultados para: <strong>{{ request.GET.q }}</strong></p>
+    {% endif %}
+
+    {% if drivers %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -17,7 +29,7 @@
         <th>Last name</th>
         <th>License number</th>
       </tr>
-    {% for driver in driver_list %}
+    {% for driver in drivers %}
       <tr>
         <td>{{ driver.id }}</td>
         <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
@@ -29,6 +41,12 @@
 
     </table>
     {% else %}
-      <p>There are no drivers in the service.</p>
+      {% if not request.GET.q %}
+          <p>There are no drivers in the service.</p>
+      {% else %}
+          <div class="alert alert-warning" role="alert">
+              Nenhum motorista encontrado com o termo buscado.
+          </div>
+      {% endif %}
     {% endif %}
 {% endblock %}

@@ -7,9 +7,22 @@
       Create
     </a>
   </h1>
-  {% if car_list %}
+  <form method="get" action="">
+      <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Buscar por Modelo..." name="q" value="{{ request.GET.q }}">
+          <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+          </div>
+      </div>
+  </form>
+
+  {% if request.GET.q %}
+      <p>Resultados para: <strong>{{ request.GET.q }}</strong></p>
+  {% endif %}
+
+  {% if cars %}
     <ul>
-      {% for car in car_list %}
+      {% for car in cars %}
         <li>
           <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
@@ -17,6 +30,12 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no cars in taxi</p>
+    {% if not request.GET.q %}
+        <p>There are no cars in taxi</p>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nenhum carro encontrado com o termo buscado.
+        </div>
+    {% endif %}
   {% endif %}
 {% endblock %}

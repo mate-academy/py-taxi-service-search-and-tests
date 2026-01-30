@@ -7,8 +7,20 @@
       Create
     </a>
   </h1>
+  <form method="get" action="">
+      <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Buscar por Nome..." name="q" value="{{ request.GET.q }}">
+          <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+          </div>
+      </div>
+  </form>
 
-  {% if manufacturer_list %}
+  {% if request.GET.q %}
+      <p>Resultados para: <strong>{{ request.GET.q }}</strong></p>
+  {% endif %}
+
+  {% if manufacturers %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -18,7 +30,7 @@
         <th>Delete</th>
       </tr>
 
-      {% for manufacturer in manufacturer_list %}
+      {% for manufacturer in manufacturers %}
         <tr>
           <td>
               {{ manufacturer.id }}
@@ -45,6 +57,12 @@
     </table>
 
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+    {% if not request.GET.q %}
+        <p>There are no manufacturers in the service.</p>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nenhum fabricante encontrado com o termo buscado.
+        </div>
+    {% endif %}
   {% endif %}
 {% endblock %}
