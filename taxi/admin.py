@@ -13,9 +13,7 @@ class DriverAdmin(UserAdmin):
 
     add_fieldsets = (UserAdmin.add_fieldsets + (
         ("Additional info", {"fields": (
-            "first_name",
-            "last_name",
-            "license_number",
+            "first_name", "last_name", "license_number",
         )},),))
 
 

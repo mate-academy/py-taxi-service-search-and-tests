@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
@@ -7,7 +7,6 @@ from taxi.models import Car, Manufacturer
 
 class AdminSiteTests(TestCase):
     def setUp(self):
-        # self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
             username="admin",
             password="admin123",
@@ -65,5 +64,5 @@ class AdminSiteTests(TestCase):
 
     def test_car_filter_by_manufacturer(self):
         url = reverse("admin:taxi_car_changelist")
-        response = self.client.get(url, {"manufacturer__id__exact": 1})
+        response = self.client.get(url, {"manufacturer__id__exact": self.manufacturer.id})
         self.assertContains(response, self.car.model)
