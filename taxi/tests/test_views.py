@@ -101,25 +101,27 @@ class PrivateTaxiSearchTest(TestCase):
         self.client.force_login(self.user)
 
     def test_search_manufacturers_by_name(self):
-        manufacturer1 = Manufacturer.objects.create(
+        manufacturer1 = Manufacturer.objects.create(  # noqa: F841
             name="Mitsubishi",
             country="Japan",
         )
-        manufacturer2 = Manufacturer.objects.create(
+        manufacturer2 = Manufacturer.objects.create(  # noqa: F841
             name="Mazda",
             country="Japan",
         )
-        manufacturer3 = Manufacturer.objects.create(
+        manufacturer3 = Manufacturer.objects.create(  # noqa: F841
             name="Renault",
             country="France",
         )
 
-        filter_names = ["M", "A","Renau", "Mazda"]
+        filter_names = ["M", "A", "Renau", "Mazda"]
 
         for filter_name in filter_names:
             manufacturers_query = MANUFACTURER_URL + f"?name={filter_name}"
             response = self.client.get(manufacturers_query)
-            filtered_manufacturers = Manufacturer.objects.filter(name__icontains=filter_name)
+            filtered_manufacturers = Manufacturer.objects.filter(
+                name__icontains=filter_name
+            )
             self.assertEqual(
                 list(response.context["paginator"].object_list),
                 list(filtered_manufacturers),
@@ -166,20 +168,20 @@ class PrivateTaxiSearchTest(TestCase):
             )
 
     def test_search_driver_by_username(self):
-        driver1 = get_user_model().objects.create_user(
-            username = "joyce.byers",
-            password = "test123",
-            license_number = "KOY26458",
+        driver1 = get_user_model().objects.create_user(  # noqa: F841
+            username="joyce.byers",
+            password="test123",
+            license_number="KOY26458",
         )
-        driver2 = get_user_model().objects.create_user(
-            username = "jonader.byers",
-            password = "test123",
-            license_number = "KOD26458",
+        driver2 = get_user_model().objects.create_user(  # noqa: F841
+            username="jonader.byers",
+            password="test123",
+            license_number="KOD26458",
         )
-        driver2 = get_user_model().objects.create_user(
-            username = "dustin.henderson",
-            password = "test123",
-            license_number = "KOK26458",
+        driver2 = get_user_model().objects.create_user(  # noqa: F841
+            username="dustin.henderson",
+            password="test123",
+            license_number="KOK26458",
         )
 
         filter_usernames = ["j", "byers", "der"]

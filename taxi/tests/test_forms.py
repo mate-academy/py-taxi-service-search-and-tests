@@ -16,10 +16,22 @@ class FormTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         # comparing to the whole form.cleaned_data is not reliable
-        self.assertEqual(form.cleaned_data["username"], form_data["username"])
-        self.assertEqual(form.cleaned_data["first_name"], form_data["first_name"])
-        self.assertEqual(form.cleaned_data["last_name"], form_data["last_name"])
-        self.assertEqual(form.cleaned_data["license_number"], form_data["license_number"])
+        self.assertEqual(
+            form.cleaned_data["username"],
+            form_data["username"]
+        )
+        self.assertEqual(
+            form.cleaned_data["first_name"],
+            form_data["first_name"]
+        )
+        self.assertEqual(
+            form.cleaned_data["last_name"],
+            form_data["last_name"]
+        )
+        self.assertEqual(
+            form.cleaned_data["license_number"],
+            form_data["license_number"]
+        )
 
     def test_driver_creation_form_lowercase_license_number_is_not_valid(self):
         form_data = {
@@ -31,7 +43,7 @@ class FormTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
 
-    def test_driver_creation_form_all_numbers_license_number_is_not_valid(self):
+    def test_driver_creation_form_all_numbers_lic_num_is_not_valid(self):
         form_data = {
             "username": "new_user",
             "password1": "user12test",
@@ -41,7 +53,7 @@ class FormTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
 
-    def test_driver_creation_form_all_letters_license_number_is_not_valid(self):
+    def test_driver_creation_form_all_letters_lic_num_is_not_valid(self):
         form_data = {
             "username": "new_user",
             "password1": "user12test",
@@ -51,7 +63,7 @@ class FormTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
 
-    def test_driver_creation_form_wrong_length_license_number_is_not_valid(self):
+    def test_driver_creation_form_wrong_length_lic_num_is_not_valid(self):
         form_data = {
             "username": "new_user",
             "password1": "user12test",
