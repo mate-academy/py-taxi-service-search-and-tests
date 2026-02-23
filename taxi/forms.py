@@ -17,6 +17,18 @@ class CarForm(forms.ModelForm):
         fields = "__all__"
 
 
+class DriverTitleSearchForm(forms.Form):
+    driver = forms.CharField(max_length=255, required=False)
+
+
+class CarModelSearchForm(forms.Form):
+    model = forms.CharField(max_length=255, required=False)
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(max_length=255, required=False)
+
+
 class DriverCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Driver
@@ -27,7 +39,11 @@ class DriverCreationForm(UserCreationForm):
         )
 
     def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
+        license_number = self.cleaned_data.get("license_number")
+        if not license_number:
+            return license_number
+        validate_license_number(license_number)
+        return license_number
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
@@ -36,7 +52,11 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         fields = ["license_number"]
 
     def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
+        license_number = self.cleaned_data.get("license_number")
+        if not license_number:
+            return license_number
+        validate_license_number(license_number)
+        return license_number
 
 
 def validate_license_number(
