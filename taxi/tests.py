@@ -139,7 +139,10 @@ class FormsTests(TestCase):
 
         self.assertTrue(form.is_valid())
 
-        response = self.client.get(reverse("taxi:driver-list"))
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": "test_user"}
+        )
         self.assertContains(
             response,
             self.user.username,
@@ -153,7 +156,10 @@ class FormsTests(TestCase):
 
         self.assertTrue(form.is_valid())
 
-        response = self.client.get(reverse("taxi:car-list"))
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": "search_model"}
+        )
         self.assertContains(
             response,
             self.car.model,
@@ -167,7 +173,10 @@ class FormsTests(TestCase):
 
         self.assertTrue(form.is_valid())
 
-        response = self.client.get(reverse("taxi:manufacturer-list"))
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            {"name": "search_name"}
+        )
         self.assertContains(
             response,
             self.manufacturer.name,
