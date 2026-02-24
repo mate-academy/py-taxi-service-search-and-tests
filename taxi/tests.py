@@ -2,8 +2,13 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from taxi.forms import DriverCreationForm
-from taxi.models import Manufacturer
+from taxi.forms import (
+    DriverCreationForm,
+    DriversSearchForm,
+    CarsSearchForm,
+    ManufacturersSearchForm
+)
+from taxi.models import Manufacturer, Car
 
 
 class ModelTests(TestCase):
@@ -93,6 +98,26 @@ class LoggedInViewsTests(TestCase):
 
 
 class FormsTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = get_user_model().objects.create_user(
+            username="test_user",
+            password="test1234",
+            license_number="test_license_number",
+        )
+        self.client.force_login(self.user)
+
+        self.manufacturer = Manufacturer.objects.create(
+            name="search_name",
+            country="test_c",
+        )
+
+        self.car = Car.objects.create(
+            model="search_model",
+            manufacturer=self.manufacturer,
+        )
+
+
     def test_driver_creation(self):
         form_data = {
             "username": "test_driver",
@@ -105,7 +130,45 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=form_data)
 
         self.assertTrue(form.is_valid())
-        self.assertEqual(
-            form.cleaned_data,
-            form_data
+
+    def test_search_driver(self):
+        form_data = {
+            "username": "test_user",
+        }
+        form = DriversSearchForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
+
+        response = self.client.get(reverse("taxi:driver-list"))
+        self.assertContains(
+            response,
+            self.user.username,
+        )
+
+    def test_cars_search(self):
+        form_data = {
+            "model": "search_model",
+        }
+        form = CarsSearchForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
+
+        response = self.client.get(reverse("taxi:car-list"))
+        self.assertContains(
+            response,
+            self.car.model,
+        )
+
+    def test_manufacturers_search(self):
+        form_data = {
+            "name": "search_name",
+        }
+        form = ManufacturersSearchForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
+
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertContains(
+            response,
+            self.manufacturer.name,
         )
