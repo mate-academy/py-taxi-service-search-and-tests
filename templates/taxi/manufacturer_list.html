@@ -1,50 +1,85 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Manufacturer List
-    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
-      Create
+
+<div class="container mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Manufacturer List</h1>
+    <a href="{% url 'taxi:manufacturer-create' %}"
+       class="btn btn-success">
+      + Create
     </a>
-  </h1>
+  </div>
 
+  <!-- Search -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-4 align-items-end">
+
+        <div class="col-md-8">
+          {{ search_form|crispy }}
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">
+            🔍 Search
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Table -->
   {% if manufacturer_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Update</th>
-        <th>Delete</th>
-      </tr>
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
 
-      {% for manufacturer in manufacturer_list %}
-        <tr>
-          <td>
-              {{ manufacturer.id }}
-          </td>
-          <td>
-              {{ manufacturer.name }}
-          </td>
-          <td>
-              {{ manufacturer.country }}
-          </td>
-          <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
-              </a>
-            </td>
-            <td>
-              <a style="color: red"
-                href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
-                Delete
-              </a>
-            </td>
-        </tr>
-      {% endfor %}
-    </table>
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Country</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
 
+          <tbody>
+            {% for manufacturer in manufacturer_list %}
+              <tr>
+                <td>{{ manufacturer.id }}</td>
+                <td class="fw-semibold">
+                  {{ manufacturer.name }}
+                </td>
+                <td>{{ manufacturer.country }}</td>
+                <td class="text-end">
+                  <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}"
+                     class="btn btn-sm btn-outline-primary">
+                    Update
+                  </a>
+                  <a href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}"
+                     class="btn btn-sm btn-outline-danger">
+                    Delete
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+    <div class="alert alert-warning">
+      There are no manufacturers in the service.
+    </div>
   {% endif %}
+
+</div>
+
 {% endblock %}
