@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
@@ -12,7 +11,9 @@ from taxi.forms import (validate_license_number,
                         CarForm)
 from taxi.models import Manufacturer
 
+
 User = get_user_model()
+
 
 class LicenseValidationTests(TestCase):
     def test_valid_license(self):
@@ -100,7 +101,7 @@ class CarFormTests(TestCase):
         form_data = {
             "model": "Corolla",
             "manufacturer": self.manufacturer.id,
-            "drivers": [self.driver.id],  # 🔥 передаємо driver
+            "drivers": [self.driver.id],
         }
 
         form = CarForm(data=form_data)
