@@ -21,6 +21,3 @@ class DriverListTest(TestCase):
 
     def test_get_context(self):
         self.assertIn("search", self.response.context)
-
-
-

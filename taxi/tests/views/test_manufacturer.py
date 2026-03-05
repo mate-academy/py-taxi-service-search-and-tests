@@ -22,6 +22,3 @@ class ManufacturerListTest(TestCase):
     def test_get_context(self):
         self.assertIn("search", self.response.context)
         self.assertIn("manufacturer_list", self.response.context)
-
-
-
