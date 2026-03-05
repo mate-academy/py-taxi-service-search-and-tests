@@ -38,4 +38,4 @@ class DriverListTest(TestCase):
 
         drivers = response.context.get("driver_list")
         self.assertEqual(len(drivers), 1)
-        self.assertEqual(drivers.model, Driver)
+        self.assertTrue(isinstance(drivers[0], Driver))

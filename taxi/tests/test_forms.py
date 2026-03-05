@@ -35,7 +35,7 @@ class DriverLicenseUpdateFormTest(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_first_three_number_not_is_upper_case(self):
-        self.form_data["license_number"] = "aaa123456"
+        self.form_data["license_number"] = "aaa12345"
         form = DriverLicenseUpdateForm(data=self.form_data)
         self.assertFalse(form.is_valid())
 

@@ -25,13 +25,12 @@ class CarListTest(TestCase):
     def test_search(self):
         manufacturer = Manufacturer.objects.create(name="test",
                                                    country="test")
-        cars = [
+        for i in range(10):
             Car.objects.create(
                 model=f"test_model_{i}",
                 manufacturer=manufacturer,
             )
-            for i in range(10)
-        ]
+
         response = self.client.get(
             reverse("taxi:car-list"),
             {"model": "test_model_1"}
@@ -39,4 +38,4 @@ class CarListTest(TestCase):
         cars = response.context.get("car_list")
 
         self.assertEqual(len(cars), 1)
-        self.assertEqual(cars.model, Car)
+        self.assertTrue(isinstance(cars[0], Car))
