@@ -21,3 +21,23 @@ class DriverListTest(TestCase):
 
     def test_get_context(self):
         self.assertIn("search", self.response.context)
+
+    def test_search(self):
+        drivers_list = [
+            Driver.objects.create_user(
+                username=f"username_{i}",
+                password=f"password__{i}",
+                license_number=f"ABC1234{i}"
+
+            )
+            for i in range(10)
+        ]
+
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": "username_1"}
+        )
+
+        drivers = response.context.get("driver_list")
+        self.assertEqual(len(drivers), 1)
+        self.assertEqual(drivers.model, Driver)

@@ -1,18 +1,18 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Driver, Car
+from taxi.models import Driver, Car, Manufacturer
 from taxi.views import CarListView
 
 
 class CarListTest(TestCase):
 
     def setUp(self):
-        user = Driver.objects.create_user(
+        self.user = Driver.objects.create_user(
             username="test",
             password="testpassword"
         )
-        self.client.force_login(user)
+        self.client.force_login(self.user)
         self.response = self.client.get(reverse("taxi:car-list"))
 
     def test_get_page(self):
@@ -21,3 +21,22 @@ class CarListTest(TestCase):
 
     def test_get_context(self):
         self.assertIn("search", self.response.context)
+
+    def test_search(self):
+        manufacturer = Manufacturer.objects.create(name="test",
+                                                   country="test")
+        cars = [
+            Car.objects.create(
+                model=f"test_model_{i}",
+                manufacturer=manufacturer,
+            )
+            for i in range(10)
+        ]
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": "test_model_1"}
+        )
+        cars = response.context.get("car_list")
+
+        self.assertEqual(len(cars), 1)
+        self.assertEqual(cars.model, Car)

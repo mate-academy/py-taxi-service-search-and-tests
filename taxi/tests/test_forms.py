@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 
 from taxi.forms import (DriverSearchForm,
                         CarSearchForm,
@@ -20,12 +20,9 @@ class FormsTest(SimpleTestCase):
         self.assertTrue(form.is_valid())
 
 
-class DriverLicenseUpdateFormTest(SimpleTestCase):
+class DriverLicenseUpdateFormTest(TestCase):
     def setUp(self):
-        self.form_data = {"username": "test",
-                          "password1": "passwordstrong",
-                          "password2": "passwordstrong",
-                          "license_number": "AAA123456"}
+        self.form_data = {"license_number": "AAA12345"}
 
     def test_short_number(self):
         self.form_data["license_number"] = "DDR1111"
@@ -43,6 +40,10 @@ class DriverLicenseUpdateFormTest(SimpleTestCase):
         self.assertFalse(form.is_valid())
 
     def test_last_numbers_is_not_digits(self):
-        self.form_data["license_number"] = "aaabbbbb"
+        self.form_data["license_number"] = "AAAbbbbb"
         form = DriverLicenseUpdateForm(data=self.form_data)
         self.assertFalse(form.is_valid())
+
+    def test_license_number_is_correct(self):
+        form = DriverLicenseUpdateForm(data=self.form_data)
+        self.assertTrue(form.is_valid())
