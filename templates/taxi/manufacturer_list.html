@@ -8,6 +8,12 @@
     </a>
   </h1>
 
+  <form action="" method="GET">
+    <input type="text" name="search" value="{{request.GET.search}}" placeholder="Search manufacturer">
+    <button type="submit" class="primary">Search</button>
+
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>

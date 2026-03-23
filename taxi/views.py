@@ -37,6 +37,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_field = self.request.GET.get("search")
+
+        if search_field:
+            queryset = queryset.filter(name__icontains=search_field)
+        return queryset
+
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
@@ -59,6 +67,13 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_field = self.request.GET.get("search")
+
+        if search_field:
+            queryset = queryset.filter(model__icontains=search_field)
+        return queryset
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
@@ -85,6 +100,13 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_field = self.request.GET.get("search")
+
+        if search_field:
+            queryset = queryset.filter(username__icontains=search_field)
+        return queryset
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
