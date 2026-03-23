@@ -78,6 +78,32 @@ class DriverListViewTest(TestCase):
         self.assertEqual(len(response_2.context["driver_list"]), 5)
 
 
+class CarListViewTest(TestCase):
+    def setUp(self):
+        self.driver = get_user_model().objects.create_user(
+            username="Test",
+            password="PasswordTest",
+            license_number="KLJ12345"
+        )
+
+        self.client.login(
+            username="Test",
+            password="PasswordTest"
+        )
+
+        self.manufacturer = Manufacturer.objects.create(
+            name="Test",
+            country="Country"
+        )
+
+        self.car = Car.objects.create(model="TestModel", manufacturer=self.manufacturer)
+        self.car.drivers.add(self.driver)
+
+    def test_car_search(self):
+        url = reverse("taxi:car-list")
+        response = self.client.get(url, data={"search":"TestModel"})
+        self.assertContains(response, self.car.model)
+
 class IndexTest(TestCase):
 
     def setUp(self):
@@ -97,6 +123,29 @@ class IndexTest(TestCase):
 
         self.client.get(url)
         self.assertEqual(self.client.session["num_visits"], 2)
+
+
+class ManufacturerListViewTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Login",
+            password="Password",
+            license_number="GHJ00991"
+        )
+        self.client.login(
+            username="Login",
+            password="Password"
+        )
+        self.manufacturer = Manufacturer.objects.create(
+            name="TestName",
+            country="TestCountry"
+        )
+
+    def test_manufacturer_search(self):
+        url = reverse("taxi:manufacturer-list")
+        response = self.client.get(url, data={"search":"TestName"})
+
+        self.assertContains(response, self.manufacturer.name)
 
 
 class ToggleAssignToCar(TestCase):
