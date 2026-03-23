@@ -8,6 +8,10 @@
       </a>
     </h1>
 
+    <form action="" method="GET">
+      <input type="text" name="search" placeholder="Search driver" value="{{request.GET.search}}">
+      <button class="primary" type="submit">Search</button>
+    </form>
     {% if driver_list %}
     <table class="table">
       <tr>
