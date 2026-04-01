@@ -64,7 +64,6 @@ class DriverCreationFormTest(TestCase):
         }
 
     def test_valid_license_number(self):
-        """Test DriverCreationForm with a valid license number."""
         form_data = self.base_data.copy()
         form_data["license_number"] = "ABC12345"
         form = DriverCreationForm(data=form_data)
@@ -72,7 +71,6 @@ class DriverCreationFormTest(TestCase):
         self.assertNotIn("license_number", form.errors)
 
     def test_invalid_license_number_too_short(self):
-        """Test DriverCreationForm with a license number too short."""
         form_data = self.base_data.copy()
         form_data["license_number"] = "AB12345"
         form = DriverCreationForm(data=form_data)
@@ -81,7 +79,6 @@ class DriverCreationFormTest(TestCase):
         self.assertIn("8 characters", form.errors["license_number"][0])
 
     def test_invalid_license_number_letters(self):
-        """Test DriverCreationForm with non-uppercase letters in license number."""
         form_data = self.base_data.copy()
         form_data["license_number"] = "abC12345"
         form = DriverCreationForm(data=form_data)
@@ -90,7 +87,6 @@ class DriverCreationFormTest(TestCase):
         self.assertIn("uppercase", form.errors["license_number"][0])
 
     def test_invalid_license_number_digits(self):
-        """Test DriverCreationForm with last 5 characters not digits."""
         form_data = self.base_data.copy()
         form_data["license_number"] = "ABC12A45"
         form = DriverCreationForm(data=form_data)
@@ -99,14 +95,10 @@ class DriverCreationFormTest(TestCase):
         self.assertIn("digits", form.errors["license_number"][0])
 
     def test_missing_license_number(self):
-        """Test DriverCreationForm missing the license_number field."""
         form_data = self.base_data.copy()
-        # Don't add license_number key at all
         form = DriverCreationForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertIn("license_number", form.errors)
-
-        # INSERT_YOUR_CODE
 
 
 class DriverUsernameSearchFormTest(TestCase):
