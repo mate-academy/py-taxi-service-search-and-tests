@@ -41,7 +41,10 @@ class ManufacturerListViewTest(TestCase):
         self.assertContains(
             response,
             "There are no manufacturers in the service.",
-            msg_prefix="Should display no results message when name does not match any manufacturer",
+            msg_prefix=(
+                "Should display no results message when name does not "
+                "match any manufacturer"
+            ),
         )
 
 
@@ -82,7 +85,10 @@ class CarListViewTest(TestCase):
         self.assertContains(
             response,
             "There are no cars in the service.",
-            msg_prefix="Should display no results message when model does not match any car",
+            msg_prefix=(
+                "Should display no results message when "
+                "model does not match any car"
+            ),
         )
 
 
@@ -124,5 +130,8 @@ class DriverListViewTest(TestCase):
         self.assertContains(
             response,
             "There are no drivers in the service.",
-            msg_prefix="Should display no results message when username does not match any driver",
+            msg_prefix=(
+                "Should display no results message when username does not "
+                "match any driver"
+            ),
         )
