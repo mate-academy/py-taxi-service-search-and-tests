@@ -101,6 +101,33 @@ class DriverCreationFormTest(TestCase):
         self.assertIn("license_number", form.errors)
 
 
+class CarModelSearchFormTest(TestCase):
+    def test_form_valid_with_model(self):
+        form = CarModelSearchForm(data={"model": "Civic"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["model"], "Civic")
+
+    def test_form_valid_with_empty_model(self):
+        form = CarModelSearchForm(data={"model": ""})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["model"], "")
+
+    def test_form_valid_when_model_not_provided(self):
+        form = CarModelSearchForm(data={})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["model"], "")
+
+    def test_form_invalid_when_model_too_long(self):
+        long_string = "a" * 256
+        form = CarModelSearchForm(data={"model": long_string})
+        self.assertFalse(form.is_valid())
+        self.assertIn("model", form.errors)
+        self.assertIn(
+            "Ensure this value has at most 255 characters",
+            form.errors["model"][0],
+        )
+
+
 class DriverUsernameSearchFormTest(TestCase):
     def test_form_valid_with_username(self):
         form = DriverUsernameSearchForm(data={"username": "johndoe"})
