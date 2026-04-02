@@ -53,4 +53,4 @@ def validate_license_number(
 
 
 class SearchForm(forms.Form):
-    q = forms.CharField(max_length=255, required=False, label="Search")
+    queryset = forms.CharField(max_length=255, required=False, label="Search")
