@@ -36,9 +36,6 @@ class PrivateManufacturerTest(TestCase):
             username="test_user",
             password="test_password",
         )
-        self.client.force_login(self.user)
-
-    def test_retrieve_manufacturer(self):
         Manufacturer.objects.create(
             name="test_name1",
             country="test_country1"
@@ -47,6 +44,9 @@ class PrivateManufacturerTest(TestCase):
             name="test_name2",
             country="test_country2"
         )
+        self.client.force_login(self.user)
+
+    def test_retrieve_manufacturer(self):
         response = self.client.get(MANUFACTURER_URL)
         manufacturers = Manufacturer.objects.all()
 
@@ -56,6 +56,17 @@ class PrivateManufacturerTest(TestCase):
             list(manufacturers))
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
+    def test_retrieve_manufacturer_with_parameters(self):
+        response = self.client.get(MANUFACTURER_URL, {"name": "test_name1"})
+        manufacturer = Manufacturer.objects.filter(name="test_name1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["manufacturer_list"]), 1)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturer))
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
 
 class PrivateDriverTest(TestCase):
     def setUp(self):
@@ -63,9 +74,6 @@ class PrivateDriverTest(TestCase):
             username="test_user",
             password="test_password",
         )
-        self.client.force_login(self.user)
-
-    def test_retrieve_driver(self):
         get_user_model().objects.create_user(
             username="test_user1",
             password="test_password1",
@@ -76,13 +84,28 @@ class PrivateDriverTest(TestCase):
             password="test_password2",
             license_number="test_license_number2"
         )
+        self.client.force_login(self.user)
+
+    def test_retrieve_driver(self):
         response = self.client.get(DRIVER_URL)
         drivers = get_user_model().objects.all()
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["driver_list"]), 3)
         self.assertEqual(
             list(response.context["driver_list"]),
             list(drivers))
+        self.assertTemplateUsed(response, "taxi/driver_list.html")
+
+    def test_retrieve_driver_with_parameters(self):
+        response = self.client.get(DRIVER_URL, {"username": "test_user1"})
+        driver = get_user_model().objects.filter(username="test_user1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["driver_list"]), 1)
+        self.assertEqual(
+            list(response.context["driver_list"]),
+            list(driver))
         self.assertTemplateUsed(response, "taxi/driver_list.html")
 
 
@@ -92,9 +115,6 @@ class PrivateCarTest(TestCase):
             username="test_user",
             password="test_password",
         )
-        self.client.force_login(self.user)
-
-    def test_retrieve_car(self):
         Car.objects.create(
             model="test_model1",
             manufacturer=Manufacturer.objects.create(
@@ -109,6 +129,9 @@ class PrivateCarTest(TestCase):
                 country="test_country2"
             )
         )
+        self.client.force_login(self.user)
+
+    def test_retrieve_car(self):
         response = self.client.get(CAR_URL)
         cars = Car.objects.all()
 
@@ -116,4 +139,15 @@ class PrivateCarTest(TestCase):
         self.assertEqual(
             list(response.context["car_list"]),
             list(cars))
+        self.assertTemplateUsed(response, "taxi/car_list.html")
+
+    def test_retrieve_car_with_parameters(self):
+        response = self.client.get(CAR_URL, {"model": "test_model1"})
+        car = Car.objects.filter(model="test_model1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["car_list"]), 1)
+        self.assertEqual(
+            list(response.context["car_list"]),
+            list(car))
         self.assertTemplateUsed(response, "taxi/car_list.html")
