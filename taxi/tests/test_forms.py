@@ -3,12 +3,19 @@ from django.core.exceptions import ValidationError
 from django.forms import CheckboxSelectMultiple
 from django.test import TestCase
 
-from taxi.forms import validate_license_number, DriverLicenseUpdateForm, DriverCreationForm, CarForm
+from taxi.forms import (
+    validate_license_number,
+    DriverLicenseUpdateForm,
+    DriverCreationForm,
+    CarForm,
+    CarModelSearchForm,
+    ManufacturerNameSearchForm,
+    DriverUsernameSearchForm
+)
 from taxi.models import Manufacturer
 
 
 class TestValidateLicenseNumber(TestCase):
-    # <>= 8 chars in license
     def test_valid_license_number(self):
         result = validate_license_number("ABC12345")
         self.assertEqual(result, "ABC12345")
@@ -39,8 +46,8 @@ class TestValidateLicenseNumber(TestCase):
             validate_license_number("ABCsadff")
         self.assertIn("Last 5", str(ctx.exception))
 
+
 class TestDriverUpdateForm(TestCase):
-    #driver license update form
     def test_valid_driver_license_update_form(self):
         form = DriverLicenseUpdateForm(data={"license_number": "ABS12345"})
         self.assertTrue(form.is_valid())
@@ -67,12 +74,10 @@ class TestDriverCreationForm(TestCase):
             "last_name": "test_last",
         }
 
-    #valid form
     def test_driver_creation_with_valid_data(self):
         form = DriverCreationForm(data=self.get_user_data())
         self.assertTrue(form.is_valid())
 
-    #invalid form
     def test_empty_data_driver_creation(self):
         form = DriverCreationForm(data={})
         self.assertFalse(form.is_valid())
@@ -127,7 +132,10 @@ class TestCarForm(TestCase):
 
     def test_drivers_field_uses_checkbox_widget(self):
         form = CarForm()
-        self.assertIsInstance(form.fields["drivers"].widget, CheckboxSelectMultiple)
+        self.assertIsInstance(
+            form.fields["drivers"].widget,
+            CheckboxSelectMultiple
+        )
 
     def test_drivers_field_uses_model_queryset(self):
         form = CarForm()
@@ -138,7 +146,7 @@ class TestCarForm(TestCase):
 
     def test_valid_form_car_create(self):
         form = CarForm(data={
-            "model":"Test_model",
+            "model": "Test_model",
             "manufacturer": self.manufacturer.pk,
             "drivers": [self.driver1.pk, self.driver2.pk],
         })
@@ -147,9 +155,111 @@ class TestCarForm(TestCase):
 
     def test_valid_form_with_empty_drivers_car_create(self):
         form = CarForm(data={
-            "model":"Test_model",
+            "model": "Test_model",
             "manufacturer": self.manufacturer.pk,
             "drivers": [],
         })
 
         self.assertFalse(form.is_valid())
+
+
+class CarModelSearchFormTest(TestCase):
+    def test_empty_value_is_valid_in_car_model_search(self):
+        form = CarModelSearchForm(data={"model": ""})
+
+        self.assertTrue(form.is_valid())
+
+    def test_valid_value_in_car_model_search(self):
+        form = CarModelSearchForm(data={"model": "Test_model"})
+
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_char_count_in_car_model_search(self):
+        form = CarModelSearchForm(data={"model": "A" * 256})
+
+        self.assertFalse(form.is_valid())
+
+    def test_valid_char_count_in_car_model_search(self):
+        form = CarModelSearchForm(data={"model": "A" * 255})
+
+        self.assertTrue(form.is_valid())
+
+    def test_empty_label_in_car_model_search(self):
+        form = CarModelSearchForm()
+        label = form.fields["model"].label
+
+        self.assertEqual(label, "")
+
+    def test_exist_attrs_in_widgets_in_car_model_search(self):
+        form = CarModelSearchForm()
+        attrs = form.fields["model"].widget.attrs
+
+        self.assertEqual(attrs["placeholder"], "Select a model")
+
+
+class DriverModelSearchFormTest(TestCase):
+    def test_empty_value_is_valid_in_driver_model_search(self):
+        form = DriverUsernameSearchForm(data={"username": ""})
+
+        self.assertTrue(form.is_valid())
+
+    def test_valid_value_in_driver_model_search(self):
+        form = DriverUsernameSearchForm(data={"username": "Test_username"})
+
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_char_count_in_driver_model_search(self):
+        form = DriverUsernameSearchForm(data={"username": "A" * 256})
+
+        self.assertFalse(form.is_valid())
+
+    def test_valid_char_count_in_driver_model_search(self):
+        form = DriverUsernameSearchForm(data={"username": "A" * 255})
+
+        self.assertTrue(form.is_valid())
+
+    def test_empty_label_in_driver_model_search(self):
+        form = DriverUsernameSearchForm()
+        label = form.fields["username"].label
+
+        self.assertEqual(label, "")
+
+    def test_exist_attrs_in_widgets_in_driver_model_search(self):
+        form = DriverUsernameSearchForm()
+        attrs = form.fields["username"].widget.attrs
+
+        self.assertEqual(attrs["placeholder"], "Select a username")
+
+
+class ManufacturerModelSearchFormTest(TestCase):
+    def test_empty_value_is_valid_in_manufacturer_model_search(self):
+        form = ManufacturerNameSearchForm(data={"name": ""})
+
+        self.assertTrue(form.is_valid())
+
+    def test_valid_value_in_manufacturer_model_search(self):
+        form = ManufacturerNameSearchForm(data={"name": "Test_name"})
+
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_char_count_in_manufacturer_model_search(self):
+        form = ManufacturerNameSearchForm(data={"name": "A" * 256})
+
+        self.assertFalse(form.is_valid())
+
+    def test_valid_char_count_in_manufacturer_model_search(self):
+        form = ManufacturerNameSearchForm(data={"name": "A" * 255})
+
+        self.assertTrue(form.is_valid())
+
+    def test_empty_label_in_manufacturer_model_search(self):
+        form = ManufacturerNameSearchForm()
+        label = form.fields["name"].label
+
+        self.assertEqual(label, "")
+
+    def test_exist_attrs_in_widgets_in_manufacturer_model_search(self):
+        form = ManufacturerNameSearchForm()
+        attrs = form.fields["name"].widget.attrs
+
+        self.assertEqual(attrs["placeholder"], "Select a manufacturer name")
