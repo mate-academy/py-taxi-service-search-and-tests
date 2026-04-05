@@ -6,8 +6,13 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, DriverSearchForm, CarSearchForm, \
-    ManufacturerSearchForm
+from .forms import (DriverCreationForm,
+                    DriverLicenseUpdateForm,
+                    CarForm,
+                    DriverSearchForm,
+                    CarSearchForm,
+                    ManufacturerSearchForm,
+                    )
 
 
 @login_required
@@ -38,7 +43,8 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         manufacturer_name = self.request.GET.get("manufacturer", "")
-        context["search_form"] = ManufacturerSearchForm(initial={"manufacturer": manufacturer_name})
+        context["search_form"] =\
+            ManufacturerSearchForm(initial={"manufacturer": manufacturer_name})
         return context
 
     def get_queryset(self):
@@ -49,9 +55,6 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
             if manufacturer_name:
                 queryset = queryset.filter(name__icontains=manufacturer_name)
         return queryset
-
-
-
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
@@ -119,7 +122,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         driver_name = self.request.GET.get("driver", "")
-        context["search_form"] = DriverSearchForm(initial={"driver": driver_name})
+        context["search_form"] = (
+            DriverSearchForm(initial={"driver": driver_name}))
         return context
 
     def get_queryset(self):
@@ -150,7 +154,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
