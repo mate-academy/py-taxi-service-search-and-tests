@@ -7,26 +7,24 @@
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
+  </h1> <div class="container-fluid mb-3">
+    <form method="get" action="" class="row g-2 align-items-center">
+      <div class="col-sm-4">
+        {{ search_form|crispy }}
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mt-3">
+          🔍 Search
+        </button>
+      </div>
+    </form>
+  </div>
 
-  <div class="container-fluid mb-3">
-      <form method="get" action="" class="row g-2 align-items-center">
-        <div class="col-sm-4">
-          {{ search_form|crispy }}
-        </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-primary mb-3">
-            🔍 Search
-          </button>
-        </div>
-      </form>
-    </div>
-
-  </h1>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
