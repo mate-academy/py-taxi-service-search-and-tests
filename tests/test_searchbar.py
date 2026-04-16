@@ -30,7 +30,7 @@ class SearchBarTest(TestCase):
 
     def test_searchbar_for_manufacturer(self):
         reverse_test = reverse("taxi:manufacturer-list")
-        response = self.client.get(reverse_test,{"title": "Toyota"})
+        response = self.client.get(reverse_test, {"title": "Toyota"})
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Toyota")
@@ -38,7 +38,7 @@ class SearchBarTest(TestCase):
 
     def test_searchbar_for_driver(self):
         reverse_test = reverse("taxi:driver-list")
-        response = self.client.get(reverse_test,{"title": "driver_a"})
+        response = self.client.get(reverse_test, {"title": "driver_a"})
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "driver_a")
@@ -46,7 +46,7 @@ class SearchBarTest(TestCase):
 
     def test_searchbar_for_car(self):
         reverse_test = reverse("taxi:car-list")
-        response = self.client.get(reverse_test,{"title": "Civic"})
+        response = self.client.get(reverse_test, {"title": "Civic"})
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Civic")
