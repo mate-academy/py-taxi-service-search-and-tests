@@ -30,11 +30,11 @@ class SearchBarTest(TestCase):
 
     def test_searchbar_for_manufacturer(self):
         responce = self.client.get(reverse("taxi:manufacturer-list"),
-                                   {"title": "Ferrari"})
+                                   {"title": "Toyota"})
 
         self.assertEqual(responce.status_code, 200)
-        self.assertContains(responce, "Ferrari")
-        self.assertNotContains(responce, "Dodge")
+        self.assertContains(responce, "Toyota")
+        self.assertNotContains(responce, "Honda")
 
     def test_searchbar_for_driver(self):
         responce = self.client.get(reverse("taxi:driver-list"),
