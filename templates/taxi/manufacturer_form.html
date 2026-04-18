@@ -3,10 +3,13 @@
 
 {% block content %}
   <h1>{{ object|yesno:"Update,Create" }} manufacturer</h1>
-  <form action="" method="post" novalidate>
+
+  <form method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
 
-    <input type="submit" value="Submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">
+      Submit
+    </button>
   </form>
 {% endblock %}
