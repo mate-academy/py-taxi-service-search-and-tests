@@ -2,13 +2,20 @@
 
 {% block content %}
   <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+    {{ driver.username }}
+
+    <a
+      href="{% url "taxi:driver-delete" pk=driver.id %}"
+      class="btn btn-danger"
+    >
       Delete
     </a>
 
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
+    <a
+      href="{% url "taxi:driver-update" pk=driver.id %}"
+      class="btn btn-secondary"
+    >
+      Update license
     </a>
   </h1>
 
@@ -17,17 +24,26 @@
   <p><strong>License number:</strong> {{ driver.license_number }}</p>
   <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
 
-  <div class="ml-3">
+  <div class="mt-3">
     <h4>Cars</h4>
 
     {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
-
+      <hr>
+      <p>
+        <strong>Model:</strong>
+        <a href="{% url "taxi:car-detail" pk=car.id %}">
+          {{ car.model }}
+        </a>
+      </p>
+      <p>
+        <strong>Manufacturer:</strong>
+        {{ car.manufacturer.name }}
+      </p>
+      <p class="text-muted">
+        <strong>Id:</strong> {{ car.id }}
+      </p>
     {% empty %}
-      <p>No cars!</p>
+      <p>No cars assigned</p>
     {% endfor %}
   </div>
 {% endblock %}
