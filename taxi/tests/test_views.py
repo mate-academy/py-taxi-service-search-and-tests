@@ -64,8 +64,8 @@ class PrivateViewsTest(TestCase):
             name="Citroen",
             country="France",
         )
-        res = self.client.get(MANUFACTURER_URL + "?name=za")
-        manufacturer = Manufacturer.objects.filter(name="ZAZ")
+        res = self.client.get(MANUFACTURER_URL + "?name=zaz")
+        manufacturer = Manufacturer.objects.filter(name__icontains="ZAZ")
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(
             res, "taxi/manufacturer_list.html"
@@ -126,9 +126,9 @@ class PrivateViewsTest(TestCase):
             manufacturer=manufacturer,
         )
         car.drivers.add(driver)
-        res = self.client.get(CAR_URL + "?name=o")
+        res = self.client.get(CAR_URL + "?model=volvo")
         self.assertEqual(res.status_code, 200)
-        car = Car.objects.all()
+        car = Car.objects.filter(model__icontains="volvo")
         self.assertEqual(
             list(res.context["car_list"]),
             list(car),
@@ -136,4 +136,31 @@ class PrivateViewsTest(TestCase):
         self.assertTrue("search_form" in res.context)
         self.assertTemplateUsed(
             res, "taxi/car_list.html"
+        )
+
+    def test_filtered_drivers(self):
+        get_user_model().objects.create_user(
+            username="test_driver",
+            password="test123",
+            first_name="Test first name",
+            last_name="Test last name",
+            license_number="test_license_number1",
+        )
+        get_user_model().objects.create_user(
+            username="test_user",
+            password="test123",
+            first_name="Test first name",
+            last_name="Test last name",
+            license_number="test_license_number2",
+        )
+        res = self.client.get(DRIVER_URL + "?username=driver")
+        self.assertEqual(res.status_code, 200)
+        driver = get_user_model().objects.filter(username__icontains="driver")
+        self.assertEqual(
+            list(res.context["driver_list"]),
+            list(driver),
+        )
+        self.assertTrue("search_form" in res.context)
+        self.assertTemplateUsed(
+            res, "taxi/driver_list.html"
         )
