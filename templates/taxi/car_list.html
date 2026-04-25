@@ -7,15 +7,24 @@
       Create
     </a>
   </h1>
+    {% include "includes/search_form.html" %}
   {% if car_list %}
-    <ul>
-      {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
-      {% endfor %}
-    </ul>
+    <table class="table">
+        <thead>
+            <td>Id</td>
+            <td>Model</td>
+            <td>Manufacturer</td>
+        </thead>
+        <tbody>
+          {% for car in car_list %}
+              <tr>
+                  <td><a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a></td>
+                  <td>{{ car.model }}</td>
+                  <td>{{ car.manufacturer.name }}</td>
+              </tr>
+          {% endfor %}
+        </tbody>
+    </table>
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
