@@ -1,13 +1,18 @@
 {% extends "base.html" %}
-
 {% block content %}
   <h1>
     Car list
-    <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
+    <a href="{% url 'taxi:car-create' %}"
+       class="btn btn-primary link-to-page">Create</a>
   </h1>
   {% if car_list %}
+    <form action="" method="get" class="form-inline">
+      <input type="text"
+             name="model"
+             placeholder="Search by model..."
+             class="form-control">
+      <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
     <ul>
       {% for car in car_list %}
         <li>
@@ -19,4 +24,4 @@
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
-{% endblock %}
+{% endblock content %}
