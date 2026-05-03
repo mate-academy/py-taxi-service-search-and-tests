@@ -8,6 +8,11 @@
     </a>
   </h1>
 
+  <form action="" method="get" class="form-inline">
+    {{ search_form }}
+    <input type="submit" value="🔍️" class="btn btn-secondary">
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -47,4 +52,5 @@
   {% else %}
       <p>There are no manufacturers in the service.</p>
   {% endif %}
+  {% include "includes/pagination.html" %}
 {% endblock %}
