@@ -8,6 +8,7 @@ MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 DRIVER_URL = reverse("taxi:driver-list")
 CAR_URL = reverse("taxi:car-list")
 
+
 class PublicManufacturerTests(TestCase):
     def test_login_required(self):
         res = self.client.get(MANUFACTURER_URL)
