@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 
@@ -62,3 +63,20 @@ class DriverSearchTest(TestCase):
         )
 
         self.assertEqual(len(response.context["driver_list"]), 0)
+
+    def test_driver_license_correct(self):
+        get_user_model().objects.create_user(
+            username="dddddd",
+            email="besst@gmail.com",
+            password="pass98312",
+            license_number="ABC22222",
+        )
+        try:
+            self.user2 = get_user_model().objects.create_user(
+                username="besdddt_driver",
+                email="bessst@gmail.com",
+                password="pass98312",
+                license_number="dsadsadasdsadas",
+            )
+        except ValidationError:
+            pass
