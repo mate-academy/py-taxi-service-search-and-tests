@@ -32,9 +32,9 @@ class ManufacturerTest(TestCase):
 
         self.assertContains(response, "Audi")
         self.assertNotContains(response, "Tesla")
-        self.assertContains(response, "")
 
         self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "NonExistent")
 
     def test_search_manufacturer_all(self):
         self.client.force_login(self.user)
