@@ -72,7 +72,7 @@ class PrivateDriversViewTests(TestCase):
 
     def test_context_contains_search_form(self):
         """
-        The view context should include the DriversSearchForm.
+        The view context should include the DriverSearchForm.
         """
         response = self.client.get(DRIVER_LIST_URL)
 

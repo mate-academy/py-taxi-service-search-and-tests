@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from taxi.models import Driver, Car, Manufacturer
+from taxi.models import Car, Manufacturer
 
 CAR_LIST_URL = reverse("taxi:car-list")
 
@@ -38,7 +38,7 @@ class PrivateCarViewTest(TestCase):
         self.car1.drivers.add(self.user)
         self.car2.drivers.add(self.user)
 
-    def test_login_required(self):
+    def test_access_granted_for_authenticated_user(self):
         res = self.client.get(CAR_LIST_URL)
         self.assertEqual(res.status_code, 200)
 
