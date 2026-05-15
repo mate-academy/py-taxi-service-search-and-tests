@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from taxi.forms import DriversSearchForm
+from taxi.forms import DriverSearchForm
 from taxi.models import Driver, Car, Manufacturer
 
 DRIVER_LIST_URL = reverse("taxi:driver-list")
@@ -77,7 +77,7 @@ class PrivateDriversViewTests(TestCase):
         response = self.client.get(DRIVER_LIST_URL)
 
         form = response.context.get("search_form")
-        self.assertIsInstance(form, DriversSearchForm)
+        self.assertIsInstance(form, DriverSearchForm)
         self.assertIn("username", form.fields)
 
     def test_search_no_results_returns_empty_list(self):
