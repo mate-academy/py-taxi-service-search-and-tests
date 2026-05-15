@@ -1,51 +1,50 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-
+from django.urls import reverse
 from taxi.models import Manufacturer, Car
 
 
-class ModelsTests(TestCase):
+class ModelTests(TestCase):
+    def setUp(self):
+        self.manufacturer = Manufacturer.objects.create(
+            name="test name",
+            country="test Country"
+        )
+        self.driver = get_user_model().objects.create_user(
+            username="test username",
+            password="12345",
+            first_name="test first name",
+            last_name="test last name",
+            license_number="YFT12345",
+        )
+
     def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test")
-        self.assertEqual(str(manufacturer),
-                         f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(self.manufacturer),
+            f"{self.manufacturer.name} {self.manufacturer.country}"
+        )
 
     def test_driver_str(self):
-        driver = get_user_model().objects.create(username="test",
-                                                 first_name="test",
-                                                 last_name="test")
-        self.assertEqual(str(driver), f"{driver.username}"
-                                      f" ({driver.first_name}"
-                                      f" {driver.last_name})")
+        self.assertEqual(
+            str(self.driver),
+            f"{self.driver.username}"
+            f" ({self.driver.first_name} "
+            f"{self.driver.last_name})"
+        )
 
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="test", country="test")
-        driver = get_user_model().objects.create(username="test",
-                                                 first_name="test",
-                                                 last_name="test")
         car = Car.objects.create(
-            model="test",
-            manufacturer=manufacturer
+            model="test model",
+            manufacturer=self.manufacturer,
         )
-        car.drivers.add(driver)
+        car.drivers.add(self.driver)
         self.assertEqual(str(car), car.model)
 
-    def test_create_driver_with_license_number(self):
-        username = "test"
-        first_name = "test"
-        last_name = "test"
-        license_number = "RFE12345"
-        password = "abdhf1234"
-        driver = get_user_model().objects.create_user(
-            username=username,
-            first_name=first_name,
-            password=password,
-            last_name=last_name,
-            license_number=license_number
-        )
+    def test_driver_license_num(self):
+        self.assertEqual(self.driver.username, "test username")
+        self.assertEqual(self.driver.license_number, "YFT12345")
+        self.assertTrue(self.driver.check_password("12345"))
 
-        self.assertEqual(driver.username, username)
-        self.assertEqual(driver.first_name, first_name)
-        self.assertEqual(driver.last_name, last_name)
-        self.assertEqual(driver.license_number, license_number)
-        self.assertTrue(driver.check_password(password))
+    def test_get_driver_absolute_url(self):
+        url = reverse("taxi:driver-detail", args=[self.driver.id])
+        self.assertEqual(self.driver.get_absolute_url(), url)
