@@ -1,5 +1,3 @@
-from multiprocessing import context
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -8,7 +6,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, SearchForm
+from .forms import (
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    SearchForm
+)
 
 
 @login_required
@@ -43,17 +46,17 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = SearchForm(
             placeholder_text="Search by name..."
         )
-        if self.request.GET.get("q"):
+        if self.request.GET.get("search_query"):
             context["search_form"] = SearchForm(
                 self.request.GET,
                 placeholder_text="Search by name..."
             )
-            context["query"] = self.request.GET.get("q")
+            context["query"] = self.request.GET.get("search_query")
         return context
 
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
-        query = self.request.GET.get("q")
+        query = self.request.GET.get("search_query")
         if query:
             queryset = queryset.filter(name__icontains=query)
         return queryset.order_by("name")
@@ -85,18 +88,17 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = SearchForm(
             placeholder_text="Search by model..."
         )
-        if self.request.GET.get("q"):
+        if self.request.GET.get("search_query"):
             context["search_form"] = SearchForm(
                 self.request.GET,
                 placeholder_text="Search by model..."
             )
-            context["query"] = self.request.GET.get("q")
+            context["query"] = self.request.GET.get("search_query")
         return context
-
 
     def get_queryset(self):
         queryset = Car.objects.select_related("manufacturer")
-        query = self.request.GET.get("q")
+        query = self.request.GET.get("search_query")
         if query:
             queryset = queryset.filter(model__icontains=query)
         return queryset.order_by("model")
@@ -132,23 +134,20 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = SearchForm(
             placeholder_text="Search by username..."
         )
-        if self.request.GET.get("q"):
+        if self.request.GET.get("search_query"):
             context["search_form"] = SearchForm(
                 self.request.GET,
                 placeholder_text="Search by username..."
             )
-            context["query"] = self.request.GET.get("q")
+            context["query"] = self.request.GET.get("search_query")
         return context
-
 
     def get_queryset(self):
         queryset = Driver.objects.all()
-        query = self.request.GET.get("q")
+        query = self.request.GET.get("search_query")
         if query:
             queryset = queryset.filter(username__icontains=query)
         return queryset.order_by("username")
-
-
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):

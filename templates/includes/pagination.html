@@ -2,7 +2,7 @@
   <ul class="pagination">
     {% if page_obj.has_previous %}
       <li class="page-item">
-        <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+        <a href="?page={{ page_obj.previous_page_number }}{% if query %}&search_query={{ query }}{% endif %}"
            class="page-link"
         >
           prev
@@ -16,7 +16,7 @@
     </li>
     {% if page_obj.has_next %}
       <li class="page-item">
-        <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+        <a href="?page={{ page_obj.next_page_number }}{% if query %}&search_query={{ query }}{% endif %}"
            class="page-link"
         >
           next

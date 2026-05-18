@@ -53,7 +53,7 @@ def validate_license_number(
 
 
 class SearchForm(forms.Form):
-    q = forms.CharField(
+    search_query = forms.CharField(
         max_length=255,
         required=False,
         label="",
@@ -65,4 +65,6 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         placeholder_text = kwargs.pop("placeholder_text", "Search...")
         super().__init__(*args, **kwargs)
-        self.fields["q"].widget.attrs.update({"placeholder": placeholder_text})
+        self.fields["search_query"].widget.attrs.update(
+            {"placeholder": placeholder_text}
+        )
