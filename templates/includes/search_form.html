@@ -1,0 +1,13 @@
+{% load crispy_forms_filters %}
+
+<form method="get" action="" class="form-inline my-3">
+    <div class="input-group w-100">
+      {{ search_form|crispy }}
+      <div class="input-group-append">
+        <button class="btn btn-secondary" type="submit">Search</button>
+        {% if query %}
+          <a href="{{ request.path }}" class="btn btn-outline-danger">Reset</a>
+        {% endif %}
+      </div>
+    </div>
+  </form>
