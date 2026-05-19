@@ -107,7 +107,8 @@ class CarFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_car_form_without_drivers_is_valid(self):
-        """drivers field is not required — car can exist with no assigned drivers"""
+        """drivers field is not required —
+         car can exist with no assigned drivers"""
         form = CarForm(
             data={
                 "model": "Camry",
