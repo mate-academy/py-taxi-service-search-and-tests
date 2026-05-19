@@ -26,7 +26,7 @@ class AdminSiteTests(TestCase):
 
     def test_driver_listed(self):
         """Driver list page shows username, first_name,
-         last_name, license_number"""
+        last_name, license_number"""
         url = reverse("admin:taxi_driver_changelist")
         response = self.client.get(url)
         self.assertContains(response, self.driver.license_number)
