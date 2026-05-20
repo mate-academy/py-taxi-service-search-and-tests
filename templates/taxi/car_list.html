@@ -7,6 +7,10 @@
       Create
     </a>
   </h1>
+  <form method="get" class="form-inline mb-3">
+    {{ search_form }}
+    <button class="btn btn-secondary ml-2" type="submit">🔍</button>
+  </form>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
