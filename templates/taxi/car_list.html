@@ -7,15 +7,29 @@
       Create
     </a>
   </h1>
+
+  <form method="get" action="">
+    <input
+        type="text"
+        name="model"
+        placeholder="Search by model"
+        value="{{ request.GET.model }}"
+    >
+    <input type="submit" value="Search">
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %}">
+            {{ car.id }}
+          </a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
     </ul>
+      {% include "includes/pagination.html" %}
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}

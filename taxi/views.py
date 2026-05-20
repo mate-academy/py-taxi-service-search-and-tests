@@ -36,6 +36,20 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        queryset = Manufacturer.objects.all()
+        name = self.request.GET.get("name")
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["name"] = self.request.GET.get("name", "")
+        return context
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -52,12 +66,6 @@ class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
 class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Manufacturer
     success_url = reverse_lazy("taxi:manufacturer-list")
-
-
-class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
-    paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -81,9 +89,42 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:car-list")
 
 
+class CarListView(generic.ListView):
+    model = Car
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Car.objects.all()
+        model = self.request.GET.get("model")
+
+        if model:
+            queryset = queryset.filter(model__icontains=model)
+
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["model"] = self.request.GET.get("model", "")
+        return context
+
+
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Driver.objects.all()
+        username = self.request.GET.get("username")
+
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["username"] = self.request.GET.get("username", "")
+        return context
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
