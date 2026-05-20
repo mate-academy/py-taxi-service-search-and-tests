@@ -8,6 +8,17 @@
     </a>
   </h1>
 
+  <form method="get">
+  <input
+    type="text"
+    name="name"
+    value="{{ search_value }}"
+    class="form-control"
+    placeholder="Search by name"
+  >
+  <button type="submit" class="btn btn-outline-secondary">Search</button>
+  </form>
+
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -48,3 +59,5 @@
       <p>There are no manufacturers in the service.</p>
   {% endif %}
 {% endblock %}
+
+
