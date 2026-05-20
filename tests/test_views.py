@@ -92,13 +92,16 @@ class CarListViewTest(TestCase):
         self.assertEqual(len(response.context["car_list"]), 0)
 
     def test_car_list_search_empty(self):
-        manufacturer = Manufacturer.objects.create(
+        nissan = Manufacturer.objects.create(
             name="Nissan", country="Japan"
         )
-        Car.objects.create(model="GTR", manufacturer=manufacturer)
 
-        Manufacturer.objects.create(name="Ferrari", country="Italy")
-        Car.objects.create(model="Samara", manufacturer=manufacturer)
+        ferrari = Manufacturer.objects.create(
+            name="Ferrari", country="Italy"
+        )
+
+        Car.objects.create(model="GTR", manufacturer=nissan)
+        Car.objects.create(model="Testarossa", manufacturer=ferrari)
         response = self.client.get(
             reverse("taxi:car-list")
         )
@@ -162,3 +165,55 @@ class DriverListViewTest(TestCase):
         )
         response = self.client.get(reverse("taxi:driver-list"))
         self.assertEqual(len(response.context["driver_list"]), 3)
+
+
+class CarDetailViewTest(TestCase):
+    def setUp(self):
+        self.user = Driver.objects.create_user(
+            username="testuser",
+            password="testpass",
+            license_number="ABC12345",
+        )
+        self.client.force_login(self.user)
+        manufacturer = Manufacturer.objects.create(
+            name="Nissan", country="Japan"
+        )
+        self.car = Car.objects.create(
+            model="GTR", manufacturer=manufacturer
+        )
+
+    def test_car_detail_page_loads(self):
+        response = self.client.get(
+            reverse("taxi:car-detail", kwargs={"pk": self.car.id})
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_car_detail_login_required(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse("taxi:car-detail", kwargs={"pk": self.car.id})
+        )
+        self.assertNotEqual(response.status_code, 200)
+
+
+class DriverDetailViewTest(TestCase):
+    def setUp(self):
+        self.user = Driver.objects.create_user(
+            username="testuser",
+            password="testpass",
+            license_number="ABC12345",
+        )
+        self.client.force_login(self.user)
+
+    def test_driver_detail_page_loads(self):
+        response = self.client.get(
+            reverse("taxi:driver-detail", kwargs={"pk": self.user.id})
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_driver_detail_login_required(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse("taxi:driver-detail", kwargs={"pk": self.user.id})
+        )
+        self.assertNotEqual(response.status_code, 200)
