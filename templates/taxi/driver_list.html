@@ -8,6 +8,17 @@
       </a>
     </h1>
 
+    <form method="get">
+    <input
+      type="text"
+      name="username"
+      value="{{ search_value }}"
+      class="form-control"
+      placeholder="Search by username"
+    >
+    <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -32,3 +43,5 @@
       <p>There are no drivers in the service.</p>
     {% endif %}
 {% endblock %}
+
+
