@@ -7,7 +7,18 @@
       Create
     </a>
   </h1>
-
+  <form method="get" action="">
+      <input
+          type="text"
+          name="name"
+          value="{{ search_query }}"
+          placeholder="Search by name..."
+      >
+      <button type="submit">Search</button>
+      {% if search_query %}
+          <a href="?">Clear</a>
+      {% endif %}
+  </form>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
