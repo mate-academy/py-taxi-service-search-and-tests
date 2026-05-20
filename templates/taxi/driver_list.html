@@ -7,7 +7,12 @@
         Create
       </a>
     </h1>
-
+    <form method="get">
+    <label>
+      <input type="text" name="search" placeholder="Search by username">
+    </label>
+    <button class="btn btn-secondary" type="submit">Search</button>
+    </form>
     {% if driver_list %}
     <table class="table">
       <tr>
