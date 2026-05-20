@@ -33,7 +33,7 @@ class PrivateDriverTests(TestCase):
         get_user_model().objects.create_user(
             username="john_driver",
             password="12345",
-            license_number = "ABC12545"
+            license_number="ABC12545"
         )
         get_user_model().objects.create_user(
             username="mike_driver",
@@ -66,13 +66,13 @@ class PrivateCarTests(TestCase):
     def test_search_car_by_model(self):
         """Test that search car by model is working"""
         Car.objects.create(
-            model = "Tesla",
-            manufacturer = self.manufacturer,
+            model="Tesla",
+            manufacturer=self.manufacturer,
         )
 
         Car.objects.create(
-            model = "BMW X5",
-            manufacturer = self.manufacturer,
+            model="BMW X5",
+            manufacturer=self.manufacturer,
         )
 
         res = self.client.get(reverse("taxi:car-list"), {"search": "Tesla"})
