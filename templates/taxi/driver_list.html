@@ -3,10 +3,20 @@
 {% block content %}
     <h1>
       Driver List
+      <a href="{% url 'taxi:driver-list' %}" class="btn btn-secondary">Reset</a>
       <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
         Create
       </a>
     </h1>
+
+    <form method="get" action="{% url 'taxi:driver-list' %}" class="form-inline mb-3">
+        <div class="input-group">
+            <input type="text" name="username" class="form-control" placeholder="Search by username..." value="{{ request.GET.username }}">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
 
     {% if driver_list %}
     <table class="table">

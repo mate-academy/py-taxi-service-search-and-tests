@@ -3,15 +3,26 @@
 {% block content %}
   <h1>
     Car list
+    <a href="{% url 'taxi:car-list' %}" class="btn btn-secondary">Reset</a>
     <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
+
+  <form method="get" action="{% url 'taxi:car-list' %}" class="form-inline mb-3">
+    <div class="input-group">
+      <input type="text" name="model" class="form-control" placeholder="Search by model..." value="{{ request.GET.model }}">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
         <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
+          <a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.id }}</a>
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
