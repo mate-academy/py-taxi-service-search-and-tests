@@ -3,10 +3,20 @@
 {% block content %}
   <h1>
     Manufacturer List
+    <a href="{% url 'taxi:manufacturer-list' %}" class="btn btn-secondary">Reset</a>
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
+
+  <form method="get" action="{% url 'taxi:manufacturer-list' %}" class="form-inline mb-3">
+    <div class="input-group">
+      <input type="text" name="name" class="form-control" placeholder="Search by name..." value="{{ request.GET.name }}">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </form>
 
   {% if manufacturer_list %}
     <table class="table">
@@ -20,26 +30,20 @@
 
       {% for manufacturer in manufacturer_list %}
         <tr>
+          <td>{{ manufacturer.id }}</td>
+          <td>{{ manufacturer.name }}</td>
+          <td>{{ manufacturer.country }}</td>
           <td>
-              {{ manufacturer.id }}
+            <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
+              Update
+            </a>
           </td>
           <td>
-              {{ manufacturer.name }}
+            <a style="color: red"
+               href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
+              Delete
+            </a>
           </td>
-          <td>
-              {{ manufacturer.country }}
-          </td>
-          <td>
-              <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">
-                Update
-              </a>
-            </td>
-            <td>
-              <a style="color: red"
-                href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">
-                Delete
-              </a>
-            </td>
         </tr>
       {% endfor %}
     </table>
