@@ -28,11 +28,15 @@ class PrivateSearchTests(TestCase):
         )
         self.client.force_login(self.user)
 
-        self.manufacturer1 = Manufacturer.objects.create(name="Toyota", country="Japan")
-        self.manufacturer2 = Manufacturer.objects.create(name="Tesla", country="USA")
+        self.manufacturer1 = Manufacturer.objects.create(name="Toyota",
+                                                         country="Japan")
+        self.manufacturer2 = Manufacturer.objects.create(name="Tesla",
+                                                         country="USA")
 
-        self.car1 = Car.objects.create(model="Camry", manufacturer=self.manufacturer1)
-        self.car2 = Car.objects.create(model="Model S", manufacturer=self.manufacturer2)
+        self.car1 = Car.objects.create(model="Camry",
+                                       manufacturer=self.manufacturer1)
+        self.car2 = Car.objects.create(model="Model S",
+                                       manufacturer=self.manufacturer2)
 
         self.driver1 = get_user_model().objects.create_user(
             username="driver_john",
@@ -82,7 +86,8 @@ class FormValidationTests(TestCase):
         try:
             validate_license_number("XYZ98765")
         except ValidationError:
-            self.fail("validate_license_number raised ValidationError unexpectedly!")
+            self.fail("validate_license_number raised "
+                      "ValidationError unexpectedly!")
 
     def test_validate_license_number_wrong_length(self):
         from taxi.forms import validate_license_number

@@ -123,14 +123,18 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
-        context["search_form"] = DriverSearchForm(initial={"username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self):
         queryset = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return queryset
 
 
@@ -164,4 +168,5 @@ def toggle_assign_to_car(request, pk):
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
-    return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+    return HttpResponseRedirect(reverse_lazy("taxi:car-detail",
+                                             args=[pk]))
