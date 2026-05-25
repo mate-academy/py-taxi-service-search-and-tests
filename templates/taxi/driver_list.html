@@ -8,6 +8,12 @@
       </a>
     </h1>
 
+    <!-- Пошук -->
+    <form method="get" class="mb-3">
+      <input type="text" name="q" placeholder="Search drivers..." class="form-control" value="{{ request.GET.q }}">
+      <button type="submit" class="btn btn-secondary mt-2">Search</button>
+    </form>
+
     {% if driver_list %}
     <table class="table">
       <tr>
@@ -20,13 +26,16 @@
     {% for driver in driver_list %}
       <tr>
         <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
+        <td>
+          <a href="{{ driver.get_absolute_url }}">
+            {{ driver.username }} {% if user == driver %}(Me){% endif %}
+          </a>
+        </td>
         <td>{{ driver.first_name }}</td>
         <td>{{ driver.last_name }}</td>
         <td>{{ driver.license_number }}</td>
       </tr>
     {% endfor %}
-
     </table>
     {% else %}
       <p>There are no drivers in the service.</p>
