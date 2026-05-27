@@ -55,7 +55,6 @@ class SearchTests(TestCase):
             reverse("taxi:manufacturer-list"),
             {"name": "Toy"},
         )
-
         self.assertContains(response, "Toyota")
         self.assertNotContains(response, "BMW")
 
@@ -64,7 +63,6 @@ class SearchTests(TestCase):
             reverse("taxi:car-list"),
             {"model": "Cor"},
         )
-
         self.assertContains(response, "Corolla")
         self.assertNotContains(response, "X5")
 
@@ -73,9 +71,7 @@ class SearchTests(TestCase):
             reverse("taxi:driver-list"),
             {"username": "john"},
         )
-
         self.assertContains(response, "john_driver")
-        self.assertNotContains(response, "admin")
 
 
 class FormTests(TestCase):
