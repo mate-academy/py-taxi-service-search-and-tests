@@ -4,6 +4,7 @@ from taxi.views import (
     IndexView,
     ManufacturerListView,
     ManufacturerDetailView,
+    ManufacturerCreateView,
     CarListView,
     CarDetailView,
     CarCreateView,
@@ -22,7 +23,6 @@ app_name = "taxi"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
-
     path(
         "manufacturers/",
         ManufacturerListView.as_view(),
@@ -33,7 +33,11 @@ urlpatterns = [
         ManufacturerDetailView.as_view(),
         name="manufacturer-detail",
     ),
-
+    path(
+        "manufacturers/create/",
+        ManufacturerCreateView.as_view(),
+        name="manufacturer-create",
+    ),
     path(
         "cars/",
         CarListView.as_view(),
@@ -60,17 +64,6 @@ urlpatterns = [
         name="car-delete",
     ),
     path(
-        "cars/<int:pk>/assign/",
-        assign_me_to_car,
-        name="assign-me",
-    ),
-    path(
-        "cars/<int:pk>/delete-assignment/",
-        delete_me_from_car,
-        name="delete-me",
-    ),
-
-    path(
         "drivers/",
         DriverListView.as_view(),
         name="driver-list",
@@ -86,13 +79,23 @@ urlpatterns = [
         name="driver-create",
     ),
     path(
-        "drivers/<int:pk>/update/",
-        DriverLicenseUpdateView.as_view(),
-        name="driver-update",
-    ),
-    path(
         "drivers/<int:pk>/delete/",
         DriverDeleteView.as_view(),
         name="driver-delete",
+    ),
+    path(
+        "drivers/<int:pk>/license/",
+        DriverLicenseUpdateView.as_view(),
+        name="driver-license-update",
+    ),
+    path(
+        "cars/<int:pk>/assign/",
+        assign_me_to_car,
+        name="assign-me",
+    ),
+    path(
+        "cars/<int:pk>/delete-me/",
+        delete_me_from_car,
+        name="delete-me",
     ),
 ]
