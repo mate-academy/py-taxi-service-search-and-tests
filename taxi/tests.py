@@ -206,7 +206,6 @@ class ViewTests(TestCase):
         self.assertNotContains(response, self.car2.model)
         self.assertNotContains(response, self.car3.model)
 
-        response = self.client.get(reverse("taxi:car-list") + "=mustang")
         response = self.client.get(reverse("taxi:car-list") + "?model=mustang")
         self.assertContains(response, self.car2.model)
         self.assertNotContains(response, self.car1.model)
