@@ -53,7 +53,7 @@ def validate_license_number(
 
 
 class SearchForm(forms.Form):
-    query = forms.CharField(
+    q = forms.CharField(  # noqa: VNE001
         max_length=255,
         required=False,
         label="",
