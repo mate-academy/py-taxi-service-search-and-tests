@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <h1>
@@ -7,6 +8,12 @@
       Create
     </a>
   </h1>
+
+  <!-- The Search Form is now inside the content block -->
+  <form method="GET" action="" class="form-inline my-3">
+    {{ search_form|crispy }}
+    <button type="submit" class="btn btn-secondary ml-2">🔍 Search</button>
+  </form>
 
   {% if manufacturer_list %}
     <table class="table">
