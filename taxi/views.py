@@ -43,16 +43,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("q", "")
-        context["search_form"] = SearchForm(initial={"search_query": name})
+        context["search_form"] = SearchForm(initial={"q": name})
         return context
 
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
-        form = SearchForm(self.request.GET)
-        if form.is_valid():
-            query = form.cleaned_data["search_query"]
-            if query:
-                return queryset.filter(name__icontains=query)
+        query = self.request.GET.get("q")
+        if query:
+            return queryset.filter(name__icontains=query)
         return queryset
 
 
@@ -82,7 +80,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         model = self.request.GET.get("q", "")
-        context["search_form"] = SearchForm(initial={"search_query": model})
+        context["search_form"] = SearchForm(initial={"q": model})
         return context
 
     def get_queryset(self):
@@ -123,7 +121,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("q", "")
-        context["search_form"] = SearchForm(initial={"search_query": username})
+        context["search_form"] = SearchForm(initial={"q": username})
         return context
 
     def get_queryset(self):
