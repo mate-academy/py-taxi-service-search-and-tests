@@ -48,7 +48,8 @@ class TestDriver(TestCase):
         self.driver = Driver.objects.get(username="test_user")
 
     def test_license_number_label(self):
-        field_label = self.driver._meta.get_field("license_number").verbose_name
+        field_label = (self.driver._meta
+                       .get_field("license_number").verbose_name)
         self.assertEqual(field_label, "license number")
 
     def test_license_number_unique(self):
