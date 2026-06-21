@@ -22,7 +22,13 @@ class DriverCreationFormTests(TestCase):
         }
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, form_data)
+        driver = form.save()
+
+        self.assertEqual(driver.username, form_data["username"])
+        self.assertEqual(driver.first_name, form_data["first_name"])
+        self.assertEqual(driver.last_name, form_data["last_name"])
+        self.assertEqual(driver.license_number, form_data["license_number"])
+        self.assertTrue(driver.check_password(form_data["password1"]))
 
 
 class LicenseNumberValidationTests(TestCase):

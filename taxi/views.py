@@ -53,8 +53,8 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
         form = ManufacturerSearchForm(self.request.GET)
-        if form.is_valid():
-            return queryset.filter(
+        if form.is_valid() and form.cleaned_data["name"]:
+            queryset = queryset.filter(
                 name__icontains=form.cleaned_data["name"]
             )
         return queryset
@@ -80,7 +80,6 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -92,8 +91,8 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         queryset = Car.objects.select_related("manufacturer")
         form = CarSearchForm(self.request.GET)
-        if form.is_valid():
-            return queryset.filter(
+        if form.is_valid() and form.cleaned_data["model"]:
+            queryset = queryset.filter(
                 model__icontains=form.cleaned_data["model"]
             )
         return queryset
@@ -134,8 +133,8 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         queryset = Driver.objects.all()
         form = DriverSearchForm(self.request.GET)
-        if form.is_valid():
-            return queryset.filter(
+        if form.is_valid() and form.cleaned_data["username"]:
+            queryset = queryset.filter(
                 username__icontains=form.cleaned_data["username"]
             )
         return queryset
@@ -159,7 +158,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
