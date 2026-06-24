@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from taxi.models import Car, Driver
+from taxi.models import Car, Driver, Manufacturer
 
 
 class CarForm(forms.ModelForm):
@@ -26,8 +26,10 @@ class DriverCreationForm(UserCreationForm):
             "last_name",
         )
 
-    def clean_license_number(self):  # this logic is optional, but possible
-        return validate_license_number(self.cleaned_data["license_number"])
+    def clean_license_number(self):
+        return validate_license_number(
+            self.cleaned_data["license_number"]
+        )
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
@@ -36,17 +38,51 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         fields = ["license_number"]
 
     def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
+        return validate_license_number(
+            self.cleaned_data["license_number"]
+        )
 
 
-def validate_license_number(
-    license_number,
-):  # regex validation is also possible here
+def validate_license_number(license_number):
     if len(license_number) != 8:
-        raise ValidationError("License number should consist of 8 characters")
-    elif not license_number[:3].isupper() or not license_number[:3].isalpha():
-        raise ValidationError("First 3 characters should be uppercase letters")
+        raise ValidationError(
+            "License number should consist of 8 characters"
+        )
+
+    elif (
+        not license_number[:3].isupper()
+        or not license_number[:3].isalpha()
+    ):
+        raise ValidationError(
+            "First 3 characters should be uppercase letters"
+        )
+
     elif not license_number[3:].isdigit():
-        raise ValidationError("Last 5 characters should be digits")
+        raise ValidationError(
+            "Last 5 characters should be digits"
+        )
 
     return license_number
+
+
+# Search forms
+
+class DriverSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+    )
+
+
+class CarSearchForm(forms.Form):
+    model = forms.CharField(
+        max_length=255,
+        required=False,
+    )
+
+
+class ManufacturerSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+    )
