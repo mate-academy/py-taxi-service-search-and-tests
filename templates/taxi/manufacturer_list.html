@@ -3,11 +3,15 @@
 {% block content %}
   <h1>
     Manufacturer List
+
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
-
+  <form action="" method="get">
+    <input type="text" name="q" placeholder="Search by name...">
+    <button type="submit">Search</button>
+  </form>
   {% if manufacturer_list %}
     <table class="table">
       <tr>
