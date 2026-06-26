@@ -13,7 +13,7 @@ class ManufacturerListViewTest(TestCase):
         response = self.client.get(reverse("taxi:manufacturer-list"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
-        self.assertContains(response, "Search by name")
+        self.assertContains(response, '<input type="text" name="q"')
 
     def test_search_manufacturer(self):
         self.client.login(username="dzi", password="qaz12")
@@ -40,7 +40,7 @@ class DriverListViewTest(TestCase):
         response = self.client.get(reverse("taxi:driver-list"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_list.html")
-        self.assertContains(response, "Search Drivers")
+        self.assertContains(response, '<input type="text" name="q"')
 
     def test_search_driver(self):
         self.client.login(username="dzi", password="qaz12")
@@ -67,7 +67,7 @@ class CarListViewTest(TestCase):
         response = self.client.get(reverse("taxi:car-list"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/car_list.html")
-        self.assertContains(response, "Search cars")
+        self.assertContains(response, '<input type="text" name="q"')
 
     def test_search_car(self):
         self.client.login(username="dzi", password="qaz12")
