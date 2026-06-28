@@ -32,7 +32,7 @@ class ManufacturerListViewTests(TestCase):
 
     def test_search_manufacturer(self):
         response = self.client.get(
-            reverse("taxi:manufacturer_list"),
+            reverse("taxi:manufacturer_-ist"),
             {"name": "Audi"}
         )
 
