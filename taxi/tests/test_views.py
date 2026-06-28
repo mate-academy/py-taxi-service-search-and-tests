@@ -39,4 +39,3 @@ class ManufacturerListViewTests(TestCase):
         self.assertContains(response, "Audi")
         self.assertNotContains(response, "Toyota")
         self.assertNotContains(response, "Honda")
-
