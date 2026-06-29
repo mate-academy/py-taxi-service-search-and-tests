@@ -9,10 +9,20 @@
     </a>
   </h1>
 
-  <form action="" method="get" class="form-inline" novalidate>
-    {{ search_form|crispy }}
-    <input class="btn btn-warning" type="submit" value="🔍">
-  </form>
+  <div class="search-card">
+    <form action="" method="get">
+      <div class="search-row">
+        <div class="search-field">
+          {{ search_form.username.label_tag }}
+          {{ search_form.username }}
+        </div>
+
+        <button class="btn btn-warning search-btn" type="submit">
+          🔍 Search
+        </button>
+      </div>
+    </form>
+  </div>
 
   <br>
 

@@ -6,3 +6,29 @@ body {
     float: right;
     margin: 0 2px 0 2px;
 }
+
+.search-row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+}
+
+.search-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.search-field input {
+  width: 500px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+}
+
+.search-btn {
+  height: 40px;
+  padding: 0 24px;
+  margin-bottom: 0;
+}
