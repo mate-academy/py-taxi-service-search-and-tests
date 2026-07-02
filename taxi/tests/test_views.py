@@ -49,7 +49,7 @@ class PrivateCarViewTest(TestCase):
         self.client.force_login(self.user)
 
     def test_list_for_logged_in_user(self):
-        res = self.client.get(MANUFACTURER_FORMAT_URL)
+        res = self.client.get(CAR_FORMAT_URL)
         self.assertEqual(res.status_code, 200)
 
 
