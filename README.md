@@ -1,4 +1,4 @@
-# Taxi service search and tests
+flake8 --verbose# Taxi service search and tests
 
 - Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start
 
