@@ -58,7 +58,7 @@ class ManufacturerSearchForm(forms.Form):
         required=False,
         label="",
         widget=forms.TextInput(
-            attrs={"placeholder":e"}
+            attrs={"placeholder": "Search by name"}
         )
     )
 
