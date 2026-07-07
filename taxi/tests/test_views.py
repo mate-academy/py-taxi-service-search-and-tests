@@ -121,7 +121,10 @@ class ManufacturerListViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(self.bmw, response.context["manufacturer_list"])
         self.assertIn(self.bugatti, response.context["manufacturer_list"])
-        self.assertNotIn(self.land_rover, response.context["manufacturer_list"])
+        self.assertNotIn(
+            self.land_rover,
+            response.context["manufacturer_list"]
+        )
 
     def test_manufacturer_list_exact_match(self):
         response = self.client.get(self.url, data={"name": "Land Rover"})
