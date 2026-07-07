@@ -41,7 +41,7 @@ class FormsTests(TestCase):
 
     def test_manufacturer_search_form_is_empty(self):
         form_data = {
-            "name": "Volvo",
+            "name": "",
         }
         form = ManufacturerSearchForm(data=form_data)
         self.assertTrue(form.is_valid())

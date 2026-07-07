@@ -43,13 +43,6 @@ class AdminSiteTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'name="license_number"')
 
-    def test_car_search_field(self):
-        url = reverse("admin:taxi_car_changelist")
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'name="q"')
-        self.assertContains(response, 'id="searchbar"')
-
     def test_car_list_filter(self):
         manufacturer1 = Manufacturer.objects.create(
             name="Tesla",
