@@ -11,7 +11,7 @@ class FromTest(TestCase):
         user = get_user_model().objects.create_user(
             username="superuser",
             password="password",
-            license_number="QWE12323"
+            license_number="QWE12323",
         )
         self.client.force_login(user=user)
 
@@ -43,7 +43,9 @@ class FromTest(TestCase):
 
     def test_search_by_car_form(self):
         url = reverse("taxi:car-list")
-        test_manufacturer = Manufacturer.objects.create(name="test", country="USA")
+        test_manufacturer = Manufacturer.objects.create(
+            name="test", country="USA"
+        )
         Car.objects.create(manufacturer=test_manufacturer, model="test")
         Car.objects.create(manufacturer=test_manufacturer, model="tset")
         res = self.client.get(url, data={"model": "test"})
