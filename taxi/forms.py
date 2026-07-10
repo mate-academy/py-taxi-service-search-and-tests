@@ -9,6 +9,7 @@ from taxi.models import Car, Driver
 class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
+        required=False,
         widget=forms.CheckboxSelectMultiple,
     )
 
