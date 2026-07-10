@@ -7,6 +7,8 @@
       Create
     </a>
   </h1>
+
+  {% include "includes/search_form.html" %}
   {% if car_list %}
     <ul>
       {% for car in car_list %}
@@ -20,3 +22,4 @@
     <p>There are no cars in taxi</p>
   {% endif %}
 {% endblock %}
+
