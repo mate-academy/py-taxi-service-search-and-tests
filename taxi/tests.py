@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+
+from django.db.utils import IntegrityError
 
 from taxi.models import Manufacturer, Driver, Car
 
@@ -33,7 +34,7 @@ class ModelTests(TestCase):
             password="test1234",
             license_number="ABC12345",
         )
-        with self.assertRaises(Exception):
+        with self.assertRaises(IntegrityError):
             Driver.objects.create_user(
                 username="driver2",
                 password="test1234",
@@ -336,7 +337,7 @@ class SearchTests(TestCase):
         self.assertNotContains(response, "Toyota")
         self.assertNotContains(response, "Honda")
         self.assertNotContains(response, "BMW")
-        self.assertContains(response, "There are no manufacturers")
+        self.assertContains(response, "There are no manufacturers in the service.")
 
     # Car search tests
     def test_car_search_by_model(self):
@@ -428,7 +429,7 @@ class SearchTests(TestCase):
         self.assertNotContains(response, "alex_driver")
         self.assertNotContains(response, "bob_driver")
         self.assertNotContains(response, "charlie")
-        self.assertContains(response, "There are no drivers in the service")
+        self.assertContains(response, "There are no drivers in the service.")
 
 
 class FormTests(TestCase):
@@ -477,7 +478,7 @@ class FormTests(TestCase):
 
     def test_driver_license_update_form_valid(self):
         from taxi.forms import DriverLicenseUpdateForm
-        form_data = {"license_number": "NEW12345"}
+        form_data = {"license_number": "ABC12345"}
         form = DriverLicenseUpdateForm(data=form_data)
         self.assertTrue(form.is_valid())
 
