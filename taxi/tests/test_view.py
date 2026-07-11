@@ -18,7 +18,7 @@ class PublicManufacturerTest(TestCase):
 class ManufacturerSearchTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="testuser", password="123"
+            username="testuser", password="ASD45231"
         )
         self.manufacturer_opel = Manufacturer.objects.create(
             name="Opel",
@@ -61,18 +61,28 @@ class ManufacturerSearchTest(TestCase):
         self.assertIn(self.car_juke, cars)
         self.assertNotIn(self.car_zafira, cars)
 
+    def test_search_form_for_manufacturer_context(self):
+        self.client.force_login(self.user)
+        response = self.client.get(MANUFACTURER_URL)
+        self.assertIn("search_form", response.context)
+
+    def test_search_form_for_car_context(self):
+        self.client.force_login(self.user)
+        response = self.client.get(CAR_URL)
+        self.assertIn("search_form", response.context)
+
 
 class DriverSearchTest(TestCase):
     def setUp(self):
 
         self.driver_ivan = get_user_model().objects.create_user(
-            username="ivan_petrov", password="123", license_number="A1"
+            username="ivan_petrov", password="ASD12345", license_number="ASD12312"
         )
         self.driver_oleg = get_user_model().objects.create_user(
-            username="oleg_ivanov", password="123", license_number="B2"
+            username="oleg_ivanov", password="ASD12346", license_number="ADB21245"
         )
         self.driver_anna = get_user_model().objects.create_user(
-            username="anna_smith", password="123", license_number="C3"
+            username="anna_smith", password="ASD12332", license_number="CAS12345"
         )
 
     def test_search_by_username_returns_correct_results(self):

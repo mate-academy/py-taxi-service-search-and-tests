@@ -56,12 +56,12 @@ class ModelsTest(TestCase):
         )
         driver1 = get_user_model().objects.create_user(
             username="TestUser1",
-            license_number="DGR327833",
+            license_number="DGR32783",
             password="ad12",
         )
         driver2 = get_user_model().objects.create_user(
             username="TestUser2",
-            license_number="DGR327843",
+            license_number="DGR32784",
             password="ad11",
         )
         car.drivers.add(driver1, driver2)
