@@ -76,13 +76,13 @@ class DriverSearchTest(TestCase):
     def setUp(self):
 
         self.driver_ivan = get_user_model().objects.create_user(
-            username="ivan_petrov", password="ASD12345", license_number="ASD12312"
+            username="ivan_petrov", password="AS45", license_number="ASD12312"
         )
         self.driver_oleg = get_user_model().objects.create_user(
-            username="oleg_ivanov", password="ASD12346", license_number="ADB21245"
+            username="oleg_ivanov", password="AS46", license_number="ADB21245"
         )
         self.driver_anna = get_user_model().objects.create_user(
-            username="anna_smith", password="ASD12332", license_number="CAS12345"
+            username="anna_smith", password="AS32", license_number="CAS12345"
         )
 
     def test_search_by_username_returns_correct_results(self):
