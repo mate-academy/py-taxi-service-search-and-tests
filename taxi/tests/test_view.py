@@ -2,14 +2,64 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from taxi.models import Manufacturer, Car
+
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 DRIVER_URL = reverse("taxi:driver-list")
+CAR_URL = reverse("taxi:car-list")
 
 
 class PublicManufacturerTest(TestCase):
     def test_login_required(self):
         res = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(res.status_code, 200)
+
+
+class ManufacturerSearchTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="testuser", password="123"
+        )
+        self.manufacturer_opel = Manufacturer.objects.create(
+            name="Opel",
+            country="Germany",
+        )
+        self.manufacturer_renault = Manufacturer.objects.create(
+            name="Renault",
+            country="France",
+        )
+        self.manufacturer_nissan = Manufacturer.objects.create(
+            name="Nissan",
+            country="Japan",
+        )
+        self.car_logan = Car.objects.create(
+            model="Logan",
+            manufacturer=self.manufacturer_renault,
+        )
+        self.car_zafira = Car.objects.create(
+            model="Zafira",
+            manufacturer=self.manufacturer_opel,
+        )
+        self.car_juke = Car.objects.create(
+            model="Juke",
+            manufacturer=self.manufacturer_nissan,
+        )
+
+    def test_search_by_name_manufacturer(self):
+        self.client.force_login(self.user)
+        res = self.client.get(MANUFACTURER_URL, {"name": "Nissan"})
+        self.assertEqual(res.status_code, 200)
+        manufacturer = res.context["manufacturer_list"]
+        self.assertIn(self.manufacturer_nissan, manufacturer)
+        self.assertNotIn(self.manufacturer_opel, manufacturer)
+
+    def test_search_by_model_car(self):
+        self.client.force_login(self.user)
+        res = self.client.get(CAR_URL, {"model": "Juke"})
+        self.assertEqual(res.status_code, 200)
+        cars = res.context["car_list"]
+        self.assertIn(self.car_juke, cars)
+        self.assertNotIn(self.car_zafira, cars)
 
 
 class DriverSearchTest(TestCase):
