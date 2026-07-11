@@ -8,7 +8,10 @@ from taxi.models import Manufacturer, Driver, Car
 
 class ModelTests(TestCase):
     def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
         self.assertEqual(str(manufacturer), "Toyota Japan")
 
     def test_manufacturer_ordering(self):
@@ -42,12 +45,18 @@ class ModelTests(TestCase):
             )
 
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
         car = Car.objects.create(model="Camry", manufacturer=manufacturer)
         self.assertEqual(str(car), "Camry")
 
     def test_car_drivers_many_to_many(self):
-        manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
         car = Car.objects.create(model="Camry", manufacturer=manufacturer)
         driver1 = Driver.objects.create_user(
             username="driver1",
@@ -76,8 +85,14 @@ class ViewTests(TestCase):
             last_name="User",
         )
         self.client.force_login(self.user)
-        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
-        self.car = Car.objects.create(model="Camry", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        self.car = Car.objects.create(
+            model="Camry",
+            manufacturer=self.manufacturer
+        )
         self.car.drivers.add(self.user)
 
     def test_index_view(self):
@@ -123,7 +138,10 @@ class ViewTests(TestCase):
 
     def test_manufacturer_update_view(self):
         response = self.client.post(
-            reverse("taxi:manufacturer-update", kwargs={"pk": self.manufacturer.pk}),
+            reverse(
+                "taxi:manufacturer-update",
+                kwargs={"pk": self.manufacturer.pk}
+            ),
             {"name": "Toyota Updated", "country": "Japan"},
         )
         self.assertEqual(response.status_code, 302)
@@ -132,10 +150,15 @@ class ViewTests(TestCase):
 
     def test_manufacturer_delete_view(self):
         response = self.client.post(
-            reverse("taxi:manufacturer-delete", kwargs={"pk": self.manufacturer.pk})
+            reverse(
+                "taxi:manufacturer-delete",
+                kwargs={"pk": self.manufacturer.pk},
+            )
         )
         self.assertEqual(response.status_code, 302)
-        self.assertFalse(Manufacturer.objects.filter(pk=self.manufacturer.pk).exists())
+        self.assertFalse(
+            Manufacturer.objects.filter(pk=self.manufacturer.pk).exists()
+        )
 
     # Car view tests
     def test_car_list_view(self):
@@ -146,7 +169,9 @@ class ViewTests(TestCase):
         self.assertContains(response, "Toyota")
 
     def test_car_detail_view(self):
-        response = self.client.get(reverse("taxi:car-detail", kwargs={"pk": self.car.pk}))
+        response = self.client.get(
+            reverse("taxi:car-detail", kwargs={"pk": self.car.pk})
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/car_detail.html")
         self.assertContains(response, "Camry")
@@ -189,7 +214,9 @@ class ViewTests(TestCase):
         self.assertContains(response, "testdriver")
 
     def test_driver_detail_view(self):
-        response = self.client.get(reverse("taxi:driver-detail", kwargs={"pk": self.user.pk}))
+        response = self.client.get(
+            reverse("taxi:driver-detail", kwargs={"pk": self.user.pk})
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_detail.html")
         self.assertContains(response, "testdriver")
@@ -237,7 +264,9 @@ class ViewTests(TestCase):
         self.assertFalse(Driver.objects.filter(pk=other_driver.pk).exists())
 
     def test_toggle_assign_to_car(self):
-        new_car = Car.objects.create(model="Prius", manufacturer=self.manufacturer)
+        new_car = Car.objects.create(
+            model="Prius", manufacturer=self.manufacturer
+        )
         self.assertNotIn(self.user, new_car.drivers.all())
 
         response = self.client.post(
@@ -266,13 +295,27 @@ class SearchTests(TestCase):
             last_name="User",
         )
         self.client.force_login(self.user)
-        self.manufacturer1 = Manufacturer.objects.create(name="Toyota", country="Japan")
-        self.manufacturer2 = Manufacturer.objects.create(name="Honda", country="Japan")
-        self.manufacturer3 = Manufacturer.objects.create(name="BMW", country="Germany")
-        self.car1 = Car.objects.create(model="Camry", manufacturer=self.manufacturer1)
-        self.car2 = Car.objects.create(model="Corolla", manufacturer=self.manufacturer1)
-        self.car3 = Car.objects.create(model="Civic", manufacturer=self.manufacturer2)
-        self.car4 = Car.objects.create(model="X5", manufacturer=self.manufacturer3)
+        self.manufacturer1 = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
+        self.manufacturer2 = Manufacturer.objects.create(
+            name="Honda", country="Japan"
+        )
+        self.manufacturer3 = Manufacturer.objects.create(
+            name="BMW", country="Germany"
+        )
+        self.car1 = Car.objects.create(
+            model="Camry", manufacturer=self.manufacturer1
+        )
+        self.car2 = Car.objects.create(
+            model="Corolla", manufacturer=self.manufacturer1
+        )
+        self.car3 = Car.objects.create(
+            model="Civic", manufacturer=self.manufacturer2
+        )
+        self.car4 = Car.objects.create(
+            model="X5", manufacturer=self.manufacturer3
+        )
         self.driver1 = Driver.objects.create_user(
             username="alex_driver",
             password="test1234",
@@ -337,7 +380,9 @@ class SearchTests(TestCase):
         self.assertNotContains(response, "Toyota")
         self.assertNotContains(response, "Honda")
         self.assertNotContains(response, "BMW")
-        self.assertContains(response, "There are no manufacturers in the service.")
+        self.assertContains(
+            response, "There are no manufacturers in the service."
+        )
 
     # Car search tests
     def test_car_search_by_model(self):
@@ -434,7 +479,9 @@ class SearchTests(TestCase):
 
 class FormTests(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
 
     def test_driver_creation_form_valid(self):
         from taxi.forms import DriverCreationForm
@@ -490,7 +537,11 @@ class FormTests(TestCase):
 
     def test_car_form_valid(self):
         from taxi.forms import CarForm
-        form_data = {"model": "Camry", "manufacturer": self.manufacturer.pk, "drivers": []}
+        form_data = {
+            "model": "Camry",
+            "manufacturer": self.manufacturer.pk,
+            "drivers": [],
+        }
         form = CarForm(data=form_data)
         if not form.is_valid():
             print("Form errors:", form.errors)
@@ -517,7 +568,9 @@ class URLTests(TestCase):
         self.assertEqual(reverse("taxi:manufacturer-list"), "/manufacturers/")
 
     def test_manufacturer_create_url(self):
-        self.assertEqual(reverse("taxi:manufacturer-create"), "/manufacturers/create/")
+        self.assertEqual(
+            reverse("taxi:manufacturer-create"), "/manufacturers/create/"
+        )
 
     def test_manufacturer_update_url(self):
         self.assertEqual(
@@ -535,16 +588,22 @@ class URLTests(TestCase):
         self.assertEqual(reverse("taxi:car-list"), "/cars/")
 
     def test_car_detail_url(self):
-        self.assertEqual(reverse("taxi:car-detail", kwargs={"pk": 1}), "/cars/1/")
+        self.assertEqual(
+            reverse("taxi:car-detail", kwargs={"pk": 1}), "/cars/1/"
+        )
 
     def test_car_create_url(self):
         self.assertEqual(reverse("taxi:car-create"), "/cars/create/")
 
     def test_car_update_url(self):
-        self.assertEqual(reverse("taxi:car-update", kwargs={"pk": 1}), "/cars/1/update/")
+        self.assertEqual(
+            reverse("taxi:car-update", kwargs={"pk": 1}), "/cars/1/update/"
+        )
 
     def test_car_delete_url(self):
-        self.assertEqual(reverse("taxi:car-delete", kwargs={"pk": 1}), "/cars/1/delete/")
+        self.assertEqual(
+            reverse("taxi:car-delete", kwargs={"pk": 1}), "/cars/1/delete/"
+        )
 
     def test_car_toggle_assign_url(self):
         self.assertEqual(
@@ -556,17 +615,21 @@ class URLTests(TestCase):
         self.assertEqual(reverse("taxi:driver-list"), "/drivers/")
 
     def test_driver_detail_url(self):
-        self.assertEqual(reverse("taxi:driver-detail", kwargs={"pk": 1}), "/drivers/1/")
+        self.assertEqual(
+            reverse("taxi:driver-detail", kwargs={"pk": 1}), "/drivers/1/"
+        )
 
     def test_driver_create_url(self):
         self.assertEqual(reverse("taxi:driver-create"), "/drivers/create/")
 
     def test_driver_update_url(self):
         self.assertEqual(
-            reverse("taxi:driver-update", kwargs={"pk": 1}), "/drivers/1/update/"
+            reverse("taxi:driver-update", kwargs={"pk": 1}),
+            "/drivers/1/update/",
         )
 
     def test_driver_delete_url(self):
         self.assertEqual(
-            reverse("taxi:driver-delete", kwargs={"pk": 1}), "/drivers/1/delete/"
+            reverse("taxi:driver-delete", kwargs={"pk": 1}),
+            "/drivers/1/delete/",
         )
