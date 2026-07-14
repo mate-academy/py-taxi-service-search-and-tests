@@ -84,9 +84,18 @@ class CarSearchTests(TestCase):
         )
         self.client.force_login(self.user)
 
-        manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
-        Car.objects.create(model="Camry", manufacturer=manufacturer)
-        Car.objects.create(model="Corolla", manufacturer=manufacturer)
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        Car.objects.create(
+            model="Camry",
+            manufacturer=manufacturer
+        )
+        Car.objects.create(
+            model="Corolla",
+            manufacturer=manufacturer
+        )
 
     def test_retrieve_car_list(self):
         res = self.client.get(CAR_LIST_URL)

@@ -12,7 +12,10 @@ class DriverTests(TestCase):
             first_name=" Test first",
             last_name="Test last",
         )
-        self.assertEqual(str(driver), f"{driver.username} ({driver.first_name} {driver.last_name})")
+        self.assertEqual(
+            str(driver),
+            f"{driver.username} ({driver.first_name} {driver.last_name})"
+        )
 
     def test_driver_license_number(self):
         username = "driver2"
@@ -36,13 +39,22 @@ class DriverTests(TestCase):
             password=password,
             license_number=license_number,
         )
-        self.assertEqual(driver.get_absolute_url(), f"/drivers/{driver.pk}/")
+        self.assertEqual(
+            driver.get_absolute_url(),
+            f"/drivers/{driver.pk}/"
+        )
 
 
 class CarTests(TestCase):
     def test_car_str(self):
-        manufacturer = Manufacturer.objects.create(name="BMW", country="Germany")
-        car = Car.objects.create(model="X5", manufacturer=manufacturer)
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany"
+        )
+        car = Car.objects.create(
+            model="X5",
+            manufacturer=manufacturer
+        )
         self.assertEqual(str(car), car.model)
 
 
@@ -52,4 +64,7 @@ class ManufacturerTests(TestCase):
             name="TOYOTA",
             country="Japan",
         )
-        self.assertEqual(str(manufacturer), f"{manufacturer.name} {manufacturer.country}")
+        self.assertEqual(
+            str(manufacturer),
+            f"{manufacturer.name} {manufacturer.country}"
+        )

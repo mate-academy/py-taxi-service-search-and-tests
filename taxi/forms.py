@@ -69,6 +69,7 @@ class CarSearchForm(forms.Form):
         widget=forms.TextInput(attrs={"placeholder": "Search by model"})
     )
 
+
 class ManufacturerSearchForm(forms.Form):
     name = forms.CharField(
         max_length=255,
