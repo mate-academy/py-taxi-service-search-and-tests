@@ -109,7 +109,7 @@ class CarSearchViewTests(TestCase):
         )
 
     def test_empty_search_returns_all_cars(self):
-        response = self.client.get(CAR_URL, {"model": ""})
+        response = self.client.get(CAR_URL, {"car_model": ""})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -117,7 +117,7 @@ class CarSearchViewTests(TestCase):
             list(Car.objects.all()),
         )
 
-    def test_search_filters_drivers_by_username(self):
+    def test_search_filters_cars_by_model(self):
         response = self.client.get(CAR_URL, {"car_model": "2"})
 
         self.assertEqual(response.status_code, 200)
@@ -140,7 +140,7 @@ class ManufacturerSearchViewTests(TestCase):
             country="UK"
         )
 
-    def test_empty_search_returns_all_drivers(self):
+    def test_empty_search_returns_all_manufacturers(self):
         response = self.client.get(MANUFACTURER_URL, {"name": ""})
 
         self.assertEqual(response.status_code, 200)
@@ -149,7 +149,7 @@ class ManufacturerSearchViewTests(TestCase):
             list(Manufacturer.objects.all()),
         )
 
-    def test_search_filters_drivers_by_username(self):
+    def test_search_filters_manufacturers_by_name(self):
         response = self.client.get(MANUFACTURER_URL, {"name": "2"})
 
         self.assertEqual(response.status_code, 200)
