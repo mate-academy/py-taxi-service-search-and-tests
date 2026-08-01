@@ -11,8 +11,6 @@ from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 
 @login_required
 def index(request):
-    """View function for the home page of the site."""
-
     num_drivers = Driver.objects.count()
     num_cars = Car.objects.count()
     num_manufacturers = Manufacturer.objects.count()
@@ -36,6 +34,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("name")
+        if query:
+            filtered = queryset.filter(name__icontains=query)
+            return filtered
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -58,6 +64,14 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("model")
+        if query:
+            filtered = queryset.filter(model__icontains=query)
+            return filtered
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +98,14 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("username")
+        if query:
+            filtered = queryset.filter(username__icontains=query)
+            return filtered
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
