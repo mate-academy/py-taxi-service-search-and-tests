@@ -3,7 +3,11 @@
 {% block content %}
   <h1>
     Manufacturer List
-    <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
+    <form method="get">
+      <input type="text" name="name" value="{{ request.GET.name }}">
+      <button type="submit">Search</button>
+    </form>
+    <a href="{% url 'taxi:manufacturer-create' %} " class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
