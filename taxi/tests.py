@@ -31,14 +31,15 @@ class SearchTest(TestCase):
         self.car2.drivers.add(self.driver2)
         self.client.force_login(self.driver)
 
-
     def test_manufacturer_search(self):
-        res = self.client.get(reverse("taxi:manufacturer-list", ), {"name": "angel"})
+        res = self.client.get(reverse("taxi:manufacturer-list", ),
+                              {"name": "angel"})
         self.assertContains(res, "angel")
         self.assertNotContains(res, "Velik")
 
     def test_driver_search(self):
-        res = self.client.get(reverse("taxi:driver-list"), {"username": "john"})
+        res = self.client.get(reverse("taxi:driver-list"),
+                              {"username": "john"})
         self.assertContains(res, "john")
         self.assertNotContains(res, "Cena")
 
@@ -48,7 +49,8 @@ class SearchTest(TestCase):
         self.assertNotContains(res, "BMW")
 
     def test_toggle_assign_to_car(self):
-        res = self.client.get(reverse("taxi:toggle-car-assign", kwargs={"pk": self.car.id}))
+        res = self.client.get(reverse("taxi:toggle-car-assign",
+                                      kwargs={"pk": self.car.id}))
         expected_url = reverse("taxi:car-detail", kwargs={"pk": self.car.id})
         self.assertRedirects(res, expected_url)
         self.assertNotIn(self.car, self.driver.cars.all())
@@ -68,4 +70,3 @@ class SearchTest(TestCase):
     def test_license_number_correct(self):
         func = validate_license_number("OSU35124")
         self.assertEqual(func, "OSU35124")
-

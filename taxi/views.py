@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, request
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -11,8 +11,6 @@ from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 
 @login_required
 def index(request):
-    """View function for the home page of the site."""
-
     num_drivers = Driver.objects.count()
     num_cars = Car.objects.count()
     num_manufacturers = Manufacturer.objects.count()
@@ -76,7 +74,6 @@ class CarListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
@@ -108,7 +105,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
         if req:
             fil = queryset.filter(username__icontains=req)
             return fil
-        return  queryset
+        return queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
