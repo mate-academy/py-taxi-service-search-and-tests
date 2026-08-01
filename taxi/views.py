@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -36,6 +36,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        req = self.request.GET.get("name")
+        if req:
+            fil = queryset.filter(name__icontains=req)
+            return fil
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -58,6 +66,15 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        req = self.request.GET.get("model")
+        if req:
+            fil = queryset.filter(model__icontains=req)
+            return fil
+        return queryset
+
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +101,14 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        req = self.request.GET.get("username")
+        if req:
+            fil = queryset.filter(username__icontains=req)
+            return fil
+        return  queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
