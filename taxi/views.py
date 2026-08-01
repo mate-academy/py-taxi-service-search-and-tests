@@ -36,10 +36,10 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        req = self.request.GET.get("name")
-        if req:
-            fil = queryset.filter(name__icontains=req)
-            return fil
+        query = self.request.GET.get("name")
+        if query:
+            filtered = queryset.filter(name__icontains=query)
+            return filtered
         return queryset
 
 
@@ -67,10 +67,10 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        req = self.request.GET.get("model")
-        if req:
-            fil = queryset.filter(model__icontains=req)
-            return fil
+        query = self.request.GET.get("model")
+        if query:
+            filtered = queryset.filter(model__icontains=query)
+            return filtered
         return queryset
 
 
@@ -101,10 +101,10 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        req = self.request.GET.get("username")
-        if req:
-            fil = queryset.filter(username__icontains=req)
-            return fil
+        query = self.request.GET.get("username")
+        if query:
+            filtered = queryset.filter(username__icontains=query)
+            return filtered
         return queryset
 
 
