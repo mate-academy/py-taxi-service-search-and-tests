@@ -8,7 +8,8 @@ from taxi.models import Manufacturer, Car
 class SearchResultsTest(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            password="pbkdf2_sha256$320000$6uM28XWOFX6ewyloJzjqmt$L+ZhofPylneoaL2iZS4sZu4ZMUNb4oIevfAdzOMn/eE=",
+            password="pbkdf2_sha256$320000$6uM28XWOFX6ewyloJzj"
+                     "qmt$L+ZhofPylneoaL2iZS4sZu4ZMUNb4oIevfAdzOMn/eE=",
             username="admin.user",
             first_name="Admin",
             last_name="User",

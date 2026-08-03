@@ -33,7 +33,12 @@ class FormsTests(TestCase):
 
         self.assertTrue(form.is_valid())
         form.save()
-        self.assertEqual(get_user_model().objects.filter(license_number="ABC12345").count(), 1)
+        self.assertEqual(
+            get_user_model()
+            .objects
+            .filter(license_number="ABC12345")
+            .count(), 1
+        )
 
 
 class SearchFormTest(TestCase):
