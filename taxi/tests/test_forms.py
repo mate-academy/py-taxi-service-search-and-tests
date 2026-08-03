@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import DriverCreationForm, DriverUsernameSearchForm
+from taxi.forms import DriverCreationForm, DriverUsernameSearchForm, CarModelSearchForm, ManufacturerNameSearchForm
 
 
 class FormsTests(TestCase):
@@ -51,4 +51,26 @@ class SearchFormTest(TestCase):
         self.assertEqual(
             form.cleaned_data["username"],
             "john"
+        )
+
+    def test_car_form_is_valid(self):
+        form = CarModelSearchForm(
+            data={"model": "A4"}
+        )
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(
+            form.cleaned_data["model"],
+            "A4"
+        )
+
+    def test_manufacturer_form_is_valid(self):
+        form = ManufacturerNameSearchForm(
+            data={"name": "USA"}
+        )
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(
+            form.cleaned_data["name"],
+            "USA"
         )
