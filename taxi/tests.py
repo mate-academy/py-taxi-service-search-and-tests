@@ -80,32 +80,17 @@ class PrivateViewTests(TestCase):
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
 
-class FormsTests(TestCase):
-    def test_driver_creation_form(self):
-        form_data = {
-            "username": "test_driver",
-            "password1": "StrongPass123!",
-            "password2": "StrongPass123!",
-            "first_name": "Test",
-            "last_name": "Driver",
-            "license_number": "ABC12345",
-        }
-
-        form = DriverCreationForm(data=form_data)
-
-        self.assertTrue(form.is_valid())
-        self.assertEqual(
-            form.cleaned_data["username"],
-            "test_driver",
+class SearchTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test_user",
+            password="StrongPass123!",
+            license_number="TST12345",
         )
-        self.assertEqual(
-            form.cleaned_data["license_number"],
-            "ABC12345",
-        )
-
+        self.client.force_login(self.user)
 
     def test_search_manufacturer_by_name(self):
-        Manufacturer.objects.create(
+        first_manufacturer = Manufacturer.objects.create(
             name="BMW",
             country="Germany",
         )
@@ -119,14 +104,11 @@ class FormsTests(TestCase):
             {"name": "bm"},
         )
 
-        manufacturers = response.context["manufacturer_list"]
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            list(manufacturers),
-            [Manufacturer.objects.get(name="BMW")],
+        self.assertQuerySetEqual(
+            response.context["manufacturer_list"],
+            [first_manufacturer],
         )
-
 
     def test_search_car_by_model(self):
         manufacturer = Manufacturer.objects.create(
@@ -148,11 +130,11 @@ class FormsTests(TestCase):
             {"model": "x5"},
         )
 
+        self.assertEqual(response.status_code, 200)
         self.assertQuerySetEqual(
             response.context["car_list"],
             [first_car],
         )
-
 
     def test_search_driver_by_username(self):
         first_driver = get_user_model().objects.create_user(
@@ -171,7 +153,32 @@ class FormsTests(TestCase):
             {"username": "john"},
         )
 
+        self.assertEqual(response.status_code, 200)
         self.assertQuerySetEqual(
             response.context["driver_list"],
             [first_driver],
+        )
+
+
+class FormsTests(TestCase):
+    def test_driver_creation_form(self):
+        form_data = {
+            "username": "test_driver",
+            "password1": "StrongPass123!",
+            "password2": "StrongPass123!",
+            "first_name": "Test",
+            "last_name": "Driver",
+            "license_number": "ABC12345",
+        }
+
+        form = DriverCreationForm(data=form_data)
+
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(
+            form.cleaned_data["username"],
+            "test_driver",
+        )
+        self.assertEqual(
+            form.cleaned_data["license_number"],
+            "ABC12345",
         )
