@@ -104,74 +104,74 @@ class FormsTests(TestCase):
         )
 
 
-def test_search_manufacturer_by_name(self):
-    Manufacturer.objects.create(
-        name="BMW",
-        country="Germany",
-    )
-    Manufacturer.objects.create(
-        name="Toyota",
-        country="Japan",
-    )
+    def test_search_manufacturer_by_name(self):
+        Manufacturer.objects.create(
+            name="BMW",
+            country="Germany",
+        )
+        Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan",
+        )
 
-    response = self.client.get(
-        reverse("taxi:manufacturer-list"),
-        {"name": "bm"},
-    )
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),
+            {"name": "bm"},
+        )
 
-    manufacturers = response.context["manufacturer_list"]
+        manufacturers = response.context["manufacturer_list"]
 
-    self.assertEqual(response.status_code, 200)
-    self.assertEqual(
-        list(manufacturers),
-        [Manufacturer.objects.get(name="BMW")],
-    )
-
-
-def test_search_car_by_model(self):
-    manufacturer = Manufacturer.objects.create(
-        name="BMW",
-        country="Germany",
-    )
-
-    first_car = Car.objects.create(
-        model="X5",
-        manufacturer=manufacturer,
-    )
-    Car.objects.create(
-        model="Corolla",
-        manufacturer=manufacturer,
-    )
-
-    response = self.client.get(
-        reverse("taxi:car-list"),
-        {"model": "x5"},
-    )
-
-    self.assertQuerySetEqual(
-        response.context["car_list"],
-        [first_car],
-    )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(manufacturers),
+            [Manufacturer.objects.get(name="BMW")],
+        )
 
 
-def test_search_driver_by_username(self):
-    first_driver = get_user_model().objects.create_user(
-        username="john_driver",
-        password="StrongPass123!",
-        license_number="ABC12345",
-    )
-    get_user_model().objects.create_user(
-        username="mike_driver",
-        password="StrongPass123!",
-        license_number="DEF12345",
-    )
+    def test_search_car_by_model(self):
+        manufacturer = Manufacturer.objects.create(
+            name="BMW",
+            country="Germany",
+        )
 
-    response = self.client.get(
-        reverse("taxi:driver-list"),
-        {"username": "john"},
-    )
+        first_car = Car.objects.create(
+            model="X5",
+            manufacturer=manufacturer,
+        )
+        Car.objects.create(
+            model="Corolla",
+            manufacturer=manufacturer,
+        )
 
-    self.assertQuerySetEqual(
-        response.context["driver_list"],
-        [first_driver],
-    )
+        response = self.client.get(
+            reverse("taxi:car-list"),
+            {"model": "x5"},
+        )
+
+        self.assertQuerySetEqual(
+            response.context["car_list"],
+            [first_car],
+        )
+
+
+    def test_search_driver_by_username(self):
+        first_driver = get_user_model().objects.create_user(
+            username="john_driver",
+            password="StrongPass123!",
+            license_number="ABC12345",
+        )
+        get_user_model().objects.create_user(
+            username="mike_driver",
+            password="StrongPass123!",
+            license_number="DEF12345",
+        )
+
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": "john"},
+        )
+
+        self.assertQuerySetEqual(
+            response.context["driver_list"],
+            [first_driver],
+        )
