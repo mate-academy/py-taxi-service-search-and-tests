@@ -107,6 +107,44 @@ class TestPrivateAccess(TestCase):
         )
         self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
 
+    def test_search_manufacturers(self):
+        Manufacturer.objects.create(
+            name="Test Manufacturer1",
+            country="Test Country1"
+        )
+        Manufacturer.objects.create(
+            name="Test Manufacturer2",
+            country="Test Country2"
+        )
+        Manufacturer.objects.create(
+            name="New Manufacturer",
+            country="New Country"
+        )
+        response = self.client.get(MANUFACTURER_LIST_URL)
+        self.assertEqual(response.status_code, 200)
+        manufacturers_test = Manufacturer.objects.filter(
+            name__icontains="test"
+        )
+        response = self.client.get(MANUFACTURER_LIST_URL, {"name": "test"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list(response.context["manufacturer_list"]),
+            list(manufacturers_test),
+        )
+        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+
+    def test_pagination_five(self):
+        for i in range(15):
+            Manufacturer.objects.create(
+                name="Test Manufacturer{}".format(i),
+                country="Test Country{}".format(i)
+            )
+        response = self.client.get(MANUFACTURER_LIST_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("is_paginated" in response.context)
+        self.assertTrue(response.context["is_paginated"])
+        self.assertEqual(len(response.context["manufacturer_list"]), 5)
+
 
 class TestPrivateDriver(TestCase):
     def setUp(self):

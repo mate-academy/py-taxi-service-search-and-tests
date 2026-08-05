@@ -15,7 +15,7 @@ class TestModels(TestCase):
         )
 
     def test_driver_str(self):
-        driver = get_user_model().objects.create(
+        driver = get_user_model().objects.create_user(
             username="Test Driver",
             password="test1234",
             first_name="Test First",
@@ -25,6 +25,14 @@ class TestModels(TestCase):
             str(driver),
             f"{driver.username} ({driver.first_name} {driver.last_name})"
         )
+
+    def test_get_absolute_url(self):
+        get_user_model().objects.create_user(
+            username="Test Driver",
+            password="test1234",
+        )
+        get_driver = get_user_model().objects.get(id=1)
+        self.assertEqual(get_driver.get_absolute_url(), "/drivers/1/")
 
     def test_car_str(self):
         manufacturer = Manufacturer.objects.create(
