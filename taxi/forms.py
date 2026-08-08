@@ -50,3 +50,14 @@ def validate_license_number(
         raise ValidationError("Last 5 characters should be digits")
 
     return license_number
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        required=False,
+        max_length=255,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search"}
+        ),
+    )
