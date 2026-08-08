@@ -47,10 +47,6 @@ INSTALLED_APPS = [
     "taxi",
 ]
 
-if DEBUG:
-    INSTALLED_APPS += [
-        "debug_toolbar",
-    ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -62,11 +58,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-if DEBUG:
-    MIDDLEWARE.insert(
-        1,
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-    )
 
 ROOT_URLCONF = "taxi_service.urls"
 
