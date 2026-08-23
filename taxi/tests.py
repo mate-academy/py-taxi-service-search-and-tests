@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
+from taxi.models import Manufacturer, Car, Driver
 
 
 class ModelsTests(TestCase):
@@ -61,4 +61,49 @@ class SearchTests(TestCase):
             reverse("taxi:manufacturer-list"), {"name": "Honda"}
         )
         results = response.context["manufacturer_list"]
+        self.assertEqual(len(results), 0)
+
+    def test_driver_search_finds_match(self):
+        Driver.objects.create_user(
+            username="john.smith",
+            password="testpass123",
+            license_number="BBB22222",
+        )
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "john"}
+        )
+        results = response.context["driver_list"]
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].username, "john.smith")
+
+    def test_driver_search_no_match(self):
+        Driver.objects.create_user(
+            username="john.smith",
+            password="testpass123",
+            license_number="BBB22222",
+        )
+        response = self.client.get(
+            reverse("taxi:driver-list"), {"username": "nonexistent"}
+        )
+        results = response.context["driver_list"]
+        self.assertEqual(len(results), 0)
+
+    def test_car_search_finds_match(self):
+        manufacturer = Manufacturer.objects.get(name="Toyota")
+        Car.objects.create(model="Corolla", manufacturer=manufacturer)
+        Car.objects.create(model="Camry", manufacturer=manufacturer)
+        response = self.client.get(
+            reverse("taxi:car-list"), {"model": "Corolla"}
+        )
+        results = response.context["car_list"]
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].model, "Corolla")
+
+    def test_car_search_no_match(self):
+        manufacturer = Manufacturer.objects.get(name="Toyota")
+        Car.objects.create(model="Corolla", manufacturer=manufacturer)
+        response = self.client.get(
+            reverse("taxi:car-list"), {"model": "nonexistent"}
+        )
+        results = response.context["car_list"]
         self.assertEqual(len(results), 0)
