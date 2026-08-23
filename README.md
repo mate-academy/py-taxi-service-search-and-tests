@@ -24,7 +24,7 @@ Follow these steps if you need to use `crispy_forms` v2.0 with Python 3.11:
 CRISPY_TEMPLATE_PACK="bootstrap4"
 ```
 
-2. Add these apps to `INSTALLED_APPS` and install them corresponding to the `CRISPY_TEMPLATE_PACK` bootstrap version.
+2. Add these apps to `INSTALLED_APPS` and install them corresponding to the `CRISPY_TEMPLATE_PACK` bootstrap  .
 
 ```python
 INSTALLED APPS = [
