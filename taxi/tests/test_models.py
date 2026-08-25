@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from taxi.models import Manufacturer, Driver, Car
 
+
 class ManufacturerTests(TestCase):
     def test_default_ordering(self):
         Manufacturer.objects.bulk_create([
@@ -52,7 +53,10 @@ class DriverTests(TestCase):
             username="test_username",
             license_number="test_license_number"
         )
-        self.assertEqual(driver.get_absolute_url(), reverse("taxi:driver-detail", kwargs={"pk": driver.pk}))
+        self.assertEqual(
+            driver.get_absolute_url(),
+            reverse("taxi:driver-detail", kwargs={"pk": driver.pk})
+        )
 
 
 class CarTests(TestCase):
@@ -62,7 +66,7 @@ class CarTests(TestCase):
             name="test_name",
             country="test_country"
         )
-        
+
         car = Car.objects.create(
             model=model,
             manufacturer=manufacturer

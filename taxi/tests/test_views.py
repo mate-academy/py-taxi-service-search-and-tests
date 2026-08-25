@@ -42,8 +42,14 @@ class LoginRequiredTests(BaseViewTests):
             reverse("taxi:index"),
             reverse("taxi:manufacturer-list"),
             reverse("taxi:manufacturer-create"),
-            reverse("taxi:manufacturer-update", kwargs={"pk": self.manufacturer.pk}),
-            reverse("taxi:manufacturer-delete", kwargs={"pk": self.manufacturer.pk}),
+            reverse(
+                "taxi:manufacturer-update",
+                kwargs={"pk": self.manufacturer.pk}
+            ),
+            reverse(
+                "taxi:manufacturer-delete",
+                kwargs={"pk": self.manufacturer.pk}
+            ),
             reverse("taxi:car-list"),
             reverse("taxi:car-detail", kwargs={"pk": self.car.pk}),
             reverse("taxi:car-create"),
@@ -161,12 +167,17 @@ class ManufacturerCrudViewTests(BaseViewTests):
 
         self.assertRedirects(response, reverse("taxi:manufacturer-list"))
         self.assertTrue(
-            Manufacturer.objects.filter(name="Toyota", country="Japan").exists()
+            Manufacturer.objects.filter(
+                name="Toyota", country="Japan"
+            ).exists()
         )
 
     def test_manufacturer_update_view_get(self):
         response = self.client.get(
-            reverse("taxi:manufacturer-update", kwargs={"pk": self.manufacturer.pk})
+            reverse(
+                "taxi:manufacturer-update",
+                kwargs={"pk": self.manufacturer.pk}
+            )
         )
 
         self.assertEqual(response.status_code, 200)
@@ -175,7 +186,10 @@ class ManufacturerCrudViewTests(BaseViewTests):
 
     def test_manufacturer_update_view_post(self):
         response = self.client.post(
-            reverse("taxi:manufacturer-update", kwargs={"pk": self.manufacturer.pk}),
+            reverse(
+                "taxi:manufacturer-update",
+                kwargs={"pk": self.manufacturer.pk}
+            ),
             {"name": "Audi updated", "country": "Germany updated"}
         )
         self.manufacturer.refresh_from_db()
@@ -186,20 +200,32 @@ class ManufacturerCrudViewTests(BaseViewTests):
 
     def test_manufacturer_delete_view_get(self):
         response = self.client.get(
-            reverse("taxi:manufacturer-delete", kwargs={"pk": self.manufacturer.pk})
+            reverse(
+                "taxi:manufacturer-delete",
+                kwargs={"pk": self.manufacturer.pk}
+            )
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "taxi/manufacturer_confirm_delete.html")
-        self.assertTrue(Manufacturer.objects.filter(pk=self.manufacturer.pk).exists())
+        self.assertTemplateUsed(
+            response, "taxi/manufacturer_confirm_delete.html"
+        )
+        self.assertTrue(
+            Manufacturer.objects.filter(pk=self.manufacturer.pk).exists()
+        )
 
     def test_manufacturer_delete_view_post(self):
         response = self.client.post(
-            reverse("taxi:manufacturer-delete", kwargs={"pk": self.manufacturer.pk})
+            reverse(
+                "taxi:manufacturer-delete",
+                kwargs={"pk": self.manufacturer.pk}
+            )
         )
 
         self.assertRedirects(response, reverse("taxi:manufacturer-list"))
-        self.assertFalse(Manufacturer.objects.filter(pk=self.manufacturer.pk).exists())
+        self.assertFalse(
+            Manufacturer.objects.filter(pk=self.manufacturer.pk).exists()
+        )
 
 
 class CarCrudViewTests(BaseViewTests):
@@ -296,7 +322,10 @@ class DriverCrudViewTests(BaseViewTests):
 
     def test_driver_update_view_get(self):
         response = self.client.get(
-            reverse("taxi:driver-update", kwargs={"pk": self.driver_to_change.pk})
+            reverse(
+                "taxi:driver-update",
+                kwargs={"pk": self.driver_to_change.pk}
+            )
         )
 
         self.assertEqual(response.status_code, 200)
@@ -305,7 +334,10 @@ class DriverCrudViewTests(BaseViewTests):
 
     def test_driver_update_view_post(self):
         response = self.client.post(
-            reverse("taxi:driver-update", kwargs={"pk": self.driver_to_change.pk}),
+            reverse(
+                "taxi:driver-update",
+                kwargs={"pk": self.driver_to_change.pk}
+            ),
             {"license_number": "NEW12345"}
         )
         self.driver_to_change.refresh_from_db()
@@ -315,20 +347,30 @@ class DriverCrudViewTests(BaseViewTests):
 
     def test_driver_delete_view_get(self):
         response = self.client.get(
-            reverse("taxi:driver-delete", kwargs={"pk": self.driver_to_change.pk})
+            reverse(
+                "taxi:driver-delete",
+                kwargs={"pk": self.driver_to_change.pk}
+            )
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "taxi/driver_confirm_delete.html")
-        self.assertTrue(Driver.objects.filter(pk=self.driver_to_change.pk).exists())
+        self.assertTrue(Driver.objects.filter(
+            pk=self.driver_to_change.pk).exists()
+        )
 
     def test_driver_delete_view_post(self):
         response = self.client.post(
-            reverse("taxi:driver-delete", kwargs={"pk": self.driver_to_change.pk})
+            reverse(
+                "taxi:driver-delete",
+                kwargs={"pk": self.driver_to_change.pk}
+            )
         )
 
         self.assertRedirects(response, reverse("taxi:driver-list"))
-        self.assertFalse(Driver.objects.filter(pk=self.driver_to_change.pk).exists())
+        self.assertFalse(Driver.objects.filter(
+            pk=self.driver_to_change.pk).exists()
+        )
 
 
 class ToggleAssignToCarViewTests(BaseViewTests):
@@ -410,8 +452,12 @@ class CarSearchTests(TestCase):
             name="Test manufacturer",
             country="Test country"
         )
-        cls.car1 = Car.objects.create(model="Audi A4", manufacturer=manufacturer)
-        cls.car2 = Car.objects.create(model="BMW X5", manufacturer=manufacturer)
+        cls.car1 = Car.objects.create(
+            model="Audi A4", manufacturer=manufacturer
+        )
+        cls.car2 = Car.objects.create(
+            model="BMW X5", manufacturer=manufacturer
+        )
 
     def setUp(self):
         self.client.force_login(self.driver)
@@ -439,8 +485,12 @@ class ManufacturerSearchTests(TestCase):
             password="password123",
             license_number="ABC12345",
         )
-        cls.manufacturer1 = Manufacturer.objects.create(name="Audi", country="Germany")
-        cls.manufacturer2 = Manufacturer.objects.create(name="Toyota", country="Japan")
+        cls.manufacturer1 = Manufacturer.objects.create(
+            name="Audi", country="Germany"
+        )
+        cls.manufacturer2 = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
 
     def setUp(self):
         self.client.force_login(self.driver)

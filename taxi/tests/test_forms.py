@@ -11,10 +11,10 @@ class DriverFormTests(TestCase):
     def setUpClass(cls) -> None:
         super().setUpClass()
         cls.base_data = {
-                "username": "test_username",
-                "password1": "test_password",
-                "password2": "test_password",
-            }
+            "username": "test_username",
+            "password1": "test_password",
+            "password2": "test_password",
+        }
 
     def test_valid_driver_creation_form(self):
         form = DriverCreationForm(
@@ -59,5 +59,3 @@ class DriverFormTests(TestCase):
                 data={"license_number": license_number}
             )
             self.assertFalse(form.is_valid())
-
-
