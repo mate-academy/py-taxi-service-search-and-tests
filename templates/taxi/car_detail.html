@@ -16,13 +16,19 @@
     Drivers
 
     {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
+      <form action="{% url 'taxi:toggle-car-assign' pk=car.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger link-to-page">
+          Delete me from this car
+        </button>
+      </form>
     {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
+      <form action="{% url 'taxi:toggle-car-assign' pk=car.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success link-to-page">
+          Assign me to this car
+        </button>
+      </form>
     {% endif %}
 
   </h1>
