@@ -22,7 +22,7 @@ class ManufacturerTests(TestCase):
         )
 
     def test_str(self):
-        name = "test_name",
+        name = "test_name"
         country = "test_country"
 
         manufacturer = Manufacturer.objects.create(
