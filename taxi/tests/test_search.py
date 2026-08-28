@@ -16,9 +16,11 @@ class PublicTaxiSearchTests(TestCase):
         self.assertNotContains(response, "BMW")
 
     def test_car_list_search(self):
-        m = Manufacturer.objects.create(name="Toyota", country="Japan")
-        Car.objects.create(model="Corolla", manufacturer=m)
-        Car.objects.create(model="X5", manufacturer=m)
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
+        Car.objects.create(model="Corolla", manufacturer=manufacturer)
+        Car.objects.create(model="X5", manufacturer=manufacturer)
 
         response = self.client.get(
             reverse("taxi:car-list"), {"model": "Corolla"}
