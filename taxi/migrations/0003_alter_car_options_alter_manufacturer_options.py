@@ -6,8 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taxi', '0002_alter_driver_options_alter_manufacturer_options_and_more'),
-    ]
+        ('taxi', '0002_alter_driver_options_alter_manufacturer_options_and_more'), ]
 
     operations = [
         migrations.AlterModelOptions(

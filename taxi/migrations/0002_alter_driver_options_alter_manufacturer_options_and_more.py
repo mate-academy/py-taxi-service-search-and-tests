@@ -11,16 +11,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='driver',
-            options={'ordering': ['id']},
-        ),
-        migrations.AlterModelOptions(
-            name='manufacturer',
-            options={},
-        ),
-        migrations.AlterField(
-            model_name='driver',
-            name='license_number',
-            field=models.CharField(blank=True, max_length=255, null=True, unique=True),
-        ),
-    ]
+            name='driver', options={
+                'ordering': ['id']}, ), migrations.AlterModelOptions(
+            name='manufacturer', options={}, ), migrations.AlterField(
+                    model_name='driver', name='license_number', field=models.CharField(
+                        blank=True, max_length=255, null=True, unique=True), ), ]

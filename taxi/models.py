@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class Manufacturer(models.Model):
     name = models.CharField(max_length=255, unique=True)
     country = models.CharField(max_length=255)
@@ -9,7 +10,7 @@ class Manufacturer(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return f'{self.name} ({self.country})'
+        return f"{self.name} ({self.country})"
 
 
 class Car(models.Model):
@@ -25,10 +26,11 @@ class Car(models.Model):
 
 
 class Driver(AbstractUser):
-    license_number = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    license_number = models.CharField(
+        max_length=255, unique=True, null=True, blank=True)
 
     class Meta:
         ordering = ['id']
 
     def __str__(self):
-        return f'{self.username} ({self.first_name} {self.last_name})'
+        return f"{self.username} ({self.first_name} {self.last_name})"
