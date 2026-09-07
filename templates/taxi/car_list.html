@@ -9,7 +9,7 @@
     </a>
   </h1>
   <p>Search by model:</p>
-  <form>
+  <form method="get">
   {{ search_form|crispy }}
     <input type="submit" value="Search"></form>
   {% if car_list %}
