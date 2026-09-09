@@ -16,6 +16,12 @@ from taxi.forms import (
 from taxi.models import Car, Manufacturer
 
 
+def get_query_string(request):
+    query_params = request.GET.copy()
+    query_params.pop("page", None)
+    return query_params.urlencode()
+
+
 @login_required
 def index(request):
     """View function for the home page of the site."""
@@ -46,6 +52,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context["search_form"] = ManufacturerSearchForm(self.request.GET)
+        context["query_string"] = get_query_string(self.request)
         return context
 
     def get_queryset(self):
@@ -81,6 +88,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context["search_form"] = CarSearchForm(self.request.GET)
+        context["query_string"] = get_query_string(self.request)
         return context
 
     def get_queryset(self):
@@ -120,6 +128,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context["search_form"] = DriverSearchForm(self.request.GET)
+        context["query_string"] = get_query_string(self.request)
         return context
 
     def get_queryset(self):

@@ -78,6 +78,14 @@ class SearchViewTests(TaxiServiceTestCase):
 
         self.assertEqual(response.context["paginator"].count, 2)
 
+    def test_pagination_query_string_keeps_search_without_page(self):
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"username": "search", "page": "1"},
+        )
+
+        self.assertEqual(response.context["query_string"], "username=search")
+
 
 class CoreFeatureTests(TaxiServiceTestCase):
     def test_list_views_require_login(self):
