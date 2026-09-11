@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from taxi.models import Manufacturer, Driver, Car
-from taxi.tests.test_views import(
+from taxi.tests.test_views import (
     MANUFACTURER_LIST_URL,
     CAR_LIST_URL,
     DRIVER_LIST_URL,

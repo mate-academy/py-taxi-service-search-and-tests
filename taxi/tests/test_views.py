@@ -9,6 +9,7 @@ MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
 CAR_LIST_URL = reverse("taxi:car-list")
 DRIVER_LIST_URL = reverse("taxi:driver-list")
 
+
 class PublicManufacturerTest(TestCase):
 
     def test_login_required(self):
@@ -55,7 +56,10 @@ class PrivateCarTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_car(self):
-        manufacturer = Manufacturer.objects.create(name="test1", country="test_country1")
+        manufacturer = Manufacturer.objects.create(
+            name="test1",
+            country="test_country1"
+        )
 
         Car.objects.create(
             model="test_model_1",
@@ -112,4 +116,3 @@ class PrivateDriverTest(TestCase):
             list(drivers),
         )
         self.assertTemplateUsed(response, "taxi/driver_list.html")
-
