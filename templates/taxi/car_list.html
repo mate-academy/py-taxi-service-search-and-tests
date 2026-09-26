@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -7,16 +8,32 @@
       Create
     </a>
   </h1>
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input type="submit" class="btn btn-secondary" value="🔍">
+  </form>
+
   {% if car_list %}
-    <ul>
+    <table class="table table-striped">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Model</th>
+        <th scope="col">Manufacturer</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+      </tr>
       {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
+        <tr>
+          <th scope="row">{{ car.id }}</th>
+          <td><a href="{% url 'taxi:car-detail' pk=car.id %}">{{ car.model }}</a></td>
+          <td>{{ car.manufacturer.name }}</td>
+          <td><a href="{% url 'taxi:car-update' pk=car.id %}">Update</a></td>
+          <td><a href="{% url 'taxi:car-delete' pk=car.id %}" style="color: red">Delete</a></td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
   {% else %}
-    <p>There are no cars in taxi</p>
+    <p>There are no cars in taxi.</p>
   {% endif %}
+
 {% endblock %}
