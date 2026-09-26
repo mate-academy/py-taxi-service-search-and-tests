@@ -1,0 +1,21 @@
+[
+{
+  "model": "taxi.driver",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$2FuBuJ3TiMQqaue3L27hFf$Yv5ckMsCv7Vo1AEfcprtum0R2Smpuq9zWGI1DIyB7DU=",
+    "last_login": "2026-09-25T14:34:54.936Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-25T14:33:45.269Z",
+    "license_number": "",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
