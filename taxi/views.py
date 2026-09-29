@@ -36,6 +36,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_queryset(self):
+        name = self.request.GET.get("name")
+
+        if name:
+            return Manufacturer.objects.filter(name__icontains=name)
+
+        return Manufacturer.objects.all()
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -57,7 +65,13 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
+
+    def get_queryset(self):
+        queryset = Car.objects.select_related("manufacturer")
+        model = self.request.GET.get("model")
+        if model:
+            queryset = queryset.filter(model__icontains=model)
+        return queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +98,13 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+
+    def get_queryset(self):
+        username = self.request.GET.get("username")
+        if username:
+            return Driver.objects.filter(username__icontains=username)
+        else:
+            return Driver.objects.all()
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
