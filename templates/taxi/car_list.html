@@ -7,6 +7,11 @@
       Create
     </a>
   </h1>
+  <form method="get" action="" class="form-inline">
+    {{ car_search_form.as_div }}
+    <input class="btn btn-secondary" type="submit" value="Submit">
+  </form>
+  <br>
   {% if car_list %}
     <ul>
       {% for car in car_list %}
