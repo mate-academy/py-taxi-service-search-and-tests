@@ -6,7 +6,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import (DriverCreationForm,
+                    DriverLicenseUpdateForm,
+                    CarForm,
+                    DriverUserSearchForm,
+                    CarSearchForm,
+                    ManufacturesSearchForm)
 
 
 @login_required
@@ -36,6 +41,22 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     template_name = "taxi/manufacturer_list.html"
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ManufacturerListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        form = ManufacturesSearchForm(initial={"name": name})
+        context["form"] = form
+        return context
+
+    def get_queryset(self):
+        form = ManufacturesSearchForm(self.request.GET)
+        queryset = Manufacturer.objects.all()
+
+        if form.is_valid():
+            if form.cleaned_data["name"]:
+                return queryset.filter(name=form.cleaned_data["name"])
+        return queryset
+
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
@@ -58,6 +79,20 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CarListView, self).get_context_data(**kwargs)
+        model = self.request.GET.get("model", "")
+        form = CarSearchForm(initial={"model": model})
+        context["form"] = form
+        return context
+
+    def get_queryset(self):
+        form = CarSearchForm(self.request.GET)
+        if form.is_valid():
+            if form.cleaned_data["model"]:
+                return self.queryset.filter(model=form.cleaned_data["model"])
+        return self.queryset
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -84,6 +119,22 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
+    queryset = Driver.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+        title = self.request.GET.get("username", "")
+        form = DriverUserSearchForm(initial={"username": title})
+        context["form"] = form
+        return context
+
+    def get_queryset(self):
+        form = DriverUserSearchForm(self.request.GET)
+        if form.is_valid() and form:
+            if form.cleaned_data["username"]:
+                return self.queryset.filter(
+                    username=form.cleaned_data["username"])
+        return self.queryset
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
