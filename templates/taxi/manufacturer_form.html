@@ -3,6 +3,10 @@
 
 {% block content %}
   <h1>{{ object|yesno:"Update,Create" }} manufacturer</h1>
+  <form action="" method="get" class="form-inline mb-4">
+    {{ search_form }}
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </form>
   <form action="" method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
