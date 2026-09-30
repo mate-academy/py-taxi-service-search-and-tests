@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.urls import reverse
 
 
@@ -11,7 +11,7 @@ class Manufacturer(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name} {self.country}"
+        return self.name
 
 
 class Driver(AbstractUser):
@@ -22,7 +22,7 @@ class Driver(AbstractUser):
         verbose_name_plural = "drivers"
 
     def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
+        return self.username
 
     def get_absolute_url(self):
         return reverse("taxi:driver-detail", kwargs={"pk": self.pk})
@@ -34,4 +34,4 @@ class Car(models.Model):
     drivers = models.ManyToManyField(Driver, related_name="cars")
 
     def __str__(self):
-        return self.model
+        return f"{self.manufacturer.name} {self.model}"
