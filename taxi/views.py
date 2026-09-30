@@ -6,7 +6,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import (DriverCreationForm,
+                    DriverLicenseUpdateForm,
+                    CarForm,
+                    ManufacturerSearchForm,
+                    CarSearchForm,
+                    DriverSearchForm)
 
 
 @login_required
@@ -30,13 +35,6 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
-    model = Manufacturer
-    context_object_name = "manufacturer_list"
-    template_name = "taxi/manufacturer_list.html"
-    paginate_by = 5
-
-
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
@@ -52,12 +50,6 @@ class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
 class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Manufacturer
     success_url = reverse_lazy("taxi:manufacturer-list")
-
-
-class CarListView(LoginRequiredMixin, generic.ListView):
-    model = Car
-    paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
 
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
@@ -79,11 +71,6 @@ class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
 class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("taxi:car-list")
-
-
-class DriverListView(LoginRequiredMixin, generic.ListView):
-    model = Driver
-    paginate_by = 5
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
@@ -117,3 +104,71 @@ def toggle_assign_to_car(request, pk):
     else:
         driver.cars.add(pk)
     return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+
+
+class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+    model = Manufacturer
+    paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Manufacturer.objects.order_by("name")
+        form = ManufacturerSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+        return queryset
+
+
+class CarListView(LoginRequiredMixin, generic.ListView):
+    model = Car
+    paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        model = self.request.GET.get("model", "")
+        context["search_form"] = CarSearchForm(
+            initial={"model": model}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Car.objects.select_related(
+            "manufacturer"
+        ).order_by("model")
+        form = CarSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                model__icontains=form.cleaned_data["model"]
+            )
+        return queryset
+
+
+class DriverListView(LoginRequiredMixin, generic.ListView):
+    model = Driver
+    paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Driver.objects.order_by("username")
+        form = DriverSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
+        return queryset
