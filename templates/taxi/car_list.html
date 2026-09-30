@@ -19,4 +19,8 @@
   {% else %}
     <p>There are no cars in taxi</p>
   {% endif %}
+  <form method="get" action="">
+    {{ search_form.as_p }}
+    <input type="submit" value="Search" class="btn btn-secondary">
+  </form>
 {% endblock %}
