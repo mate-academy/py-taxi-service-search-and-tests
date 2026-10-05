@@ -6,7 +6,14 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import ManufacturersSearchForm, DriversSearchForm, CarsSearchForm, DriverCreationForm, DriverLicenseUpdateForm, CarForm, ManufacturersSearchForm
+from .forms import (
+    DriversSearchForm,
+    CarsSearchForm,
+    DriverCreationForm,
+    DriverLicenseUpdateForm,
+    CarForm,
+    ManufacturersSearchForm
+)
 
 
 @login_required
@@ -161,7 +168,7 @@ def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
         Car.objects.get(id=pk) in driver.cars.all()
-    ):  # probably could check if car exists
+    ):
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
