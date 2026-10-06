@@ -8,6 +8,10 @@
     </a>
   </h1>
   {% if car_list %}
+  <form action="" method="get" class="form-inline mb-3">
+    {{ search_form }}
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
     <ul>
       {% for car in car_list %}
         <li>

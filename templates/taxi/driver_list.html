@@ -9,6 +9,10 @@
     </h1>
 
     {% if driver_list %}
+    <form action="" method="get" class="form-inline mb-3">
+      {{ search_form }}
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
     <table class="table">
       <tr>
         <th>ID</th>
