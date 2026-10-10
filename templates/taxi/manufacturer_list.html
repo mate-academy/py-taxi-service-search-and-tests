@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>
+  {% load crispy_forms_tags %}
+    <h1>Manufacturer List </h1>
+      <form action="" method="get">
+        {{ search_form|crispy }}
+        <button type="submit" class="btn btn-primary">Sumbit</button>
+      </form>
     Manufacturer List
     <a href="{% url 'taxi:manufacturer-create' %}" class="btn btn-primary link-to-page">
       Create
