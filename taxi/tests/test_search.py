@@ -51,6 +51,9 @@ class SearchFeatureTests(TestCase):
     def test_car_search_by_model(self):
         url = reverse("taxi:car-list")
 
+        response = self.client.get(url, {"model": "model1"})
+        self.assertContains(response, "model1")
+
         self.assertContains(response, "model1")
 
         response_upper = self.client.get(url, {"model": "MODEL1"})
