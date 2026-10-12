@@ -19,7 +19,7 @@ class AdminSiteTests(TestCase):
             first_name="test_driver_name",
             last_name="test_driver_last_name",
             email="test_driver_email",
-            license_number="111AAAAA"
+            license_number="AAA11111"
         )
 
     def test_driver_license_number_listed(self):
