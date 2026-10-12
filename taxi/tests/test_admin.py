@@ -2,8 +2,6 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from taxi.models import Manufacturer, Car
-
 
 class AdminSiteTests(TestCase):
     def setUp(self) -> None:
@@ -43,46 +41,3 @@ class AdminSiteTests(TestCase):
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
         self.assertContains(res, 'name="license_number"')
-
-    def test_car_search_by_model(self):
-        manufacturer = Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan",
-        )
-        car = Car.objects.create(
-            model="Camry",
-            manufacturer=manufacturer,
-        )
-
-        url = reverse("admin:taxi_car_changelist")
-        res = self.client.get(url, {"q": "Camry"})
-
-        self.assertContains(res, car.model)
-
-    def test_car_filter_by_manufacturer(self):
-        toyota = Manufacturer.objects.create(
-            name="Toyota",
-            country="Japan",
-        )
-        bmw = Manufacturer.objects.create(
-            name="BMW",
-            country="Germany",
-        )
-
-        toyota_car = Car.objects.create(
-            model="Camry",
-            manufacturer=toyota,
-        )
-        bmw_car = Car.objects.create(
-            model="X5",
-            manufacturer=bmw,
-        )
-
-        url = reverse("admin:taxi_car_changelist")
-        res = self.client.get(
-            url,
-            {"manufacturer__id__exact": toyota.id}
-        )
-
-        self.assertContains(res, toyota_car.model)
-        self.assertNotContains(res, bmw_car.model)

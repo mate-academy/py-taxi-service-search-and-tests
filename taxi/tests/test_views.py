@@ -2,9 +2,10 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Manufacturer
+from taxi.models import Manufacturer, Car
 
 MANUFACTURER_LIST_URL = reverse("taxi:manufacturer-list")
+CAR_LIST_URL = reverse("taxi:car-list")
 
 
 class PublicManufacturerListTest(TestCase):
@@ -179,4 +180,43 @@ class PrivateDriverTests(TestCase):
         self.assertEqual(
             list(response.context["driver_list"]),
             [user1]
+        )
+
+
+class PrivateCarTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="test",
+            password="X9!qL2#vR7@k",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_cars_by_model(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan",
+        )
+        Car.objects.create(
+            model="Corolla",
+            manufacturer=manufacturer
+        )
+        Car.objects.create(
+            model="Camry",
+            manufacturer=manufacturer
+        )
+        Car.objects.create(
+            model="Yaris",
+            manufacturer=manufacturer
+        )
+
+        res = self.client.get(
+            CAR_LIST_URL,
+            {"model": "cor"}
+        )
+
+        self.assertEqual(res.status_code, 200)
+        self.assertQuerySetEqual(
+            res.context["car_list"],
+            ["Corolla"],
+            transform=lambda car: car.model
         )
