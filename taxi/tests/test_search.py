@@ -48,7 +48,9 @@ class DriverSearchTests(SearchTestsBase):
         )
         self.assertNotContains(response, "alice")
         self.assertNotContains(response, "bob")
-        self.assertContains(response, "There are no drivers")
+        self.assertContains(
+            response, "There are no drivers in the taxi service."
+        )
 
     def test_empty_search_returns_all(self):
         response = self.client.get(
