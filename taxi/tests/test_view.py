@@ -22,7 +22,7 @@ class PublicManufacturerTest(TestCase):
 
 class PrivateManufacturerTest(TestCase):
     def setUp(self) -> None:
-        self.user = Driver.objects.create_user(
+        self.user = get_user_model().objects.create_user(
             username="test",
             password="test1223",
             first_name="test_first",
@@ -44,6 +44,36 @@ class PrivateManufacturerTest(TestCase):
         )
         self.assertTemplateUsed(res, "taxi/manufacturer_list.html")
 
+    def test_search_form_in_context(self):
+        response = self.client.get(MANUFACTURER_LIST_URL)
+        self.assertIn("search_form", response.context)
+        self.assertIsInstance(
+            response.context["search_form"],
+            ManufacturerSearchForm
+        )
+
+    def test_manufacturer_search_filter(self):
+        Manufacturer.objects.create(name="Toyota", country="Japan")
+        Manufacturer.objects.create(name="Honda", country="Japan")
+
+        response = self.client.get(
+            MANUFACTURER_LIST_URL + "?manufacturer=Toyota"
+        )
+        manufacturers = response.context["manufacturer_list"]
+
+        # Перевір, що тільки Toyota в результатах
+        self.assertEqual(len(manufacturers), 1)
+        self.assertEqual(manufacturers[0].name, "Toyota")
+
+        response = self.client.get(MANUFACTURER_LIST_URL)
+        manufacturers = Manufacturer.objects.all()
+
+        # Перевір, що тільки Toyota в результатах
+        self.assertEqual(len(response.context["manufacturer_list"]), 2)
+        self.assertEqual(
+            list(manufacturers),
+            list(response.context["manufacturer_list"]))
+
 
 class SearchTests(TestCase):
     def setUp(self):
@@ -60,32 +90,22 @@ class SearchTests(TestCase):
             license_number="ABC12345"
         )
 
+        self.client.force_login(self.driver)
+
     def test_car_list_view(self):
         response = self.client.get(CAR_LIST_URL)
         self.assertEqual(response.status_code, 200)
 
-    def test_driver_list_view(self):
-        response = self.client.get(DRIVER_LIST_URL)
-        self.assertEqual(response.status_code, 200)
-
-
-class ManufacturerListViewTest(TestCase):
-    def test_search_form_in_context(self):
-        response = self.client.get(MANUFACTURER_LIST_URL)
-        self.assertIn("search_form", response.context)
-        self.assertIsInstance(
-            response.context["search_form"],
-            ManufacturerSearchForm
-        )
-
-        response = self.client.get(CAR_LIST_URL)
         self.assertIn("search_form", response.context)
         self.assertIsInstance(
             response.context["search_form"],
             CarSearchForm
         )
 
+    def test_driver_list_view(self):
         response = self.client.get(DRIVER_LIST_URL)
+        self.assertEqual(response.status_code, 200)
+
         self.assertIn("search_form", response.context)
         self.assertIsInstance(
             response.context["search_form"],
