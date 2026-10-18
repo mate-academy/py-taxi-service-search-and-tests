@@ -15,15 +15,14 @@
   <h1>
     Drivers
 
-    {% if car in user.cars.all %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
-        Delete me from this car
-      </a>
-    {% else %}
-      <a href="{% url 'taxi:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
-      </a>
-    {% endif %}
+    <form method="post" action="{% url 'taxi:toggle-car-assign' pk=car.pk %}">
+      {% csrf_token %}
+      {% if car in user.cars.all %}
+        <button type="submit" class="btn btn-danger">Delete me from this car</button>
+      {% else %}
+        <button type="submit" class="btn btn-success">Assign me to this car</button>
+      {% endif %}
+    </form>
 
   </h1>
   <hr>

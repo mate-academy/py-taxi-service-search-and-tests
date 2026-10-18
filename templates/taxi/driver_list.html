@@ -8,7 +8,8 @@
       </a>
     </h1>
 
-    {% if driver_list %}
+    {% include "includes/search_form.html" %}
+  {% if driver_list %}
     <table class="table">
       <tr>
         <th>ID</th>
@@ -29,6 +30,6 @@
 
     </table>
     {% else %}
-      <p>There are no drivers in the service.</p>
+      <p>No drivers match your search.</p>
     {% endif %}
 {% endblock %}

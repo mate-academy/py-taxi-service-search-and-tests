@@ -8,6 +8,7 @@
     </a>
   </h1>
 
+  {% include "includes/search_form.html" %}
   {% if manufacturer_list %}
     <table class="table">
       <tr>
@@ -45,6 +46,6 @@
     </table>
 
   {% else %}
-      <p>There are no manufacturers in the service.</p>
+      <p>No manufacturers match your search.</p>
   {% endif %}
 {% endblock %}
