@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% include "includes/search_form.html" %}
+
     <h1>
       Driver List
       <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">

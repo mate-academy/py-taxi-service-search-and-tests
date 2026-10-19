@@ -1,22 +1,21 @@
 from django.urls import path
 
 from .views import (
-    index,
-    CarListView,
-    CarDetailView,
     CarCreateView,
-    CarUpdateView,
     CarDeleteView,
-    DriverListView,
-    DriverDetailView,
+    CarDetailView,
+    CarListView,
+    CarUpdateView,
     DriverCreateView,
-    DriverLicenseUpdateView,
     DriverDeleteView,
-    ManufacturerListView,
+    DriverDetailView,
+    DriverListView,
+    DriverUpdateView,
     ManufacturerCreateView,
-    ManufacturerUpdateView,
     ManufacturerDeleteView,
-    toggle_assign_to_car,
+    ManufacturerListView,
+    ManufacturerUpdateView,
+    index,
 )
 
 urlpatterns = [
@@ -46,23 +45,16 @@ urlpatterns = [
     path("cars/create/", CarCreateView.as_view(), name="car-create"),
     path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
     path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
-    path(
-        "cars/<int:pk>/toggle-assign/",
-        toggle_assign_to_car,
-        name="toggle-car-assign",
-    ),
     path("drivers/", DriverListView.as_view(), name="driver-list"),
     path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
-    ),
-    path("drivers/", DriverListView.as_view(), name="driver-list"),
-    path(
-        "drivers/<int:pk>/", DriverDetailView.as_view(), name="driver-detail"
+        "drivers/<int:pk>/",
+        DriverDetailView.as_view(),
+        name="driver-detail",
     ),
     path("drivers/create/", DriverCreateView.as_view(), name="driver-create"),
     path(
         "drivers/<int:pk>/update/",
-        DriverLicenseUpdateView.as_view(),
+        DriverUpdateView.as_view(),
         name="driver-update",
     ),
     path(

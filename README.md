@@ -1,35 +1,83 @@
-# Taxi service search and tests
+<div align="center">
 
-- Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before start
+# 🚕 Taxi Service — Busca e Testes
+### Filtros, consultas e testes automatizados no Django
 
-In this task, you will implement search feature for your website and write tests for your project.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Study](https://img.shields.io/badge/Tipo-Projeto%20educacional-475569?style=for-the-badge)
 
-1. Implement search feature for all 3 pages with content:
-   - drivers - by username
-   - cars - by model
-   - manufacturers - by name
-2. Write tests for custom and for core project features (no need to test built-in functionality).
-   Use this [tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Testing) as helper.
-   You decide what to test and how to test (train your testing skills here).
-3. Write tests for the searching feature that you have implemented. Make sure yourself, that it works as expected.
+</div>
 
-NOTE: Attach screenshots of all created pages to pull request. It's important to attach images not links to them.
+## 🎯 Sobre o projeto
 
-# Note
-Follow these steps if you need to use `crispy_forms` v2.0 with Python 3.11:
+Etapa de implementação de **buscas** em um sistema de gerenciamento de táxis, acompanhada de testes para funcionalidades da aplicação.
 
-1. Add `CRISPY_TEMPLATE_PACK` to `settings.py`.
+**Código relevante:** branch [`taxi-search-and-tests`](https://github.com/WalterMatheusgg/central-de-taxis-buscas/tree/taxi-search-and-tests). Desenvolvido como parte de exercícios práticos com Django; não representa um sistema comercial de transporte.
 
-```python
-CRISPY_TEMPLATE_PACK="bootstrap4"
+## ✨ Funcionalidades e estrutura
+
+| Área | Recurso presente na implementação |
+|:--|:--|
+| **Motoristas** | Pesquisa pelo nome de usuário. |
+| **Carros** | Busca de veículos por modelo. |
+| **Fabricantes** | Filtro de fabricantes pelo nome. |
+| **Interface** | Formulário de pesquisa reutilizável nos templates de listagem. |
+| **Testes** | Arquivo `tests/test_search_and_core.py` presente na branch de funcionalidade. |
+
+## 🏗️ Arquitetura
+
+```mermaid
+flowchart LR
+A["Navegador"] --> B["Django URLs + Views"]
+B --> C["Models e regras"]
+C --> D[("SQLite")]
+B --> E["Templates HTML"]
 ```
 
-2. Add these apps to `INSTALLED_APPS` and install them corresponding to the `CRISPY_TEMPLATE_PACK` bootstrap version.
+Organização principal da aplicação:
 
-```python
-INSTALLED APPS = [
-   ...,
-   "crispy_bootstrap4",
-   "crispy_forms",
-]
+```text
+taxi/             # Models, views, admin e rotas
+taxi_service/     # Configuração Django
+templates/        # Páginas HTML (quando aplicável)
+manage.py         # Comandos do Django
 ```
+
+## 🚀 Executar localmente
+
+Use um ambiente Python isolado, com versão compatível com as dependências do projeto.
+
+```bash
+git clone -b taxi-search-and-tests https://github.com/WalterMatheusgg/central-de-taxis-buscas.git
+cd central-de-taxis-buscas
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py check
+python manage.py runserver
+```
+
+Acesse **http://127.0.0.1:8000/**.
+
+Para testar funcionalidades existentes:
+
+```bash
+python manage.py test
+```
+
+**Observação:** não executei o projeto ou a suíte nesta revisão. Em algumas etapas, os testes são fornecidos como parte do enunciado do curso e podem exigir configuração adicional.
+
+## 🔒 Limites e cuidados
+
+Há commits divergentes de `master`. A existência de testes no repositório não significa que foram executados nesta revisão.
+
+Use somente dados de teste. Não reutilize senhas presentes em fixtures, mantenha `DEBUG` desabilitado em servidores públicos e revise dependências antes de qualquer implantação externa.
+
+## 👨‍💻 Repositório
+
+**Walter Matheus Soares da Silva** · [GitHub](https://github.com/WalterMatheusgg)
+
+Outros projetos do portfólio: [NEXUS CRM](https://github.com/WalterMatheusgg/NEXUS) · [Biblioteca Digital](https://github.com/WalterMatheusgg/library-service/tree/develop)
