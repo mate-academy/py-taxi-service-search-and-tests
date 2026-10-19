@@ -14,7 +14,7 @@
 
 Etapa de implementação de **buscas** em um sistema de gerenciamento de táxis, acompanhada de testes para funcionalidades da aplicação.
 
-**Código relevante:** branch [`taxi-search-and-tests`](https://github.com/WalterMatheusgg/py-taxi-service-search-and-tests/tree/taxi-search-and-tests). Desenvolvido como parte de exercícios práticos com Django; não representa um sistema comercial de transporte.
+**Código relevante:** branch [`taxi-search-and-tests`](https://github.com/WalterMatheusgg/central-de-taxis-buscas/tree/taxi-search-and-tests). Desenvolvido como parte de exercícios práticos com Django; não representa um sistema comercial de transporte.
 
 ## ✨ Funcionalidades e estrutura
 
@@ -50,8 +50,8 @@ manage.py         # Comandos do Django
 Use um ambiente Python isolado, com versão compatível com as dependências do projeto.
 
 ```bash
-git clone -b taxi-search-and-tests https://github.com/WalterMatheusgg/py-taxi-service-search-and-tests.git
-cd py-taxi-service-search-and-tests
+git clone -b taxi-search-and-tests https://github.com/WalterMatheusgg/central-de-taxis-buscas.git
+cd central-de-taxis-buscas
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
