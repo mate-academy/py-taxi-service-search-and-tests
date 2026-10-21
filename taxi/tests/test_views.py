@@ -15,7 +15,6 @@ class AuthenticatedTestCase(TestCase):
         self.client.force_login(user=self.user)
 
 
-
 class PublicCarTest(TestCase):
     def test_login_required(self):
         url = reverse("taxi:car-list")
@@ -48,7 +47,7 @@ class PrivateCarTest(AuthenticatedTestCase):
         self.assertTemplateUsed(response, "taxi/car_list.html")
 
     def test_search_car_list(self):
-        car_2 = Car.objects.create(
+        Car.objects.create(
             model="BMW",
             manufacturer=self.manufacturer,
         )
