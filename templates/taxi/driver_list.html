@@ -1,13 +1,15 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
-
+    <div class="d-flex justify-content-between">
+      <h1>Driver List</h1>
+      <a href="{% url 'taxi:driver-create' %}" class="btn btn-success d-flex justify-content-center align-items-center">Create</a>
+    </div>
+    <form action="" method="get" class="form-inline">
+      {{ search_form|crispy }}
+      <input class="btn btn-secondary" type="submit" value="🔍">
+    </form>
     {% if driver_list %}
     <table class="table">
       <tr>

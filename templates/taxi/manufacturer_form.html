@@ -6,7 +6,9 @@
   <form action="" method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
-
-    <input type="submit" value="Submit" class="btn btn-primary">
+    <div class="mt-3">
+      <input type="submit" value="Submit" class="btn btn-primary">
+      <a href="{{ request.META.HTTP_REFERER|default:'taxi:manufacturer-list' }}" class="btn btn-secondary">Cancel</a>
+    </div>
   </form>
 {% endblock %}
