@@ -1,0 +1,70 @@
+[
+    {
+        "model": "taxi.manufacturer",
+        "pk": 1,
+        "fields": {
+            "name": "Toyota",
+            "country": "Japan"
+        }
+    },
+    {
+        "model": "taxi.manufacturer",
+        "pk": 2,
+        "fields": {
+            "name": "Ford",
+            "country": "USA"
+        }
+    },
+    {
+        "model": "taxi.car",
+        "pk": 1,
+        "fields": {
+            "model": "Corolla",
+            "manufacturer": 1,
+            "drivers": [1]
+        }
+    },
+    {
+        "model": "taxi.car",
+        "pk": 2,
+        "fields": {
+            "model": "Focus",
+            "manufacturer": 2,
+            "drivers": [2]
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$ks4XjyaGv1XkQIANaGJ1jW$mhTYGpKY6jjejCRVJJfCoOHkjLi+PSivnGZdEXGWd38=",
+            "last_login": "2025-04-08T10:00:00Z",
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "Admin",
+            "last_name": "User",
+            "email": "admin@example.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2025-04-01T10:00:00Z",
+            "license_number": "ABC12345"
+        }
+    },
+    {
+        "model": "taxi.driver",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$ks4XjyaGv1XkQIANaGJ1jW$mhTYGpKY6jjejCRVJJfCoOHkjLi+PSivnGZdEXGWd38=",
+            "last_login": "2025-04-08T10:00:00Z",
+            "is_superuser": false,
+            "username": "driver",
+            "first_name": "Test",
+            "last_name": "Driver",
+            "email": "driver@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-04-01T10:00:00Z",
+            "license_number": "XYZ67890"
+        }
+    }
+]

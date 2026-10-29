@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load query_transform %}
 
 {% block content %}
   <h1>
@@ -7,6 +8,17 @@
       Create
     </a>
   </h1>
+
+  <form action="" method="get" class="form-inline my-3">
+    <div class="form-group mr-2">
+      {{ search_form.model }}
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if search %}
+      <a href="{% url 'taxi:car-list' %}" class="btn btn-secondary ml-2">Clear</a>
+    {% endif %}
+  </form>
+
   {% if car_list %}
     <ul>
       {% for car in car_list %}
@@ -17,6 +29,14 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no cars in taxi</p>
+    {% if search %}
+      <p>There are no cars in taxi matching "{{ search }}"</p>
+    {% else %}
+      <p>There are no cars in taxi</p>
+    {% endif %}
+  {% endif %}
+
+  {% if is_paginated %}
+    {% include "includes/pagination.html" %}
   {% endif %}
 {% endblock %}
