@@ -106,3 +106,98 @@ class ViewsTests(TestCase):
         self.assertFalse(
             car.drivers.filter(pk=self.user.pk).exists()
         )
+
+    def test_manufacturer_create_view(self):
+        response = self.client.post(
+            reverse("taxi:manufacturer-create"),
+            {
+                "name": "Toyota",
+                "country": "Japan"
+            }
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("taxi:manufacturer-list"),
+        )
+
+        self.assertTrue(
+            Manufacturer.objects.filter(
+                name="Toyota",
+                country="Japan"
+            ).exists()
+        )
+
+    def test_manufacturer_update_view(self):
+        manuf = Manufacturer.objects.create(
+            name="TOYOTA",
+            country="JAPAN",
+        )
+        response = self.client.post(
+            reverse(
+                "taxi:manufacturer-update",
+                kwargs={"pk": manuf.pk}
+            ),
+            {"name": "Toyota", "country": "Japan"}
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("taxi:manufacturer-list"),
+        )
+
+        manuf.refresh_from_db()
+
+        self.assertEqual(manuf.name, "Toyota")
+        self.assertEqual(manuf.country, "Japan")
+
+    def test_car_create_view(self):
+        manuf = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan",
+        )
+        response = self.client.post(
+            reverse("taxi:car-create"),
+            {
+                "model": "Camry",
+                "manufacturer": manuf.pk,
+                "drivers": [self.user.pk],
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("taxi:car-list"),
+        )
+
+        self.assertTrue(
+            Car.objects.filter(
+                model="Camry",
+                manufacturer=manuf,
+                drivers=self.user
+            ).exists()
+        )
+
+    def test_driver_create_view(self):
+        response = self.client.post(
+            reverse("taxi:driver-create"),
+            {
+                "username": "Dave",
+                "password1": "David1234",
+                "password2": "David1234",
+                "license_number": "TCP33999",
+            },
+        )
+
+        driver = get_user_model().objects.get(username="Dave")
+
+        self.assertRedirects(
+            response,
+            reverse("taxi:driver-detail", kwargs={"pk": driver.pk}),
+        )
+
+        self.assertEqual(driver.license_number, "TCP33999")
+
+        self.assertTrue(
+            driver.check_password("David1234")
+        )
