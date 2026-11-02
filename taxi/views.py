@@ -110,10 +110,47 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
-    if (
-        Car.objects.get(id=pk) in driver.cars.all()
-    ):  # probably could check if car exists
+    if Car.objects.filter(id=pk, drivers=driver).exists():
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
     return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+
+
+class DriverSearchView(LoginRequiredMixin, generic.ListView):
+    model = Driver
+    template_name = "taxi/driver_search_results.html"
+    context_object_name = "driver_list"
+    paginate_by = 5
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            return Driver.objects.filter(username__icontains=query)
+        return Driver.objects.all()
+
+
+class CarSearchView(LoginRequiredMixin, generic.ListView):
+    model = Car
+    template_name = "taxi/car_search_results.html"
+    context_object_name = "car_list"
+    paginate_by = 5
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            return Car.objects.filter(model__icontains=query)
+        return Car.objects.all()
+
+
+class ManufacturerSearchView(LoginRequiredMixin, generic.ListView):
+    model = Manufacturer
+    template_name = "taxi/manufacturer_search_results.html"
+    context_object_name = "manufacturer_list"
+    paginate_by = 5
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            return Manufacturer.objects.filter(name__icontains=query)
+        return Manufacturer.objects.all()
