@@ -26,7 +26,18 @@
         <td>{{ driver.license_number }}</td>
       </tr>
     {% endfor %}
-
+    <form method="get" action="">
+        <input
+          type="text"
+          name="username"
+          placeholder="Search by username"
+          value="{{ request.GET.username }}"
+        >
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a href="{% url 'taxi:driver-list' %}" class="btn btn-secondary">
+        Reset
+      </a>
+    </form>
     </table>
     {% else %}
       <p>There are no drivers in the service.</p>

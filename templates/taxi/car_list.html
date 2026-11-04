@@ -15,6 +15,18 @@
           {{ car.model }} ({{ car.manufacturer.name }})
         </li>
       {% endfor %}
+      <form method="get" action="">
+        <input
+          type="text"
+          name="model"
+          placeholder="Search by car model"
+          value="{{ request.GET.model }}"
+        >
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="{% url 'taxi:car-list' %}" class="btn btn-secondary">
+          Reset
+        </a>
+      </form>
     </ul>
   {% else %}
     <p>There are no cars in taxi</p>
