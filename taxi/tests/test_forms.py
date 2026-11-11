@@ -4,6 +4,8 @@ from taxi.forms import (
     CarSearchForm,
     DriverCreationForm,
     DriverLicenseUpdateForm,
+    DriverSearchForm,
+    ManufacturerSearchForm,
 )
 
 
@@ -55,5 +57,46 @@ class DriverLicenseUpdateFormTests(TestCase):
 
 
 class SearchFormTests(TestCase):
-    def test_search_form_is_valid_when_empty(self) -> None:
-        self.assertTrue(CarSearchForm(data={"model": ""}).is_valid())
+    def test_search_forms_are_valid_when_empty(self) -> None:
+        cases = (
+            (DriverSearchForm, "username"),
+            (CarSearchForm, "model"),
+            (ManufacturerSearchForm, "name"),
+        )
+        for form_class, field in cases:
+            with self.subTest(form=form_class.__name__):
+                form = form_class(data={field: ""})
+                self.assertTrue(form.is_valid())
+                self.assertEqual(form.cleaned_data[field], "")
+
+    def test_driver_search_form_keeps_username(self) -> None:
+        form = DriverSearchForm(data={"username": "john"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["username"], "john")
+
+    def test_car_search_form_keeps_model(self) -> None:
+        form = CarSearchForm(data={"model": "X5"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["model"], "X5")
+
+    def test_manufacturer_search_form_keeps_name(self) -> None:
+        form = ManufacturerSearchForm(data={"name": "BMW"})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["name"], "BMW")
+
+    def test_search_forms_reject_too_long_value(self) -> None:
+        too_long = "a" * 256
+        self.assertFalse(
+            DriverSearchForm(data={"username": too_long}).is_valid()
+        )
+        self.assertFalse(CarSearchForm(data={"model": too_long}).is_valid())
+        self.assertFalse(
+            ManufacturerSearchForm(data={"name": too_long}).is_valid()
+        )
+
+    def test_search_forms_have_placeholders(self) -> None:
+        widget = DriverSearchForm().fields["username"].widget
+        self.assertEqual(
+            widget.attrs["placeholder"],
+            "Search by username",
+        )
