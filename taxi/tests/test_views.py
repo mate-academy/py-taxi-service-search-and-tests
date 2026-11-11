@@ -112,3 +112,17 @@ class PrivateViewsTests(TestCase):
         new_user = get_user_model().objects.get(username="new_user")
         self.assertEqual(new_user.license_number, "NEW12345")
         self.assertTrue(new_user.check_password("User12345test"))
+
+    def test_delete_driver_redirects_to_driver_list(self) -> None:
+        driver = get_user_model().objects.create_user(
+            username="to.delete",
+            password="Test12345!",
+            license_number="DEL12345",
+        )
+        response = self.client.post(
+            reverse("taxi:driver-delete", args=[driver.id])
+        )
+        self.assertRedirects(response, DRIVER_LIST_URL)
+        self.assertFalse(
+            get_user_model().objects.filter(id=driver.id).exists()
+        )
