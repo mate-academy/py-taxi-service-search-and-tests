@@ -1,34 +1,84 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Drivers</h1>
 
-    {% if driver_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>License number</th>
-      </tr>
-    {% for driver in driver_list %}
-      <tr>
-        <td>{{ driver.id }}</td>
-        <td><a href="{{ driver.get_absolute_url }}">{{ driver.username }} {% if user == driver %} (Me){% endif %}</a></td>
-        <td>{{ driver.first_name }}</td>
-        <td>{{ driver.last_name }}</td>
-        <td>{{ driver.license_number }}</td>
-      </tr>
-    {% endfor %}
+    <a href="{% url 'taxi:driver-create' %}" class="btn btn-primary">
+      + Create driver
+    </a>
+  </div>
 
-    </table>
-    {% else %}
-      <p>There are no drivers in the service.</p>
-    {% endif %}
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="" method="GET">
+        {{ search_form|crispy }}
+
+        <button type="submit" class="btn btn-primary mt-2">
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {% if driver_list %}
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>License number</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for driver in driver_list %}
+              <tr>
+                <td>{{ driver.id }}</td>
+
+                <td>
+                  <a
+                    href="{{ driver.get_absolute_url }}"
+                    class="text-decoration-none fw-bold"
+                  >
+                    {{ driver.username }}
+                  </a>
+
+                  {% if user == driver %}
+                    <span class="badge bg-primary ms-1">
+                      Me
+                    </span>
+                  {% endif %}
+                </td>
+
+                <td>
+                  {{ driver.first_name|default:"—" }}
+                </td>
+
+                <td>
+                  {{ driver.last_name|default:"—" }}
+                </td>
+
+                <td>
+                  <span class="font-monospace">
+                    {{ driver.license_number|default:"—" }}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      There are no drivers in the service.
+    </div>
+  {% endif %}
+  {% include "includes/pagination.html" %}
 {% endblock %}

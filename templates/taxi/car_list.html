@@ -1,22 +1,70 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Car list
-    <a href="{% url 'taxi:car-create' %}" class="btn btn-primary link-to-page">
-      Create
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Cars</h1>
+
+    <a href="{% url 'taxi:car-create' %}" class="btn btn-primary">
+      + Create car
     </a>
-  </h1>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <form action="" method="GET">
+        {{ search_form|crispy }}
+
+        <button type="submit" class="btn btn-primary mt-2">
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
+
   {% if car_list %}
-    <ul>
+    <div class="list-group">
       {% for car in car_list %}
-        <li>
-          <a href="{% url "taxi:car-detail" pk=car.id %} ">{{ car.id }}</a>
-          {{ car.model }} ({{ car.manufacturer.name }})
-        </li>
+        <div class="list-group-item py-3">
+          <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+              <a
+                href="{% url 'taxi:car-detail' pk=car.id %}"
+                class="text-decoration-none"
+              >
+                <h5 class="mb-1">{{ car.model }}</h5>
+              </a>
+
+              <small class="text-muted">
+                Manufacturer: {{ car.manufacturer.name }}
+              </small>
+            </div>
+
+            <div class="d-flex gap-2">
+              <a
+                href="{% url 'taxi:car-update' pk=car.id %}"
+                class="btn btn-outline-primary btn-sm"
+              >
+                Update
+              </a>
+
+              <a
+                href="{% url 'taxi:car-delete' pk=car.id %}"
+                class="btn btn-outline-danger btn-sm"
+              >
+                Delete
+              </a>
+            </div>
+
+          </div>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <p>There are no cars in taxi</p>
+    <div class="alert alert-info">
+      There are no cars in taxi.
+    </div>
   {% endif %}
+  {% include "includes/pagination.html" %}
 {% endblock %}
