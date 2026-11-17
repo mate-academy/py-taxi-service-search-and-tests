@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "crispy_forms",
     "taxi",
+    "crispy_bootstrap4",
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ LOGIN_REDIRECT_URL = "/"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Europe/Kiev"
+TIME_ZONE = "Europe/Kyiv"
 
 USE_I18N = True
 
@@ -143,3 +144,5 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
