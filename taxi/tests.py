@@ -3,6 +3,9 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from taxi.forms import DriverCreationForm
+from taxi.models import Car, Manufacturer, Driver
+
+User = get_user_model()
 
 
 class AdminSiteTests(TestCase):
@@ -44,3 +47,78 @@ class FormsTests(TestCase):
         form = DriverCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
+
+
+class CarSearchTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="test_driver",
+            password="testpassword123",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_by_model_returns_matching_cars(self):
+        manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan",
+        )
+        matching_car = Car.objects.create(
+            model="Corolla",
+            manufacturer=manufacturer,
+        )
+        Car.objects.create(
+            model="Civic",
+            manufacturer=manufacturer,
+        )
+        response = self.client.get(
+            reverse("taxi:car-list"),  # заміни на назву свого URL
+            {"model": "cor"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Corolla")
+        self.assertNotContains(response, "Civic")
+
+
+class DriverSearchTests(TestCase):
+    def setUp(self):
+        self.matching_driver = Driver.objects.create_user(
+            username="john_smith",
+            password="test-password",
+            license_number="HGU12345",
+        )
+        self.other_driver = Driver.objects.create_user(
+            username="alice",
+            password="test-password",
+            license_number="UIG12345",
+        )
+        self.client.force_login(self.matching_driver)
+
+    def test_search_by_username(self):
+        response = self.client.get(
+            reverse("taxi:driver-list"),  # заміни на ім'я URL зі свого urls.py
+            {"username": "JOHN"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "john_smith")
+        self.assertNotContains(response, "alice")
+
+
+class ManufacturerSearchTests(TestCase):
+    def setUp(self):
+        Manufacturer.objects.create(name="Toyota", country="Japan")
+        Manufacturer.objects.create(name="Honda", country="Japan")
+
+        self.user = User.objects.create_user(
+            username="test_driver",
+            password="testpassword123",
+        )
+        self.client.force_login(self.user)
+
+    def test_search_by_name(self):
+        response = self.client.get(
+            reverse("taxi:manufacturer-list"),  # заміни на ім'я URL зі свого urls.py
+            {"name": "toy"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Toyota")
+        self.assertNotContains(response, "Honda")
