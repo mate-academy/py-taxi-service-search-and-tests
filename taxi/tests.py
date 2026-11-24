@@ -35,7 +35,7 @@ class AdminSiteTests(TestCase):
 
 
 class FormsTests(TestCase):
-    def test_driver_creation_form_with_license_number_first_last_name_is_valid(self):
+    def test_driver_creation_form(self):
         form_data = {
             "username": "new_user",
             "password1": "user12test",
@@ -71,11 +71,11 @@ class CarSearchTests(TestCase):
             manufacturer=manufacturer,
         )
         response = self.client.get(
-            reverse("taxi:car-list"),  # заміни на назву свого URL
+            reverse("taxi:car-list"),
             {"model": "cor"},
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Corolla")
+        self.assertContains(response, matching_car.model)
         self.assertNotContains(response, "Civic")
 
 
@@ -116,7 +116,7 @@ class ManufacturerSearchTests(TestCase):
 
     def test_search_by_name(self):
         response = self.client.get(
-            reverse("taxi:manufacturer-list"),  # заміни на ім'я URL зі свого urls.py
+            reverse("taxi:manufacturer-list"),
             {"name": "toy"},
         )
         self.assertEqual(response.status_code, 200)
