@@ -41,7 +41,9 @@ class CarModelTest(TestCase):
         self.manufacturer = Manufacturer.objects.create(
             name="Model_test", country="Test_country"
         )
-        self.car = Car.objects.create(model="BMW", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(
+            model="BMW", manufacturer=self.manufacturer
+        )
 
     def test_car_drivers_many_to_many(self):
         driver1 = get_user_model().objects.create_user(

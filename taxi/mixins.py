@@ -2,7 +2,7 @@ from taxi.forms import TitleSearchForm
 
 
 class SearchMixin:
-    search_field = None | str
+    search_field: str | None = None
     search_param = "title"
 
     def get_queryset(self):
@@ -10,7 +10,9 @@ class SearchMixin:
         value = self.request.GET.get(self.search_param)
 
         if value and self.search_field:
-            return queryset.filter(**{f"{self.search_field}__icontains": value})
+            return queryset.filter(
+                **{f"{self.search_field}__icontains": value}
+            )
 
         return queryset
 
@@ -18,6 +20,8 @@ class SearchMixin:
         context = super().get_context_data(**kwargs)
 
         context["search_form"] = TitleSearchForm(
-            initial={self.search_param: self.request.GET.get(self.search_param, "")}
+            initial={
+                self.search_param: self.request.GET.get(self.search_param, "")
+            }
         )
         return context

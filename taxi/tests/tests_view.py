@@ -24,7 +24,9 @@ class PrivateViewsTest(TestCase):
             username="test", password="test12345", license_number="ABC12345"
         )
         self.client.force_login(self.user)
-        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
 
     def test_index_counts_and_visits(self):
         Car.objects.create(model="Camry", manufacturer=self.manufacturer)
@@ -53,8 +55,21 @@ class PrivateViewsTest(TestCase):
         )
 
     def test_search_by_model(self):
-        camry = Car.objects.create(model="Camry", manufacturer=self.manufacturer)
+        camry = Car.objects.create(
+            model="Camry", manufacturer=self.manufacturer
+        )
         Car.objects.create(model="Corolla", manufacturer=self.manufacturer)
 
         response = self.client.get(CAR_LIST_URL, {"title": "cam"})
         self.assertEqual(list(response.context["car_list"]), [camry])
+
+    def test_search_by_username(self):
+        get_user_model().objects.create_user(
+            username="john", password="test12345", license_number="JHN12345"
+        )
+
+        response = self.client.get(DRIVER_LIST_URL, {"title": "jo"})
+        self.assertEqual(
+            [driver.username for driver in response.context["driver_list"]],
+            ["john"],
+        )

@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from taxi.mixins import SearchMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, TitleSearchForm
+from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 
 
 @login_required
@@ -109,7 +109,7 @@ class DriverLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("taxi:driver-list")
 
 
 @login_required
