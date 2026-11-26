@@ -81,6 +81,9 @@ class SearchFunctionalityTests(TestCase):
         self.manufacturer_b = Manufacturer.objects.create(
             name="Volvo", country="Sweden"
         )
+        self.manufacturer_c = Manufacturer.objects.create(
+            name="Toyota", country="Japan"
+        )
         self.car_a = Car.objects.create(
             model="Golf GTI", manufacturer=self.manufacturer_a
         )
@@ -109,6 +112,7 @@ class SearchFunctionalityTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.manufacturer_a.name)
         self.assertContains(response, self.manufacturer_b.name)
+        self.assertNotContains(response, self.manufacturer_c.name)
 
     def test_empty_search_returns_all_items(self):
         url = reverse("taxi:manufacturer-list")
@@ -116,3 +120,4 @@ class SearchFunctionalityTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.manufacturer_a.name)
         self.assertContains(response, self.manufacturer_b.name)
+        self.assertContains(response, self.manufacturer_c.name)
