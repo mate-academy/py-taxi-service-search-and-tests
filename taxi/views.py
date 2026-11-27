@@ -12,6 +12,8 @@ from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 @login_required
 def index(request):
     """View function for the home page of the site."""
+    query = request.GET.get("username", "")
+    drivers = Driver.objects.filter(username__icontains=query)
 
     num_drivers = Driver.objects.count()
     num_cars = Car.objects.count()
@@ -59,6 +61,12 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
 
+    def get_queryset(self):
+        query = self.request.GET.get("model", "")
+
+        if query:
+            return Car.objects.filter(model__icontains=query)
+            return super().get_queryset()
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
@@ -111,7 +119,7 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
-        Car.objects.get(id=pk) in driver.cars.all()
+            Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
