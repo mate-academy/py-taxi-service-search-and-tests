@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
 from django.views.generic import ListView
 
 from .models import Driver, Car, Manufacturer
@@ -14,8 +13,6 @@ from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
 @login_required
 def index(request):
     """View function for the home page of the site."""
-    query = request.GET.get("username", "")
-    drivers = Driver.objects.filter(username__icontains=query)
 
     num_drivers = Driver.objects.count()
     num_cars = Car.objects.count()
@@ -74,6 +71,7 @@ class CarListView(LoginRequiredMixin, ListView):
             return queryset.filter(model__icontains=model)
         return queryset
 
+
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
@@ -105,6 +103,7 @@ class DriverListView(LoginRequiredMixin, ListView):
         if username:
             return queryset.filter(username__icontains=username)
         return queryset
+
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
